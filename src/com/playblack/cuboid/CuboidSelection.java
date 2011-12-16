@@ -1,16 +1,16 @@
 package com.playblack.cuboid;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import com.playblack.vector.Vector;
-import com.playblack.cuboid.CuboidData;
+import com.playblack.blocks.BaseBlock;
+
 
 /**
- * Resembles a dynamic cuboid selection.
- * Please note: This class does not touch the actual world data. 
- * It merely loads abstracted data from the world and processes it to
- * return it to an Interfacee, which will, in turn, probably edit the actual world data,
- * depending on what the interface does.
+ * Resembles a dynamic cuboid selection.<br>
+ * This class does not modify the actual world.<br>
+ * It merely holds the information that is required by WorldObserver to actually change the world
  * @author Chris
  *
  */
@@ -19,126 +19,212 @@ public class CuboidSelection {
 	/**
 	 * The starting point
 	 */
-	protected Vector origin = null;
+	private Vector origin = null;
 	/**
 	 * The ending Point
 	 */
-	protected Vector offset = null;
+	private Vector offset = null;
 	
-//	private HashMap<String, CuboidSelection> selections = new HashMap<String, CuboidSelection>();
+	private String world = "no_world";
+	
+	private LinkedHashMap<Vector,BaseBlock> blocks;
+	
+	private int sculptData = 0;
+	private int sculptType = 0;
+	private int sculptRadius = 3;
+	
 	
 	/**
-	 * Data storage for our blocks
-	 */
-	private CuboidData content;
-	
-	/**
-	 * The world this selection is set in
-	 */
-	private String world;
-
-	
-
-
-	/**
-	 * Construct a Cuboid Selection
+	 * Default Contructor<br>
+	 * This will set origin and offset to null and the block list 
+	 * will be default initiated with 0 elements
 	 */
 	public CuboidSelection() {
-//		origin = null;
-//		offset = null;
-		content = null;
-		setWorld("no_world");
+		blocks = new LinkedHashMap<Vector,BaseBlock>(0);
 	}
-	
 	/**
-	 * Construct a new Cuboid Selection
-	 * @param world
+	 * This will init origin and offset as null and init the block list with listSize elements
+	 * @param listSize
 	 */
-	public CuboidSelection(String world) {
-		origin = null;
-		offset = null;
-		content = null;
-		this.setWorld(world);
+	public CuboidSelection(int listSize) {
+		blocks = new LinkedHashMap<Vector,BaseBlock>(listSize);
 	}
 	
 	/**
-	 * Construct a Cuboid Selection with origin etc already set.
+	 * This will set origin and offset but init the block list with 0 elements
 	 * @param origin
 	 * @param offset
 	 */
 	public CuboidSelection(Vector origin, Vector offset) {
 		this.origin = origin;
 		this.offset = offset;
-		content.setSizeVector(Vector.getAreaVolume(origin, offset));
-		world = "no_world";
+		blocks = new LinkedHashMap<Vector,BaseBlock>(0);
 	}
 	
 	/**
-	 * Construct a Cuboid Selection with origin etc already set.
+	 * Init the CuboidSelection accordingly with all details set
 	 * @param origin
 	 * @param offset
-	 * @param world
+	 * @param listSize
 	 */
-	public CuboidSelection(Vector origin, Vector offset, String world) {
-		this.origin = origin;
+	public CuboidSelection(Vector origin, Vector offset, int listSize) {
 		this.offset = offset;
-		content = new CuboidData();
-		content.setSizeVector(Vector.getAreaVolume(origin, offset));
-		this.setWorld(world);
-	}
-	
-	/*
-	 * ***************************************************************************
-	 * IINITIALISATION SETTING AND GETTING OF OUR FIELDS
-	 * ***************************************************************************
-	 */
-	/**
-	 * Check if origin and offset are not null and complete the selection by sorting
-	 * the Vectors, making the origin the one nearer to the 0,0,0.
-	 */
-	private void completeCuboid() {
-		if(origin != null && offset != null ) {
-			content = new CuboidData();
-			content.setSizeVector(Vector.getAreaVolume(origin, offset));
-		}
-//		if(isComplete == true) {
-//			Vector min = Vector.getMinor(origin, offset);
-//			Vector max = Vector.getMajor(origin, offset);
-//			origin = min;
-//			offset = max;
-//		}
+		this.origin = origin;
+		blocks = new LinkedHashMap<Vector,BaseBlock>(listSize);
 	}
 	
 	/**
-	 * Check if the Cuboid is completed yet
-	 * @return True if complete, false otherwise
+	 * Set a block at a given point.
+	 * @param v
+	 * @param block
+	 */
+	public void setBlockAt(Vector v, BaseBlock block) {
+		blocks.put(v, block);
+	}
+	
+	/**
+	 * Get a block from this selection from a given point
+	 * @param v
+	 * @return
+	 */
+	public BaseBlock getBlockAt(Vector v) {
+		return blocks.get(v);
+	}
+	
+	/**
+	 * Set the origin point of this selection
+	 * @param v
+	 */
+	public void setOrigin(Vector v) {
+		origin = v;
+	}
+	
+	/**
+	 * Get the origin of this selection
+	 * @return
+	 */
+	public Vector getOrigin() {
+		return origin;
+	}
+	
+	/**
+	 * Set the offset point of this selection
+	 * @param v
+	 */
+	public void setOffset(Vector v) {
+		offset = v;
+	}
+	
+	/**
+	 * Get the offset point of this selection
+	 * @return
+	 */
+	public Vector getOffset() {
+		return offset;
+	}
+	
+	/**
+	 * Get the data value for the current sculpt tool setting
+	 * @return
+	 */
+	public int getSculptData() {
+		return sculptData;
+	}
+	
+	/**
+	 * Set the data value for the current sculpt tool setting
+	 * @param sculptData
+	 */
+	public void setSculptData(int sculptData) {
+		this.sculptData = sculptData;
+	}
+	
+	/**
+	 * Get block type for current sculpt tool setting
+	 * @return
+	 */
+	public int getSculptType() {
+		return sculptType;
+	}
+	
+	/**
+	 * Set block type for current sculpt tool setting
+	 */
+	public void setSculptType(int sculptType) {
+		this.sculptType = sculptType;
+	}
+	
+	public int getSculptRadius() {
+		return sculptRadius;
+	}
+	public void setSculptRadius(int sculptRadius) {
+		this.sculptRadius = sculptRadius;
+	}
+	/**
+	 * Return the current Block List
+	 * @return
+	 */
+	public LinkedHashMap<Vector,BaseBlock> getBlockList() {
+		return blocks;
+	}
+	
+	/**
+	 * Override the current block list with a new one
+	 * @param list
+	 */
+	public void setBlockList(LinkedHashMap<Vector,BaseBlock> list) {
+		blocks = list;
+	}
+	
+	public String getWorld() {
+		return world;
+	}
+	public void setWorld(String world) {
+		this.world = world;
+	}
+	/**
+	 * Reset all properties to their defaults and empty the block list
+	 */
+	public void clearAll() {
+		blocks.clear();
+		origin=null;
+		offset=null;
+		sculptType=0;
+		sculptData=0;
+	}
+	
+	/**
+	 * Clearthe block list. This leaves points and sculpt information untouched
+	 */
+	public void clearBlocks() {
+		blocks.clear();
+	}
+	
+	/**
+	 * Check if the selection has both points set
+	 * @return
 	 */
 	public boolean isComplete() {
 		if(origin != null && offset != null) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	/**
-	 * Check if origin is set.
-	 * 
-	 * @return true if yes, false otherwise
-	 */
-	public boolean originSet() {
-		if(origin != null) {
-			System.out.println("Origin not null");
 			return true;
 		}
 		return false;
 	}
 	
 	/**
-	 * Check if offset is set.
-	 * 
-	 * @return true if yes, false otherwise
+	 * Check if the origin point is set
+	 * @return
+	 */
+	public boolean originSet() {
+		if(origin != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Check if the offset point is set
+	 * @return
 	 */
 	public boolean offsetSet() {
 		if(offset != null) {
@@ -148,199 +234,79 @@ public class CuboidSelection {
 	}
 	
 	/**
-	 * Retrieve the current origin of this selection
-	 * @return Vector origin
+	 * Set Ceiling height for the selection
+	 * @param height
 	 */
-	public Vector getOrigin() {
-		return origin;
-	}
-
-	/**
-	 * Set the current origin of this selection
-	 * @param origin
-	 */
-	public void setOrigin(Vector origin) {
-			this.origin = origin;
-		//Check if Cuboid is completed and sort the vectors 
-		completeCuboid();
-		
-	}
-
-	/**
-	 * Retrieve the current offset of this selection
-	 * @return Vector offset
-	 */
-	public Vector getOffset() {
-		return offset;
-	}
-
-	public void setOffset(Vector offset) {
-			this.offset = offset;
-		//Check if Cuboid is completed and sort the vectors 
-		completeCuboid();
+	public void setCeiling(int height) {
+		origin.setY(height);
 	}
 	
 	/**
-	 * Retrieve the current world name
-	 * @return
+	 * Set the floor height for the selection
+	 * @param height
 	 */
-public String getWorld() {
-		return world;
+	public void setFloor(int height) {
+		offset.setY(height);
 	}
-
+	
 	/**
-	 * Set the current World name
+	 * Expand the selection vertically from top to bottom
+	 */
+	public void expandVert() {
+		origin.setY(127);
+		offset.setY(0);
+	}
+	
+	/**
+	 * Turn this selection info a cuboid
+	 * @param playerlist
+	 * @param name
+	 * @param defaultSettings
 	 * @param world
-	 */
-	public void setWorld(String world) {
-		this.world = world;
-	}
-
-	/**
-	 * Clear this Selection, resetting fields to the defaults
-	 * After this, you have to set details again
-	 */
-	public void clear() {
-		origin = null;
-		offset = null;
-		content = null;
-		world = "no_world"; 
-	}
-	
-
-	
-	/*
-	 * ***************************************************************************
-	 * SELECTION SIZE MANIPULATION
-	 * ***************************************************************************
-	 */
-	
-	/**
-	 * Span the selecion vertically from 0 to 128
-	 */
-	public boolean expandVert() {
-		if(isComplete()) {
-			origin = new Vector(origin.getX(), 0, origin.getZ());
-			offset = new Vector(offset.getX(), 130, offset.getZ());
-			return true;
-		}
-		else {
-			return false;
-		}
-		
-		
-	}
-	
-	/**
-	 * Set Cuboids ceiling height
-	 * @param ceiling
 	 * @return
 	 */
-	public boolean setCeiling(int ceiling) {
-		if(isComplete()) {
-			offset = new Vector(offset.getX(), (double)ceiling, offset.getZ());
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	public boolean setFloor(int floor) {
-		if(isComplete()) {
-			origin = new Vector(origin.getX(), (double)floor, origin.getZ());
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	/*
-	 * ***************************************************************************
-	 * SOME MORE INTERACTIONS YAY
-	 * ***************************************************************************
-	 */
-	
-	/**
-	 * Turn this selection into a cuboid area and save it.
-	 * @param playerlist A String with a list of players, separated by spaces, add o: to define owner or g: to define a group.
-	 * @param world The world this cuboid is made in
-	 * @param defaultSettings <br> 
-	 * The defaultSettings need the following keys:
-	 * <ul>
-	 * 	<li>allowPvp</li>
-	 * 	<li>creeperSecure</li>
-	 * 	<li>healing</li>
-	 * 	<li>protection</li>
-	 * <li>blockFireSpread</li>
-	 * 	<li>sanctuary</li>
-	 * <li>freeBuild</li>
-	 * 	<li>sanctuarySpawnAnimals</li>
-	 * </ul>
-	 * @return a new CuboidE
-	 */
-	public CuboidE toCuboid(String playerlist, String name, HashMap<String, Boolean>defaultSettings) {
+	public CuboidE toCuboid(String playerlist, String name, HashMap<String, Boolean> defaultSettings, String world){
 		CuboidE cube = new CuboidE();
-		cube.setPoints(origin, offset);
-		String[] allowed = playerlist.split(" ");
-		//Add players and groups and all
-		for(int i = 0; i < allowed.length; i++) {
-			if(allowed[i].indexOf("o:") != -1) {
-				cube.addPlayer(allowed[i]);
-			}
-			else if(allowed[i].indexOf("g:") != -1) {
-				cube.addGroup(allowed[i]);
-			}
-			else {
-				cube.addPlayer(allowed[i]);
-			}
-		}
-		cube.setWorld(world);
-		cube.setName(name);
-		cube.setAllowPvp(defaultSettings.get("allowPvp"));
-		cube.setCreeperSecure(defaultSettings.get("creeperSecure"));
-		cube.setHealing(defaultSettings.get("healing"));
-		cube.setProtection(defaultSettings.get("protection"));
-		cube.setSanctuary(defaultSettings.get("sanctuary"));
-		cube.setSanctuarySpawnAnimals(defaultSettings.get("sanctuarySpawnAnimals"));
-		cube.setFreeBuild(defaultSettings.get("freeBuild"));
-		cube.setBlockFireSpread(defaultSettings.get("blockFireSpread"));
+	    cube.setPoints(this.origin, this.offset);
+	    String[] allowed = playerlist.split(" ");
 
-		//V 1.2.0
-		cube.setLavaControl(defaultSettings.get("lavaControl"));
-		cube.setWaterControl(defaultSettings.get("waterControl"));
-		cube.setFarmland(defaultSettings.get("farmland"));
-		cube.setTntSecure(defaultSettings.get("tntSecure"));
-		return cube;
+	    for (int i = 0; i < allowed.length; i++) {
+	      if (allowed[i].indexOf("o:") != -1) {
+	        cube.addPlayer(allowed[i]);
+	      }
+	      else if (allowed[i].indexOf("g:") != -1) {
+	        cube.addGroup(allowed[i]);
+	      }
+	      else {
+	        cube.addPlayer(allowed[i]);
+	      }
+	    }
+	    cube.setWorld(world);
+	    cube.setName(name);
+	    cube.overrideProperties(defaultSettings);
+	    
+	    return cube;
 	}
 	
 	/**
-	 * Get the current Content Matrix.
-	 * @return
+	 * Sort the selection points so origin is the greater one and offset the smaller
 	 */
-	public CuboidData getContent() {
-		return new CuboidData(content);
+	public void sortEdgesOriginFirst() {
+
+		Vector or_temp = Vector.getMaximum(origin, offset);
+		Vector off_temp = Vector.getMinimum(origin, offset);
+		origin = or_temp;
+		offset = off_temp;
 	}
 	
 	/**
-	 * Set the content matrix - this will override everything that currently is in the matrix!
-	 * @param c
+	 * Sort the selection edges so offset is the greater one and origin the smaller
 	 */
-	public void setContent(CuboidData c) {
-		//content = null;
-		content = new CuboidData(c);
+	public void sortEdgesOffsetFirst() {
+		Vector or_temp = Vector.getMaximum(origin, offset);
+		Vector off_temp = Vector.getMinimum(origin, offset);
+		origin = off_temp;
+		offset = or_temp;
 	}
 	
-	/**
-	 * Empties the BlockBag so it doesn't grow uncontrollably
-	 */
-	public void clearContentData() {
-		if(content != null) {
-			content.clearBlockBag();
-		}
-		else {
-			content = new CuboidData();
-		}
-	}
 }

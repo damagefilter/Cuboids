@@ -9,7 +9,7 @@ public class Cuboids2Config {
 
 	//Plugin Specific information:
 	private String name="Cuboids2";
-	private String version = "1.5.2";
+	private String version = "1.6.0 Testdrive 2";
 	
 	//Behaviour settings
 	private boolean useDoubleAction=false;

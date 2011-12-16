@@ -85,6 +85,9 @@ public class CuboidTreeHandler {
 						
 					}
 				}
+				else {
+					getPossibleParent(node.getCuboid());
+				}
 			}
 		}
 	}

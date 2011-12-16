@@ -968,19 +968,27 @@ public class CuboidE {
 	 * @param cube
 	 */
 	public void overrideProperties(CuboidE cube) {
-		setAllowPvp(cube.isAllowedPvp());
-		setBlockFireSpread(cube.isBlockFireSpread());
-		setCreeperSecure(cube.isCreeperSecure());
-		setFarmland(cube.isFarmland());
-		setFreeBuild(cube.isFreeBuild());
-		setHealing(cube.isHealingArea());
-		setLavaControl(cube.isLavaControl());
-		setPriority(cube.getPriority()+1);
-		setProtection(cube.isProtected());
-		setSanctuary(cube.isSanctuary());
-		setSanctuarySpawnAnimals(cube.sanctuarySpawnAnimals());
-		setTntSecure(cube.isTntSecure());
-		setWaterControl(cube.isWaterControl());
-		setRestriction(cube.isRestricted());
+		overrideProperties(cube.getFlagListArray());
+	}
+	/**
+	 * This takes a cuboid and overrides the local properties<br>
+	 * with the ones given inside cube
+	 * @param cube
+	 */
+	public void overrideProperties(HashMap<String, Boolean> props) {
+		setAllowPvp(((Boolean)props.get("allowPvp")).booleanValue());
+	    setCreeperSecure(((Boolean)props.get("creeperSecure")).booleanValue());
+	    setHealing(((Boolean)props.get("healing")).booleanValue());
+	    setProtection(((Boolean)props.get("protection")).booleanValue());
+	    setSanctuary(((Boolean)props.get("sanctuary")).booleanValue());
+	    setSanctuarySpawnAnimals(((Boolean)props.get("sanctuarySpawnAnimals")).booleanValue());
+	    setFreeBuild(((Boolean)props.get("freeBuild")).booleanValue());
+	    setBlockFireSpread(((Boolean)props.get("blockFireSpread")).booleanValue());
+
+	    setLavaControl(((Boolean)props.get("lavaControl")).booleanValue());
+	    setWaterControl(((Boolean)props.get("waterControl")).booleanValue());
+	    setFarmland(((Boolean)props.get("farmland")).booleanValue());
+	    setTntSecure(((Boolean)props.get("tntSecure")).booleanValue());
+	    setRestriction(((Boolean)props.get("restriction")).booleanValue());
 	}
 }

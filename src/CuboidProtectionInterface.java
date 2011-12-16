@@ -13,8 +13,7 @@ import java.util.Timer;
 
 import com.playblack.EventLogger;
 import com.playblack.ToolBox;
-import com.playblack.cuboid.Blockc;
-import com.playblack.cuboid.CuboidData;
+import com.playblack.blocks.WorldBlock;
 import com.playblack.cuboid.CuboidE;
 import com.playblack.cuboid.CuboidSelection;
 import com.playblack.cuboid.tree.CuboidNode;
@@ -39,7 +38,7 @@ public class CuboidProtectionInterface {
 	Object lock = new Object();
 	ArrayList<String> noTeleportList = new ArrayList<String>(0);
 	CuboidsConverter conv;
-	CuboidData myContent;
+	CuboidSelection myContent;
 	HashMap<String,Item[]> playerInventories = new HashMap<String,Item[]>(0);
 	
 	/**
@@ -1840,7 +1839,7 @@ public class CuboidProtectionInterface {
 			return false;
 		}
 		loadAreaData(cube.getMinorPoint(), cube.getMajorPoint(), player);
-		if(myContent.getBlockBag().size() >= Cuboids2.cfg.getMaxBlockBagSize()) {
+		if(myContent.getBlockList().size() >= Cuboids2.cfg.getMaxBlockBagSize()) {
 			player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("areaTooLarge"));
 			return false;
 		}
@@ -1936,8 +1935,8 @@ public class CuboidProtectionInterface {
 		size.setX(length_x);
 		size.setY(length_y);
 		size.setZ(length_z);
-		myContent = new CuboidData();
-		myContent.setSizeVector(size);
+		myContent = new CuboidSelection();
+		//myContent.setSizeVector(size);
 		//For instanciating we need this ugly monster to get the correct block positions But that should be alright
 		for(int x = 0; x < length_x; ++x) {
 			
@@ -1949,7 +1948,7 @@ public class CuboidProtectionInterface {
 					//Vector arrayPosition = new Vector(x,y,z);
 					Block b = player.getWorld().getBlockAt(current.getBlockX(),current.getBlockY(),current.getBlockZ());
 					
-					Blockc bc = new Blockc((byte)b.getData(), (short)b.getType());
+					WorldBlock bc = new WorldBlock((byte)b.getData(), (short)b.getType());
 					myContent.setBlockAt(current, bc);
 				}
 			}
@@ -1962,7 +1961,7 @@ public class CuboidProtectionInterface {
 	 * @param path
 	 * @return CuboidData object or null if somethign went wrong
 	 */
-	public CuboidData restoreFromBackup(Player player, String cubeName) {
+	public CuboidSelection restoreFromBackup(Player player, String cubeName) {
 		if(!player.canUseCommand("/cbackup")) {
 			if(!player.canUseCommand("/cIgnorerestrictions")) {
 				if(!player.canUseCommand("/cAreaMod")) {
@@ -1978,7 +1977,7 @@ public class CuboidProtectionInterface {
                     new BufferedInputStream(
                     new FileInputStream(
                     new File(path))));
-            CuboidData cube = new CuboidData( (CuboidData) ois.readObject());
+            CuboidSelection cube = (CuboidSelection) ois.readObject();
             ois.close();
             return cube;
         }

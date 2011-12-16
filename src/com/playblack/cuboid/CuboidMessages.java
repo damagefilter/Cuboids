@@ -32,6 +32,9 @@ public class CuboidMessages {
 		messages.put("actionsUndone", "Your action has been reverted.");
 		messages.put("UndoDisabled", "The undo function is disabled.");
 		
+		messages.put("actionsRedone", "Your action has been re-done.");
+		messages.put("RedoDisabled", "The redo function is disabled (because undo is disabled).");
+		
 		//MANAGEMENT / TREE HANDLING
 		messages.put("cuboidAdded", "Cuboid created and saved");
 		messages.put("cuboidNotAdded", "Cuboid could not be created.");
@@ -99,6 +102,7 @@ public class CuboidMessages {
 		messages.put("noCopy", "You must use /ccopy before pasting!");
 		messages.put("pasteFailed", "Pasting failed. Selection is incomplete!");
 		messages.put("invalidRadius", "The radius specified is invalid!(Not a number)");
+		messages.put("negativeNumber", "A number you entered was smaller than 0! Try again with 0 or greater.");
 		messages.put("invalidHeight", "The height specified is invalid!(Not a number)");
 		messages.put("cannotParentChild", "Can't parent - Child would not be inside the desired parent.");
 		

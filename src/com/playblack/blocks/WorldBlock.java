@@ -1,4 +1,4 @@
-package com.playblack.cuboid;
+package com.playblack.blocks;
 
 import java.io.Serializable;
 
@@ -12,7 +12,7 @@ import java.io.Serializable;
  *
  */
 @SuppressWarnings("serial")
-public class Blockc implements Serializable {
+public class WorldBlock extends BaseBlock implements Serializable {
 
 	/**
 	 * The Data or damage value
@@ -28,7 +28,7 @@ public class Blockc implements Serializable {
 	/**
 	 * Construct empty block (is Air)
 	 */
-	public Blockc() {
+	public WorldBlock() {
 		data=0;
 		type=0;
 	}
@@ -37,7 +37,7 @@ public class Blockc implements Serializable {
 	 * Construct a block with its type only
 	 * @param type
 	 */
-	public Blockc(short type) {
+	public WorldBlock(short type) {
 		this.type= type;
 		data = 0;
 	}
@@ -48,7 +48,7 @@ public class Blockc implements Serializable {
 	 * @param type
 	 * @param position
 	 */
-	public Blockc(byte data, short type) {
+	public WorldBlock(byte data, short type) {
 		this.data = data;
 		this.type = type;
 	}
@@ -56,40 +56,28 @@ public class Blockc implements Serializable {
 	/**
 	 * Copy Constructor
 	 */
-	public Blockc(Blockc tpl) {
+	public WorldBlock(WorldBlock tpl) {
 		this.data = tpl.data;
 		this.type = tpl.type;
 	}
 	
-	/**
-	 * Set the Item/Block Type of this block.
-	 * @param type
-	 */
-	public void setType(short type) {
-		this.type = type;
+
+	public void setType(Number type) {
+		this.type = (Short)type;
 	}
 	
-	/**
-	 * Get the current Item/Block Type of this block.
-	 * @return short The Block Type
-	 */
-	public short getType() {
+
+	public Short getType() {
 		return type;
 	}
 	
-	/**
-	 * Set the Data or Damage value of this block.
-	 * @param data
-	 */
-	public void setData(byte data) {
-		this.data = data;
+
+	public void setData(Number data) {
+		this.data = (Byte)data;
 	}
 	
-	/**
-	 * Get the current damage/data value of this block.
-	 * @return byte The current damage/data value
-	 */
-	public byte getData() {
+	
+	public Byte getData() {
 		return data;
 	}
 	
@@ -110,7 +98,7 @@ public class Blockc implements Serializable {
 	 * @param b
 	 * @return true if is equal, false otherwise
 	 */
-	public boolean equals(Blockc b) {
+	public boolean equals(WorldBlock b) {
 		if(type == b.getType() && data == b.getData()) {
 			return true;
 		}
@@ -119,7 +107,7 @@ public class Blockc implements Serializable {
 		}
 	}
 	
-	public boolean equalsSlack(Blockc b) {
+	public boolean equalsSlack(WorldBlock b) {
 		if(type == b.getType()) {
 			return true;
 		}

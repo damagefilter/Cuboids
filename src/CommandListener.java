@@ -1,13 +1,14 @@
-import com.playblack.cuboid.Blockc;
-import com.playblack.cuboid.CuboidData;
+
+import com.playblack.blocks.WorldBlock;
 import com.playblack.cuboid.CuboidE;
 import com.playblack.cuboid.CuboidSelection;
+import com.playblack.vector.Vector;
 
 
 public class CommandListener extends PluginListener {
 	
 	//if stuff like cfill cannot be undone by exceeding max undoable blocks
-	private boolean ignoreSizeWarning = false;
+	//private boolean ignoreSizeWarning = false;
 	private String[] commandSplit;
 	/**
 	 * *********************************************************************************************
@@ -44,11 +45,11 @@ public class CommandListener extends PluginListener {
 			
 			//command, radius, type
 			if(split.length == 3) {
-				int radius = convertItem(split[1]);
-				int type = convertItem(split[2]);
-				Cuboids2.blockOp.setSculptData(0, player);
-				Cuboids2.blockOp.setSculptRadius(radius, player);
-				Cuboids2.blockOp.setSculptType(type, player);
+				int radius = parseInt(split[1]);
+				int type = parseInt(split[2]);
+				Cuboids2.sel.get(player.getName()).setSculptData(0);
+				Cuboids2.sel.get(player.getName()).setSculptRadius(radius);
+				Cuboids2.sel.get(player.getName()).setSculptType(type);
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("brushSet"));
 				return true;
 				
@@ -58,9 +59,10 @@ public class CommandListener extends PluginListener {
 				int radius = convertItem(split[1]);
 				int type = convertItem(split[2]);
 				int data = convertData(split[3]);
-				Cuboids2.blockOp.setSculptData(data, player);
-				Cuboids2.blockOp.setSculptRadius(radius, player);
-				Cuboids2.blockOp.setSculptType(type, player);
+				Cuboids2.sel.get(player.getName()).setSculptData(data);
+				Cuboids2.sel.get(player.getName()).setSculptRadius(radius);
+				Cuboids2.sel.get(player.getName()).setSculptType(type);
+
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("brushSet"));
 				return true;
 			}
@@ -88,8 +90,12 @@ public class CommandListener extends PluginListener {
 				}
 			}
 			if(Cuboids2.sel.get(player.getName()).isComplete()) {
-				Cuboids2.content.initCuboidData(Cuboids2.sel.get(player.getName()).getOrigin(), Cuboids2.sel.get(player.getName()).getOffset(), player);
-				Cuboids2.blockOp.relativeCopy(player, Cuboids2.content.getCuboidData());
+				//Cuboids2.content.initCuboidData(Cuboids2.sel.get(player.getName()).getOrigin(), Cuboids2.sel.get(player.getName()).getOffset(), player);
+				Cuboids2.blockOp.relativeCopy(  player.getName(), 
+												Cuboids2.content.getBlocksFromWorld(player, Cuboids2.sel.get(player.getName()))
+												//grüße an alex
+												,new Vector(player.getX(), player.getY(), player.getZ()) 
+				);
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidCopied"));
 			}
 			return true;
@@ -108,36 +114,29 @@ public class CommandListener extends PluginListener {
 					return true;
 				}
 			}
-			CuboidData tmp = Cuboids2.blockOp.positionMove(player, true); //simulate new block positions for backup
+			Vector position;
+			if(Cuboids2.sel.get(player.getName()).getOrigin() != null) {
+				position = Cuboids2.sel.get(player.getName()).getOrigin();
+				System.out.println("Using Origin as pastepoint");
+			}
+			else {
+				position =  new Vector(player.getX(), player.getY(), player.getZ());
+				System.out.println("Using Player position as pastepoint");
+			}
+			CuboidSelection tmp = Cuboids2.blockOp.clipboardMoveByVector(player.getName(),
+																		 position
+																		 ,false); //simulate new block positions for backup
 			if(tmp != null) {
-				CuboidData world = Cuboids2.content.getWorldDataForSelection(player, tmp);
-				//Check area size, if too big ask player if its okay that the action cannot be undone.  
-				int volume = tmp.getBlockBag().size();
-				if(!ignoreSizeWarning && Cuboids2.cfg.allowUndo()) {
-					if(volume >= Cuboids2.cfg.getMaxBlockBagSize()) {
-						//More than 500k blocks .... dude...
-							player.sendMessage("You're trying to paste something from epic size.("+volume+" Blocks)");
-							player.sendMessage("Due to this size, this action cannot be undone. It would blast your the to pieces.");
-							player.sendMessage("If you're sure type /caccept to proceed without making this undoable or specify a smaller area.");
-							commandSplit = split;
-							return true;
-					}
-				}
-				//log.info("Area Volume: "+volume);
-				if(!Cuboids2.noBackup && Cuboids2.cfg.allowUndo()) {
-					Cuboids2.content.setCuboidData(world);
-					//log.info("INSERTING UNDO =================================================");
-					Cuboids2.undoList.add(Cuboids2.content.getContentMatrixSerialized(Integer.toString(Cuboids2.undoList.getUndoList(player.getName()).size()), player.getName()), player.getName());
-					
-				}
-				Cuboids2.blockOp.paste(player);
+				Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, tmp), false);
+				
+				Cuboids2.content.modifyWorld(player, tmp);
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidPasted"));
 			}
 			else {
 				player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCopy"));
 			}
 			Cuboids2.noBackup = false;
-			ignoreSizeWarning = false;
+			//ignoreSizeWarning = false;
 			commandSplit = null;
 			return true;
 		}
@@ -161,9 +160,9 @@ public class CommandListener extends PluginListener {
 			}
 
 			if(Cuboids2.sel.get(player.getName()).isComplete()) {
-				Cuboids2.content.initCuboidData(Cuboids2.sel.get(player.getName()).getOrigin(), Cuboids2.sel.get(player.getName()).getOffset(), player);
-				Cuboids2.blockOp.fullCopy(player, Cuboids2.content.getCuboidData());
-				//player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidCopied"));
+				CuboidSelection selection = Cuboids2.content.getBlocksFromWorld(player, Cuboids2.sel.get(player.getName()));
+				
+				Cuboids2.blockOp.rawCopy(player.getName(), selection);
 			}
 			else {
 				player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("selectionIncomplete"));
@@ -177,18 +176,16 @@ public class CommandListener extends PluginListener {
 				return true;
 			}
 
-			Cuboids2.content.getCuboidData().fill(new Blockc((byte)0,(short)0));
-			//Get the new world shit again because java demands that to let this function work properly
-			//Has to do with making the area air first and then pasting whatever it was
-			Cuboids2.blockOp.fullCopy(player, Cuboids2.content.getWorldDataForSelection(player, Cuboids2.content.getCuboidData()));
-			//Now clear the old area (like CuboidPlugin does ....)
-			Cuboids2.content.modifyWorld(player);
-			
+			CuboidSelection tmp = Cuboids2.blockOp.fill(player.getName(), Cuboids2.blockOp.getClipboard(player.getName()), new WorldBlock((byte)0,(short)0), true);
+			Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, tmp), true);
+			Cuboids2.content.modifyWorld(player, tmp);
 			//And now paste stuff at the new positions
-			Cuboids2.blockOp.pasteOffset(player, split[1], distance);
+			tmp = Cuboids2.blockOp.moveByOffset(player.getName(), split[1], distance, Cuboids2.blockOp.getClipboard(player.getName()), true);
+			Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, tmp), false);
+			Cuboids2.content.modifyWorld(player,tmp);
 			player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidMoved"));
 			Cuboids2.noBackup = false;
-			ignoreSizeWarning = false;
+			//ignoreSizeWarning = false;
 			commandSplit = null;
 			return true;
 		}
@@ -206,83 +203,63 @@ public class CommandListener extends PluginListener {
 				}
 			}
 			if(split.length < 2) {
-				player.sendMessage(Colors.Yellow+Cuboids2.msg.help.get("cfaces"));
-				return true;
+				if(split[0].equalsIgnoreCase("/cfaces")) {
+					player.sendMessage(Colors.Yellow+Cuboids2.msg.help.get("cfaces"));
+					return true;
+				}
+				if(split[0].equalsIgnoreCase("/cwalls")) {
+					player.sendMessage(Colors.Yellow+Cuboids2.msg.help.get("cwalls"));
+					return true;
+				}
 			}
-
-			// /cfaces <block id/name> <data (optional)>
-			
-			if(Cuboids2.sel.get(player.getName()).isComplete()) {
+			CuboidSelection selection = Cuboids2.sel.get(player.getName());
+			CuboidSelection tmp;
+			if(selection.isComplete()) {
+				if(split[0].equalsIgnoreCase("/cwalls")) {
+					tmp = Cuboids2.blockOp.buildWalls(player.getName(), selection, false);
+				}
+				else {
+					tmp = Cuboids2.blockOp.buildWalls(player.getName(), selection, true);
+				}
+				WorldBlock block = new WorldBlock();
+				if(split.length == 2) {
+					short type = convertType(split[1]);
+					if(type == -1) {
+						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("invalidBlock"));
+						return true;
+					}
+					else {
+						block.setType(type);
+						block.setData((byte)0);
+					}
+				}
+				else if(split.length > 2) {
+					short type = convertType(split[1]);
+					byte data = convertData(split[2]);
+					if(type == -1 | data == -1) {
+						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("invalidBlock"));
+						return true;
+					}
+					else {
+						block.setType(type);
+						block.setData(data);
+					}
+				}
 				
-				Cuboids2.content.initCuboidData(Cuboids2.sel.get(player.getName()).getOrigin(), Cuboids2.sel.get(player.getName()).getOffset(), player);
-				Cuboids2.blockOp.fullCopy(player, Cuboids2.content.getCuboidData());
-				//player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidCopied"));
+				Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, tmp), true);
+				tmp = Cuboids2.blockOp.replace(player.getName(), tmp, new WorldBlock((byte)0,(short)1), block, true);
+				if(Cuboids2.content.modifyWorld(player, tmp)) {
+					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("wallsCreated"));
+					return true;
+				}
+				else {
+					return true;
+				}
 			}
 			else {
 				player.sendMessage(Colors.Rose+Cuboids2.msg.help.get("selectionIncomplete"));
 				return true;
 			}
-			
-			Blockc block = new Blockc();
-			if(split.length == 2) {
-				short type = convertType(split[1]);
-				if(type == -1) {
-					player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("invalidBlock"));
-					return true;
-				}
-				else {
-					block.setType(type);
-					block.setData((byte)0);
-				}
-			}
-			else if(split.length > 2) {
-				short type = convertType(split[1]);
-				byte data = convertData(split[2]);
-				if(type == -1 | data == -1) {
-					player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("invalidBlock"));
-					return true;
-				}
-				else {
-					block.setType(type);
-					block.setData(data);
-				}
-			}
-			
-			CuboidData tmp; //simulate new block positions for backup
-			if(split[0].equalsIgnoreCase("/cwalls")) {
-				tmp = Cuboids2.blockOp.buildWalls(player, block, false);
-			}
-			else {
-				 tmp = Cuboids2.blockOp.buildWalls(player, block, true);
-			}
-			if(!ignoreSizeWarning && Cuboids2.cfg.allowUndo()) {
-				if(tmp.getBlockBag().size() >= Cuboids2.cfg.getMaxBlockBagSize()) {
-					//More than 750k blocks .... dude...
-						player.sendMessage("You're trying to move something from epic size.("+tmp.getBlockBag().size()+" Blocks)");
-						player.sendMessage("Due to this size, this action cannot be undone. It would blast your server the to pieces.");
-						player.sendMessage("If you're sure type /caccept to proceed without making this undoable or specify a smaller area.");
-						commandSplit = split;
-						return true;
-				}
-			}
-			//log.info("Area Volume: "+volume);
-			//CuboidData world = Cuboids2.content.getWorlDataForSelection(player, tmp);
-			if(!Cuboids2.noBackup && Cuboids2.cfg.allowUndo()) {
-				//Cuboids2.content.setContentMatrix(Cuboids2.content.getWorlDataForSelection(player, tmp));
-				Cuboids2.undoList.add(Cuboids2.content.serializeCuboidData(
-						Integer.toString(
-								Cuboids2.undoList.getUndoList(player.getName()).size()), 
-								player.getName(),Cuboids2.content.getCuboidData()), player.getName());
-			}
-			
-			
-			Cuboids2.content.setCuboidData(tmp);
-			Cuboids2.content.modifyWorld(player);
-			player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("wallsCreated"));
-			Cuboids2.noBackup = false;
-			ignoreSizeWarning = false;
-			commandSplit = null;
-			return true;
 		}
 		
 		/*
@@ -305,7 +282,7 @@ public class CommandListener extends PluginListener {
 						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("invalidBlock"));
 						return true;
 					}
-					Blockc b = new Blockc();
+					WorldBlock b = new WorldBlock();
 					if(split.length > 2) {
 						byte data = convertData(split[2]);
 						if(data == -1) {
@@ -319,57 +296,18 @@ public class CommandListener extends PluginListener {
 						b.setType(type);
 					}
 
-					//log.info("Initialising Selection");
-					if(Cuboids2.sel.get(player.getName()).isComplete()) {
-						Cuboids2.content.initCuboidData(Cuboids2.sel.get(player.getName()).getOrigin(),Cuboids2.sel.get(player.getName()).getOffset(), player);
-						//Reflect that on the selection content matrix
-						//log.info("Reflecting Selection on to modifier");
-					}
-					else {
-						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("selectionIncomplete"));
-						return true;
-					}
-					//Check area size, if too big ask player if its okay that the action cannot be undone.
-					int volume = Cuboids2.content.getCuboidData().getBlockBag().size();
-					if(!ignoreSizeWarning && Cuboids2.cfg.allowUndo()) {
-						if(volume >= Cuboids2.cfg.getMaxBlockBagSize()) {
-							//More than 500k blocks .... dude...
-								player.sendMessage("You're trying to do something from epic size.("+volume+" Blocks)");
-								player.sendMessage("Due to this size, this action cannot be undone. It would blast your the to pieces.");
-								player.sendMessage("If you're sure type /caccept to proceed without making this undoable or specify a smaller area.");
-								commandSplit = split;
-								return true;
-						}
-					}
-					//log.info("Area Volume: "+volume);
-					if(!Cuboids2.noBackup && Cuboids2.cfg.allowUndo()) {
-						//log.info("INSERTING UNDO =================================================");
-						Cuboids2.undoList.add(Cuboids2.content.getContentMatrixSerialized(
-						Integer.toString(Cuboids2.undoList.getUndoList(player.getName()).size()), player.getName()),player.getName());
-						
-					}
-					//Cuboids2.sel.get(player.getName()).setContentMatrix(Cuboids2.content.getContentMatrix());
-					//Cuboids2.sel.get(player.getName()).fill(b); 
-					Cuboids2.content.getCuboidData().fill(b);
-					
-					//Reflect changes on Cuboids2.content and on world	
-					//log.info("reflecting changes to interface");
-					//Cuboids2.content.setContentMatrix(Cuboids2.sel.get(player.getName()).getContent());
-					
-					
-					
-					/*
-					 * EXECUTE THE CHANGES
-					 */
-					//Do those changes to the world.
-					//log.info("modifying world");
-					Cuboids2.content.modifyWorld(player);
+					CuboidSelection selection;
+					selection = Cuboids2.blockOp.fill(player.getName(), 
+										  Cuboids2.content.getBlocksFromWorld(player, Cuboids2.sel.get(player.getName())),
+										  b,
+										  false);
+
+					Cuboids2.content.modifyWorld(player, selection);
 					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("selectionFilled"));
 					//Reset the Cuboids2.noBackup props and stuff
 					Cuboids2.noBackup = false;
-					ignoreSizeWarning = false;
+					//ignoreSizeWarning = false;
 					commandSplit = null;
-					Cuboids2.sel.get(player.getName()).clearContentData();
 					return true;
 				}
 				else {
@@ -401,10 +339,10 @@ public class CommandListener extends PluginListener {
 			if(split.length > 2) {
 				if(Cuboids2.sel.get(player.getName()).isComplete()) {
 					//Assign block type
-					Blockc a = new Blockc();
+					WorldBlock a = new WorldBlock();
 					short a_type = 0;
 					byte a_data = 0;
-					Blockc b = new Blockc();
+					WorldBlock b = new WorldBlock();
 					short b_type = 0;
 					byte b_data = 0;
 					if(split.length > 4) {
@@ -451,33 +389,14 @@ public class CommandListener extends PluginListener {
 					a.setType(a_type);
 					b.setData(b_data);
 					b.setType(b_type);
-					Cuboids2.content.initCuboidData(Cuboids2.sel.get(player.getName()).getOrigin(),Cuboids2.sel.get(player.getName()).getOffset(), player);
-					int volume = Cuboids2.content.getCuboidData().getBlockBag().size();
-					if(!ignoreSizeWarning && Cuboids2.cfg.allowUndo()) {
-						if(volume >= Cuboids2.cfg.getMaxBlockBagSize()) {
-							//More than 500k blocks .... dude...
-								player.sendMessage("You're trying to do something from epic size.("+volume+" Blocks)");
-								player.sendMessage("Due to this size, this action cannot be undone. It would blast your the to pieces.");
-								player.sendMessage("If you're sure type /caccept to proceed without making this undoable or specify a smaller area.");
-								commandSplit = split;
-								return true;
-						}
-					}
-					//log.info("Area Volume: "+volume);
-					if(!Cuboids2.noBackup && Cuboids2.cfg.allowUndo()) {
-						//log.info("INSERTING UNDO =================================================");
-						Cuboids2.undoList.add(Cuboids2.content.getContentMatrixSerialized(
-								Integer.toString(Cuboids2.undoList.getUndoList(player.getName()).size()), player.getName()), player.getName());
-						
-					}
-					Cuboids2.content.getCuboidData().replace(a, b);
-					Cuboids2.content.modifyWorld(player);
+					CuboidSelection selection = Cuboids2.content.getBlocksFromWorld(player, Cuboids2.sel.get(player.getName()));
+
+					Cuboids2.content.modifyWorld(player, Cuboids2.blockOp.replace(player.getName(), selection, a, b, false));
 					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("selectionReplaced"));
 					
 					Cuboids2.noBackup = false;
-					ignoreSizeWarning = false;
+					//ignoreSizeWarning = false;
 					commandSplit = null;
-					Cuboids2.sel.get(player.getName()).clearContentData();
 					return true;
 				}
 				else {
@@ -510,7 +429,7 @@ public class CommandListener extends PluginListener {
 				}
 			}
 			Cuboids2.noBackup = true; //tell it not to make a backup
-			ignoreSizeWarning = true;
+			//ignoreSizeWarning = true;
 			player.command(command);
 			return true;
 		}
@@ -527,7 +446,7 @@ public class CommandListener extends PluginListener {
 			}
 			
 			if(Cuboids2.sel.get(player.getName()).originSet()) {
-				Blockc block = new Blockc();
+				WorldBlock block = new WorldBlock();
 				int radius = 0;
 				
 				boolean fill = true; //this is default and means it is NOT HOLLOW
@@ -612,30 +531,10 @@ public class CommandListener extends PluginListener {
 					return true;
 				}
 
-				CuboidData sphere = Cuboids2.blockOp.buildSphere(player, radius, block, fill, Cuboids2.sel.get(player.getName()).getOrigin());
-				
-				int volume = sphere.getBlockBag().size();
-				//BackUp
-				if(!ignoreSizeWarning && Cuboids2.cfg.allowUndo()) {
-					if(volume >= Cuboids2.cfg.getMaxBlockBagSize()) {
-						//More than 750k blocks .... dude...
-							player.sendMessage("You're trying to do something from epic size.("+volume+" Blocks)");
-							player.sendMessage("Due to this size, this action cannot be undone. It would blast your Server the to pieces.");
-							player.sendMessage("If you're sure type /caccept to proceed without making this undoable or specify a smaller area.");
-							commandSplit = split;
-							return true;
-					}
-				}
-				//log.info("Area Volume: "+volume);
-				if(!Cuboids2.noBackup && Cuboids2.cfg.allowUndo()) {
-					Cuboids2.content.setCuboidData(
-							Cuboids2.content.getWorldDataForSelection(player, sphere));
-					Cuboids2.undoList.add(Cuboids2.content.getContentMatrixSerialized(
-							Integer.toString(Cuboids2.undoList.getUndoList(player.getName()).size()), player.getName()), player.getName());
-					
-				}
-				Cuboids2.content.setCuboidData(sphere);
-				Cuboids2.content.modifyWorld(player);
+				CuboidSelection sphere = Cuboids2.blockOp.buildSphere(player.getName(), radius, Cuboids2.sel.get(player.getName()).getOrigin(),fill);
+				sphere = Cuboids2.blockOp.replace(player.getName(), sphere, new WorldBlock((byte)0,(short)1), block, true);
+				Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, sphere), true);
+				Cuboids2.content.modifyWorld(player, sphere);
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("sphereCreated"));
 				return true;
 			}
@@ -655,7 +554,7 @@ public class CommandListener extends PluginListener {
 			 //    0        1           2               3
 			 ///cpyramid <radius> <block id/name> <data (optional)>
 			if(Cuboids2.sel.get(player.getName()).originSet()) {
-				Blockc block = new Blockc((byte)0,(short)0);
+				WorldBlock block = new WorldBlock((byte)0,(short)0);
 				int radius = 0;
 				
 				boolean fill = true; //this is default and means it is NOT HOLLOW
@@ -740,31 +639,10 @@ public class CommandListener extends PluginListener {
 					return true;
 				}
 
-				CuboidData pyramid = Cuboids2.blockOp.buildPyramid(player, radius, block, fill, Cuboids2.sel.get(player.getName()).getOrigin());
-				
-				int volume = pyramid.getBlockBag().size();
-				//BackUp
-
-				if(!ignoreSizeWarning && Cuboids2.cfg.allowUndo()) {
-					if(volume >= Cuboids2.cfg.getMaxBlockBagSize()) {
-						//More than 750k blocks .... dude...
-							player.sendMessage("You're trying to do something from epic size.("+volume+" Blocks)");
-							player.sendMessage("Due to this size, this action cannot be undone. It would blast your Server the to pieces.");
-							player.sendMessage("If you're sure type /caccept to proceed without making this undoable or specify a smaller area.");
-							commandSplit = split;
-							return true;
-					}
-				}
-				//log.info("Area Volume: "+volume);
-				if(!Cuboids2.noBackup && Cuboids2.cfg.allowUndo()) {
-					Cuboids2.content.setCuboidData(
-							Cuboids2.content.getWorldDataForSelection(player, pyramid));
-					Cuboids2.undoList.add(Cuboids2.content.getContentMatrixSerialized(
-							Integer.toString(Cuboids2.undoList.getUndoList(player.getName()).size()), player.getName()), player.getName());
-					
-				}
-				Cuboids2.content.setCuboidData(pyramid);
-				Cuboids2.content.modifyWorld(player);
+				CuboidSelection pyramid = Cuboids2.blockOp.buildPyramid(player.getName(), radius, Cuboids2.sel.get(player.getName()).getOrigin(), fill);
+				pyramid = Cuboids2.blockOp.replace(player.getName(), pyramid, new WorldBlock((byte)0, (short)1), block, true);
+				Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, pyramid), true);
+				Cuboids2.content.modifyWorld(player, pyramid);
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("pyramidCreated"));
 				return true;
 			}
@@ -786,7 +664,7 @@ public class CommandListener extends PluginListener {
 			///cpyramid <radius> <block id/name> <data (optional)>
 			///cdisc    <radius> <block id/name  <data> [height]");
 			if(Cuboids2.sel.get(player.getName()).originSet()) {
-				Blockc block = new Blockc((byte)0,(short)0);
+				WorldBlock block = new WorldBlock((byte)0,(short)0);
 				int radius = 0;
 				int height = 1;
 				//0: cmd  1: radius 2:block
@@ -874,31 +752,11 @@ public class CommandListener extends PluginListener {
 					return true;
 				}
 
-				CuboidData tmp = Cuboids2.blockOp.buildCircle(player, radius, block, height, disc, Cuboids2.sel.get(player.getName()).getOrigin());
-				
-				int volume = tmp.getBlockBag().size();
-				//BackUp
+				CuboidSelection tmp = Cuboids2.blockOp.buildCircle(player.getName(), radius, height, Cuboids2.sel.get(player.getName()).getOrigin(), disc);
+				tmp = Cuboids2.blockOp.replace(player.getName(), tmp, new WorldBlock((byte)0, (short)1), block, true);
+				Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, tmp), true);
+				Cuboids2.content.modifyWorld(player, tmp);
 
-				if(!ignoreSizeWarning && Cuboids2.cfg.allowUndo()) {
-					if(volume >= Cuboids2.cfg.getMaxBlockBagSize()) {
-						//More than 750k blocks .... dude...
-							player.sendMessage("You're trying to do something from epic size.("+volume+" Blocks)");
-							player.sendMessage("Due to this size, this action cannot be undone. It would blast your Server the to pieces.");
-							player.sendMessage("If you're sure type /caccept to proceed without making this undoable or specify a smaller area.");
-							commandSplit = split;
-							return true;
-					}
-				}
-				//log.info("Area Volume: "+volume);
-				if(!Cuboids2.noBackup && Cuboids2.cfg.allowUndo()) {
-					Cuboids2.content.setCuboidData(
-							Cuboids2.content.getWorldDataForSelection(player, tmp));
-					Cuboids2.undoList.add(Cuboids2.content.getContentMatrixSerialized(
-							Integer.toString(Cuboids2.undoList.getUndoList(player.getName()).size()), player.getName()), player.getName());
-					
-				}
-				Cuboids2.content.setCuboidData(tmp);
-				Cuboids2.content.modifyWorld(player);
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("pyramidCreated"));
 				return true;
 			}
@@ -920,48 +778,42 @@ public class CommandListener extends PluginListener {
 				player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("UndoDisabled"));
 				return true;
 			}
+			int undoSteps = -1;
 			if(split.length > 1) {
-				int undoSteps = 0;
+				
 				try {
-					undoSteps = Integer.parseInt(split[1]);
+					undoSteps = parseInt(split[1]);
 				}
 				catch(NumberFormatException e) {
 					player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("invalidParameterTypeInteger"));
 					return true;
 				}
-				if(Cuboids2.cfg.isJumpingUndo()) {
-					Cuboids2.content.setCuboidData(Cuboids2.content.deserializeObject(Cuboids2.undoList.undo(undoSteps,player.getName())));
-					
-					
-					Cuboids2.content.modifyWorld(player);
+				if(undoSteps < 0) {
+					player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("negativeNumber"));
+					return true;
 				}
-				else {
-					for(int i = 0; i < undoSteps;i++) {
-						//log.info("Undoing stuff.");
-						Cuboids2.content.setCuboidData(Cuboids2.content.deserializeObject(Cuboids2.undoList.undo(i,player.getName())));				
-						Cuboids2.content.modifyWorld(player);
-					}
+			}
+			if(undoSteps == -1) {
+				undoSteps = 1;
+			}
+			for(int i = 0; i < undoSteps; i++) {
+				//log.info("Undoing stuff.");			
+				if(Cuboids2.content.modifyWorld(player, Cuboids2.blockOp.undo(player.getName()))) {
+					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("actionsUndone"));
 				}
-				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("actionsUndone"));
-				return true;
-				
 			}
-			else {
-				player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("missingArgumentsUndo"));
-				player.sendMessage(Colors.Yellow+Cuboids2.msg.help.get("cundo"));
-				return true;
-			}
+			return true;
 					
 		}
 		
 		/*
 		 * **************************************************
 		 * MANAGE CUBOIDS
+		 * TODO: add -r flag to ceiling and floor so people can also use relative nums ?
 		 * **************************************************
 		 */
 		
 		if(split[0].equalsIgnoreCase("/cceiling") || split[0].equalsIgnoreCase("/cceil")) {
-			
 			if(!player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/cselect")) {
 					if(!player.canUseCommand("/ccreate")) {
@@ -979,8 +831,12 @@ public class CommandListener extends PluginListener {
 					player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("invalidParameterTypeInteger"));
 					return true;
 				}
-				Cuboids2.sel.get(player.getName()).setCeiling(ceiling);
-				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidCeiled"));
+				if(ceiling >= 0) {
+					Cuboids2.sel.get(player.getName()).setCeiling(ceiling);
+					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidCeiled"));
+					return true;
+				}
+				player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("negativeNumber"));
 				return true;
 			}
 			player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("missingArguments"));
@@ -990,7 +846,6 @@ public class CommandListener extends PluginListener {
 		}
 		
 		if(split[0].equalsIgnoreCase("/cfloor")) {
-			
 			if(!player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/cWorldMod")) {
 					if(!player.canUseCommand("/ccreate")) {
@@ -1009,8 +864,12 @@ public class CommandListener extends PluginListener {
 					player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("invalidParameterTypeInteger"));
 					return true;
 				}
-				Cuboids2.sel.get(player.getName()).setFloor(floor);
-				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidFloored"));
+				if(floor >= 0) {
+					Cuboids2.sel.get(player.getName()).setFloor(floor);
+					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidFloored"));
+					return true;
+				}
+				player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("negativeNumber"));
 				return true;
 			}
 			player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("missingArguments"));
@@ -1085,7 +944,8 @@ public class CommandListener extends PluginListener {
 							}
 							CuboidE newCube = Cuboids2.sel.get(player.getName()).toCuboid(owner, 
 																	split[1], 
-																	Cuboids2.cfg.getDefaultCuboidSettings(player));
+																	Cuboids2.cfg.getDefaultCuboidSettings(player),
+																	player.getWorld().getType().name());
 							if(Cuboids2.cuboids.addCuboid(newCube)) {
 								player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidAdded"));
 								return true;
@@ -1124,25 +984,25 @@ public class CommandListener extends PluginListener {
 				/*
 				 * RESTORE
 				 */
-				if(split[2].equalsIgnoreCase("restore")) {
-					if(!player.canUseCommand("/cIgnoreRestrictions")) {
-						if(!player.canUseCommand("/cbackup")) {
-							player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
-							return true;
-						}
-					}
-					CuboidData tmp = Cuboids2.cuboids.restoreFromBackup(player, split[1]);
-					if(tmp != null) {
-						Cuboids2.content.setCuboidData(tmp);
-						Cuboids2.content.modifyWorld(player);
-						player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidRestoreSuccess"));
-						return true;
-					}
-					else {
-						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("cuboidRestoreFail"));
-						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCuboidFoundOnCommand"));
-					}
-				}
+//				if(split[2].equalsIgnoreCase("restore")) {
+//					if(!player.canUseCommand("/cIgnoreRestrictions")) {
+//						if(!player.canUseCommand("/cbackup")) {
+//							player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
+//							return true;
+//						}
+//					}
+//					CuboidData tmp = Cuboids2.cuboids.restoreFromBackup(player, split[1]);
+//					if(tmp != null) {
+//						Cuboids2.content.setCuboidData(tmp);
+//						Cuboids2.content.modifyWorld(player);
+//						player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidRestoreSuccess"));
+//						return true;
+//					}
+//					else {
+//						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("cuboidRestoreFail"));
+//						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCuboidFoundOnCommand"));
+//					}
+//				}
 				
 				/*
 				 * RESTRICT COMMAND
@@ -1632,7 +1492,10 @@ public class CommandListener extends PluginListener {
 				}
 				cubeName = split[split.length-1];
 
-				CuboidE cube = Cuboids2.sel.get(player.getName()).toCuboid(playerlist, cubeName, Cuboids2.cfg.getDefaultCuboidSettings(player));
+				CuboidE cube = Cuboids2.sel.get(player.getName()).toCuboid( playerlist, 
+																			cubeName, 
+																			Cuboids2.cfg.getDefaultCuboidSettings(player),
+																			player.getWorld().getType().name());
 			
 				cube.setProtection(true);
 
@@ -1663,7 +1526,7 @@ public class CommandListener extends PluginListener {
 					return true;
 				}
 			}
-			if(split.length > 2) {
+			if(split.length > 2) { //TODO: USE STRINGBUILDER YOU LAZY BASTARD!
 				if(Cuboids2.sel.get(player.getName()).isComplete()) {
 					String cubeName = split[split.length-1];
 					String playerName="";
@@ -1676,7 +1539,10 @@ public class CommandListener extends PluginListener {
 						}
 						playerName += split[i];
 					}
-					CuboidE cube = Cuboids2.sel.get(player.getName()).toCuboid(playerName, cubeName, Cuboids2.cfg.getDefaultCuboidSettings(player));
+					CuboidE cube = Cuboids2.sel.get(player.getName()).toCuboid( playerName, 
+																				cubeName, 
+																				Cuboids2.cfg.getDefaultCuboidSettings(player),
+																				player.getWorld().getType().name());
 					cube.setProtection(true);
 					if(Cuboids2.cuboids.addCuboid(cube)) {
 						player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidAdded"));

@@ -1,6 +1,6 @@
 import com.playblack.ToolBox;
-import com.playblack.cuboid.Blockc;
-import com.playblack.cuboid.CuboidData;
+import com.playblack.blocks.WorldBlock;
+
 import com.playblack.cuboid.CuboidSelection;
 import com.playblack.vector.Vector;
 
@@ -25,7 +25,7 @@ public class BlockListener extends PluginListener{
 		if(item.getItemId() == Cuboids2.cfg.getRegionItem()) {
 			if(!player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/cselect")) {
-					return true;
+					return false;
 				}
 			}
 			/*
@@ -82,7 +82,7 @@ public class BlockListener extends PluginListener{
 				}
 				
 				if(Cuboids2.sel.get(player.getName()).isComplete()) {
-					Cuboids2.sel.get(player.getName()).clear();
+					Cuboids2.sel.get(player.getName()).clearAll();
 					Cuboids2.sel.get(player.getName()).setWorld(player.getWorld().getType().name());
 					Cuboids2.sel.get(player.getName()).setOrigin(v);
 					//This means a new area so we need to re-initialize the content matrix
@@ -176,7 +176,7 @@ public class BlockListener extends PluginListener{
 					}
 					
 					else if(Cuboids2.sel.get(player.getName()).isComplete() && offsetSet == false) {
-						Cuboids2.sel.get(player.getName()).clear();
+						Cuboids2.sel.get(player.getName()).clearAll();
 						Cuboids2.sel.get(player.getName()).setWorld(player.getWorld().getType().name());
 						Cuboids2.sel.get(player.getName()).setOrigin(v);
 						//This means a new area so we need to re-initialize the content matrix
@@ -184,6 +184,9 @@ public class BlockListener extends PluginListener{
 						player.sendMessage(Colors.LightGray+Cuboids2.msg.messages.get("firstPointSet"));
 					}
 				}
+			}
+			else {
+				return;
 			}
 		}
 		
@@ -196,18 +199,20 @@ public class BlockListener extends PluginListener{
 						
 						Vector v = new Vector(b.getX(), b.getY(),b.getZ());
 						v = toolBox.adjustWorldBlock(v);
-						Blockc block = new Blockc((byte)Cuboids2.blockOp.getSculptData(player), (short)Cuboids2.blockOp.getSculptType(player));
-						CuboidData sphere = Cuboids2.blockOp.buildSphere(player, Cuboids2.blockOp.getSculptRadius(player), block, true, v);
-						//log.info("Area Volume: "+volume);
-						if(!Cuboids2.noBackup && Cuboids2.cfg.allowUndo()) {
-							Cuboids2.content.setCuboidData(
-									Cuboids2.content.getWorldDataForSelection(player, sphere));
-							Cuboids2.undoList.add(Cuboids2.content.getContentMatrixSerialized(
-									Integer.toString(Cuboids2.undoList.getUndoList(player.getName()).size()), player.getName()), player.getName());
-							
-						}
-						Cuboids2.content.setCuboidData(sphere);
-						Cuboids2.content.modifyWorld(player);
+						int radius = Cuboids2.sel.get(player.getName()).getSculptRadius();
+						WorldBlock block = new WorldBlock(	(byte)Cuboids2.sel.get(player.getName()).getSculptData(), 
+															(short)Cuboids2.sel.get(player.getName()).getSculptType());
+						
+						CuboidSelection sphere = Cuboids2.blockOp.buildSphere(player.getName(), radius, v, true);
+						Cuboids2.blockOp.rememberBlocks(player.getName(), 
+														Cuboids2.content.getBlocksFromWorld(player, sphere), 
+														true);
+						sphere = Cuboids2.blockOp.replace(player.getName(), 
+												 sphere, 
+												 new WorldBlock((byte)0,(short)1), 
+												 block, 
+												 true);
+						Cuboids2.content.modifyWorld(player, sphere);
 						//player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("sphereCreated"));
 						
 						
@@ -232,7 +237,7 @@ public class BlockListener extends PluginListener{
 			if(!player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/cselect")) {
 					//player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
-					return true;
+					return false;
 				}
 			}
 			
@@ -253,7 +258,7 @@ public class BlockListener extends PluginListener{
 
 		        Cuboids2.sel.get(player.getName()).setWorld(player.getWorld().getType().name());
 		        Cuboids2.sel.get(player.getName()).setOrigin(this.toolBox.adjustWorldBlock(blockPosition));
-
+		        Cuboids2.sel.get(player.getName()).clearBlocks();
 		        player.sendMessage(Colors.LightGray+Cuboids2.msg.messages.get("firstPointSet"));
 		        return true;
 		    }

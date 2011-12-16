@@ -3,11 +3,10 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 import com.playblack.EventLogger;
+import com.playblack.cuboid.CuboidBlockOperator;
 import com.playblack.cuboid.CuboidMessages;
 import com.playblack.cuboid.CuboidSelection;
-import com.playblack.cuboid.CuboidUndoList;
 import com.playblack.cuboid.tree.CuboidTreeHandler;
-import com.playblack.datasource.BaseData;
 import com.playblack.datasource.*;
 
 
@@ -23,23 +22,16 @@ public class Cuboids2 extends Plugin{
 	/*
 	 * STUFF THAT IS SHARED BY MULTIPLE LISTENERS
 	 */
-	public static BlockOperator blockOp = new BlockOperator();
 	public static HashMap<String, CuboidSelection> sel = new HashMap<String, CuboidSelection>();
-	public static CuboidContentInterface content = new CuboidContentInterface();
+	public static WorldObserver content = new WorldObserver();
 	public static CuboidMessages msg = new CuboidMessages();
 	public static EventLogger eventLog = new EventLogger(Logger.getLogger("Minecraft"));
 	public static Cuboids2Config cfg = new Cuboids2Config();
-	//TODO: Differentiate between faltfile and mysql data backend here and include the 
-	//corresponding dataSource!
-	public static BaseData ds;
+	public static CuboidBlockOperator blockOp = new CuboidBlockOperator(cfg.getUndoSteps());
+	public static BaseData ds; //Init in enable
 	public static CuboidTreeHandler treeHandler;
 	public static CuboidProtectionInterface cuboids;
-	public static CuboidUndoList undoList;
 	
-	
-	/*
-	 * SOME SHARED MEMBERS 
-	 */
 	public static boolean noBackup = false;
 	
 	
@@ -74,10 +66,10 @@ public class Cuboids2 extends Plugin{
 		}
 		treeHandler = new CuboidTreeHandler(eventLog, ds);
 		cuboids = new CuboidProtectionInterface(eventLog);
-		undoList = new CuboidUndoList(cfg.getUndoSteps());
+		
 		eventLog.logMessage(msg.messages.get("onEnable") + ", Version " + cfg.getVersion(), "INFO");
 		//log.log(Level.INFO, msg.messages.get("onEnable")+" - Version "+cfg.getVersion());
-		//TODO: Wrap this up ?
+		//TODO: Wrap this up ? Better finish this?
 		etc.getInstance().addCommand("/cmod <name> create", "Create a new Cuboid Area with default settings");
 		etc.getInstance().addCommand("/cmod <name> remove (or delete)", "Remove Cuboid Area");
 		etc.getInstance().addCommand("/cmod <name> allow <player/group>", "Allow player(s) or group(s) (flag \"g:\") in this area");
