@@ -115,22 +115,26 @@ public class CommandListener extends PluginListener {
 				}
 			}
 			Vector position;
-			if(Cuboids2.sel.get(player.getName()).getOrigin() != null) {
-				position = Cuboids2.sel.get(player.getName()).getOrigin();
-				System.out.println("Using Origin as pastepoint");
-			}
-			else {
+//			if(Cuboids2.sel.get(player.getName()).getOrigin() != null) {
+//				position = Cuboids2.sel.get(player.getName()).getOrigin();
+//				System.out.println("Using Origin as pastepoint");
+//			}
+//			else {
 				position =  new Vector(player.getX(), player.getY(), player.getZ());
-				System.out.println("Using Player position as pastepoint");
-			}
+				//System.out.println("Using Player position as pastepoint");
+			//}
 			CuboidSelection tmp = Cuboids2.blockOp.clipboardMoveByVector(player.getName(),
 																		 position
 																		 ,false); //simulate new block positions for backup
 			if(tmp != null) {
 				Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, tmp), false);
 				
-				Cuboids2.content.modifyWorld(player, tmp);
-				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidPasted"));
+				if(Cuboids2.content.modifyWorld(player, tmp)) {
+					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidPasted"));
+				}
+				else {
+					player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCopy"));
+				}
 			}
 			else {
 				player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCopy"));
@@ -182,8 +186,12 @@ public class CommandListener extends PluginListener {
 			//And now paste stuff at the new positions
 			tmp = Cuboids2.blockOp.moveByOffset(player.getName(), split[1], distance, Cuboids2.blockOp.getClipboard(player.getName()), true);
 			Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, tmp), false);
-			Cuboids2.content.modifyWorld(player,tmp);
-			player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidMoved"));
+			if(Cuboids2.content.modifyWorld(player,tmp)) {
+				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidMoved"));
+			}
+			else {
+				player.sendMessage(Colors.Rose+"Cuboid cannot be moved! There was an internal error concerning the selection");
+			}
 			Cuboids2.noBackup = false;
 			//ignoreSizeWarning = false;
 			commandSplit = null;
@@ -757,7 +765,12 @@ public class CommandListener extends PluginListener {
 				Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, tmp), true);
 				Cuboids2.content.modifyWorld(player, tmp);
 
-				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("pyramidCreated"));
+				if(disc) {
+					player.sendMessage(Colors.Yellow+Cuboids2.msg.messages.get("discCreated"));
+				}
+				else {
+					player.sendMessage(Colors.Yellow+Cuboids2.msg.messages.get("circleCreated"));
+				}
 				return true;
 			}
 		}
@@ -970,16 +983,16 @@ public class CommandListener extends PluginListener {
 				/*
 				 * BACKUP
 				 */
-				if(split[2].equalsIgnoreCase("backup")) {
-					if(Cuboids2.cuboids.saveCuboidBackup(player, split[1])) {
-						player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidBackupSuccess"));
-					}
-					else {
-						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("cuboidBackupFail"));
-						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCuboidFoundOnCommand"));
-					}
-					return true;
-				}
+//				if(split[2].equalsIgnoreCase("backup")) {
+//					if(Cuboids2.cuboids.saveCuboidBackup(player, split[1])) {
+//						player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidBackupSuccess"));
+//					}
+//					else {
+//						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("cuboidBackupFail"));
+//						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCuboidFoundOnCommand"));
+//					}
+//					return true;
+//				}
 				
 				/*
 				 * RESTORE

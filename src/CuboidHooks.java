@@ -91,11 +91,11 @@ public class CuboidHooks implements PluginInterface {
 	 * Get the amout of my parameters, dude!
 	 */
 	public int getNumParameters() {
-		return 2;
+		return 3;
 	}
 	
 	public String checkParameters(Object[] os) {
-		if(os.length != 3) {
+		if(os.length < 3) {
 			return "Invalid amount of parameters";
 		}
 		return null;
@@ -129,6 +129,65 @@ public class CuboidHooks implements PluginInterface {
         		return true;
         	}
         }
+//        /* ***********************************
+//         * CUBOID GET INFORMATION
+//         * ***********************************/
+//        else if(mode.equalsIgnoreCase("AREA_GET_NAME")) {
+//        	//TODO: Add function 
+//        	//Requires: player/block position 
+//        	return playerIsOwner(player, v);
+//        }
+//        else if(mode.equalsIgnoreCase("AREA_GET_OWNER")) {
+//        	//TODO: Add function 
+//        	//Requires: Areaname
+//        	return playerIsOwner(player, v);
+//        }
+//        else if(mode.equalsIgnoreCase("AREA_GET_PLAYERLIST")) {
+//        	//TODO: Add function
+//        	//Requires: Areaname
+//        	return playerIsOwner(player, v);
+//        }
+//        else if(mode.equalsIgnoreCase("AREA_GET_GROUPLIST")) {
+//        	//TODO: Add function
+//        	//Requires: Areaname
+//        	return playerIsOwner(player, v);
+//        }
+//        
+//        else if(mode.equalsIgnoreCase("AREA_CHECK_FLAG")) {
+//        	//TODO: Add function
+//        	//Requires: Areaname, Flag
+//        	return playerIsOwner(player, v);
+//        }
+//        
+//        /* ***********************************
+//         * CUBOID CONTROLS
+//         * ***********************************/
+//        else if(mode.equalsIgnoreCase("AREA_ADD_PLAYER")) {
+//        	//TODO: Add function 
+//        	//Requires: Areaname, Player
+//        	return true;
+//        }
+//        else if(mode.equalsIgnoreCase("AREA_ADD_GROUP")) {
+//        	//TODO: Add function 
+//        	//Requires: Areaname, Groupname
+//        	return true;
+//        }
+//        
+//        else if(mode.equalsIgnoreCase("AREA_REMOVE_PLAYER")) {
+//        	//TODO: Add function 
+//        	//Requires: Areaname, Player
+//        	return true;
+//        }
+//        else if(mode.equalsIgnoreCase("AREA_REMOVE_GROUP")) {
+//        	//TODO: Add function 
+//        	//Requires: Areaname, Groupname
+//        	return true;
+//        }
+//        else if(mode.equalsIgnoreCase("AREA_SET_FLAG")) {
+//        	//TODO: Add function
+//        	//Requires: Areaname, Flag
+//        	return playerIsOwner(player, v);
+//        }
         else {
         	return true;
         }

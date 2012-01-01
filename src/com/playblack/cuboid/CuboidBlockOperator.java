@@ -84,9 +84,8 @@ public class CuboidBlockOperator {
 	 * @param data
 	 */
 	public void relativeCopy(String player, CuboidSelection data, Vector pos) {
-		//data.setOrigin(pos);
-		data.setOrigin(Vector.getMinimum(data.getOrigin(), data.getOffset()));
-		data.setOffset(Vector.getMaximum(data.getOrigin(), data.getOffset()));
+		data.setOrigin(pos);
+		//data.sortEdgesOffsetFirst();
 		history.copyToClipboard(player, data);
 	}
 	

@@ -192,13 +192,13 @@ public class CuboidHistory {
 		}
 		
 		/**
-		 * Go back in time one step. Literally go one index back in the array list of undo selections
+		 * Go back in time one step. Literally remove the last kown element and return it
 		 * @return
 		 */
 		public CuboidSelection undo() {
 			if(currentIndex >=0 && currentIndex <= history.size()) {
 				currentIndex--;
-				return history.get(currentIndex+1);
+				return history.remove(currentIndex+1);
 			}
 			else {
 				currentIndex=0;

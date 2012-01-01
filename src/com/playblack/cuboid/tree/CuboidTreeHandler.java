@@ -540,7 +540,7 @@ public class CuboidTreeHandler {
 				max = node;
 			}
 			else if(max.getCuboid().getPriority() == node.getCuboid().getPriority()) {
-				if(max.getCuboid().getSize() < node.getCuboid().getSize()) {
+				if(max.getCuboid().getSize() > node.getCuboid().getSize()) {
 					max = node;
 				}
 			}

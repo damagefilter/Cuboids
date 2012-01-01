@@ -9,7 +9,7 @@ public class Cuboids2Config {
 
 	//Plugin Specific information:
 	private String name="Cuboids2";
-	private String version = "1.6.0 Testdrive 2";
+	private String version = "1.6.1";
 	
 	//Behaviour settings
 	private boolean useDoubleAction=false;
@@ -41,7 +41,7 @@ public class Cuboids2Config {
 	private boolean stopWaterFlow = false;
 	private boolean stopLavaFlow = false;
 	
-	private int 	maxBlockBagSize = 750000; //only to tell there will be no undo
+	private int 	maxBlockBagSize = 750000; //this isn't used anywhere atm.
 	private int 	regionItem;
 	
 	private int 	remoteRegionItem; //hitBlox block retrieval

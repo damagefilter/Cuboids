@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Logger;
 
 import com.playblack.ToolBox;
 import com.playblack.blocks.BaseBlock;
@@ -45,6 +44,7 @@ public class WorldObserver {
 							Block b = player.getWorld().getBlockAt((int)current.getX(),(int)current.getY(),(int)current.getZ());
 							//Are we a chest or double chest?
 							if(b.getType() == 54) {
+								//Replace cast exception with this: getOnlyComplexBlock   if (chest.findAttachedChest != null)
 								try {
 									Chest chest = (Chest)player.getWorld().getComplexBlock(b);
 									if(chest != null) {
@@ -152,7 +152,7 @@ public class WorldObserver {
 //		for(int i = 0; i < items.length; i++) {
 //			Logger.getLogger("Minecraft").info("Item"+items[i].toString());
 //		}
-		Logger.getLogger("Minecraft").info("item amount: "+items.length);
+	//	Logger.getLogger("Minecraft").info("item amount: "+items.length);
 		for(Item i: items) {
 			if(i != null) {
 				newItems.add(new BaseItem(i.getItemId(), i.getDamage(), i.getAmount(), i.getSlot()));
@@ -223,13 +223,13 @@ public class WorldObserver {
         }
         Block test = world.getBlockAt(coords.getBlockX(), coords.getBlockY(), coords.getBlockZ()); //after setting zee chest
         if((Short)block.getType()  == 54 && block instanceof ChestBlock) {
-        	Logger.getLogger("Minecraft").info("block Type is chest");
+        	//Logger.getLogger("Minecraft").info("block Type is chest");
     		ChestBlock c = (ChestBlock)block;
-    		Logger.getLogger("Minecraft").info("Chest Data: "+c.getData());
+    		//Logger.getLogger("Minecraft").info("Chest Data: "+c.getData());
 			try {
 				Chest chest = (Chest)world.getComplexBlock(test);
 				if(chest != null) {
-					Logger.getLogger("Minecraft").info("Class: "+chest.getClass());
+					//Logger.getLogger("Minecraft").info("Class: "+chest.getClass());
 					try {
 						chest.setContents(itemsToArray(c.getItemList()));
 						chest.getBlock().setData(c.getData());
@@ -241,11 +241,11 @@ public class WorldObserver {
 				}
 			}
 			catch(ClassCastException e) {
-				Logger.getLogger("Minecraft").info(e.getMessage());
+				//Logger.getLogger("Minecraft").info(e.getMessage());
 				try {
 					DoubleChest dchest = (DoubleChest)world.getComplexBlock(test);
 					if(dchest != null) {
-						Logger.getLogger("Minecraft").info("Class: "+dchest.getClass());
+						//Logger.getLogger("Minecraft").info("Class: "+dchest.getClass());
 						try {
 							dchest.setContents(itemsToArray(c.getItemList()));
 							dchest.getBlock().setData(c.getData());
@@ -257,12 +257,12 @@ public class WorldObserver {
 					}
 				}
 				catch(ClassCastException f) {
-					Logger.getLogger("Minecraft").info(f.getMessage());
+					//Logger.getLogger("Minecraft").info(f.getMessage());
 				}
 			}
         }
         if((Short)block.getType()  == 63 && block instanceof SignBlock) {
-        	Logger.getLogger("Minecraft").info("block Type is Sign");
+        	//Logger.getLogger("Minecraft").info("block Type is Sign");
         	SignBlock c = (SignBlock)block;
         	try {
         		Sign sign = (Sign)world.getComplexBlock(test);  	
@@ -270,7 +270,7 @@ public class WorldObserver {
             	sign.setText(1, c.getTextOnLine(1));
             	sign.setText(2, c.getTextOnLine(2));
             	sign.setText(3, c.getTextOnLine(3));
-            	Logger.getLogger("Minecraft").info("Sign Data: "+c.getData());
+            	//Logger.getLogger("Minecraft").info("Sign Data: "+c.getData());
             	sign.getBlock().setData(c.getData());
             	sign.update();
         	}
@@ -299,7 +299,7 @@ public class WorldObserver {
 	 */
 	public boolean modifyWorld(Player player, CuboidSelection selection) {
 		if(selection == null) {
-			player.sendMessage(Colors.Red+"Cannot modify world, the selection was invalid!");
+			//player.sendMessage(Colors.Red+"Cannot modify world, the selection was invalid!");
 			return false;
 		}
 		synchronized (lock) {

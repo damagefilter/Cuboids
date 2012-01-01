@@ -57,8 +57,8 @@ public class FlatfileData extends BaseData {
 		if(!silent) {
 			//System.out.println("Cuboids2: Saving Cuboid Trees to files...");
 			log.logMessage("Cuboids2: Saving Cuboid Nodes (your areas)", "INFO");
+			log.logMessage("Saving to fatfile backend ...", "INFO");
 		}
-		log.logMessage("Saving to fatfile backend ...", "INFO");
 		//cleanTreeFiles();
 		 //FileOutputStream fos;
 		 String path = "plugins/cuboids2/cuboids/";

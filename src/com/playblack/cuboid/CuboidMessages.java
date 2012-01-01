@@ -116,6 +116,8 @@ public class CuboidMessages {
 		messages.put("sphereCreated", "The sphere has been build!");
 		messages.put("pyramidCreated", "The pyramid has been build!");
 		messages.put("wallsCreated", "The walls have been build!");
+		messages.put("discCreated", "The cylinder has been build!");
+		messages.put("circleCreated", "The circle been build!");
 		
 		//Brush Tool
 		messages.put("brushSet", "Updated Brush settings!");

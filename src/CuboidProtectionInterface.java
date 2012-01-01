@@ -1268,9 +1268,9 @@ public class CuboidProtectionInterface {
 						return false;
 					}
 				}
-				for(int i = 3; i < command.length; i++) {
+				for(int i = 2; i < command.length; i++) {
 					if(command[i].startsWith("g:")) {
-						//log.info("Group found");
+						log.logMessage("Group found", "INFO");
 						cube.removeGroup(command[i]);
 					}
 					else {
@@ -1407,8 +1407,13 @@ public class CuboidProtectionInterface {
 								//log.logMessage("trying to reset inventory", "INFO");
 								player.getInventory().setContents(playerInventories.get(player.getName()));
 								playerInventories.remove(player.getName());
-								player.updateInventory();
-								//log.logMessage("Done ?", "INFO");
+								//TODO: This is a work around, remove when canary fixes the updateInventory
+								try {
+									player.updateInventory();
+								}
+								catch(ClassCastException e) {
+									
+								}
 							}
 							catch(NullPointerException e) {
 								//log.logMessage("Cuboids2: NPE while resetting inventory!", "INFO");
@@ -1436,7 +1441,13 @@ public class CuboidProtectionInterface {
 							//log.logMessage("Resetting player inv ...!", "INFO");
 							player.getInventory().setContents(playerInventories.get(player.getName()));
 							playerInventories.remove(player.getName());
-							player.updateInventory();
+							//TODO: This is a work around, remove when canary fixes the updateInventory
+							try {
+								player.updateInventory();
+							}
+							catch(ClassCastException e) {
+								
+							}
 						}
 						catch(NullPointerException e) {
 						//	log.logMessage("Dude! There is an NPE when resetting player inventories!", "INFO");
@@ -1670,6 +1681,11 @@ public class CuboidProtectionInterface {
 		return false;
 	}
 	
+	/**
+	 * Show blacklisted commands for a given area.
+	 * @param player
+	 * @param cubeName
+	 */
 	public void showCommandBlacklist(Player player, String cubeName) {
 		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
 		if(!player.canUseCommand("/cIgnoreRestrictions")) {

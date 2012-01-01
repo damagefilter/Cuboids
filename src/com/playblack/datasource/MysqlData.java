@@ -365,7 +365,10 @@ public class MysqlData extends BaseData {
 
 	@Override
 	public void saveAll(ArrayList<CuboidTree> treeList, boolean silent, boolean force) {
-		log.logMessage("Saving to mysql backend ...", "INFO");
+		if(!silent) {
+			log.logMessage("Cuboids2: Saving Cuboid Nodes (your areas)", "INFO");
+			log.logMessage("Saving to MySQL backend ...", "INFO");
+		}
 		for(CuboidTree tree : treeList) {
 			for(CuboidNode node : tree.toList()) {
 				if(node.getCuboid().hasChanged || force == true) {					

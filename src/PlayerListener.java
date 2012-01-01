@@ -11,7 +11,7 @@ import com.playblack.vector.Vector;
  */
 public class PlayerListener extends PluginListener {
 	private ToolBox toolBox = new ToolBox();
-	private ArrayList<Integer> foodList = new ArrayList<Integer>(0);
+	private ArrayList<Integer> foodList = new ArrayList<Integer>(15);
 	private boolean playerTeleported = false;
 	public PlayerListener() {
 		super();
@@ -39,6 +39,7 @@ public class PlayerListener extends PluginListener {
 	public void onDisconnect(Player player) {
 		Vector v = new Vector(player.getX(), player.getY(), player.getZ());
 		Vector to = new Vector(0,0,0);
+		//TODO: Add a plain remove here to make sure the disconnected player surely is out
 		Cuboids2.cuboids.removePlayerWithin(player, v, to);
 	}
 	
@@ -46,6 +47,7 @@ public class PlayerListener extends PluginListener {
 	public void onBan(Player mod, Player player, String reason) {
 		Vector v = new Vector(player.getX(), player.getY(), player.getZ());
 		Vector to = new Vector(0,0,0);
+		//TODO: Add a plain remove here to make sure the disconnected player surely is out
 		Cuboids2.cuboids.removePlayerWithin(player, v, to);
 	}
 	
@@ -53,6 +55,7 @@ public class PlayerListener extends PluginListener {
 	public void onKick(Player mod, Player player, String reason) {
 		Vector v = new Vector(player.getX(), player.getY(), player.getZ());
 		Vector to = new Vector(0,0,0);
+		//TODO: Add a plain remove here to make sure the disconnected player surely is out
 		Cuboids2.cuboids.removePlayerWithin(player, v, to);
 	}
 	

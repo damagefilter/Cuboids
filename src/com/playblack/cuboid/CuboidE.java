@@ -439,6 +439,10 @@ public class CuboidE {
 			groupList.remove("g:"+groupName);
 			return true;
 		}
+		else if(groupList.contains(groupName.substring(2))) {
+			groupList.remove(groupName.substring(2));
+			return true;
+		}
 		else {
 			return false;
 		}
