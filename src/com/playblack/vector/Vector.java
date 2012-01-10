@@ -353,12 +353,7 @@ public class Vector implements Serializable
      * @return int x
      */
     public int getBlockX() {
-    	if(getX() > 0) {
-    		return (int)Math.floor(getX());
-    	}
-    	else {
-    		return (int)Math.ceil(getX());
-    	}
+    	return (int)Math.floor(getX());
     }
     
     /**
@@ -366,12 +361,7 @@ public class Vector implements Serializable
      * @return int y
      */
     public int getBlockY() {
-    	if(getY() > 0) {
-    		return (int)Math.floor(getY());
-    	}
-    	else {
-    		return (int)Math.ceil(getY());
-    	}
+    	return (int)Math.floor(getY());
     }
     
     /**
@@ -379,20 +369,13 @@ public class Vector implements Serializable
      * @return int z
      */
     public int getBlockZ() {
-    	if(getZ() > 0) {
-    		//System.out.println("Floored Z: "+Math.floor(getZ()));
-    		return (int)Math.floor(getZ());
-    	}
-    	else {
-    		//System.out.println("Ceiled Z: "+Math.floor(getZ()));
-    		return (int)Math.ceil(getZ());
-    	}
+    	return (int)Math.floor(getZ());
     }
     
     public String toString() {
-    	return  "\n  x: "+getBlockX()+"\n"+
-    			", y: "+getBlockY()+"\n"+
-    			", z: "+getBlockZ()+"\n"+
+    	return  "\n  x: "+getX()+"\n"+
+    			", y: "+getY()+"\n"+
+    			", z: "+getZ()+"\n"+
     			"===================================";
     }
 }

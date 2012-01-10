@@ -46,7 +46,7 @@ public class BlockListener extends PluginListener{
 		        Vector blockPosition = new Vector(block.getX(), block.getY(), block.getZ());
 
 		        Cuboids2.sel.get(player.getName()).setWorld(player.getWorld().getType().name());
-		        Cuboids2.sel.get(player.getName()).setOffset(this.toolBox.adjustWorldBlock(blockPosition));
+		        Cuboids2.sel.get(player.getName()).setOffset(this.toolBox.adjustWorldPosition(blockPosition));
 
 		        player.sendMessage(Colors.LightGray+Cuboids2.msg.messages.get("secondPointSet"));
 		        return true;
@@ -63,7 +63,7 @@ public class BlockListener extends PluginListener{
 				}
 				
 				Vector blockPosition = new Vector(block.getX(), block.getY(), block.getZ());
-				Vector v = toolBox.adjustWorldBlock(blockPosition);
+				Vector v = toolBox.adjustWorldPosition(blockPosition);
 				//log.info("Point: "+v.toString());
 				
 				if(!Cuboids2.sel.get(player.getName()).isComplete()) {
@@ -75,7 +75,7 @@ public class BlockListener extends PluginListener{
 						return true;
 					}
 					else if(!Cuboids2.sel.get(player.getName()).offsetSet()) {
-						Cuboids2.sel.get(player.getName()).setOffset(v);
+						Cuboids2.sel.get(player.getName()).setOffset(this.toolBox.adjustWorldPosition(v));
 						player.sendMessage(Colors.LightGray+Cuboids2.msg.messages.get("secondPointSet"));
 						return true;
 					}
@@ -102,7 +102,7 @@ public class BlockListener extends PluginListener{
 		if(item.getItemId() == Cuboids2.cfg.getInspectorItem()) {
 			
 			Vector blockPosition = new Vector(block.getX(), block.getY(), block.getZ());
-			blockPosition = toolBox.adjustWorldBlock(blockPosition);
+			blockPosition = toolBox.adjustWorldPosition(blockPosition);
 			Cuboids2.cuboids.explainCuboid(player, blockPosition);
 			return true;
 		}
@@ -158,7 +158,7 @@ public class BlockListener extends PluginListener{
 					}
 					
 					Vector blockPosition = new Vector(b.getX(), b.getY(), b.getZ());
-					Vector v = toolBox.adjustWorldBlock(blockPosition);
+					Vector v = toolBox.adjustWorldPosition(blockPosition);
 					//log.info("Point: "+v.toString());
 					
 					if(Cuboids2.sel.get(player.getName()).isComplete() == false) {
@@ -169,7 +169,7 @@ public class BlockListener extends PluginListener{
 							player.sendMessage(Colors.LightGray+Cuboids2.msg.messages.get("firstPointSet"));
 						}
 						else if(!Cuboids2.sel.get(player.getName()).offsetSet()) {
-							Cuboids2.sel.get(player.getName()).setOffset(v);
+							Cuboids2.sel.get(player.getName()).setOffset(this.toolBox.adjustWorldPosition(v));
 							player.sendMessage(Colors.LightGray+Cuboids2.msg.messages.get("secondPointSet"));
 							offsetSet = true;
 						}
@@ -198,7 +198,7 @@ public class BlockListener extends PluginListener{
 					if(b != null && Cuboids2.cuboids.canModifyBlock(player, b)) {
 						
 						Vector v = new Vector(b.getX(), b.getY(),b.getZ());
-						v = toolBox.adjustWorldBlock(v);
+						v = toolBox.adjustWorldPosition(v);
 						int radius = Cuboids2.sel.get(player.getName()).getSculptRadius();
 						WorldBlock block = new WorldBlock(	(byte)Cuboids2.sel.get(player.getName()).getSculptData(), 
 															(short)Cuboids2.sel.get(player.getName()).getSculptType());
@@ -225,7 +225,7 @@ public class BlockListener extends PluginListener{
 		theTime = System.currentTimeMillis();
 	}
 	
-	/**
+	/*
 	 * *********************************************************************************************
 	 * BLOCKS LEFT CLICK HANDLING
 	 * *********************************************************************************************
@@ -257,7 +257,7 @@ public class BlockListener extends PluginListener{
 		        Vector blockPosition = new Vector(block.getX(), block.getY(), block.getZ());
 
 		        Cuboids2.sel.get(player.getName()).setWorld(player.getWorld().getType().name());
-		        Cuboids2.sel.get(player.getName()).setOrigin(this.toolBox.adjustWorldBlock(blockPosition));
+		        Cuboids2.sel.get(player.getName()).setOrigin(this.toolBox.adjustWorldPosition(blockPosition));
 		        Cuboids2.sel.get(player.getName()).clearBlocks();
 		        player.sendMessage(Colors.LightGray+Cuboids2.msg.messages.get("firstPointSet"));
 		        return true;

@@ -9,7 +9,8 @@ public class Cuboids2Config {
 
 	//Plugin Specific information:
 	private String name="Cuboids2";
-	private String version = "1.6.1";
+	private String version = "1.7.0";
+	private boolean verbose = false;
 	
 	//Behaviour settings
 	private boolean useDoubleAction=false;
@@ -82,6 +83,7 @@ public class Cuboids2Config {
 	private boolean isRestrictionDefault = false;
 	
 	
+	
 	/**
 	 * List of operable items to protect
 	 */
@@ -127,6 +129,8 @@ public class Cuboids2Config {
 		allowWaterControl = pluginSettings.getBoolean("allow-stop-water-flow", true);
 		allowFarmland = pluginSettings.getBoolean("allow-farmland", true);
 		allowRestriction = pluginSettings.getBoolean("allow-restriction", true);
+		
+		verbose = pluginSettings.getBoolean("verbose-logging",false);
 		
 		/*
 		 * DATA SOURCE
@@ -461,6 +465,10 @@ public class Cuboids2Config {
 	
 	public void setStopWaterFlow(boolean flow) {
 		stopWaterFlow = flow;
+	}
+	
+	public boolean isVerbose() {
+		return verbose;
 	}
 	
 	//END

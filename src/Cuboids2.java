@@ -18,7 +18,7 @@ public class Cuboids2 extends Plugin{
 	private PlayerListener players = new PlayerListener(); //is static becuz we need the canPlayerUsecommand thing
 	private ArrayList<PluginRegisteredListener> registeredListeners = new ArrayList<PluginRegisteredListener>();
 	//Create custom hooks object
-	public CuboidHooks hooks = new CuboidHooks();
+	public CuboidHookDispatcher hooks = new CuboidHookDispatcher();
 	/*
 	 * STUFF THAT IS SHARED BY MULTIPLE LISTENERS
 	 */

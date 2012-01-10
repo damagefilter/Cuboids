@@ -90,7 +90,7 @@ public class CuboidProtectionInterface {
 				if(parent != null) {
 					cube.setParent(parent.getCuboid().getName());
 					cube.setPriority(parent.getCuboid().getPriority()+1);
-					cube.overrideProperties(parent.getCuboid());
+					cube.overwriteProperties(parent.getCuboid());
 					return Cuboids2.treeHandler.addCuboid(cube);
 				}
 				else {
@@ -103,7 +103,7 @@ public class CuboidProtectionInterface {
 	}
 	
 	public boolean removeCuboid(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") 
@@ -153,7 +153,7 @@ public class CuboidProtectionInterface {
 	 * @param v
 	 * @return CuboidE or null if there was no cuboid
 	 */
-	private CuboidE findNode(String world, Vector v) {
+	private CuboidE findCuboid(String world, Vector v) {
 		if(v != null) {
 			try {
 				return Cuboids2.treeHandler.getActiveCuboid(v, world).getCuboid();
@@ -168,12 +168,12 @@ public class CuboidProtectionInterface {
 	}
 	
 	/**
-	 * Find a cuboidE in the given World with the given name
+	 * Find a cuboidE in the given World with the given name.
 	 * @param World
 	 * @param v
 	 * @return CuboidE or null if there was no cuboid
 	 */
-	private CuboidE findNode(String world, String name) {
+	private CuboidE findCuboid(String world, String name) {
 		try {
 			return Cuboids2.treeHandler.getCuboidByName(name, world).getCuboid();
 		}
@@ -195,10 +195,10 @@ public class CuboidProtectionInterface {
 			v = new Vector(player.getX(), player.getY(), player.getZ());
 		}
 		else {
-			v = toolBox.adjustWorldBlock(new Vector(block.getX(), block.getY(), block.getZ()));
+			v = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
 		}
 		
-		CuboidE cube = findNode(player.getWorld().getType().name(), v);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), v);
 		if(cube != null) {
 			if(cube.isProtected()) {
 				if(cube.playerIsAllowed(player.getName(), player.getGroups()) 
@@ -235,9 +235,9 @@ public class CuboidProtectionInterface {
 	 * @param position
 	 */
 	public void explainCuboid(Player player, Vector position ) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), position);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), position);
 		if(cube != null) {
-			player.sendMessage(Colors.LightGray+"---- Information for "+cube.getName()+" ----");
+			player.sendMessage(Colors.LightGray+"---- "+cube.getName()+" ----");
 			if(cube.playerIsAllowed(player.getName(), player.getGroups())) {
 				if(cube.playerIsOwner(player.getName())) {
 					player.sendMessage(Colors.LightGreen+"You own this areas");
@@ -254,7 +254,8 @@ public class CuboidProtectionInterface {
 			}
 			
 			player.sendMessage(Colors.LightGray+"Flags: " + Colors.Yellow+cube.getFlagListSimple());
-			player.sendMessage(Colors.LightGray+"Players/Groups: " + Colors.Yellow+cube.getPlayerList() + "/" + cube.getGroupList());
+			player.sendMessage(Colors.LightGray+"Players: " + Colors.Yellow+cube.getPlayerList());
+			player.sendMessage(Colors.LightGray+"Groups: " + Colors.Yellow+ cube.getGroupList());
 			if(cube.getParent() == null) {
 				player.sendMessage(Colors.LightGray+"Parent: " + Colors.Yellow+"none");
 			}
@@ -276,9 +277,9 @@ public class CuboidProtectionInterface {
 	 * @param position
 	 */
 	public void explainCuboid(Player player, String name) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), name);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), name);
 		if(cube != null) {
-			player.sendMessage(Colors.LightGray+"---- Information for "+cube.getName()+" ----");
+			player.sendMessage(Colors.LightGray+"---- "+cube.getName()+" ----");
 			player.sendMessage(Colors.Yellow+cube.getFlagList());
 			player.sendMessage(Colors.Yellow+"Players: "+Colors.LightGray+cube.getPlayerList());
 			player.sendMessage(Colors.Yellow+"Groups: "+Colors.LightGray+cube.getGroupList());
@@ -321,7 +322,7 @@ public class CuboidProtectionInterface {
 				}
 				else {
 					//player attacking player ... hm
-					CuboidE cube = findNode(target.getWorld().getType().name(), targetPosition);
+					CuboidE cube = findCuboid(target.getWorld().getType().name(), targetPosition);
 					if(cube != null) {
 						if(cube.isAllowedPvp()) {
 							return false;
@@ -344,7 +345,7 @@ public class CuboidProtectionInterface {
 			}
 			//Mob, sanctuary!
 			if(attacker.isMob() || attacker.isAnimal()) {
-				CuboidE cube = findNode(target.getWorld().getType().name(), targetPosition);
+				CuboidE cube = findCuboid(target.getWorld().getType().name(), targetPosition);
 				if(cube != null) {
 					if(cube.isSanctuary()) {
 						return true;
@@ -369,7 +370,7 @@ public class CuboidProtectionInterface {
 	public boolean sanctuarySpawnsMobs(Mob mob) {
 		Vector v = new Vector(mob.getX(), mob.getY(), mob.getZ());
 		//v = toolBox.adjustBlockPosition(v);
-		CuboidE cube = findNode(mob.getWorld().getType().name(), v);
+		CuboidE cube = findCuboid(mob.getWorld().getType().name(), v);
 		if(cube != null) {
 			//log.logMessage("Cube Found, doing Cube Stuff!", "INFO");
 			if(mob.isMob()) {
@@ -410,9 +411,9 @@ public class CuboidProtectionInterface {
 		if(block.getStatus() == 2) {
 			//log.info("Receiving Creeper Explosion!");
 			//got a creeper explosion!
-			Vector v = toolBox.adjustWorldBlock(new Vector(block.getX(), block.getY(), block.getZ()));
+			Vector v = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
 			//SysteCuboids2.msg.out.print(v.toString());
-			CuboidE cube = findNode(block.getWorld().getType().name(), v);
+			CuboidE cube = findCuboid(block.getWorld().getType().name(), v);
 			if(cube != null) {
 				//log.info("Creeper stat: "+cube.isCreeperSecure());
 				return cube.isCreeperSecure();
@@ -442,9 +443,9 @@ public class CuboidProtectionInterface {
 		if(block.getStatus() == 1) { //that's tnt
 			//log.info("Receiving Creeper Explosion!");
 			//got a creeper explosion!
-			Vector v = toolBox.adjustWorldBlock(new Vector(block.getX(), block.getY(), block.getZ()));
+			Vector v = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
 			//SysteCuboids2.msg.out.print(v.toString());
-			CuboidE cube = findNode(block.getWorld().getType().name(), v);
+			CuboidE cube = findCuboid(block.getWorld().getType().name(), v);
 			if(cube != null) {
 				//log.info("Creeper stat: "+cube.isCreeperSecure());
 				return cube.isTntSecure();
@@ -473,7 +474,7 @@ public class CuboidProtectionInterface {
 	 * @return true if okay, false otherwise
 	 */
 	public boolean setPriority(Player player, String cubeName, int prio) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				cube.setPriority(prio);
@@ -499,10 +500,10 @@ public class CuboidProtectionInterface {
 	 * @return True if okay, false otherwise
 	 */
 	public boolean setParent(Player player, String subject, String parent) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), subject);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), subject);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
-				CuboidE parentNode = findNode(player.getWorld().getType().name(), parent);
+				CuboidE parentNode = findCuboid(player.getWorld().getType().name(), parent);
 				if(parentNode == null) {
 					player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("parentNotSet"));
 					return false;
@@ -543,7 +544,7 @@ public class CuboidProtectionInterface {
 	 * @return true if done, false otherwise
 	 */
 	public boolean toggleCreeper(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				
@@ -592,7 +593,7 @@ public class CuboidProtectionInterface {
 	 * @return true if done, false otherwise
 	 */
 	public boolean toggleLavaControl(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				
@@ -641,7 +642,7 @@ public class CuboidProtectionInterface {
 	 * @return true if done, false otherwise
 	 */
 	public boolean toggleWaterControl(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				
@@ -690,7 +691,7 @@ public class CuboidProtectionInterface {
 	 * @return true if done, false otherwise
 	 */
 	public boolean toggleFarmland(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				
@@ -739,7 +740,7 @@ public class CuboidProtectionInterface {
 	 * @return true if done, false otherwise
 	 */
 	public boolean toggleTnt(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				
@@ -788,7 +789,7 @@ public class CuboidProtectionInterface {
 	 * @param string
 	 */
 	public void toggleRestriction(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				
@@ -838,7 +839,7 @@ public class CuboidProtectionInterface {
 	 * @return true if done, false otherwise
 	 */
 	public boolean togglePvp(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/cpvp")) {
@@ -886,7 +887,7 @@ public class CuboidProtectionInterface {
 	 * @return true if done, false otherwise
 	 */
 	public boolean toggleProtection(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/cprotection")) {
@@ -934,7 +935,7 @@ public class CuboidProtectionInterface {
 	 * @return true if done, false otherwise
 	 */
 	public boolean toggleSanctuary(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/csanctuary")) {
@@ -982,7 +983,7 @@ public class CuboidProtectionInterface {
 	 * @return true if done, false otherwise
 	 */
 	public boolean toggleSanctuaryAnimals(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/csanctuary")) {
@@ -1027,7 +1028,7 @@ public class CuboidProtectionInterface {
 	 * Toggle healing flag
 	 */
 	public boolean toggleHealing(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod")|| player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/cheal")) {
@@ -1072,7 +1073,7 @@ public class CuboidProtectionInterface {
 	 * Toggle Freebuild flag
 	 */
 	public boolean toggleFreebuild(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod")|| player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/cfreebuild")) {
@@ -1117,7 +1118,7 @@ public class CuboidProtectionInterface {
 	 * Toggle Firespread
 	 */
 	public boolean toggleFirespread(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod")|| player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/cfirespread")) {
@@ -1166,7 +1167,7 @@ public class CuboidProtectionInterface {
 	 * @return
 	 */
 	public boolean allowEntity(Player player, String[] command) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), command[1]);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), command[1]);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				
@@ -1207,7 +1208,7 @@ public class CuboidProtectionInterface {
 	 * @return
 	 */
 	public boolean restrictCommand(Player player, String[] command, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/ccommand")) {
@@ -1233,7 +1234,7 @@ public class CuboidProtectionInterface {
 	 * @return
 	 */
 	public boolean allowCommand(Player player, String[] command, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/ccommand")) {
@@ -1259,7 +1260,7 @@ public class CuboidProtectionInterface {
 	 * @return
 	 */
 	public boolean disallowEntity(Player player, String[] command) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), command[1]);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), command[1]);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod")|| player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/callow")) {
@@ -1313,38 +1314,36 @@ public class CuboidProtectionInterface {
 	 * auto-calls onMove once more, making the usual procedure run twice
 	 */
 	public void addPlayerWithin(Player player, Vector location, boolean teleported) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), location);
-		if(cube != null) {
-			//Init a player visit
-			if(!cube.playerIsWithin(player.getName())) {
-				cube.addPlayerWithin(player.getName());
-				if(cube.getWelcome() != null) {
-					player.sendMessage(Colors.Yellow+cube.getWelcome());
+		ArrayList<CuboidE> all = Cuboids2.treeHandler.getCuboidsContaining(location, player.getWorld().getType().name());
+		for(CuboidE c : all) {
+			if(!c.playerIsWithin(player.getName())) {
+				c.addPlayerWithin(player.getName());
+				if(c.getWelcome() != null) {
+					player.sendMessage(Colors.Yellow+c.getWelcome());
 				}
 				if(Cuboids2.cfg.allowHealing()) {
 					//log.info("Healing is allowed");
-					if(cube.isHealingArea()) {
+					if(c.isHealingArea()) {
 						//log.info("Player Health: "+player.getHealth());
 						if(player.getHealth() < 20) {
 							//player.sendMessage("Healing Player");
-							healjob.schedule( new CuboidHealThread(player, cube, Cuboids2.cfg.getHealPower(), Cuboids2.cfg.getHealDelay()), Cuboids2.cfg.getHealDelay());
+							healjob.schedule( new CuboidHealThread(player, c, Cuboids2.cfg.getHealPower(), Cuboids2.cfg.getHealDelay()), Cuboids2.cfg.getHealDelay());
 						}
 					}
 				}
-			}
-			
-			if((Cuboids2.cfg.allowFreebuild()) && (teleported == false)) {
-				if(cube.isFreeBuild()) {
-					if(cube.playerIsWithin(player.getName())) {
-						if(player.getCreativeMode() != 1) {
-							if(!playerInventories.containsKey(player.getName())) {
-								//log.logMessage("CreativeMode change, saving inventory!", "INFO");
-								playerInventories.put(	player.getName(), 
-								player.getInventory().getContents());
+				if((Cuboids2.cfg.allowFreebuild()) && (teleported == false)) {
+					if(c.isFreeBuild()) {
+						if(c.playerIsWithin(player.getName())) {
+							if(player.getCreativeMode() != 1) {
+								if(!playerInventories.containsKey(player.getName())) {
+									//log.logMessage("CreativeMode change, saving inventory!", "INFO");
+									playerInventories.put(	player.getName(), 
+									player.getInventory().getContents());
+								}
+								player.setCreativeMode(1);
 							}
-							player.setCreativeMode(1);
-						}
-					}	
+						}	
+					}
 				}
 			}
 		}
@@ -1357,88 +1356,55 @@ public class CuboidProtectionInterface {
 	 * @param from
 	 * @param to
 	 */
-	public void removePlayerWithin(Player player, Vector from, Vector to) {
-		CuboidE cubeFrom = findNode(player.getWorld().getType().name(), from);
-		CuboidE cubeTo = findNode(player.getWorld().getType().name(), to);
+	public void removePlayerWithin(Player player, Vector vFrom, Vector vTo) {
+		CuboidE cubeFrom = findCuboid(player.getWorld().getType().name(), vFrom);
+		CuboidE cubeTo = findCuboid(player.getWorld().getType().name(), vTo);
 		//Before we remove player, we check if they both have parent relations
 		if(cubeFrom != null) {
 			//log.logMessage("removing player from cube from...", "INFO");
 			if(cubeTo != null) {
-				//log.logMessage("------ Moving between Cuboids -----", "INFO");
-			//	log.logMessage("CubeTo is not null", "INFO");
-				//if we're still in the same cuboid, do nothing
 				if(cubeFrom.getName().equalsIgnoreCase(cubeTo.getName())) {	
-					//log.logMessage("No CuboidChange ... skipping", "INFO");
 					return;
 				}
-				if(cubeTo.cuboidIsWithin(cubeFrom.getFirstPoint(), cubeFrom.getSecondPoint(), false)) {
-					//log.logMessage("cubeTo is within cubeFrom", "INFO");
-					if(cubeFrom.getParent() != null) {
-						if(cubeFrom.getParent().equalsIgnoreCase(cubeTo.getName())) {
-							//log.logMessage("Stepping into Parent", "INFO");
-							cubeFrom.removePlayerWithin(player.getName());
-							if(cubeFrom.getFarewell() != null) {
-								player.sendMessage(Colors.Yellow + cubeFrom.getFarewell());
-							}
+				//ArrayList<CuboidE> cubesTo = Cuboids2.treeHandler.getCuboidsContaining(vTo, cubeTo.getWorld());
+				ArrayList<CuboidE> cubesFrom = Cuboids2.treeHandler.getCuboidsContaining(vFrom, cubeFrom.getWorld());			
+				for(CuboidE from : cubesFrom) {
+					if(!from.isWithin(vTo)) {
+						if(from.getFarewell() != null) {
+							player.sendMessage(Colors.Yellow+from.getFarewell());
 						}
-					}
-				}				
-				if(!cubeTo.cuboidIsWithin(cubeFrom.getFirstPoint(), cubeFrom.getSecondPoint(), false)) {
-					//log.logMessage("cubeTo is not within cubeFrom", "INFO");
-					if(cubeTo.getParent() != null) {
-						if(!cubeTo.getParent().equalsIgnoreCase(cubeFrom.getName())) {
-							//log.logMessage("No Parents...", "INFO");
-							cubeFrom.removePlayerWithin(player.getName());
-							if(cubeFrom.getFarewell() != null) {
-								player.sendMessage(Colors.Yellow + cubeFrom.getFarewell());
-							}
-						}
-					}
-				}
-				
-				//Check for freebuild in any case
-				if(cubeFrom.isFreeBuild()) {
-					//log.logMessage("CubeFrom is FreeBuild", "INFO");
-					if(!cubeTo.isFreeBuild()) {
-						//log.logMessage("CubeTo is not Freebuild", "INFO");
-						if(player.getCreativeMode() != 0) {
-							player.setCreativeMode(0);
-							try {
-								//log.logMessage("trying to reset inventory", "INFO");
-								player.getInventory().setContents(playerInventories.get(player.getName()));
-								playerInventories.remove(player.getName());
-								//TODO: This is a work around, remove when canary fixes the updateInventory
+						if((from.isFreeBuild()) && (!cubeTo.isFreeBuild())) {
+							if(player.getCreativeMode() != 0) {
+								player.setCreativeMode(0);
 								try {
-									player.updateInventory();
+									player.getInventory().setContents(playerInventories.get(player.getName()));
+									playerInventories.remove(player.getName());
+									//TODO: This is a work around, remove when canary fixes the updateInventory
+									try {
+										player.updateInventory();
+									} catch(ClassCastException e) {
+										
+									}
+								} catch(NullPointerException e) {
+									//log.logMessage("Cuboids2: NPE while resetting inventory!", "INFO");
+									//whoops
 								}
-								catch(ClassCastException e) {
-									
-								}
-							}
-							catch(NullPointerException e) {
-								//log.logMessage("Cuboids2: NPE while resetting inventory!", "INFO");
-								//whoops
 							}
 						}
+						from.removePlayerWithin(player.getName());
 					}
-				} //End FreeBuild
-			//	log.logMessage("--------------------------------------------------------", "INFO");
-			} //end cubeTo not null
+				} 
+			} 
 			
 			else {
-				//log.logMessage("CubeTo is null", "INFO");
-				if(cubeFrom.getFarewell() != null) {
-					//So we walked into a no-area zone. lets say goodbye
-					player.sendMessage(Colors.Yellow + cubeFrom.getFarewell());
-				}
-				
-				//Lastly, check for freebuild area
-				if(cubeFrom.isFreeBuild()) {
-					//In any case, check about cuboid areas
-					if(player.getCreativeMode() != 0) {
+				ArrayList<CuboidE> cubesFrom = Cuboids2.treeHandler.getCuboidsContaining(vFrom, cubeFrom.getWorld());				
+				for(CuboidE from : cubesFrom) {
+					if(from.getFarewell() != null) {
+						player.sendMessage(Colors.Yellow + from.getFarewell());
+					}
+					if(from.isFreeBuild()) {
 						player.setCreativeMode(0);
 						try {
-							//log.logMessage("Resetting player inv ...!", "INFO");
 							player.getInventory().setContents(playerInventories.get(player.getName()));
 							playerInventories.remove(player.getName());
 							//TODO: This is a work around, remove when canary fixes the updateInventory
@@ -1450,33 +1416,13 @@ public class CuboidProtectionInterface {
 							}
 						}
 						catch(NullPointerException e) {
-						//	log.logMessage("Dude! There is an NPE when resetting player inventories!", "INFO");
 							//whoops
 						}
 					}
-						
-				}
-
-				cubeFrom.removePlayerWithin(player.getName());
-				if(cubeFrom.getParent() != null) {
-					CuboidE parent = findNode(player.getWorld().getType().name(), cubeFrom.getParent());
-					if(parent != null) {
-						parent.removePlayerWithin(player.getName());
-						if(parent.getFarewell() != null) {
-							player.sendMessage(Colors.Yellow + parent.getFarewell());
-						}
-					}
+					from.removePlayerWithin(player.getName());
 				}
 			}
-		} //end cubeFrom not null
-		
-//		else {
-//			if(player.isAdmin()) {
-//				if(player.getCreativeMode() != 0) {
-//					player.setCreativeMode(0);
-//				}
-//			}
-//		}
+		}
 	}
 	
 	/**
@@ -1489,7 +1435,7 @@ public class CuboidProtectionInterface {
 		if(player.canUseCommand("/cIgnoreRestrictions")) {
 			return true;
 		}		
-		CuboidE cube = findNode(player.getWorld().getType().name(), block);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), block);
 		if(cube != null) {
 			if(cube.isRestricted()) {
 				if(!cube.playerIsAllowed(player.getName(), player.getGroups())) {
@@ -1514,7 +1460,7 @@ public class CuboidProtectionInterface {
 	 * @return
 	 */
 	public boolean isInCuboid(String world, Vector v) {
-		if(findNode(world, v) != null) {
+		if(findCuboid(world, v) != null) {
 			return true;
 		}
 		else {
@@ -1523,7 +1469,7 @@ public class CuboidProtectionInterface {
 	}
 	
 	public boolean resize(Player player, CuboidSelection selection, String cuboidName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cuboidName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cuboidName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				if(!player.canUseCommand("/cIgnoreRestrictions")) {
@@ -1557,7 +1503,7 @@ public class CuboidProtectionInterface {
 	 * @param message
 	 */
 	public boolean setWelcomeMessage(Player player, String cubeName, String message) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				
@@ -1597,7 +1543,7 @@ public class CuboidProtectionInterface {
 	 * @param message
 	 */
 	public boolean setFarewellMessage(Player player, String cubeName, String message) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube != null) {
 			if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod") || player.canUseCommand("/cIgnoreRestrictions")) {
 				
@@ -1673,7 +1619,7 @@ public class CuboidProtectionInterface {
 	 */
 	public boolean commandIsRestricted(Player player, String command) {
 		Vector v = new Vector(player.getX(), player.getY(), player.getZ()); 
-		CuboidE cube = findNode(player.getWorld().getType().name(), v);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), v);
 		if(cube != null) {
 			//NOTE: There is a check for player.isAdmin in the canPlayerUseCommand hook!!
 			return cube.commandIsRestricted(command);
@@ -1687,7 +1633,7 @@ public class CuboidProtectionInterface {
 	 * @param cubeName
 	 */
 	public void showCommandBlacklist(Player player, String cubeName) {
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(!player.canUseCommand("/cIgnoreRestrictions")) {
 			if(!cube.playerIsOwner(player.getName())) {
 				player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
@@ -1706,7 +1652,7 @@ public class CuboidProtectionInterface {
 	 */
 	public boolean canStartFire(Player player, Block block) {
 		Vector v = new Vector(player.getX(), player.getY(), player.getZ());
-		CuboidE cube = findNode(player.getWorld().getType().name(), v);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), v);
 		if(cube != null) {
 			if(cube.isProtected() && cube.isBlockFireSpread()) {
 				if(player.canUseCommand("/cIgnoreRestrictions") || cube.playerIsOwner(player.getName())) {
@@ -1731,8 +1677,8 @@ public class CuboidProtectionInterface {
 	 * @return true if can not flow, false otherwise
 	 */
 	public boolean canFlow(Block block) {
-		Vector v = toolBox.adjustWorldBlock(new Vector(block.getX(), block.getY(), block.getZ()));
-		CuboidE cube = findNode(block.getWorld().getType().name(), v);
+		Vector v = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
+		CuboidE cube = findCuboid(block.getWorld().getType().name(), v);
 		if(cube != null) {
 			//LAVA
 			if(block.getType() == 10 || block.getType() == 11) {
@@ -1778,8 +1724,8 @@ public class CuboidProtectionInterface {
 	 * @return true if can not place, false otherwise
 	 */
 	public boolean canPlaceBucket(Player player, Block block) {
-		Vector v = toolBox.adjustWorldBlock(new Vector(block.getX(), block.getY(), block.getZ()));
-		CuboidE cube = findNode(block.getWorld().getType().name(), v);
+		Vector v = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
+		CuboidE cube = findCuboid(block.getWorld().getType().name(), v);
 		if(player.canUseCommand("/cIgnorerestriction")) {
 			return false;
 		}
@@ -1817,8 +1763,8 @@ public class CuboidProtectionInterface {
 	 * @return True if fireproof, false otherwise
 	 */
 	public boolean isFireProof(Block block) {
-		Vector v = toolBox.adjustWorldBlock(new Vector(block.getX(), block.getY(), block.getZ()));
-		CuboidE cube = findNode(block.getWorld().getType().name(), v);
+		Vector v = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
+		CuboidE cube = findCuboid(block.getWorld().getType().name(), v);
 		if(cube != null) {
 			if(cube.isBlockFireSpread()) {
 				return true;
@@ -1850,7 +1796,7 @@ public class CuboidProtectionInterface {
 				}
 			}
 		}
-		CuboidE cube = findNode(player.getWorld().getType().name(), cubeName);
+		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
 		if(cube == null) {
 			return false;
 		}
@@ -1933,7 +1879,7 @@ public class CuboidProtectionInterface {
 	
 	
 	/**
-	 * Loads block informatio into a CuboidData object
+	 * Loads block information into a CuboidSelection object. Used to save area backups
 	 * @param v1
 	 * @param v2
 	 * @param player

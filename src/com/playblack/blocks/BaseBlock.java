@@ -2,12 +2,14 @@ package com.playblack.blocks;
 
 public class BaseBlock {
 
+	private byte data;
+	private short type;
 	/**
 	 * Set the Item/Block Type of this block.
 	 * @param type
 	 */
 	public void setType(Number type) {
-		
+		this.type = type.shortValue();
 	}
 	
 	/**
@@ -15,7 +17,7 @@ public class BaseBlock {
 	 * @return Number The Item/Block Type
 	 */
 	public Number getType() {
-		return null;
+		return type;
 	}
 	
 	/**
@@ -23,7 +25,7 @@ public class BaseBlock {
 	 * @param data
 	 */
 	public void setData(Number data) {
-		
+		this.data = data.byteValue();
 	}
 	
 	/**
@@ -31,7 +33,7 @@ public class BaseBlock {
 	 * @return byte The current damage/data value
 	 */
 	public Number getData() {
-		return null;
+		return data;
 	}
 	
 	public boolean equals(Object block) {

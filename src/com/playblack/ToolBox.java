@@ -11,54 +11,23 @@ import com.playblack.vector.Vector;
 public class ToolBox {
 	
 	/**
-	 * Take the position of a MC block as Vector and adjust it to fix the negative values bug.
-	 * THIS IS USED TO CORRECT VALUES THAT WERE TAKEN FROM A Block OBJECT!!!
-	 * @param vector
-	 * @return new Vector with corrected values
-	 */
-	public Vector adjustWorldBlock(Vector vector) {
-		int px = vector.getBlockX();
-		int py = vector.getBlockY();
-		int pz = vector.getBlockZ();
-		if (px < 0) {
-		    px = px + 1;
-		}
-		if (pz < 0){
-		    pz = pz + 1;
-		}
-		return new Vector(px, py, pz);
-	}
-	
-	/**
-	 * Take the position of a MC block as Vector and adjust it to fix the negative values bug.
-	 * This is the one wth -2
-	 * @param vector
-	 * @return new Vector with corrected values
-	 */
-	public Vector adjustBlockPosition(Vector v) {
-		if (v.getX() < 0) {
-		    v.setX(v.getX()-2);
-		}
-		if (v.getZ() < 0) {
-		    v.setZ(v.getZ()-2);
-		}
-		return new Vector(v.getX(), v.getY(), v.getZ());
-	}
-	
-	/**
 	 * Adjust the calculated block positions.
 	 * This is used to correct some positioning bugs
 	 * @param pos
 	 * @return
 	 */
 	public Vector adjustWorldPosition(Vector pos) {
-		if(pos.getBlockX() < 0) {
-			pos.setX(pos.getBlockX()-1);
-		}
-		if(pos.getBlockZ() < 0) {
-			pos.setZ(pos.getBlockZ()-1);
-		}
-		return new Vector(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ());
+//		if(pos.getX() < 0.0D) {
+//			pos.setX(pos.getX()-1.0);
+//		}
+//		if(pos.getZ() < 0.0D) {
+//			pos.setZ(pos.getZ()-1.0);
+//		}
+//		return new Vector(pos.getX(), pos.getY(), pos.getZ());
+		//NOTE: This is a dirty quick fix to work around the fact that all of the sudden,
+		//there is no issue with negative coordinates anymore
+		//In case it somehow, magically, comes back again, I'm leaving this here to uncomment again
+		return pos;
 	}
 	
 	/**

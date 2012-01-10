@@ -64,7 +64,8 @@ public class CuboidTreeHandler {
 	}
 	/**
 	 * This crunches through all cuboid areas and clears the parent
-	 * relations if childs are not 100% inside their parent
+	 * relations if childs are not 100% inside their parent.
+	 * This is legacy support!
 	 */
 	public void cleanParentRelations() {
 		CuboidNode parent;
@@ -188,6 +189,60 @@ public class CuboidTreeHandler {
 	}
 	
 	/**
+	 * Scan for nodes inside a node and parent them if they don't have a parent yet
+	 * @param node
+	 * @return
+	 */
+	public void reverseFindChildNodes(CuboidNode node) {
+		CuboidE c = node.getCuboid();
+		ArrayList<CuboidNode> childs = new ArrayList<CuboidNode>();
+		System.out.println("Checking for possible childs in "+c.getName());
+		for(CuboidTree tree : treeList) {
+			if(tree.getWorld().equalsIgnoreCase(node.getCuboid().getWorld())) {
+				for(CuboidNode n : tree.toList()) {
+					//if(n.getCuboid().isWithin(c.getFirstPoint()) && n.getCuboid().isWithin(c.getSecondPoint())) {
+					if(n.getCuboid().cuboidIsWithin(c.getMajorPoint(), c.getMinorPoint(), true)) {
+						System.out.println(n.getCuboid().getName()+" is within "+c.getName());
+						if(n.getCuboid().getParent() == null) {
+							System.out.println("We have no parent yet!");
+							if(n.getCuboid().getName().equalsIgnoreCase(c.getName())) {
+								System.out.println("Same name, stupid");
+								continue;
+							}
+							n.getCuboid().setParent(c.getName());
+							n.getCuboid().hasChanged=true;
+							childs.add(n);
+						}
+					}
+					else {
+						System.out.println(n.getCuboid().getName()+" is not within "+c.getName());
+					}
+				}
+			}
+		}
+		for(CuboidNode n : childs) {
+			updateCuboidNode(n.getCuboid());
+		}
+		save(false, true);
+	}
+	
+	/**
+	 * Take a starting Cuboid and recursively travel the tree upwards by checking for parents,
+	 * until it hits the root. All passed nodes will be saved and returned in an arraylist.
+	 * 
+	 * @param base The cuboid to start with
+	 * @param list the list you want to be filled.
+	 * @return
+	 */
+	public ArrayList<CuboidE> reverseSeekParents(CuboidE base, ArrayList<CuboidE> list) {
+		if(base.getParent() != null) {
+			CuboidE parent = getCuboidByName(base.getParent(), base.getWorld()).getCuboid();			
+			list.add(parent);
+			reverseSeekParents(parent, list);
+		}
+		return list;
+	}
+	/**
 	 * Removes the file corresponding to the given node object from disk
 	 * @param node
 	 */
@@ -210,6 +265,7 @@ public class CuboidTreeHandler {
 			log.logMessage("Cuboids2: Cuboid already exists :O", "INFO");
 			return false;
 		}
+		CuboidNode nodee = createNode(cube);
 		if(cube.getParent() == null) {
 			cube.hasChanged = true;
 			addTree(cube);
@@ -220,12 +276,13 @@ public class CuboidTreeHandler {
 					for(CuboidNode node: tree.toList()) {					
 						if(node.getCuboid().getName().equalsIgnoreCase(cube.getParent())) {
 							cube.hasChanged = true;
-							node.addChild(createNode(cube));
+							node.addChild(nodee);
 						}
 					}
 				}	
 			}
 		}
+		reverseFindChildNodes(nodee);
 		//save(true);
 		return true;
 	}
@@ -417,7 +474,6 @@ public class CuboidTreeHandler {
 					return false;
 	          }
 
-	          
 	          if ((cube.getParent() != null) && (!node.getCuboid().getParent().equalsIgnoreCase(cube.getParent())))
 	          {
 	        	 // log.logMessage("Parent Node has changed!!", "INFO");
@@ -487,27 +543,22 @@ public class CuboidTreeHandler {
 	 * @param v
 	 * @param world
 	 * @return
-	 * @deprecated
 	 */
-	public ArrayList<CuboidNode> getNodesContaining(Vector v, String world) {
-		//ArrayList<CuboidNode> list = new ArrayList<CuboidNode>(0);
-		nodeList.clear();
+	public ArrayList<CuboidE> getCuboidsContaining(Vector v, String world) {
+		ArrayList<CuboidE> list = new ArrayList<CuboidE>(0);
 		if(v == null) {
-			return nodeList;
+			return list;
 		}
 		for(CuboidTree tree : treeList) {
-			if(!tree.getRoot().getCuboid().isWithin(v)) {
-				continue;
-			}
-			if(tree.getWorld().equalsIgnoreCase(world)) {
+			if(tree.getRoot().getCuboid().isWithin(v) && tree.getWorld().equalsIgnoreCase(world)) {
 				for(CuboidNode node : tree.toList()) {
 					if(node.getCuboid().isWithin(v)) {
-						nodeList.add(node);
+						list.add(node.getCuboid());
 					}
 				}
 			}
 		}
-		return nodeList;
+		return list;
 	}
 	
 	/**

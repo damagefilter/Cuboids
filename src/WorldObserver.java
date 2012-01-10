@@ -1,7 +1,6 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import com.playblack.ToolBox;
+//import com.playblack.ToolBox;
 import com.playblack.blocks.BaseBlock;
 import com.playblack.blocks.BaseItem;
 import com.playblack.blocks.ChestBlock;
@@ -13,7 +12,7 @@ import com.playblack.vector.Vector;
 
 public class WorldObserver {
 	private static Object lock = new Object();
-	private static ToolBox toolBox = new ToolBox();
+//	private static ToolBox toolBox = new ToolBox();
 	
 	/**
 	 * Collect blocks from the world and convert them to Cuboids2 block format
@@ -28,7 +27,7 @@ public class WorldObserver {
 			int length_y = (int)Vector.getDistance(selection.getOrigin().getY(), selection.getOffset().getY())+1;
 			int length_z = (int)Vector.getDistance(selection.getOrigin().getZ(), selection.getOffset().getZ())+1;
 			//We use that to calculate the blocks we wnat to put
-			Vector min = Vector.getMinimum(selection.getOrigin(), selection.getOffset());
+			Vector min = Vector.getMinimum(tmp.getOrigin(), tmp.getOffset());
 			
 			Vector size = new Vector();
 			
@@ -40,30 +39,26 @@ public class WorldObserver {
 					for(int y = 0; y < length_y; ++y) {		
 						for(int z = 0; z < length_z; ++z) {
 							Vector current = new Vector(min.getX()+x, min.getY()+y, min.getZ()+z);
-							current = toolBox.adjustWorldPosition(current);
+							//current = toolBox.adjustWorldPosition(current);
 							Block b = player.getWorld().getBlockAt((int)current.getX(),(int)current.getY(),(int)current.getZ());
 							//Are we a chest or double chest?
 							if(b.getType() == 54) {
-								//Replace cast exception with this: getOnlyComplexBlock   if (chest.findAttachedChest != null)
-								try {
-									Chest chest = (Chest)player.getWorld().getComplexBlock(b);
+									Chest chest = (Chest)player.getWorld().getOnlyComplexBlock(b);
 									if(chest != null) {
 										ChestBlock bc = new ChestBlock();
-										bc.putItemList(itemsToArrayList(chest.getContents()));
-										bc.setData((byte)chest.getBlock().getData());
-										tmp.setBlockAt(current, bc);
+										if(chest.findAttachedChest() != null) {
+											DoubleChest dchest = chest.findAttachedChest();						
+											bc.putItemList(itemsToArrayList(dchest.getContents()));
+											bc.setData((byte)dchest.getBlock().getData());
+											tmp.setBlockAt(current, bc);
+										}
+										else {
+											bc.putItemList(itemsToArrayList(chest.getContents()));
+											bc.setData((byte)chest.getBlock().getData());
+											tmp.setBlockAt(current, bc);
+										}
 									}
 								}
-								catch(ClassCastException e) {
-									DoubleChest chest = (DoubleChest)player.getWorld().getComplexBlock(b);
-									if(chest != null) {
-										ChestBlock bc = new ChestBlock();
-										bc.putItemList(itemsToArrayList(chest.getContents()));
-										bc.setData((byte)chest.getBlock().getData());
-										tmp.setBlockAt(current, bc);
-									}
-								}
-							}
 							//Are we a sign?
 							else if(b.getType() == 63) {
 									Sign sign = (Sign)player.getWorld().getComplexBlock(b);
@@ -74,13 +69,14 @@ public class WorldObserver {
 									text[2] = sign.getText(2);
 									text[3] = sign.getText(3);
 									SignBlock bc = new SignBlock(text);
+									//player.sendMessage("Schild Data: "+sign.getBlock().getData() + "\n Zeile 1: " + sign.getText(0));
 									bc.setData((byte)sign.getBlock().getData());
 									tmp.setBlockAt(current, bc);
 									
 							}
 							else {
-								WorldBlock bc = new WorldBlock((byte)b.getData(), (short)b.getType());
-								tmp.setBlockAt(current, bc);
+								//WorldBlock bc = new WorldBlock((byte)b.getData(), (short)b.getType());
+								tmp.setBlockAt(current, new WorldBlock((byte)b.getData(), (short)b.getType()));
 							}
 						}
 					}
@@ -90,25 +86,22 @@ public class WorldObserver {
 		
 		else {
 			synchronized(lock) {
-				for(Iterator<Vector> data = selection.getBlockList().keySet().iterator(); data.hasNext();) {
-					Vector key = (Vector) data.next();
-					
+				for(Vector key : selection.getBlockList().keySet()) { 
 					//Are we a chest or double chest?
 					Block b = player.getWorld().getBlockAt(key.getBlockX(), key.getBlockY(), key.getBlockZ());
 					if(b.getType() == 54) {
-						try {
-							Chest chest = (Chest)player.getWorld().getComplexBlock(b);
-							if(chest != null) {
-								ChestBlock bc = new ChestBlock();
-								bc.putItemList(itemsToArrayList(chest.getContents()));
-								bc.setData((byte)chest.getBlock().getData());
+						Chest chest = (Chest)player.getWorld().getOnlyComplexBlock(b);
+						if(chest != null) {
+							ChestBlock bc;
+							if(chest.findAttachedChest() != null) {
+								DoubleChest dchest = chest.findAttachedChest();
+								bc = new ChestBlock();
+								bc.putItemList(itemsToArrayList(dchest.getContents()));
+								bc.setData((byte)dchest.getBlock().getData());
 								tmp.setBlockAt(key, bc);
 							}
-						}
-						catch(ClassCastException e) {
-							DoubleChest chest = (DoubleChest)player.getWorld().getComplexBlock(b);
-							if(chest != null) {
-								ChestBlock bc = new ChestBlock();
+							else {
+								bc = new ChestBlock();
 								bc.putItemList(itemsToArrayList(chest.getContents()));
 								bc.setData((byte)chest.getBlock().getData());
 								tmp.setBlockAt(key, bc);
@@ -170,7 +163,7 @@ public class WorldObserver {
 		if(items.isEmpty() || items.size() == 0) {
 			return new Item[1];
 		}
-		Item[] nItem = new Item[27];
+		Item[] nItem = new Item[items.size()];
 		//ArrayList<Item> newItems = new ArrayList<Item>();
 //		for(BaseItem i : items) {	
 //			Item it = new Item();
@@ -223,43 +216,32 @@ public class WorldObserver {
         }
         Block test = world.getBlockAt(coords.getBlockX(), coords.getBlockY(), coords.getBlockZ()); //after setting zee chest
         if((Short)block.getType()  == 54 && block instanceof ChestBlock) {
-        	//Logger.getLogger("Minecraft").info("block Type is chest");
     		ChestBlock c = (ChestBlock)block;
-    		//Logger.getLogger("Minecraft").info("Chest Data: "+c.getData());
-			try {
-				Chest chest = (Chest)world.getComplexBlock(test);
+				Chest chest = (Chest)world.getOnlyComplexBlock(test);
 				if(chest != null) {
-					//Logger.getLogger("Minecraft").info("Class: "+chest.getClass());
-					try {
-						chest.setContents(itemsToArray(c.getItemList()));
-						chest.getBlock().setData(c.getData());
-						chest.update();
-					}
-					catch(ArrayIndexOutOfBoundsException f) {
-						
-					}
-				}
-			}
-			catch(ClassCastException e) {
-				//Logger.getLogger("Minecraft").info(e.getMessage());
-				try {
-					DoubleChest dchest = (DoubleChest)world.getComplexBlock(test);
-					if(dchest != null) {
-						//Logger.getLogger("Minecraft").info("Class: "+dchest.getClass());
+					if(chest.findAttachedChest() != null) {
 						try {
-							dchest.setContents(itemsToArray(c.getItemList()));
+							DoubleChest dchest = chest.findAttachedChest();
 							dchest.getBlock().setData(c.getData());
+							dchest.clearContents();
+							dchest.setContents(itemsToArray(c.getItemList()));
 							dchest.update();
+						}
+						catch(ArrayIndexOutOfBoundsException e) {
+							
+						}
+					}
+					else {
+						try {	
+							chest.getBlock().setData(c.getData());
+							chest.setContents(itemsToArray(c.getItemList()));
+							chest.update();
 						}
 						catch(ArrayIndexOutOfBoundsException f) {
 							
 						}
 					}
 				}
-				catch(ClassCastException f) {
-					//Logger.getLogger("Minecraft").info(f.getMessage());
-				}
-			}
         }
         if((Short)block.getType()  == 63 && block instanceof SignBlock) {
         	//Logger.getLogger("Minecraft").info("block Type is Sign");
@@ -271,7 +253,8 @@ public class WorldObserver {
             	sign.setText(2, c.getTextOnLine(2));
             	sign.setText(3, c.getTextOnLine(3));
             	//Logger.getLogger("Minecraft").info("Sign Data: "+c.getData());
-            	sign.getBlock().setData(c.getData());
+            	//Logger.getLogger("Minecraft").info("Schild Data: "+((SignBlock)block).getData().byteValue() + "\n" + c.getTextOnLine(0));
+            	sign.getBlock().setData(((SignBlock)block).getData().byteValue());
             	sign.update();
         	}
         	catch(ClassCastException e) {
@@ -303,9 +286,8 @@ public class WorldObserver {
 			return false;
 		}
 		synchronized (lock) {
-			for(Iterator<Vector> data = selection.getBlockList().keySet().iterator(); data.hasNext(); ) {
-				Vector coord = (Vector) data.next();
-					changeBlock(selection.getBlockList().get(coord),coord,player.getWorld());
+			for(Vector v : selection.getBlockList().keySet()) {
+				changeBlock(selection.getBlockList().get(v), v, player.getWorld());
 			}
 			return true;
 		}

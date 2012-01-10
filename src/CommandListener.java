@@ -9,7 +9,6 @@ public class CommandListener extends PluginListener {
 	
 	//if stuff like cfill cannot be undone by exceeding max undoable blocks
 	//private boolean ignoreSizeWarning = false;
-	private String[] commandSplit;
 	/**
 	 * *********************************************************************************************
 	 * AREA MANIPULATION COMMAND LISTENER
@@ -90,7 +89,6 @@ public class CommandListener extends PluginListener {
 				}
 			}
 			if(Cuboids2.sel.get(player.getName()).isComplete()) {
-				//Cuboids2.content.initCuboidData(Cuboids2.sel.get(player.getName()).getOrigin(), Cuboids2.sel.get(player.getName()).getOffset(), player);
 				Cuboids2.blockOp.relativeCopy(  player.getName(), 
 												Cuboids2.content.getBlocksFromWorld(player, Cuboids2.sel.get(player.getName()))
 												//grüße an alex
@@ -115,14 +113,7 @@ public class CommandListener extends PluginListener {
 				}
 			}
 			Vector position;
-//			if(Cuboids2.sel.get(player.getName()).getOrigin() != null) {
-//				position = Cuboids2.sel.get(player.getName()).getOrigin();
-//				System.out.println("Using Origin as pastepoint");
-//			}
-//			else {
-				position =  new Vector(player.getX(), player.getY(), player.getZ());
-				//System.out.println("Using Player position as pastepoint");
-			//}
+			position =  new Vector(player.getX(), player.getY(), player.getZ());
 			CuboidSelection tmp = Cuboids2.blockOp.clipboardMoveByVector(player.getName(),
 																		 position
 																		 ,false); //simulate new block positions for backup
@@ -131,6 +122,9 @@ public class CommandListener extends PluginListener {
 				
 				if(Cuboids2.content.modifyWorld(player, tmp)) {
 					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidPasted"));
+					if(Cuboids2.cfg.isVerbose()) {
+						Cuboids2.eventLog.logMessage(player.getName()+" used /cpaste, modifying "+tmp.getBlockList().size()+" blocks.","INFO");
+					}
 				}
 				else {
 					player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCopy"));
@@ -139,9 +133,6 @@ public class CommandListener extends PluginListener {
 			else {
 				player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCopy"));
 			}
-			Cuboids2.noBackup = false;
-			//ignoreSizeWarning = false;
-			commandSplit = null;
 			return true;
 		}
 		
@@ -188,13 +179,13 @@ public class CommandListener extends PluginListener {
 			Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, tmp), false);
 			if(Cuboids2.content.modifyWorld(player,tmp)) {
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidMoved"));
+				if(Cuboids2.cfg.isVerbose()) {
+					Cuboids2.eventLog.logMessage(player.getName()+" used /cmove, modifying "+tmp.getBlockList().size()+" blocks.","INFO");
+				}
 			}
 			else {
 				player.sendMessage(Colors.Rose+"Cuboid cannot be moved! There was an internal error concerning the selection");
 			}
-			Cuboids2.noBackup = false;
-			//ignoreSizeWarning = false;
-			commandSplit = null;
 			return true;
 		}
 		
@@ -258,6 +249,9 @@ public class CommandListener extends PluginListener {
 				tmp = Cuboids2.blockOp.replace(player.getName(), tmp, new WorldBlock((byte)0,(short)1), block, true);
 				if(Cuboids2.content.modifyWorld(player, tmp)) {
 					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("wallsCreated"));
+					if(Cuboids2.cfg.isVerbose()) {
+						Cuboids2.eventLog.logMessage(player.getName()+" used /cwalls, modifying "+tmp.getBlockList().size()+" blocks.","INFO");
+					}
 					return true;
 				}
 				else {
@@ -312,10 +306,9 @@ public class CommandListener extends PluginListener {
 
 					Cuboids2.content.modifyWorld(player, selection);
 					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("selectionFilled"));
-					//Reset the Cuboids2.noBackup props and stuff
-					Cuboids2.noBackup = false;
-					//ignoreSizeWarning = false;
-					commandSplit = null;
+					if(Cuboids2.cfg.isVerbose()) {
+						Cuboids2.eventLog.logMessage(player.getName()+" used /cfill, modifying "+selection.getBlockList().size()+" blocks.","INFO");
+					}
 					return true;
 				}
 				else {
@@ -401,10 +394,9 @@ public class CommandListener extends PluginListener {
 
 					Cuboids2.content.modifyWorld(player, Cuboids2.blockOp.replace(player.getName(), selection, a, b, false));
 					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("selectionReplaced"));
-					
-					Cuboids2.noBackup = false;
-					//ignoreSizeWarning = false;
-					commandSplit = null;
+					if(Cuboids2.cfg.isVerbose()) {
+						Cuboids2.eventLog.logMessage(player.getName()+" used /creplace, modifying "+selection.getBlockList().size()+" blocks.","INFO");
+					}
 					return true;
 				}
 				else {
@@ -419,27 +411,6 @@ public class CommandListener extends PluginListener {
 				return true;
 			}
 					
-		}
-		
-		/*
-		 * **************************************************
-		 * ACCEPT THAT THERE CANNOT BE A BACKUP
-		 * **************************************************
-		 */
-		if(split[0].equalsIgnoreCase("/caccept") && player.canUseCommand("/cWorldMod")) {
-			//execute the last command by stringing it together
-			String command = "";
-			for(int i = 0; i< commandSplit.length;i++) {
-				if(i == 0)
-					command += commandSplit[i];
-				else {
-					command +=" "+commandSplit[i];
-				}
-			}
-			Cuboids2.noBackup = true; //tell it not to make a backup
-			//ignoreSizeWarning = true;
-			player.command(command);
-			return true;
 		}
 		
 		/* *******************************************************************************
@@ -544,6 +515,9 @@ public class CommandListener extends PluginListener {
 				Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, sphere), true);
 				Cuboids2.content.modifyWorld(player, sphere);
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("sphereCreated"));
+				if(Cuboids2.cfg.isVerbose()) {
+					Cuboids2.eventLog.logMessage(player.getName()+" used /csphere, modifying "+sphere.getBlockList().size()+" blocks.","INFO");
+				}
 				return true;
 			}
 		}
@@ -652,6 +626,9 @@ public class CommandListener extends PluginListener {
 				Cuboids2.blockOp.rememberBlocks(player.getName(), Cuboids2.content.getBlocksFromWorld(player, pyramid), true);
 				Cuboids2.content.modifyWorld(player, pyramid);
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("pyramidCreated"));
+				if(Cuboids2.cfg.isVerbose()) {
+					Cuboids2.eventLog.logMessage(player.getName()+" used /cpyramid, modifying "+pyramid.getBlockList().size()+" blocks.","INFO");
+				}
 				return true;
 			}
 		}
@@ -767,9 +744,15 @@ public class CommandListener extends PluginListener {
 
 				if(disc) {
 					player.sendMessage(Colors.Yellow+Cuboids2.msg.messages.get("discCreated"));
+					if(Cuboids2.cfg.isVerbose()) {
+						Cuboids2.eventLog.logMessage(player.getName()+" used /cdics, modifying "+tmp.getBlockList().size()+" blocks.","INFO");
+					}
 				}
 				else {
 					player.sendMessage(Colors.Yellow+Cuboids2.msg.messages.get("circleCreated"));
+					if(Cuboids2.cfg.isVerbose()) {
+						Cuboids2.eventLog.logMessage(player.getName()+" used /ccircle, modifying "+tmp.getBlockList().size()+" blocks.","INFO");
+					}
 				}
 				return true;
 			}
@@ -809,11 +792,17 @@ public class CommandListener extends PluginListener {
 			if(undoSteps == -1) {
 				undoSteps = 1;
 			}
+			int blocks = 0;
 			for(int i = 0; i < undoSteps; i++) {
-				//log.info("Undoing stuff.");			
-				if(Cuboids2.content.modifyWorld(player, Cuboids2.blockOp.undo(player.getName()))) {
-					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("actionsUndone"));
+				//log.info("Undoing stuff.");	
+				CuboidSelection d = Cuboids2.blockOp.undo(player.getName());
+				if(Cuboids2.content.modifyWorld(player, d)) {
+					blocks+=d.getBlockList().size();
 				}
+			}
+			player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("actionsUndone"));
+			if(Cuboids2.cfg.isVerbose()) {
+				Cuboids2.eventLog.logMessage(player.getName()+" used /cundo "+undoSteps+" times, modifying "+blocks+" blocks.","INFO");
 			}
 			return true;
 					
@@ -961,6 +950,9 @@ public class CommandListener extends PluginListener {
 																	player.getWorld().getType().name());
 							if(Cuboids2.cuboids.addCuboid(newCube)) {
 								player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidAdded"));
+								if(Cuboids2.cfg.isVerbose()) {
+									Cuboids2.eventLog.logMessage(player.getName()+" used /cmod create", "INFO");
+								}
 								return true;
 							}
 							else {
@@ -1032,6 +1024,9 @@ public class CommandListener extends PluginListener {
 					//	player.sendMessage("Trying to restrict");
 						Cuboids2.cuboids.restrictCommand(player, split, split[1]);
 						player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidCommandBlacklisted"));
+						if(Cuboids2.cfg.isVerbose()) {
+							Cuboids2.eventLog.logMessage(player.getName()+" used /cmod restrictcommand", "INFO");
+						}
 						return true;
 					}
 				}
@@ -1049,6 +1044,9 @@ public class CommandListener extends PluginListener {
 						}
 						Cuboids2.cuboids.allowCommand(player, split, split[1]);
 						player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidCommandAllowed"));
+						if(Cuboids2.cfg.isVerbose()) {
+							Cuboids2.eventLog.logMessage(player.getName()+" used /cmod allowcommand", "INFO");
+						}
 						return true;
 					}
 				}
@@ -1059,6 +1057,9 @@ public class CommandListener extends PluginListener {
 				 */
 				if(split[2].equalsIgnoreCase("remove") || split[2].equalsIgnoreCase("delete")) {
 					Cuboids2.cuboids.removeCuboid(player, split[1]);
+					if(Cuboids2.cfg.isVerbose()) {
+						Cuboids2.eventLog.logMessage(player.getName()+" used /cmod delete", "INFO");
+					}
 					return true;
 				}
 				
@@ -1091,6 +1092,9 @@ public class CommandListener extends PluginListener {
 						return true;
 					}
 					Cuboids2.cuboids.setPriority(player, split[1], prio);
+					if(Cuboids2.cfg.isVerbose()) {
+						Cuboids2.eventLog.logMessage(player.getName()+" used /cmod priority", "INFO");
+					}
 					return true;
 				}
 				
@@ -1098,7 +1102,11 @@ public class CommandListener extends PluginListener {
 				 * PARENT SETTING
 				 */
 				if(split[2].equalsIgnoreCase("parent")) {
-					Cuboids2.cuboids.setParent(player, split[1], split[3]);
+					if(Cuboids2.cuboids.setParent(player, split[1], split[3])) {
+						if(Cuboids2.cfg.isVerbose()) {
+							Cuboids2.eventLog.logMessage(player.getName()+" used /cmod parent", "INFO");
+						}
+					}
 					return true;
 				}
 				
@@ -1106,7 +1114,11 @@ public class CommandListener extends PluginListener {
 				 * ALLOW STUFF TO CUBOID
 				 */
 				if(split[2].equalsIgnoreCase("allow")) {
-					Cuboids2.cuboids.allowEntity(player, split);
+					if(Cuboids2.cuboids.allowEntity(player, split)) {
+						if(Cuboids2.cfg.isVerbose()) {
+							Cuboids2.eventLog.logMessage(player.getName()+" used /cmod allow", "INFO");
+						}
+					}
 					return true;
 				}
 				
@@ -1114,7 +1126,11 @@ public class CommandListener extends PluginListener {
 				 * DISALLOW STUFF TO CUBOID
 				 */
 				if(split[2].equalsIgnoreCase("disallow")) {
-					Cuboids2.cuboids.disallowEntity(player, split);
+					if(Cuboids2.cuboids.disallowEntity(player, split)) {
+						if(Cuboids2.cfg.isVerbose()) {
+							Cuboids2.eventLog.logMessage(player.getName()+" used /cmod disallow", "INFO");
+						}
+					}
 					return true;
 				}
 				
@@ -1122,7 +1138,11 @@ public class CommandListener extends PluginListener {
 				 * RESIZE / MOVE CUBOID BOUNDING RECTANGLE
 				 */
 				if(split[2].equalsIgnoreCase("resize") || split[2].equalsIgnoreCase("move")) {
-						Cuboids2.cuboids.resize(player, Cuboids2.sel.get(player.getName()), split[1]);
+						if(Cuboids2.cuboids.resize(player, Cuboids2.sel.get(player.getName()), split[1])) {
+							if(Cuboids2.cfg.isVerbose()) {
+								Cuboids2.eventLog.logMessage(player.getName()+" used /cmod resize or /cmod move", "INFO");
+							}
+						}
 						return true;
 				}
 				
@@ -1143,7 +1163,11 @@ public class CommandListener extends PluginListener {
 							}
 							message += split[i];
 						}
-						Cuboids2.cuboids.setWelcomeMessage(player, split[1], message);
+						if(Cuboids2.cuboids.setWelcomeMessage(player, split[1], message)) {
+							if(Cuboids2.cfg.isVerbose()) {
+								Cuboids2.eventLog.logMessage(player.getName()+" used /cmod welcome", "INFO");
+							}
+						}
 						//player.sendMessage(Colors.LightGreen+Cuboids2.msg.help.get("cuboidUpdated"));
 						return true;
 					}
@@ -1166,7 +1190,11 @@ public class CommandListener extends PluginListener {
 							}
 							message += split[i];
 						}
-						Cuboids2.cuboids.setFarewellMessage(player, split[1], message);
+						if(Cuboids2.cuboids.setFarewellMessage(player, split[1], message)) {
+							if(Cuboids2.cfg.isVerbose()) {
+								Cuboids2.eventLog.logMessage(player.getName()+" used /cmod farewell", "INFO");
+							}
+						}
 						//player.sendMessage(Colors.LightGreen+Cuboids2.msg.help.get("cuboidUpdated"));
 						return true;
 						
@@ -1190,12 +1218,18 @@ public class CommandListener extends PluginListener {
 									Cuboids2.cfg.setGlobalDisableCreeperSecure(false);
 									Cuboids2.cfg.updateSetting("disable-creeper-secure-global", false);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalCreeperEnabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle creeper", "INFO");
+									}
 									return true;
 								}
 								else {
 									Cuboids2.cfg.setGlobalDisableCreeperSecure(true);
 									Cuboids2.cfg.updateSetting("disable-creeper-secure-global", true);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalCreeperDisabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle creeper", "INFO");
+									}
 									return true;
 								}
 							}
@@ -1205,12 +1239,18 @@ public class CommandListener extends PluginListener {
 									Cuboids2.cfg.setGlobalSanctuary(false);
 									Cuboids2.cfg.updateSetting("sanctuary-global", false);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalSanctuaryDisabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle sanctuary", "INFO");
+									}
 									return true;
 								}
 								else {
 									Cuboids2.cfg.setGlobalSanctuary(true);
 									Cuboids2.cfg.updateSetting("sanctuary-global", true);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalSanctuaryEnabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle sanctuary", "INFO");
+									}
 									return true;
 								}
 							}
@@ -1220,12 +1260,18 @@ public class CommandListener extends PluginListener {
 									Cuboids2.cfg.setGlobalSanctuarySpawnAnimals(false);
 									Cuboids2.cfg.updateSetting("sanctuary-animal-spawn-global", false);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalSanctuaryAnimalsDisabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle sanctuary-animalspawn", "INFO");
+									}
 									return true;
 								}
 								else {
 									Cuboids2.cfg.setGlobalSanctuarySpawnAnimals(true);
 									Cuboids2.cfg.updateSetting("sanctuary-animal-spawn-global", true);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalSanctuaryAnimalsEnabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle sanctuary-animalspawn", "INFO");
+									}
 									return true;
 								}
 							}
@@ -1235,12 +1281,18 @@ public class CommandListener extends PluginListener {
 									Cuboids2.cfg.setStopLavaFlow(false); //global 
 									Cuboids2.cfg.updateSetting("lava-flow-global", false);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalLavaFlowDisabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle lavaflow", "INFO");
+									}
 									return true;
 								}
 								else {
 									Cuboids2.cfg.setStopLavaFlow(true);
 									Cuboids2.cfg.updateSetting("stop-lava-flow-global", true);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalLavaFlowEnabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle lavaflow", "INFO");
+									}
 									return true;
 								}
 							}
@@ -1250,12 +1302,18 @@ public class CommandListener extends PluginListener {
 									Cuboids2.cfg.setStopWaterFlow(false); //global
 									Cuboids2.cfg.updateSetting("stop-water-flow-global", false);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalWaterFlowDisabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle waterflow", "INFO");
+									}
 									return true;
 								}
 								else {
 									Cuboids2.cfg.setStopWaterFlow(true);
 									Cuboids2.cfg.updateSetting("stop-water-flow-global", true);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalWaterFlowEnabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle waterflow", "INFO");
+									}
 									return true;
 								}
 							}
@@ -1265,12 +1323,18 @@ public class CommandListener extends PluginListener {
 									Cuboids2.cfg.setGlobalPvp(false);
 									Cuboids2.cfg.updateSetting("disable-pvp-global", false);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalPvpDisabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle pvp", "INFO");
+									}
 									return true;
 								}
 								else {
 									Cuboids2.cfg.setGlobalPvp(true);
 									Cuboids2.cfg.updateSetting("disable-pvp-global", true);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalPvpEnabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle pvp", "INFO");
+									}
 									return true;
 								}
 							}
@@ -1280,12 +1344,18 @@ public class CommandListener extends PluginListener {
 									Cuboids2.cfg.setTntGlobal(false);
 									Cuboids2.cfg.updateSetting("tnt-secure-global", false);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalTntDisabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle tnt", "INFO");
+									}
 									return true;
 								}
 								else {
 									Cuboids2.cfg.setTntGlobal(true);
 									Cuboids2.cfg.updateSetting("tnt-secure-global", true);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalTntEnabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle tnt", "INFO");
+									}
 									return true;
 								}
 							}
@@ -1295,12 +1365,18 @@ public class CommandListener extends PluginListener {
 									Cuboids2.cfg.setGlobalFirespreadBlock(false);
 									Cuboids2.cfg.updateSetting("firespread-block-global", false);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalFirespreadDisabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle firespread", "INFO");
+									}
 									return true;
 								}
 								else {
 									Cuboids2.cfg.setGlobalFirespreadBlock(true);
 									Cuboids2.cfg.updateSetting("firespread-block-global", true);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalFirespreadEnabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle firespread", "INFO");
+									}
 									return true;
 								}
 							}
@@ -1310,12 +1386,18 @@ public class CommandListener extends PluginListener {
 									Cuboids2.cfg.setGlobalProtection(false);
 									Cuboids2.cfg.updateSetting("protection-global", false);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalProtectionDisabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle protection", "INFO");
+									}
 									return true;
 								}
 								else {
 									Cuboids2.cfg.setGlobalProtection(true);
 									Cuboids2.cfg.updateSetting("protection-global", true);
 									player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("globalProtectionEnabled"));
+									if(Cuboids2.cfg.isVerbose()) {
+										Cuboids2.eventLog.logMessage(player.getName()+" used /cmod toggle protection", "INFO");
+									}
 									return true;
 								}
 							}
@@ -1381,6 +1463,9 @@ public class CommandListener extends PluginListener {
 							Cuboids2.cuboids.toggleSanctuaryAnimals(player, split[1]);
 							return true;
 						}
+						if(Cuboids2.cfg.isVerbose()) {
+							Cuboids2.eventLog.logMessage(player.getName()+" used /cmod "+split[1]+" toggle "+split[3],"INFO");
+						}
 					}
 					else {
 						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("missingArguments"));
@@ -1413,6 +1498,9 @@ public class CommandListener extends PluginListener {
 		if(split[0].equalsIgnoreCase("/csave")) {
 			  if (split.length >= 2) {
 			    Cuboids2.cuboids.saveCuboid(player, split[1]);
+			    if(Cuboids2.cfg.isVerbose()) {
+					Cuboids2.eventLog.logMessage(player.getName()+" used /csave","INFO");
+				}
 			    return true;
 			  }
 			  player.sendMessage(Colors.Yellow + Cuboids2.msg.help.get("csave"));
@@ -1424,10 +1512,13 @@ public class CommandListener extends PluginListener {
 		 * SAVE ALL
 		 * **************************************************
 		 */
-		if(split[0].equalsIgnoreCase("/csave-all")) {
+		if(split[0].equalsIgnoreCase("/csave-all") && player.isAdmin()) {
 			  if(Cuboids2.treeHandler != null) {
 				  Cuboids2.treeHandler.save(false, true);
 				  player.sendMessage(Colors.LightGreen + Cuboids2.msg.messages.get("cuboidSaved"));
+				  if(Cuboids2.cfg.isVerbose()) {
+						Cuboids2.eventLog.logMessage(player.getName()+" used /csave-all","INFO");
+					}
 				  return true;
 			  }
 			  else {
@@ -1443,6 +1534,9 @@ public class CommandListener extends PluginListener {
 		if(split[0].equalsIgnoreCase("/cload")) {
 			  if (split.length >= 2) {
 			    Cuboids2.cuboids.loadCuboid(player, split[1]);
+			    if(Cuboids2.cfg.isVerbose()) {
+					Cuboids2.eventLog.logMessage(player.getName()+" used /cload","INFO");
+				}
 			    return true;
 			  }
 			
@@ -1466,6 +1560,9 @@ public class CommandListener extends PluginListener {
 				  else {
 					  player.sendMessage(Colors.Yellow + Cuboids2.msg.help.get("cloadfrom"));
 				  }
+				  if(Cuboids2.cfg.isVerbose()) {
+						Cuboids2.eventLog.logMessage(player.getName()+" used /cloadfrom "+split[1],"INFO");
+				  }
 			    return true;
 			  }
 			  player.sendMessage(Colors.Yellow + Cuboids2.msg.help.get("cloadfrom"));
@@ -1474,7 +1571,7 @@ public class CommandListener extends PluginListener {
 		
 		/*
 		 * **************************************************
-		 * PROTECT SHORTCUT
+		 * PROTECT SHORTCUTS
 		 * **************************************************
 		 */
 		if(split[0].equalsIgnoreCase("/protect")) {
@@ -1494,18 +1591,17 @@ public class CommandListener extends PluginListener {
 				return true;
 			}
 			if(Cuboids2.sel.get(player.getName()).isComplete()) {
-				//TODO: Refactor to use StringBuilder
-				String playerlist = "";
+				StringBuilder playerlist = new StringBuilder();
 				String cubeName = "";
 				for(int i=1;i<split.length-1;i++) {
 					if(i > 1) {
-						playerlist+=" ";
+						playerlist.append(" ");
 					}
-					playerlist += split[i];
+					playerlist.append(split[i]);
 				}
 				cubeName = split[split.length-1];
 
-				CuboidE cube = Cuboids2.sel.get(player.getName()).toCuboid( playerlist, 
+				CuboidE cube = Cuboids2.sel.get(player.getName()).toCuboid( playerlist.toString(), 
 																			cubeName, 
 																			Cuboids2.cfg.getDefaultCuboidSettings(player),
 																			player.getWorld().getType().name());
@@ -1513,6 +1609,9 @@ public class CommandListener extends PluginListener {
 				cube.setProtection(true);
 
 				if(Cuboids2.cuboids.addCuboid(cube)) {
+					if(Cuboids2.cfg.isVerbose()) {
+							Cuboids2.eventLog.logMessage(player.getName()+" used /protect","INFO");
+					}
 					player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidAdded"));
 					return true;
 				}
@@ -1539,25 +1638,26 @@ public class CommandListener extends PluginListener {
 					return true;
 				}
 			}
-			if(split.length > 2) { //TODO: USE STRINGBUILDER YOU LAZY BASTARD!
+			if(split.length > 2) { 
 				if(Cuboids2.sel.get(player.getName()).isComplete()) {
 					String cubeName = split[split.length-1];
-					String playerName="";
-					//StringGroup
+					StringBuilder playerName= new StringBuilder();
 					Cuboids2.sel.get(player.getName()).expandVert();
-					//CuboidE cube = selection.to
 					for(int i = 1; i < split.length-1;i++) {
 						if(i > 1) {
-							playerName += " ";
+							playerName.append(" ");
 						}
-						playerName += split[i];
+						playerName.append(split[i]);
 					}
-					CuboidE cube = Cuboids2.sel.get(player.getName()).toCuboid( playerName, 
+					CuboidE cube = Cuboids2.sel.get(player.getName()).toCuboid( playerName.toString(), 
 																				cubeName, 
 																				Cuboids2.cfg.getDefaultCuboidSettings(player),
 																				player.getWorld().getType().name());
 					cube.setProtection(true);
 					if(Cuboids2.cuboids.addCuboid(cube)) {
+						if(Cuboids2.cfg.isVerbose()) {
+							Cuboids2.eventLog.logMessage(player.getName()+" used /highprotect","INFO");
+						}
 						player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidAdded"));
 						return true;
 					}

@@ -61,12 +61,12 @@ public class PlayerListener extends PluginListener {
 	
 	@Override
 	public void onPlayerMove(Player player, Location from, Location to) {
-		Vector vTo = toolBox.adjustWorldBlock(new Vector(to.x, to.y, to.z));		
+		Vector vTo = toolBox.adjustWorldPosition(new Vector(to.x, to.y, to.z));		
 		if(!Cuboids2.cuboids.canEnter(player,vTo)) {
 			player.teleportTo(from);
 		}
 		Cuboids2.cuboids.addPlayerWithin(player, new Vector(player.getX(), player.getY(), player.getZ()), playerTeleported);	
-		Cuboids2.cuboids.removePlayerWithin(player, toolBox.adjustWorldBlock(new Vector(from.x, from.y, from.z)), 
+		Cuboids2.cuboids.removePlayerWithin(player, toolBox.adjustWorldPosition(new Vector(from.x, from.y, from.z)), 
 													vTo);
 		playerTeleported = false;	
 	}
@@ -78,7 +78,7 @@ public class PlayerListener extends PluginListener {
         }
 		//Vector vTo = toolBox.adjustWorldBlock(new Vector(to.x, to.y, to.z));
 		Cuboids2.cuboids.addPlayerWithin(player, new Vector(player.getX(), player.getY(), player.getZ()), false);	
-		Cuboids2.cuboids.removePlayerWithin(player, toolBox.adjustWorldBlock(new Vector(from.x, from.y, from.z)), 
+		Cuboids2.cuboids.removePlayerWithin(player, toolBox.adjustWorldPosition(new Vector(from.x, from.y, from.z)), 
 											new Vector(to.x, to.y, to.z));
 		playerTeleported = true;		
 		return false; //allow tp	

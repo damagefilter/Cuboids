@@ -38,10 +38,29 @@ public class CuboidSelection {
 	 * Default Contructor<br>
 	 * This will set origin and offset to null and the block list 
 	 * will be default initiated with 0 elements
+	 * @param cuboidSelection 
 	 */
 	public CuboidSelection() {
 		blocks = new LinkedHashMap<Vector,BaseBlock>(0);
 	}
+	
+	/**
+	 * Copy Contructor
+	 * @param tmp
+	 */
+	public CuboidSelection(CuboidSelection tmp) {
+		this.origin = tmp.getOrigin();
+		this.offset = tmp.getOffset();
+		this.world = tmp.getWorld();
+		this.sculptData = tmp.getSculptData();
+		this.sculptType = tmp.getSculptType();
+		this.sculptRadius = tmp.getSculptRadius();
+		blocks = new LinkedHashMap<Vector,BaseBlock>(0);
+		for(Vector v : tmp.getBlockList().keySet()) {
+			blocks.put(v, tmp.getBlockAt(v));
+		}
+	}
+	
 	/**
 	 * This will init origin and offset as null and init the block list with listSize elements
 	 * @param listSize
@@ -283,7 +302,7 @@ public class CuboidSelection {
 	    }
 	    cube.setWorld(world);
 	    cube.setName(name);
-	    cube.overrideProperties(defaultSettings);
+	    cube.overwriteProperties(defaultSettings);
 	    
 	    return cube;
 	}

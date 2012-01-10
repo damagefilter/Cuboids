@@ -2,7 +2,6 @@ package com.playblack.cuboid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import com.playblack.blocks.BaseBlock;
 import com.playblack.blocks.ChestBlock;
@@ -116,17 +115,19 @@ public class CuboidHistory {
 		 */
 		public void copyToClipboard(CuboidSelection clip) {
 			clipBoard.clearAll();
-			for(Iterator<Vector> data = clip.getBlockList().keySet().iterator(); data.hasNext();) {
-				Vector key = (Vector) data.next();
+			for(Vector key : clip.getBlockList().keySet()) {
+				
 				BaseBlock b = clip.getBlockAt(key);
 				if(b instanceof WorldBlock) {
 					clipBoard.setBlockAt(key, new WorldBlock((Byte)b.getData(), (Short)b.getType()));
 				}
 				else if(b instanceof ChestBlock) {
 					clipBoard.setBlockAt(key, new ChestBlock((ChestBlock)b));
+					clipBoard.getBlockAt(key).setData(((ChestBlock)b).getData());
 				}
 				else if(b instanceof SignBlock) {
 					clipBoard.setBlockAt(key, new SignBlock(((SignBlock) b).getSignTextArray()));
+					clipBoard.getBlockAt(key).setData(((SignBlock)b).getData());
 				}
 				//clipBoard.setBlockAt(key, new BaseBlock(b.getType(), b.getData()));
 			}
@@ -198,7 +199,9 @@ public class CuboidHistory {
 		public CuboidSelection undo() {
 			if(currentIndex >=0 && currentIndex <= history.size()) {
 				currentIndex--;
-				return history.remove(currentIndex+1);
+				CuboidSelection tmp = new CuboidSelection(history.get(currentIndex+1));
+				history.get(currentIndex+1).clearAll();
+				return tmp;
 			}
 			else {
 				currentIndex=0;

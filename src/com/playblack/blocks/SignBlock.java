@@ -30,7 +30,7 @@ public class SignBlock extends BaseBlock {
 
 	@Override
 	public void setData(Number data) {
-		this.data = (Byte)data;
+		this.data = data.byteValue();
 	}
 
 	@Override

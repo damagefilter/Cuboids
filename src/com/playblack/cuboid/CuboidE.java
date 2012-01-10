@@ -388,19 +388,21 @@ public class CuboidE {
 	 * Add a group to the list of allowed groups. This will transform group names to lower case
 	 * @param group String
 	 */
-	public void addGroup(String group) {
+	public boolean addGroup(String group) {
 		if(groupIsAllowed(group)) {
-			return;
+			return false;
 		}
 		//group = group.substring(2);
 		if(group.indexOf(",") >= 0) {
 			addGroup(group.split(","));
+			return true;
 		}
 		else {
 			if(group.indexOf("g:") >= 0) {
 				if(!group.equalsIgnoreCase("no_groups")) {
 					if(!group.equalsIgnoreCase("g:")) {
 						groupList.add(group.substring(2).replace(" ", "").toLowerCase());
+						return true;
 					}
 				}
 			}
@@ -409,9 +411,11 @@ public class CuboidE {
 				if(!group.equalsIgnoreCase("no_groups")) {
 					if(!group.replace(" ", "").isEmpty()) {
 						groupList.add(group.replace(" ", "").toLowerCase());
+						return true;
 					}
 				}
 			}
+			return false;
 		}
 	}
 	
@@ -462,19 +466,23 @@ public class CuboidE {
 	 * Add a player name to the list of allowed player names.
 	 * @param playerName String
 	 */
-	public void addPlayer(String playerName) {
+	public boolean addPlayer(String playerName) {
 		if(playerIsAllowed(playerName)) {
-			return;
+			return false;
 		}
 		if(playerName.indexOf(",") >= 0) {
 			addPlayer(playerName.split(","));
+			return true;
 		}
 		else {
 			if(!playerName.equalsIgnoreCase("no_players")) {
 				if(!playerName.equalsIgnoreCase("o:")) {
 					playerList.add(playerName.replace(" ", ""));
+					return true;
 				}
+				return false;
 			}
+			return false;
 		}
 	}
 	
@@ -580,7 +588,7 @@ public class CuboidE {
 	}
 	
 	public Vector getFirstPoint() {
-		return this.point1;
+		return point1;
 	}
 	/**
 	 * Get the point of this cuboid that is farther away from 0,0,0
@@ -591,7 +599,7 @@ public class CuboidE {
 	}
 	
 	public Vector getSecondPoint() {
-		return this.point2;
+		return point2;
 	}
 	/**
 	 * Set the first Cuboid Point
@@ -629,7 +637,6 @@ public class CuboidE {
 	public boolean cuboidIsWithin(Vector v1, Vector v2, boolean complete) {
 		Vector min = Vector.getMinor(v1, v2);
 		Vector max = Vector.getMajor(v1, v2);
-		
 		if(complete == true) {
 			if(point1.isWithin(min, max) && point2.isWithin(min, max)) {
 				return true;
@@ -914,11 +921,15 @@ public class CuboidE {
 		}
 	}
 	
+	public ArrayList<String> getPlayerListRaw() {
+		return playerList;
+	}
+	
 	public String getGroupList() {
 		StringBuilder groups = new StringBuilder();
 		for(int i = 0; i < groupList.size(); i++) {
 			if(i > 0) {
-				groups.append(",") ;
+				groups.append(",");
 			}
 			groups.append(groupList.get(i));
 		}
@@ -929,6 +940,10 @@ public class CuboidE {
 		else {
 			return out;
 		}
+	}
+	
+	public ArrayList<String> getGroupListRaw() {
+		return groupList;
 	}
 	
 	/**
@@ -971,15 +986,15 @@ public class CuboidE {
 	 * with the ones given inside cube
 	 * @param cube
 	 */
-	public void overrideProperties(CuboidE cube) {
-		overrideProperties(cube.getFlagListArray());
+	public void overwriteProperties(CuboidE cube) {
+		overwriteProperties(cube.getFlagListArray());
 	}
 	/**
 	 * This takes a cuboid and overrides the local properties<br>
 	 * with the ones given inside cube
 	 * @param cube
 	 */
-	public void overrideProperties(HashMap<String, Boolean> props) {
+	public void overwriteProperties(HashMap<String, Boolean> props) {
 		setAllowPvp(((Boolean)props.get("allowPvp")).booleanValue());
 	    setCreeperSecure(((Boolean)props.get("creeperSecure")).booleanValue());
 	    setHealing(((Boolean)props.get("healing")).booleanValue());
