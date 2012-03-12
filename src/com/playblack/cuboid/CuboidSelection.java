@@ -3,7 +3,7 @@ package com.playblack.cuboid;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 import com.playblack.blocks.BaseBlock;
 
 

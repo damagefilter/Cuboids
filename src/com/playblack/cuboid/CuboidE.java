@@ -3,7 +3,7 @@ package com.playblack.cuboid;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 
 /**
@@ -82,6 +82,8 @@ public class CuboidE {
 	private boolean restriction = false;
 	private String welcome=null;
 	private String farewell=null;
+	
+	private boolean hMob=false;
 	/**
 	 * Name of the world this cuboidE is valid for
 	 */
@@ -297,6 +299,14 @@ public class CuboidE {
 
 	public void setSanctuary(boolean sanctuary) {
 		this.sanctuary = sanctuary;
+	}
+	
+	public boolean ishMob() {
+		return hMob;
+	}
+
+	public void sethMob(boolean hMob) {
+		this.hMob = hMob;
 	}
 
 	/**
@@ -829,7 +839,10 @@ public class CuboidE {
 			flaglist.append(", Water secure");
 		}
 		if(isFarmland()) {
-			flaglist.append(", farmland");
+			flaglist.append(", Farmland");
+		}
+		if(ishMob()) {
+			flaglist.append(", hMob");
 		}
 		
 		flaglist.append(" area");
@@ -888,6 +901,9 @@ public class CuboidE {
 		}
 		if(isFarmland()) {
 			flaglist.append(", farmland");
+		}
+		if(ishMob()) {
+			flaglist.append(", hmob");
 		}
 		
 		if(welcome != null && farewell != null) {
@@ -968,6 +984,8 @@ public class CuboidE {
 		flags.put("tntSecure", this.tntSecure);
 		//1.4.0
 		flags.put("restriction", this.isRestricted());
+		
+		flags.put("hmob", this.ishMob());
 		return flags;
 		}
 	
@@ -989,6 +1007,7 @@ public class CuboidE {
 	public void overwriteProperties(CuboidE cube) {
 		overwriteProperties(cube.getFlagListArray());
 	}
+	
 	/**
 	 * This takes a cuboid and overrides the local properties<br>
 	 * with the ones given inside cube
@@ -1009,5 +1028,6 @@ public class CuboidE {
 	    setFarmland(((Boolean)props.get("farmland")).booleanValue());
 	    setTntSecure(((Boolean)props.get("tntSecure")).booleanValue());
 	    setRestriction(((Boolean)props.get("restriction")).booleanValue());
+	    sethMob(((Boolean)props.get("hmob")).booleanValue());
 	}
 }

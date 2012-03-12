@@ -15,7 +15,7 @@ import com.playblack.cuboid.CuboidE;
 import com.playblack.cuboid.tree.CuboidNode;
 import com.playblack.cuboid.tree.CuboidTree;
 import com.playblack.cuboid.tree.CuboidTreeHandler;
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 /**
  * FlatFileData extends BaseData and represents the data layer for retrieving Cuboids from text files.
@@ -246,15 +246,14 @@ public class FlatfileData extends BaseData {
 	      cube.addGroup(csv[21]);
 	      cube.addTabuCommand(csv[22]);
 	      //V 1.2.0 stuff current max lenght:27
-	      if(csv.length >= 27) {
 	    	  cube.setLavaControl(ToolBox.stringToBoolean(csv[23]));
 	    	  cube.setWaterControl(ToolBox.stringToBoolean(csv[24]));
 	    	  cube.setTntSecure(ToolBox.stringToBoolean(csv[25]));
 	    	  cube.setFarmland(ToolBox.stringToBoolean(csv[26]));
-	      }
-	    //V 1.4.0 stuff current max lenght:28
-	      if(csv.length >= 28) {
 	    	  cube.setRestriction(ToolBox.stringToBoolean(csv[27]));
+	    //V 1.4.0 stuff current max lenght:28
+	      if(csv.length >= 29) {
+	    	  cube.sethMob(ToolBox.stringToBoolean(csv[28]));
 	      }
 	     // log.logMessage("Returning Cube while loading area."+csv[0], "INFO");
 	      return cube;
@@ -334,6 +333,8 @@ public class FlatfileData extends BaseData {
 		csv.append(node.getCuboid().isFarmland());csv.append(",");
 		//1.4.0 stuff
 		csv.append(node.getCuboid().isRestricted());
+		//1.8
+		csv.append(node.getCuboid().ishMob());
 		
 		return csv.toString();
 	}

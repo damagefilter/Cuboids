@@ -32,6 +32,9 @@ public class Cuboids2Config {
 	//v 1.4.0
 	private boolean allowRestriction = false;
 	
+	//v 1.8.0
+	private boolean allowHmobs = false;
+	
 	private boolean globalDisablePvp = true;
 	private boolean globalDisableCreeperSecure = true;
 	private boolean globalFirespreadBlock = false;
@@ -81,6 +84,7 @@ public class Cuboids2Config {
 	private boolean isFarmlandDefault = false;
 	private boolean isTntSecureDefault = false;
 	private boolean isRestrictionDefault = false;
+	private boolean isHmobDefault = false;
 	
 	
 	
@@ -129,6 +133,7 @@ public class Cuboids2Config {
 		allowWaterControl = pluginSettings.getBoolean("allow-stop-water-flow", true);
 		allowFarmland = pluginSettings.getBoolean("allow-farmland", true);
 		allowRestriction = pluginSettings.getBoolean("allow-restriction", true);
+		allowHmobs = pluginSettings.getBoolean("allow-hmobs", false);
 		
 		verbose = pluginSettings.getBoolean("verbose-logging",false);
 		
@@ -161,9 +166,12 @@ public class Cuboids2Config {
 		isFarmlandDefault = props.getBoolean("default-farmland", true);
 		isTntSecureDefault = props.getBoolean("default-tnt-secure", true);
 		isRestrictionDefault = props.getBoolean("default-restriction", false);
+		
+		isHmobDefault = props.getBoolean("default-hmob", false);
 
 		stopLavaFlow = props.getBoolean("stop-lava-flow-global", false);
 		stopWaterFlow = props.getBoolean("stop-water-flow-global", false);
+		
 		
 		//Global Settings
 		globalDisablePvp = props.getBoolean("disable-pvp-global", false);
@@ -276,6 +284,10 @@ public class Cuboids2Config {
 	
 	public boolean allowRestriction() {
 		return allowRestriction;
+	}
+	
+	public boolean allowHmobs() {
+		return allowHmobs;
 	}
 	
 	public boolean autoParent() {
@@ -407,6 +419,11 @@ public class Cuboids2Config {
 	public boolean isRestrictionDefault() {
 		return isRestrictionDefault;
 	}
+	
+	public boolean isHmobDefault() {
+		return isHmobDefault;
+	}
+	
 	public long getHealDelay() {
 		return (healDelay*6000);
 	}
@@ -562,6 +579,13 @@ public class Cuboids2Config {
 		}
 		else {
 			flags.put("restriction", false);
+		}
+		
+		if(allowHmobs && (player.canUseCommand("/chmob")) || player.canUseCommand("/cIgnoreRestrictions")) {
+			flags.put("hmob", this.isHmobDefault);
+		}
+		else {
+			flags.put("hmob", false);
 		}
 		
 		flags.put("sanctuarySpawnAnimals", this.isSanctuaryAnimalSpawnDefault);

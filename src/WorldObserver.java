@@ -7,7 +7,7 @@ import com.playblack.blocks.ChestBlock;
 import com.playblack.blocks.SignBlock;
 import com.playblack.blocks.WorldBlock;
 import com.playblack.cuboid.CuboidSelection;
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 
 public class WorldObserver {
@@ -243,7 +243,7 @@ public class WorldObserver {
 					}
 				}
         }
-        if((Short)block.getType()  == 63 && block instanceof SignBlock) {
+        if((Short)block.getType() == 63 && block instanceof SignBlock) {
         	//Logger.getLogger("Minecraft").info("block Type is Sign");
         	SignBlock c = (SignBlock)block;
         	try {

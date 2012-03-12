@@ -7,7 +7,7 @@ import com.playblack.blocks.BaseBlock;
 import com.playblack.blocks.ChestBlock;
 import com.playblack.blocks.SignBlock;
 import com.playblack.blocks.WorldBlock;
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 /**
  * This stores a list of player selections per player, creating a recoverable history
@@ -198,9 +198,9 @@ public class CuboidHistory {
 		 */
 		public CuboidSelection undo() {
 			if(currentIndex >=0 && currentIndex <= history.size()) {
+				CuboidSelection tmp = new CuboidSelection(history.get(currentIndex));
+				history.remove(currentIndex);
 				currentIndex--;
-				CuboidSelection tmp = new CuboidSelection(history.get(currentIndex+1));
-				history.get(currentIndex+1).clearAll();
 				return tmp;
 			}
 			else {

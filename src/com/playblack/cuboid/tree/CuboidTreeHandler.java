@@ -9,7 +9,7 @@ import com.playblack.cuboid.CuboidE;
 import com.playblack.cuboid.CuboidMessages;
 import com.playblack.cuboid.CuboidSaveThread;
 import com.playblack.datasource.BaseData;
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 /**
  * Handles a list of multiple trees which are base nodes or "the big CuboidEs"
@@ -23,10 +23,10 @@ public class CuboidTreeHandler {
 	 * A list of all existing cuboid trees
 	 */
 	ArrayList<CuboidTree> treeList = new ArrayList<CuboidTree>(0);
-	
 	CuboidMessages messages = new CuboidMessages();
 	Timer saveTimer = new Timer();
 	public EventLogger log;
+
 	BaseData ds;
 	private ArrayList<CuboidNode> nodeList = new ArrayList<CuboidNode>();
 	//private Object lock = new Object();
@@ -196,26 +196,23 @@ public class CuboidTreeHandler {
 	public void reverseFindChildNodes(CuboidNode node) {
 		CuboidE c = node.getCuboid();
 		ArrayList<CuboidNode> childs = new ArrayList<CuboidNode>();
-		System.out.println("Checking for possible childs in "+c.getName());
+		//System.out.println("Checking for possible childs in "+c.getName());
 		for(CuboidTree tree : treeList) {
 			if(tree.getWorld().equalsIgnoreCase(node.getCuboid().getWorld())) {
 				for(CuboidNode n : tree.toList()) {
 					//if(n.getCuboid().isWithin(c.getFirstPoint()) && n.getCuboid().isWithin(c.getSecondPoint())) {
 					if(n.getCuboid().cuboidIsWithin(c.getMajorPoint(), c.getMinorPoint(), true)) {
-						System.out.println(n.getCuboid().getName()+" is within "+c.getName());
+						//System.out.println(n.getCuboid().getName()+" is within "+c.getName());
 						if(n.getCuboid().getParent() == null) {
-							System.out.println("We have no parent yet!");
+						//	System.out.println("We have no parent yet!");
 							if(n.getCuboid().getName().equalsIgnoreCase(c.getName())) {
-								System.out.println("Same name, stupid");
+							//	System.out.println("Same name, stupid");
 								continue;
 							}
 							n.getCuboid().setParent(c.getName());
 							n.getCuboid().hasChanged=true;
 							childs.add(n);
 						}
-					}
-					else {
-						System.out.println(n.getCuboid().getName()+" is not within "+c.getName());
 					}
 				}
 			}
@@ -596,7 +593,6 @@ public class CuboidTreeHandler {
 				}
 			}
 		}
-
 		return max;
 	}
 	
@@ -710,6 +706,10 @@ public class CuboidTreeHandler {
 	 * ***********************************************************************************
 	 */
 
+	/**
+	 * Return the cuboid tree data.
+	 * @return
+	 */
 	public ArrayList<CuboidTree> getTreeList() {
 		return treeList;
 	}

@@ -14,7 +14,7 @@ import com.playblack.cuboid.CuboidE;
 import com.playblack.cuboid.tree.CuboidNode;
 import com.playblack.cuboid.tree.CuboidTree;
 import com.playblack.cuboid.tree.CuboidTreeHandler;
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 /**
  * MysqlData extends BaseData and represents the data layer for retrieving Cuboids from a MySQL database.
@@ -58,6 +58,7 @@ public class MysqlData extends BaseData {
 						"`welcome` varchar(120) DEFAULT NULL," +
 						"`wheatControl` varchar(5) DEFAULT NULL," +
 						"`world` varchar(45) DEFAULT NULL," +
+						"`hmob` varchar(5) DEFAULT NULL " +
 						"PRIMARY KEY (`id`)" +
 						") ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1");
 				ps.execute();
@@ -165,9 +166,11 @@ public class MysqlData extends BaseData {
 				" welcome=?," +
 				" wheatControl=?," +
 				" world=?" +
+				" hmob=?" +
 				" WHERE name=? AND world=?");
-		ps.setString(26, ""+cube.getWorld());
-		ps.setString(25, ""+cube.getName());
+		ps.setString(27, ""+cube.getWorld());
+		ps.setString(26, ""+cube.getName());
+		ps.setString(25, ""+cube.ishMob());
 		ps.setString(24, ""+cube.getWorld());
 		ps.setString(23, ""+cube.isFarmland());
 		ps.setString(22, ""+cube.getWelcome());
@@ -226,7 +229,8 @@ public class MysqlData extends BaseData {
 				"waterControl," +
 				"welcome," +
 				"wheatControl," +
-				"world)" +
+				"world, " +
+				"hmob)" +
 				
 				"VALUES(" +
 				"?," +
@@ -253,6 +257,7 @@ public class MysqlData extends BaseData {
 				"?," +
 				"?," +
 				"?)");
+		ps.setString(25, ""+cube.ishMob());
 		ps.setString(24, ""+cube.getWorld());
 		ps.setString(23, ""+cube.isFarmland());
 		ps.setString(22, ""+cube.getWelcome());
@@ -309,6 +314,7 @@ public class MysqlData extends BaseData {
 				cube.setWelcome(ToolBox.stringToNull(rs.getString("welcome")));
 			}
 			cube.setWorld(rs.getString("world"));
+			cube.sethMob(ToolBox.stringToBoolean(rs.getString("hmob")));
 			
 			/* ***********************************************************
 			 * GIVE ME POINTS

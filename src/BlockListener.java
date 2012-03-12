@@ -2,7 +2,7 @@ import com.playblack.ToolBox;
 import com.playblack.blocks.WorldBlock;
 
 import com.playblack.cuboid.CuboidSelection;
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 /**
  * This will listen for events that are happening to blocks of all sorts
@@ -104,6 +104,7 @@ public class BlockListener extends PluginListener{
 			Vector blockPosition = new Vector(block.getX(), block.getY(), block.getZ());
 			blockPosition = toolBox.adjustWorldPosition(blockPosition);
 			Cuboids2.cuboids.explainCuboid(player, blockPosition);
+			player.sendMessage(Colors.DarkPurple+"Current Block: "+block.getType()+" : "+block.getData());
 			return true;
 		}
 		
@@ -339,4 +340,10 @@ public class BlockListener extends PluginListener{
 			return false;
 		}
 	}
+    
+//    @Override
+//    public boolean onBlockUpdate(Block block) {
+//    	etc.getServer().messageAll("onBlockUpdate");
+//    	return Cuboids2.cuboids.isFarmlandProtected(block);
+//    }
 }

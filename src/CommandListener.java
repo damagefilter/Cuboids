@@ -2,7 +2,7 @@
 import com.playblack.blocks.WorldBlock;
 import com.playblack.cuboid.CuboidE;
 import com.playblack.cuboid.CuboidSelection;
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 
 public class CommandListener extends PluginListener {
@@ -91,7 +91,7 @@ public class CommandListener extends PluginListener {
 			if(Cuboids2.sel.get(player.getName()).isComplete()) {
 				Cuboids2.blockOp.relativeCopy(  player.getName(), 
 												Cuboids2.content.getBlocksFromWorld(player, Cuboids2.sel.get(player.getName()))
-												//grüße an alex
+												//grï¿½ï¿½e an alex
 												,new Vector(player.getX(), player.getY(), player.getZ()) 
 				);
 				player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidCopied"));

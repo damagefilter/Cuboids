@@ -6,7 +6,7 @@ import com.playblack.blocks.BaseBlock;
 import com.playblack.blocks.ChestBlock;
 import com.playblack.blocks.SignBlock;
 import com.playblack.blocks.WorldBlock;
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 /**
  * This thing takes a CuboidSelection and does crazy things with it,<br>

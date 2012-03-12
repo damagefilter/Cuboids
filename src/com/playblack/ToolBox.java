@@ -1,7 +1,7 @@
 package com.playblack;
 
 
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 /**
  * This is a collection of useful stuff that we might or might not need
@@ -36,7 +36,10 @@ public class ToolBox {
 	 * @return boolean
 	 */
 	public static boolean stringToBoolean(String boo) {
-		if(boo.equalsIgnoreCase("true")) {
+		if(boo == null) {
+			return false;
+		}
+		else if(boo.equalsIgnoreCase("true")) {
 			return true;
 		}
 		else if(boo.equalsIgnoreCase("false")){

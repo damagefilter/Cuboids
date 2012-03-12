@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import com.playblack.EventLogger;
 import com.playblack.cuboid.CuboidE;
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 
 /**

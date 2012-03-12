@@ -1,7 +1,7 @@
 import com.playblack.ToolBox;
 import com.playblack.cuboid.tree.CuboidNode;
 import com.playblack.cuboid.tree.CuboidTreeHandler;
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 
 public class CuboidHookChecks extends CuboidHookBase {

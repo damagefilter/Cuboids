@@ -44,5 +44,10 @@ public class CuboidListener extends PluginListener{
 		return Cuboids2.cuboids.canFlow(blockFrom);
 	}
 	
+	@Override
+	public boolean onMobTarget(Player player, LivingEntity mob) {
+		return Cuboids2.cuboids.isHmob(player);
+	}
+	
 	
 }

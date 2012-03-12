@@ -9,7 +9,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import com.playblack.EventLogger;
 import com.playblack.ToolBox;
@@ -18,7 +20,7 @@ import com.playblack.cuboid.CuboidE;
 import com.playblack.cuboid.CuboidSelection;
 import com.playblack.cuboid.tree.CuboidNode;
 
-import com.playblack.vector.Vector;
+import com.playblack.mcutils.Vector;
 
 
 /**
@@ -32,7 +34,7 @@ import com.playblack.vector.Vector;
 public class CuboidProtectionInterface {
 	//static CuboidTreeCuboids2.treeHandler Cuboids2.treeHandler;
 	CuboidSelection selection;
-	Timer healjob = new Timer();
+	ScheduledExecutorService threadManager = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
 	ToolBox toolBox = new ToolBox();
 	EventLogger log;
 	Object lock = new Object();
@@ -464,6 +466,46 @@ public class CuboidProtectionInterface {
 		}
 		//log.info("NOT a Creeper Explosion!");
 		return false;
+	}
+	
+	/**
+	 * Check if anything can explode in our area
+	 * @param block
+	 * @return Returns true if player shall not be targeted
+	 */
+	public boolean isHmob(Player player) {
+			Vector v = toolBox.adjustWorldPosition(new Vector(player.getX(), player.getY(), player.getZ()));
+			//SysteCuboids2.msg.out.print(v.toString());
+			CuboidE cube = findCuboid(player.getWorld().getType().name(), v);
+			if(cube != null) {
+				if(cube.ishMob()) {
+					if(cube.playerIsAllowed(player.getName(), player.getGroups())) {
+						return true;
+					}
+				}
+			}
+			return false;
+				
+	}
+	
+	/**
+	 * Return true if farmland cannot be trampled. Returns false if not farmland and if farmland can be trampled
+	 * @param block
+	 * @return
+	 */
+	public boolean isFarmlandProtected(Block block) {
+		if(block.getType() != 60) {
+			return false;
+		}
+		Vector v = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
+		CuboidE cube = findCuboid(block.getWorld().getType().name(), v);
+		if(cube != null) {
+			//log.info("Creeper stat: "+cube.isCreeperSecure());
+			return cube.isFarmland();
+		}
+		else {
+			return false;
+		}
 	}
 	
 	/**
@@ -1327,7 +1369,7 @@ public class CuboidProtectionInterface {
 						//log.info("Player Health: "+player.getHealth());
 						if(player.getHealth() < 20) {
 							//player.sendMessage("Healing Player");
-							healjob.schedule( new CuboidHealThread(player, c, Cuboids2.cfg.getHealPower(), Cuboids2.cfg.getHealDelay()), Cuboids2.cfg.getHealDelay());
+							threadManager.schedule( new HealTask(player, c, threadManager, Cuboids2.cfg.getHealPower(), Cuboids2.cfg.getHealDelay()), Cuboids2.cfg.getHealDelay(), TimeUnit.SECONDS);
 						}
 					}
 				}
@@ -1366,32 +1408,34 @@ public class CuboidProtectionInterface {
 				if(cubeFrom.getName().equalsIgnoreCase(cubeTo.getName())) {	
 					return;
 				}
-				//ArrayList<CuboidE> cubesTo = Cuboids2.treeHandler.getCuboidsContaining(vTo, cubeTo.getWorld());
+				ArrayList<CuboidE> cubesTo = Cuboids2.treeHandler.getCuboidsContaining(vTo, cubeTo.getWorld());
 				ArrayList<CuboidE> cubesFrom = Cuboids2.treeHandler.getCuboidsContaining(vFrom, cubeFrom.getWorld());			
 				for(CuboidE from : cubesFrom) {
-					if(!from.isWithin(vTo)) {
-						if(from.getFarewell() != null) {
-							player.sendMessage(Colors.Yellow+from.getFarewell());
-						}
-						if((from.isFreeBuild()) && (!cubeTo.isFreeBuild())) {
-							if(player.getCreativeMode() != 0) {
-								player.setCreativeMode(0);
-								try {
-									player.getInventory().setContents(playerInventories.get(player.getName()));
-									playerInventories.remove(player.getName());
-									//TODO: This is a work around, remove when canary fixes the updateInventory
+					for(CuboidE to : cubesTo) {
+						if(!from.isWithin(vTo)) {
+							if(from.getFarewell() != null) {
+								player.sendMessage(Colors.Yellow+from.getFarewell());
+							}
+							if((from.isFreeBuild()) && (!to.isFreeBuild())) {
+								if(player.getCreativeMode() != 0) {
+									player.setCreativeMode(0);
 									try {
-										player.updateInventory();
-									} catch(ClassCastException e) {
-										
+										player.getInventory().setContents(playerInventories.get(player.getName()));
+										playerInventories.remove(player.getName());
+										//TODO: This is a work around, remove when canary fixes the updateInventory
+										try {
+											player.updateInventory();
+										} catch(ClassCastException e) {
+											
+										}
+									} catch(NullPointerException e) {
+										//log.logMessage("Cuboids2: NPE while resetting inventory!", "INFO");
+										//whoops
 									}
-								} catch(NullPointerException e) {
-									//log.logMessage("Cuboids2: NPE while resetting inventory!", "INFO");
-									//whoops
 								}
 							}
+							from.removePlayerWithin(player.getName());
 						}
-						from.removePlayerWithin(player.getName());
 					}
 				} 
 			} 
@@ -1724,7 +1768,13 @@ public class CuboidProtectionInterface {
 	 * @return true if can not place, false otherwise
 	 */
 	public boolean canPlaceBucket(Player player, Block block) {
-		Vector v = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
+		Vector v = null;// = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
+		if(block != null) {
+		   v = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
+		}
+		else {
+		    v = new Vector(player.getX(), player.getY(), player.getZ());
+		}
 		CuboidE cube = findCuboid(block.getWorld().getType().name(), v);
 		if(player.canUseCommand("/cIgnorerestriction")) {
 			return false;
