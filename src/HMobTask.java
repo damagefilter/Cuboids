@@ -1,8 +1,9 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 import com.playblack.cuboid.tree.CuboidNode;
 import com.playblack.cuboid.tree.CuboidTree;
-import com.playblack.cuboid.tree.CuboidTreeHandler;
 import com.playblack.mcutils.Vector;
 
 
@@ -14,9 +15,19 @@ import com.playblack.mcutils.Vector;
  */
 public class HMobTask implements Runnable {
     ArrayList<CuboidTree> nodes;
-
-    public HMobTask(ArrayList<CuboidTree> nodes) {
+    HashMap<Short, Class<?>> mobs = new HashMap<Short, Class<?>>();
+    Random rnd;
+    
+    
+    public HMobTask(ArrayList<CuboidTree> nodes, World world) {
         this.nodes = nodes;
+        mobs.put((short) 0, OEntityCaveSpider.class);
+        mobs.put((short) 1, OEntityCreeper.class);
+        mobs.put((short) 2, OEntityEnderman.class);
+        mobs.put((short) 3, OEntitySkeleton.class);
+        mobs.put((short) 4, OEntitySpider.class);
+        mobs.put((short) 5, OEntityZombie.class);
+        rnd = new Random();
     }
 
     private int worldToId(String world) {
@@ -30,14 +41,32 @@ public class HMobTask implements Runnable {
             return 1;
         }
     }
+    
     public synchronized void run() {
         for(CuboidTree tree : nodes) {
             for(CuboidNode node : tree.toList()) {
                 if(node.getCuboid().ishMob() && node.getCuboid().getPlayersWithin().size() > 0) {
-                    World w = etc.getServer().getWorld(worldToId(node.getCuboid().getWorld()));
-                    Mob mob = new Mob(new OEntityCreeper(w.getWorld()));
-                    Vector random = Vector.randomVector(node.getCuboid().getFirstPoint(), node.getCuboid().getSecondPoint());
+                    
+                    short nr = (short) rnd.nextInt(mobs.size());
+                    Mob mob = null;
+                    try {
+                        mob = new Mob((OEntityLiving) mobs.get(nr).newInstance());
+                    } catch (InstantiationException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    
+                    Vector random = WorldObserver.getValidSpawnPosition(
+                            Vector.randomVector(node.getCuboid().getFirstPoint(), 
+                            node.getCuboid().getSecondPoint()), 
+                            worldToId(node.getCuboid().getWorld()));
                     mob.setX(random.getX());
+                    mob.setY(random.getY());
+                    mob.setZ(random.getZ());
+                    mob.spawn();
                 }
             }
         }
