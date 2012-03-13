@@ -1,8 +1,8 @@
 
-import com.playblack.blocks.WorldBlock;
-import com.playblack.cuboid.CuboidE;
-import com.playblack.cuboid.CuboidSelection;
-import com.playblack.mcutils.Vector;
+import net.playblack.blocks.WorldBlock;
+import net.playblack.cuboid.CuboidE;
+import net.playblack.cuboid.CuboidSelection;
+import net.playblack.mcutils.Vector;
 
 
 public class CommandListener extends PluginListener {

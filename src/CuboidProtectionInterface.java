@@ -13,14 +13,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.playblack.EventLogger;
-import com.playblack.ToolBox;
-import com.playblack.blocks.WorldBlock;
-import com.playblack.cuboid.CuboidE;
-import com.playblack.cuboid.CuboidSelection;
-import com.playblack.cuboid.tree.CuboidNode;
+import net.playblack.EventLogger;
+import net.playblack.ToolBox;
+import net.playblack.blocks.WorldBlock;
+import net.playblack.cuboid.CuboidE;
+import net.playblack.cuboid.CuboidSelection;
+import net.playblack.cuboid.tree.CuboidNode;
 
-import com.playblack.mcutils.Vector;
+import net.playblack.mcutils.Vector;
 
 
 /**

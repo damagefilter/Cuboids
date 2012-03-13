@@ -1,4 +1,4 @@
-package com.playblack.datasource;
+package net.playblack.datasource;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,13 +9,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.playblack.EventLogger;
-import com.playblack.ToolBox;
-import com.playblack.cuboid.CuboidE;
-import com.playblack.cuboid.tree.CuboidNode;
-import com.playblack.cuboid.tree.CuboidTree;
-import com.playblack.cuboid.tree.CuboidTreeHandler;
-import com.playblack.mcutils.Vector;
+import net.playblack.EventLogger;
+import net.playblack.ToolBox;
+import net.playblack.cuboid.CuboidE;
+import net.playblack.cuboid.tree.CuboidNode;
+import net.playblack.cuboid.tree.CuboidTree;
+import net.playblack.cuboid.tree.CuboidTreeHandler;
+import net.playblack.mcutils.Vector;
 
 /**
  * FlatFileData extends BaseData and represents the data layer for retrieving Cuboids from text files.

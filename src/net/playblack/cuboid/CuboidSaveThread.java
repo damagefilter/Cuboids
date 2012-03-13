@@ -1,9 +1,9 @@
-package com.playblack.cuboid;
+package net.playblack.cuboid;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.playblack.cuboid.tree.CuboidTreeHandler;
+import net.playblack.cuboid.tree.CuboidTreeHandler;
 
 /**
  * Periodically save cubodis to file and stuff

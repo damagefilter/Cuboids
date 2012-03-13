@@ -1,7 +1,7 @@
-package com.playblack;
+package net.playblack;
 
 
-import com.playblack.mcutils.Vector;
+import net.playblack.mcutils.Vector;
 
 /**
  * This is a collection of useful stuff that we might or might not need

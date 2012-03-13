@@ -1,4 +1,4 @@
-package com.playblack;
+package net.playblack;
 
 import java.util.ArrayList;
 import java.util.HashMap;

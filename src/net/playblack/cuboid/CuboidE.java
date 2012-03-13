@@ -1,9 +1,9 @@
-package com.playblack.cuboid;
+package net.playblack.cuboid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.playblack.mcutils.Vector;
+import net.playblack.mcutils.Vector;
 
 
 /**

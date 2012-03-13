@@ -4,9 +4,9 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-import com.playblack.EventLogger;
-import com.playblack.cuboid.CuboidE;
-import com.playblack.mcutils.Vector;
+import net.playblack.EventLogger;
+import net.playblack.cuboid.CuboidE;
+import net.playblack.mcutils.Vector;
 
 
 /**

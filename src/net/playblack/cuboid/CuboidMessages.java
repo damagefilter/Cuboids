@@ -1,4 +1,4 @@
-package com.playblack.cuboid;
+package net.playblack.cuboid;
 
 import java.util.HashMap;
 

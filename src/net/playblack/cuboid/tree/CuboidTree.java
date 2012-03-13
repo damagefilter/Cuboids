@@ -1,10 +1,10 @@
-package com.playblack.cuboid.tree;
+package net.playblack.cuboid.tree;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.playblack.EventLogger;
-import com.playblack.cuboid.CuboidE;
+import net.playblack.EventLogger;
+import net.playblack.cuboid.CuboidE;
 
 /**
  * Define a Tree. This contains the root node and methods to get it.

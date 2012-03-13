@@ -1,4 +1,4 @@
-package com.playblack.blocks;
+package net.playblack.blocks;
 
 /**
  * This abstracts an Item from CanaryMod, mainly used when doing stuff with Chest Copying etc.<br>
@@ -83,5 +83,19 @@ public class BaseItem {
 	public int getSlot() {
 		return slot;
 	}
+        
+        public StringBuilder serialize() {
+            /*
+             * private int amount;
+	private int itemId;
+	private int itemData;
+	private int slot;
+             */
+            return new StringBuilder().append("[")
+                    .append(Integer.valueOf(amount)).append(",")
+                    .append(Integer.valueOf(itemId)).append(",")
+                    .append(Integer.valueOf(itemData)).append(",")
+                    .append(Integer.valueOf(slot)).append("]");
+        }
 	
 }

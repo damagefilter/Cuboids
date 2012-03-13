@@ -1,4 +1,4 @@
-package com.playblack.datasource;
+package net.playblack.datasource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,13 +8,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.playblack.EventLogger;
-import com.playblack.ToolBox;
-import com.playblack.cuboid.CuboidE;
-import com.playblack.cuboid.tree.CuboidNode;
-import com.playblack.cuboid.tree.CuboidTree;
-import com.playblack.cuboid.tree.CuboidTreeHandler;
-import com.playblack.mcutils.Vector;
+import net.playblack.EventLogger;
+import net.playblack.ToolBox;
+import net.playblack.cuboid.CuboidE;
+import net.playblack.cuboid.tree.CuboidNode;
+import net.playblack.cuboid.tree.CuboidTree;
+import net.playblack.cuboid.tree.CuboidTreeHandler;
+import net.playblack.mcutils.Vector;
 
 /**
  * MysqlData extends BaseData and represents the data layer for retrieving Cuboids from a MySQL database.

@@ -1,8 +1,8 @@
-import com.playblack.ToolBox;
-import com.playblack.blocks.WorldBlock;
+import net.playblack.ToolBox;
+import net.playblack.blocks.WorldBlock;
 
-import com.playblack.cuboid.CuboidSelection;
-import com.playblack.mcutils.Vector;
+import net.playblack.cuboid.CuboidSelection;
+import net.playblack.mcutils.Vector;
 
 /**
  * This will listen for events that are happening to blocks of all sorts

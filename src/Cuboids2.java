@@ -2,12 +2,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import com.playblack.EventLogger;
-import com.playblack.cuboid.CuboidBlockOperator;
-import com.playblack.cuboid.CuboidMessages;
-import com.playblack.cuboid.CuboidSelection;
-import com.playblack.cuboid.tree.CuboidTreeHandler;
-import com.playblack.datasource.*;
+import net.playblack.EventLogger;
+import net.playblack.cuboid.CuboidBlockOperator;
+import net.playblack.cuboid.CuboidMessages;
+import net.playblack.cuboid.CuboidSelection;
+import net.playblack.cuboid.tree.CuboidTreeHandler;
+import net.playblack.datasource.*;
 
 
 public class Cuboids2 extends Plugin{

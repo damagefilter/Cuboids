@@ -1,10 +1,10 @@
-package com.playblack.cuboid;
+package net.playblack.cuboid;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import com.playblack.mcutils.Vector;
-import com.playblack.blocks.BaseBlock;
+import net.playblack.mcutils.Vector;
+import net.playblack.blocks.BaseBlock;
 
 
 /**

@@ -1,7 +1,7 @@
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.playblack.cuboid.CuboidE;
+import net.playblack.cuboid.CuboidE;
 
 
 /**

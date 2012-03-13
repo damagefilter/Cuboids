@@ -1,4 +1,4 @@
-package com.playblack.blocks;
+package net.playblack.blocks;
 
 public class BaseBlock {
 
@@ -65,4 +65,10 @@ public class BaseBlock {
 			}
 		}
 	}
+        
+        public StringBuilder serialize() {
+            return new StringBuilder().append("[")
+                    .append(Short.valueOf(type)).append(",")
+                    .append(Byte.valueOf(data)).append("]");
+        }
 }

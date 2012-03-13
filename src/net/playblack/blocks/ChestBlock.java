@@ -1,4 +1,4 @@
-package com.playblack.blocks;
+package net.playblack.blocks;
 
 import java.util.ArrayList;
 

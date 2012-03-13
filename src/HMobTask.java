@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import com.playblack.cuboid.tree.CuboidNode;
-import com.playblack.cuboid.tree.CuboidTree;
-import com.playblack.mcutils.Vector;
+import net.playblack.cuboid.tree.CuboidNode;
+import net.playblack.cuboid.tree.CuboidTree;
+import net.playblack.mcutils.Vector;
 
 
 /**

@@ -1,9 +1,9 @@
-package com.playblack.cuboid.tree;
+package net.playblack.cuboid.tree;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.playblack.cuboid.CuboidE;
+import net.playblack.cuboid.CuboidE;
 
 /**
  * This represents a tree node for CuboidTree. 

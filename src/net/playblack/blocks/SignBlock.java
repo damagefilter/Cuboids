@@ -1,4 +1,4 @@
-package com.playblack.blocks;
+package net.playblack.blocks;
 
 public class SignBlock extends BaseBlock {
 

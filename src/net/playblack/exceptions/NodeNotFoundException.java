@@ -1,6 +1,6 @@
-package com.playblack.exceptions;
+package net.playblack.exceptions;
 
-import com.playblack.mcutils.Vector;
+import net.playblack.mcutils.Vector;
 
 public class NodeNotFoundException extends Exception {
 

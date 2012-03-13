@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
-import com.playblack.ToolBox;
-import com.playblack.mcutils.Vector;
+import net.playblack.ToolBox;
+import net.playblack.mcutils.Vector;
 
 
 /**

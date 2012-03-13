@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
-import com.playblack.cuboid.tree.CuboidNode;
-import com.playblack.cuboid.tree.CuboidTreeHandler;
+import net.playblack.cuboid.tree.CuboidNode;
+import net.playblack.cuboid.tree.CuboidTreeHandler;
 
 
 public class CuboidHookAreaAction extends CuboidHookBase {

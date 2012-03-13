@@ -1,6 +1,7 @@
-package com.playblack.vector;
+package net.playblack.mcutils;
 
 import java.io.Serializable;
+import java.util.Random;
 
 /**
 * Vector object that holds x,y,z coordinates for a point in 3D space.
@@ -331,6 +332,22 @@ public class Vector implements Serializable
                 Math.max(v1.getZ(), v2.getZ()));
     }
     
+    /**
+     * Return a random vector that is within v1 and v2
+     * @param v1
+     * @param v2
+     * @return
+     */
+    public static Vector randomVector(Vector v1, Vector v2) {
+        Vector smaller = Vector.getMinimum(v1, v2);
+        Vector bigger = Vector.getMaximum(v1, v2);
+        Random rnd = new Random();
+        return new Vector(
+                rnd.nextInt(smaller.getBlockX())+bigger.getBlockX(),
+                rnd.nextInt(smaller.getBlockY())+bigger.getBlockY(),
+                rnd.nextInt(smaller.getBlockZ())+bigger.getBlockZ());
+    }
+    
     /*
      * ******************************************************
      * TYPE CONVERSIONS FOR NON-DOUBLE VECTORS
@@ -372,10 +389,17 @@ public class Vector implements Serializable
     	return (int)Math.floor(getZ());
     }
     
+    @Override
     public String toString() {
-    	return  "\n  x: "+getX()+"\n"+
-    			", y: "+getY()+"\n"+
-    			", z: "+getZ()+"\n"+
-    			"===================================";
+    	return  "x: "+getX()+
+    			", y: "+getY()+
+    			", z: "+getZ();
+    }
+    
+    public StringBuilder serialize() {
+        return new StringBuilder().append("[")
+                .append(Double.valueOf(x)).append(",")
+                .append(Double.valueOf(y)).append(",")
+                .append(Duoble.valueOf(z)).append("]");
     }
 }

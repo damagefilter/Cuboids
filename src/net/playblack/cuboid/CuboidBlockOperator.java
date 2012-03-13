@@ -1,12 +1,12 @@
-package com.playblack.cuboid;
+package net.playblack.cuboid;
 
 
 import java.util.Iterator;
-import com.playblack.blocks.BaseBlock;
-import com.playblack.blocks.ChestBlock;
-import com.playblack.blocks.SignBlock;
-import com.playblack.blocks.WorldBlock;
-import com.playblack.mcutils.Vector;
+import net.playblack.blocks.BaseBlock;
+import net.playblack.blocks.ChestBlock;
+import net.playblack.blocks.SignBlock;
+import net.playblack.blocks.WorldBlock;
+import net.playblack.mcutils.Vector;
 
 /**
  * This thing takes a CuboidSelection and does crazy things with it,<br>
