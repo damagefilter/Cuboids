@@ -396,10 +396,14 @@ public class Vector implements Serializable
     			", z: "+getZ();
     }
     
+    /**
+     * Serialize this Vector into a Stringbuilder. This returns [x,y,z]
+     * @return
+     */
     public StringBuilder serialize() {
         return new StringBuilder().append("[")
                 .append(Double.valueOf(x)).append(",")
                 .append(Double.valueOf(y)).append(",")
-                .append(Duoble.valueOf(z)).append("]");
+                .append(Double.valueOf(z)).append("]");
     }
 }

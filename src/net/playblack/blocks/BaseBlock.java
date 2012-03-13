@@ -65,10 +65,14 @@ public class BaseBlock {
 			}
 		}
 	}
-        
-        public StringBuilder serialize() {
-            return new StringBuilder().append("[")
-                    .append(Short.valueOf(type)).append(",")
-                    .append(Byte.valueOf(data)).append("]");
-        }
+    
+	/**
+     * Serialize this Block into a StringBuilder. This returns [type,data]
+     * @return
+     */
+    public StringBuilder serialize() {
+        return new StringBuilder().append("[")
+                .append(Short.valueOf(type)).append(",")
+                .append(Byte.valueOf(data)).append("]");
+    }
 }
