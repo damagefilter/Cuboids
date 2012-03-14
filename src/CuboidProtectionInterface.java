@@ -1,12 +1,3 @@
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
@@ -15,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 
 import net.playblack.EventLogger;
 import net.playblack.ToolBox;
-import net.playblack.blocks.WorldBlock;
 import net.playblack.cuboid.CuboidE;
 import net.playblack.cuboid.CuboidSelection;
 import net.playblack.cuboid.tree.CuboidNode;
@@ -1831,59 +1821,6 @@ public class CuboidProtectionInterface {
 		}
 	}
 	
-	/**
-	 * Convert content object to json.
-	 * This creates a new file which will be streamed to handle larger files and all.
-	 * Lets hope this works out.
-	 * @return
-	 */
-	public boolean saveCuboidBackup(Player player, String cubeName) {
-		if(!player.canUseCommand("/cIgnoreRestrictions")) {
-			if(!player.canUseCommand("/cbackup")) {
-				if(!player.canUseCommand("/cAreaMod")) {
-					player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
-					return false;
-				}
-			}
-		}
-		CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
-		if(cube == null) {
-			return false;
-		}
-		loadAreaData(cube.getMinorPoint(), cube.getMajorPoint(), player);
-		if(myContent.getBlockList().size() >= Cuboids2.cfg.getMaxBlockBagSize()) {
-			player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("areaTooLarge"));
-			return false;
-		}
-		
-		if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cIgnoreRestrictions")) {
-			 ObjectOutputStream oos;
-			 File folder = new File("plugins/cuboids2/backups/");
-			 if(!folder.exists()) {
-				 folder.mkdirs();
-			 }
-			 String path = "plugins/cuboids2/backups/"+player.getWorld().getType().name()+"_"+player.getName()+"_"+cubeName+".area";
-			 synchronized(lock) {
-				 try {
-						oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(new File(path))));
-						oos.writeObject(myContent);
-						oos.close();
-						return true;
-						//return path;
-					} catch (FileNotFoundException e) {
-						log.logMessage("Cuboids2: File not Found Exception while serialaizing for area backup", "WARNING");
-						//e.printStackTrace();
-						return false;
-					} catch (IOException e) {
-						log.logMessage("Cuboids2: IO Exception while serializing area backup", "WARNING");
-						//SysteCuboids2.msg.out.println("Cuboids2: Cannot serialize area for backup, IOException!");
-						return false;
-					}
-			 }
-			 //return null;
-		}
-		return false;
-	}
 	
 	/**
 	 * Saves Cuboid File to Disk
@@ -1926,77 +1863,4 @@ public class CuboidProtectionInterface {
 	    else
 	      player.sendMessage(Colors.Rose + Cuboids2.msg.messages.get("playerNotOwner"));
 	  }
-	
-	
-	/**
-	 * Loads block information into a CuboidSelection object. Used to save area backups
-	 * @param v1
-	 * @param v2
-	 * @param player
-	 */
-	private void loadAreaData(Vector v1, Vector v2, Player player) {
-		int length_x = (int)Vector.getDistance(v1.getX(), v2.getX())+1;
-		int length_y = (int)Vector.getDistance(v1.getY(), v2.getY())+1;
-		int length_z = (int)Vector.getDistance(v1.getZ(), v2.getZ())+1;
-		
-		//CuboidData myContent = new CuboidData();
-		Vector min = Vector.getMinimum(v1, v2);
-		
-		Vector size = new Vector();
-		
-		size.setX(length_x);
-		size.setY(length_y);
-		size.setZ(length_z);
-		myContent = new CuboidSelection();
-		//myContent.setSizeVector(size);
-		//For instanciating we need this ugly monster to get the correct block positions But that should be alright
-		for(int x = 0; x < length_x; ++x) {
-			
-			for(int y = 0; y < length_y; ++y) {
-				
-				for(int z = 0; z < length_z; ++z) {
-					Vector current = new Vector(min.getBlockX()+x, min.getBlockY()+y, min.getBlockZ()+z);
-					current = toolBox.adjustWorldPosition(current);
-					//Vector arrayPosition = new Vector(x,y,z);
-					Block b = player.getWorld().getBlockAt(current.getBlockX(),current.getBlockY(),current.getBlockZ());
-					
-					WorldBlock bc = new WorldBlock((byte)b.getData(), (short)b.getType());
-					myContent.setBlockAt(current, bc);
-				}
-			}
-		}
-		//log.info("Area Volume: "+myContent.getBlockBag().size());
-	}
-	
-	/**
-	 * Restore area data for a cuboid from file
-	 * @param path
-	 * @return CuboidData object or null if somethign went wrong
-	 */
-	public CuboidSelection restoreFromBackup(Player player, String cubeName) {
-		if(!player.canUseCommand("/cbackup")) {
-			if(!player.canUseCommand("/cIgnorerestrictions")) {
-				if(!player.canUseCommand("/cAreaMod")) {
-					return null;
-				}
-			}
-		}
-		//log.info("cubeName: "+cubeName);
-		String path = "plugins/cuboids2/backups/"+player.getWorld().getType().name()+"_"+player.getName()+"_"+cubeName+".area";
-		try {
-            ObjectInputStream ois;
-            ois = new ObjectInputStream(
-                    new BufferedInputStream(
-                    new FileInputStream(
-                    new File(path))));
-            CuboidSelection cube = (CuboidSelection) ois.readObject();
-            ois.close();
-            return cube;
-        }
-		catch (Exception e) {
-			log.logMessage("Cuboids2: Problem while looking up area backup!", "WARNING");
-            //log.severe("Cuboids2: Problemski while recovering area backup file (no such backup?)");
-            return null;
-        }
-    }
 }

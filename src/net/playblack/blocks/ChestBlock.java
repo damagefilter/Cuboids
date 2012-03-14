@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class ChestBlock extends BaseBlock {
 
-	private byte data;
-	private short type;
 	ArrayList<BaseItem> items = new ArrayList<BaseItem>();
 	public ChestBlock() {
 		data=(byte)0;

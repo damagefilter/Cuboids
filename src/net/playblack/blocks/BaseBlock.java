@@ -4,8 +4,8 @@ import net.playblack.exceptions.DeserializeException;
 
 public class BaseBlock {
 
-	private byte data;
-	private short type;
+	protected byte data;
+	protected short type;
 	
 	public BaseBlock(short type, byte data) {
 	    this.data = data;
@@ -84,12 +84,18 @@ public class BaseBlock {
      */
     public StringBuilder serialize() {
         return new StringBuilder().append("[")
-                .append(Short.valueOf(type)).append(",")
-                .append(Byte.valueOf(data)).append("]");
+                .append(Short.toString(type)).append(",")
+                .append(Byte.toString(data)).append("]");
+    }
+    
+    public String toString() {
+        return new StringBuilder().append("[")
+                .append(Short.toString(type)).append(",")
+                .append(Byte.toString(data)).append("]").toString();
     }
     
     public static BaseBlock deserialize(String serialized) throws DeserializeException {
-        serialized = serialized.replaceAll("/[|/]", "");
+        serialized = serialized.replace("[", "").replace("]", "");
         BaseBlock tr = null;
         String[] values = serialized.split(",");
         if(values.length != 2) {

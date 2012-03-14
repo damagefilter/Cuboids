@@ -1,7 +1,13 @@
 
+import java.io.File;
+
 import net.playblack.blocks.WorldBlock;
 import net.playblack.cuboid.CuboidE;
 import net.playblack.cuboid.CuboidSelection;
+import net.playblack.cuboid.tree.CuboidNode;
+import net.playblack.datasource.CuboidDeserializer;
+import net.playblack.datasource.CuboidSerializer;
+import net.playblack.datasource.FlatFileSerializer;
 import net.playblack.mcutils.Vector;
 
 
@@ -975,39 +981,60 @@ public class CommandListener extends PluginListener {
 				/*
 				 * BACKUP
 				 */
-//				if(split[2].equalsIgnoreCase("backup")) {
-//					if(Cuboids2.cuboids.saveCuboidBackup(player, split[1])) {
-//						player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidBackupSuccess"));
-//					}
-//					else {
-//						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("cuboidBackupFail"));
-//						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCuboidFoundOnCommand"));
-//					}
-//					return true;
-//				}
+                if (split[2].equalsIgnoreCase("backup")) {
+                    if(!player.canUseCommand("/cIgnoreRestrictions")) {
+                        if(!player.canUseCommand("/cbackup")) {
+                            if(!player.canUseCommand("/cAreaMod")) {
+                                player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
+                                return true;
+                            }
+                        }
+                    }
+                    CuboidNode cuboid = Cuboids2.treeHandler.getCuboidByName(split[1], player.getWorld().getType().name());
+                    CuboidSelection tmp = new CuboidSelection(cuboid.getCuboid().getFirstPoint(), cuboid.getCuboid().getSecondPoint());
+                    CuboidSelection selection = Cuboids2.content.getBlocksFromWorld(player, tmp);
+                    
+                    CuboidSerializer ser = new FlatFileSerializer(selection);
+                    ser.save(split[1], player.getWorld().getType().name());
+                    player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidBackupSuccess"));
+                    return true;
+                }
 				
 				/*
 				 * RESTORE
 				 */
-//				if(split[2].equalsIgnoreCase("restore")) {
-//					if(!player.canUseCommand("/cIgnoreRestrictions")) {
-//						if(!player.canUseCommand("/cbackup")) {
-//							player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
-//							return true;
-//						}
-//					}
-//					CuboidData tmp = Cuboids2.cuboids.restoreFromBackup(player, split[1]);
-//					if(tmp != null) {
-//						Cuboids2.content.setCuboidData(tmp);
-//						Cuboids2.content.modifyWorld(player);
-//						player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidRestoreSuccess"));
-//						return true;
-//					}
-//					else {
-//						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("cuboidRestoreFail"));
-//						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCuboidFoundOnCommand"));
-//					}
-//				}
+				if(split[2].equalsIgnoreCase("restore")) {
+					if(!player.canUseCommand("/cIgnoreRestrictions")) {
+						if(!player.canUseCommand("/cbackup")) {
+							player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
+							return true;
+						}
+					}
+					if(split.length < 3) {
+					    player.notify(Cuboids2.msg.messages.get("missingArguments"));
+					    return true;
+					}
+					String world = player.getWorld().getType().name();
+					File f = new File("plugins/cuboids2/backups/blocks_"+world+"_"+split[1]);
+					if(f.exists()) {
+					    CuboidDeserializer des = new CuboidDeserializer(split[1], world);
+					    CuboidSelection restore = des.convert();
+					    boolean success = Cuboids2.content.modifyWorld(player, restore);
+					    if(success) {
+					        player.sendMessage(Colors.LightGreen+Cuboids2.msg.messages.get("cuboidRestoreSuccess"));
+					        return true;
+					    }
+					    else {
+					        player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("cuboidRestoreFail"));
+					        return true;
+					    }
+					}
+					else {
+					    player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("cuboidRestoreFail"));
+                        player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCuboidFoundOnCommand"));
+                        return true;
+					}
+				}
 				
 				/*
 				 * RESTRICT COMMAND

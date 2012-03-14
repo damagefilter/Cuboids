@@ -8,7 +8,6 @@ import net.playblack.cuboid.CuboidSelection;
 import net.playblack.mcutils.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 /**
  * This class takes care of serializing a CuboidSelection to text
@@ -73,19 +72,19 @@ public abstract class CuboidSerializer {
      * @param cuboid
      */
     private void serializeBlockList(CuboidSelection cuboid) {
-      LinkedHashMap<Vector,BaseBlock> toSerialize = cuboid.getBlockList(); 
-      for(Vector key : toSerialize.keySet()) {
-          BaseBlock b = toSerialize.get(key);
-          
+     // LinkedHashMap<Vector,BaseBlock> toSerialize = cuboid.getBlockList(); 
+      for(Vector key : cuboid.getBlockList().keySet()) {
+          BaseBlock b = cuboid.getBlockAt(key);
+//          System.out.println(b.toString());
           baseData.add(b.serialize().append("|").append(key.serialize()).toString());
           
           //Do chest block serializing
-          if((Integer)b.getType() == 54) {
+          if((Short)b.getType() == 54) {
               contents.put(baseData.size()-1, serializeItemList(((ChestBlock)b).getItemList()));
               
           }
           //Do SignBlock serializing
-          else if((Integer)b.getType() == 63) {
+          else if((Short)b.getType() == 63) {
               contents.put(baseData.size()-1, serializeSignText(((SignBlock)b).getSignTextArray()));
           }
       }

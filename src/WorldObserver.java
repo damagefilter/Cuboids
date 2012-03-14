@@ -76,7 +76,10 @@ public class WorldObserver {
 							}
 							else {
 								//WorldBlock bc = new WorldBlock((byte)b.getData(), (short)b.getType());
-								tmp.setBlockAt(current, new WorldBlock((byte)b.getData(), (short)b.getType()));
+//							    System.out.println(b.toString());
+							    WorldBlock foo = new WorldBlock((byte)b.getData(), (short)b.getType());
+							    //System.out.println(foo);
+								tmp.setBlockAt(current, foo);
 							}
 						}
 					}
@@ -244,16 +247,12 @@ public class WorldObserver {
 				}
         }
         if((Short)block.getType() == 63 && block instanceof SignBlock) {
-        	//Logger.getLogger("Minecraft").info("block Type is Sign");
         	SignBlock c = (SignBlock)block;
         	try {
-        		Sign sign = (Sign)world.getComplexBlock(test);  	
-            	sign.setText(0, c.getTextOnLine(0));
-            	sign.setText(1, c.getTextOnLine(1));
-            	sign.setText(2, c.getTextOnLine(2));
-            	sign.setText(3, c.getTextOnLine(3));
-            	//Logger.getLogger("Minecraft").info("Sign Data: "+c.getData());
-            	//Logger.getLogger("Minecraft").info("Schild Data: "+((SignBlock)block).getData().byteValue() + "\n" + c.getTextOnLine(0));
+        		Sign sign = (Sign)world.getComplexBlock(test);
+        		for(int i = 0; i < c.getSignTextArray().length;i++) {
+        		    sign.setText(i, c.getTextOnLine(i));
+        		}
             	sign.getBlock().setData(((SignBlock)block).getData().byteValue());
             	sign.update();
         	}

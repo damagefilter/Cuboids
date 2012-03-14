@@ -90,6 +90,7 @@ public class PlayerListener extends PluginListener {
 	public boolean onDamage(PluginLoader.DamageType type, BaseEntity attacker, BaseEntity defender, int amount) {
 		return Cuboids2.cuboids.canTakeDamage(type, attacker, defender);
 	}
+
 	
 	@Override
 	public boolean onItemUse(Player player, Block blockPlaced, Block blockClicked, Item item) {

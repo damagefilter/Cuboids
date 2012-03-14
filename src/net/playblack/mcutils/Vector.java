@@ -410,7 +410,7 @@ public class Vector implements Serializable
     }
     
     public static Vector deserialize(String data) throws DeserializeException {
-        data = data.replaceAll("/[|/]", "");
+        data = data.replace("[", "").replace("]", "");
         String[] values = data.split(",");
         if(values.length != 3) {
             throw new DeserializeException("Could not deserialize Vector object. Invalid serialized data!", data);

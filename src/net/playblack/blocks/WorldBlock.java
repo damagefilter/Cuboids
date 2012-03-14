@@ -1,29 +1,16 @@
 package net.playblack.blocks;
 
-import java.io.Serializable;
 
 
 /**
  * Abstraction Layer for Minecraft Blocks.
  * This is the de-obfuscation reobfuscated block (lol)
  * of minecraft. There you are.
- * TODO: Remove Position information once CuboidData is finished
  * @author Chris
  *
  */
-@SuppressWarnings("serial")
-public class WorldBlock extends BaseBlock implements Serializable {
 
-	/**
-	 * The Data or damage value
-	 */
-	private byte data = 0;
-	
-	/**
-	 * The Block or Item ID
-	 */
-	private short type = 0;
-
+public class WorldBlock extends BaseBlock {
 	
 	/**
 	 * Construct empty block (is Air)

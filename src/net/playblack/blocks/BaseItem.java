@@ -95,7 +95,7 @@ public class BaseItem {
     }
     
     public static BaseItem deserialize(String serialized) throws DeserializeException {
-        serialized = serialized.replaceAll("/[|/]", "");
+        serialized = serialized.replace("[", "").replace("]", "");
         BaseItem tr = null;
         String[] values = serialized.split(",");
         if(values.length != 4) {

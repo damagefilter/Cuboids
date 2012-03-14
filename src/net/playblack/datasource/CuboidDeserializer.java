@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.playblack.blocks.BaseBlock;
+import net.playblack.blocks.BaseItem;
 import net.playblack.blocks.ChestBlock;
 import net.playblack.blocks.SignBlock;
 import net.playblack.cuboid.CuboidSelection;
@@ -21,10 +22,11 @@ import net.playblack.mcutils.Vector;
  * @author Chris
  *
  */
-public abstract class CuboidDeserializer {
+public class CuboidDeserializer {
     
     private ArrayList<String>blockData = new ArrayList<String>();
     private HashMap<Integer, String>extraData = new HashMap<Integer, String>();
+    private CuboidSelection cuboid;
     /**
      * Prepared stuff for deserializing. Please check for file_exists before calling this
      * and send the according world name along.
@@ -34,6 +36,7 @@ public abstract class CuboidDeserializer {
     public CuboidDeserializer(String name, String world) {
         String blockLocation = "plugins/cuboids2/backups/blocks_"+world.toUpperCase()+"_"+name;
         String extrasLocation = "plugins/cuboids2/backups/contents_"+world.toUpperCase()+"_"+name;
+        cuboid = new CuboidSelection();
         
         try {
             //get file input streams
@@ -78,7 +81,7 @@ public abstract class CuboidDeserializer {
     }
     
     private void generateFromLine(String line, int lineNumber, CuboidSelection selection) throws DeserializeException {
-        String[]split = line.split("/|"); //results in 0=block,1=vector
+        String[]split = line.split("\\|"); //results in 0=block,1=vector
         BaseBlock block = null;
         Vector key = null;
         try {
@@ -90,29 +93,44 @@ public abstract class CuboidDeserializer {
         
         if((key != null) && (block != null)) {
             selection.setBlockAt(key, block);
+            if(block instanceof ChestBlock) {
+                generateChestContents(lineNumber, (ChestBlock)block);
+            }
+            if(block instanceof SignBlock) {
+                generateSignData(lineNumber, (SignBlock)block);
+            }
         }
         else {
             throw new DeserializeException("Could not deserialize a Vector-Block pair!", line);
         }
-        if(block instanceof ChestBlock) {
-            generateChestContents(lineNumber, (ChestBlock)block);
-        }
-        if(block instanceof SignBlock) {
-            generateSignData(lineNumber, (SignBlock)block);
-        }
-        
+
     }
     
     private void generateSignData(int index, SignBlock sign) {
-        
+        String signText = extraData.get(Integer.valueOf(index));
+        if(signText != null) {
+            sign.setText(signText.split("\\|"));
+        }
     }
     
-    private void generateChestContents(int index, ChestBlock block) {
-        
+    private void generateChestContents(int index, ChestBlock block) throws DeserializeException {
+        String chestContents = extraData.get(Integer.valueOf(index));
+        if(chestContents != null) {
+            String[]itemSplit = chestContents.split("\\|");
+            for(String item : itemSplit) {
+                block.putItem(BaseItem.deserialize(item));
+            }
+        }
     }
     public CuboidSelection convert() {
-        
-        return null;
+        for(int index = 0; index < blockData.size(); index++) {
+            try {
+                generateFromLine(blockData.get(index), index, this.cuboid);
+            } catch (DeserializeException e) {
+                e.printStackTrace();
+            }
+        }
+        return this.cuboid;
     }
 
 }

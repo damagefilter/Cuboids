@@ -114,7 +114,7 @@ public class Cuboids2 extends Plugin{
 			//etc.getLoader().addListener(PluginLoader.Hook.ARM_SWING, listener, this, PluginListener.Priority.MEDIUM);
 			registerHook(listener, "COMMAND_CHECK", "MEDIUM");
 			//etc.getLoader().addListener(PluginLoader.Hook.COMMAND_CHECK, listener, this, PluginListener.Priority.MEDIUM);
-			//registerHook(blocks, "BLOCK_UPDATE", "MEDIUM");
+			registerHook(blocks, "BLOCK_UPDATE", "MEDIUM");
 			
 			//Block fire spread
 			registerHook(blocks, "IGNITE", "MEDIUM");

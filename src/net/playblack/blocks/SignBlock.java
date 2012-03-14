@@ -2,8 +2,6 @@ package net.playblack.blocks;
 
 public class SignBlock extends BaseBlock {
 
-	private byte data;
-	private short type;
 	String[] signText = new String[4];
 	
 	public SignBlock() {
@@ -45,6 +43,20 @@ public class SignBlock extends BaseBlock {
 		else {
 			return signText[line];
 		}
+	}
+	
+	public void setTextOnLine(String text, int line) {
+	    if(line > 4) {
+	        return;
+	    }
+	    signText[line] = text;
+	}
+	
+	public void setText(String[] text) {
+	    if(text.length > 4) {
+	        return;
+	    }
+	    signText = text;
 	}
 	
 	public String[] getSignTextArray() {
