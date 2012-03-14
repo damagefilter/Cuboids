@@ -343,7 +343,6 @@ public class BlockListener extends PluginListener{
     
     @Override
     public boolean onBlockUpdate(Block block) {
-    	etc.getServer().messageAll("onBlockUpdate");
     	return Cuboids2.cuboids.isFarmlandProtected(block);
     }
 }

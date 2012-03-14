@@ -490,7 +490,6 @@ public class CuboidProtectionInterface {
 		Vector v = toolBox.adjustWorldPosition(new Vector(block.getX(), block.getY(), block.getZ()));
 		CuboidE cube = findCuboid(block.getWorld().getType().name(), v);
 		if(cube != null) {
-			//log.info("Creeper stat: "+cube.isCreeperSecure());
 			return cube.isFarmland();
 		}
 		else {
@@ -745,8 +744,8 @@ public class CuboidProtectionInterface {
 				}
 				else {
 					if(Cuboids2.cfg.allowWaterControl()) {
-						cube.setWaterControl(true);
-						player.sendMessage(Colors.LightGreen+"Water Control is enabled");
+						cube.setFarmland(true);
+						player.sendMessage(Colors.LightGreen+"Farmland Control is enabled");
 					}
 					else {
 						player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("optionDisabled"));
