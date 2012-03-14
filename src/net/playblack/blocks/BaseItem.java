@@ -1,5 +1,7 @@
 package net.playblack.blocks;
 
+import net.playblack.exceptions.DeserializeException;
+
 /**
  * This abstracts an Item from CanaryMod, mainly used when doing stuff with Chest Copying etc.<br>
  * This only contains amount, id and data/damage value. Nothing extra
@@ -84,18 +86,27 @@ public class BaseItem {
 		return slot;
 	}
         
-        public StringBuilder serialize() {
-            /*
-             * private int amount;
-	private int itemId;
-	private int itemData;
-	private int slot;
-             */
-            return new StringBuilder().append("[")
-                    .append(Integer.valueOf(amount)).append(",")
-                    .append(Integer.valueOf(itemId)).append(",")
-                    .append(Integer.valueOf(itemData)).append(",")
-                    .append(Integer.valueOf(slot)).append("]");
+    public StringBuilder serialize() {
+        return new StringBuilder().append("[")
+                .append(Integer.valueOf(amount)).append(",")
+                .append(Integer.valueOf(itemId)).append(",")
+                .append(Integer.valueOf(itemData)).append(",")
+                .append(Integer.valueOf(slot)).append("]");
+    }
+    
+    public static BaseItem deserialize(String serialized) throws DeserializeException {
+        serialized = serialized.replaceAll("/[|/]", "");
+        BaseItem tr = null;
+        String[] values = serialized.split(",");
+        if(values.length != 4) {
+            throw new DeserializeException("Could not deserialize BaseItem object. Invalid serialized data!", serialized);
         }
+        int amount = Integer.parseInt(values[0]);
+        int itemId = Integer.parseInt(values[1]);
+        int itemData = Integer.parseInt(values[2]);
+        int slot = Integer.parseInt(values[3]);
+        tr = new BaseItem(itemId,itemData,amount,slot);
+        return tr;
+    }
 	
 }

@@ -51,7 +51,7 @@ public abstract class CuboidSerializer {
     }
     
     /**
-     * Turn a Sign TExt array into a string for saving
+     * Turn a Sign Text array into a string for saving
      * @param text
      * @return
      */
@@ -59,7 +59,7 @@ public abstract class CuboidSerializer {
         StringBuilder sb = new StringBuilder();
         //sb.append("[");
         for(String s : text) {
-            sb.append(s).append(",");
+            sb.append(s).append("|");
         }
         if(sb.length() > 0) {
             sb.deleteCharAt(sb.length()-1);
@@ -76,11 +76,15 @@ public abstract class CuboidSerializer {
       LinkedHashMap<Vector,BaseBlock> toSerialize = cuboid.getBlockList(); 
       for(Vector key : toSerialize.keySet()) {
           BaseBlock b = toSerialize.get(key);
-          baseData.add(b.serialize().append(key.serialize()).toString());
+          
+          baseData.add(b.serialize().append("|").append(key.serialize()).toString());
+          
+          //Do chest block serializing
           if((Integer)b.getType() == 54) {
               contents.put(baseData.size()-1, serializeItemList(((ChestBlock)b).getItemList()));
               
           }
+          //Do SignBlock serializing
           else if((Integer)b.getType() == 63) {
               contents.put(baseData.size()-1, serializeSignText(((SignBlock)b).getSignTextArray()));
           }

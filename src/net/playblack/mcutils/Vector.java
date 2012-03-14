@@ -3,6 +3,8 @@ package net.playblack.mcutils;
 import java.io.Serializable;
 import java.util.Random;
 
+import net.playblack.exceptions.DeserializeException;
+
 /**
 * Vector object that holds x,y,z coordinates for a point in 3D space.
 * 
@@ -405,5 +407,19 @@ public class Vector implements Serializable
                 .append(Double.valueOf(x)).append(",")
                 .append(Double.valueOf(y)).append(",")
                 .append(Double.valueOf(z)).append("]");
+    }
+    
+    public static Vector deserialize(String data) throws DeserializeException {
+        data = data.replaceAll("/[|/]", "");
+        String[] values = data.split(",");
+        if(values.length != 3) {
+            throw new DeserializeException("Could not deserialize Vector object. Invalid serialized data!", data);
+        }
+        Vector tr = new Vector(0,0,0);
+        tr.setX(Double.parseDouble(values[0]));
+        tr.setY(Double.parseDouble(values[1]));
+        tr.setZ(Double.parseDouble(values[2]));
+
+        return tr;
     }
 }

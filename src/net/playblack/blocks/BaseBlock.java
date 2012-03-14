@@ -1,9 +1,21 @@
 package net.playblack.blocks;
 
+import net.playblack.exceptions.DeserializeException;
+
 public class BaseBlock {
 
 	private byte data;
 	private short type;
+	
+	public BaseBlock(short type, byte data) {
+	    this.data = data;
+	    this.type = type;
+	}
+	
+	//Just some dirty thing, I should probably not do that 
+	public BaseBlock() {
+    }
+	
 	/**
 	 * Set the Item/Block Type of this block.
 	 * @param type
@@ -74,5 +86,28 @@ public class BaseBlock {
         return new StringBuilder().append("[")
                 .append(Short.valueOf(type)).append(",")
                 .append(Byte.valueOf(data)).append("]");
+    }
+    
+    public static BaseBlock deserialize(String serialized) throws DeserializeException {
+        serialized = serialized.replaceAll("/[|/]", "");
+        BaseBlock tr = null;
+        String[] values = serialized.split(",");
+        if(values.length != 2) {
+            throw new DeserializeException("Could not deserialize BaseBlock object. Invalid serialized data!", serialized);
+        }
+        short type = Short.parseShort(values[0]);
+        byte data = Byte.parseByte(values[1]);
+        if(type == 54) {
+            tr = new ChestBlock();
+            tr.setData(data);
+        }
+        else if(type == 63) {
+            tr = new SignBlock();
+            tr.setData(data);
+        }
+        else {
+            tr = new BaseBlock(type, data);
+        }
+        return tr;
     }
 }

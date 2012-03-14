@@ -41,7 +41,7 @@ public class CuboidSelection {
 	 * @param cuboidSelection 
 	 */
 	public CuboidSelection() {
-		blocks = new LinkedHashMap<Vector,BaseBlock>(0);
+		blocks = new LinkedHashMap<Vector,BaseBlock>(50);
 	}
 	
 	/**
