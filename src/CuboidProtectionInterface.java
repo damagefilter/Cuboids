@@ -1196,7 +1196,7 @@ public class CuboidProtectionInterface {
 	    CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
         if(cube != null) {
             if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod")|| player.canUseCommand("/cIgnoreRestrictions")) {
-                if(!player.canUseCommand("/cfirespread")) {
+                if(!player.canUseCommand("/chmobs")) {
                     if(!player.canUseCommand("/cIgnoreRestrictions")) {
                         player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
                         return false;
