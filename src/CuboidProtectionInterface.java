@@ -1886,6 +1886,10 @@ public class CuboidProtectionInterface {
 	public void saveCuboid(Player player, String cube)
 	  {
 	    CuboidNode cubeNode = Cuboids2.treeHandler.getCuboidByName(cube, player.getWorld().getType().name());
+	    if(cubeNode == null) {
+	        player.sendMessage(Colors.Rose + Cuboids2.msg.messages.get("noCuboidFoundOnCommand"));
+	        return;
+	    }
 	    if ((cubeNode.getCuboid().playerIsOwner(player.getName())) || 
 	      ((player.canUseCommand("/cIgnoreRestrictions")) || (player.canUseCommand("/cAreaMod")))) {
 	      if (Cuboids2.treeHandler.saveSingle(cube, player.getWorld().getType().name())) {
@@ -1907,6 +1911,10 @@ public class CuboidProtectionInterface {
 	public void loadCuboid(Player player, String cube)
 	  {
 	    CuboidNode cubeNode = Cuboids2.treeHandler.getCuboidByName(cube, player.getWorld().getType().name());
+	    if(cubeNode == null) {
+            player.sendMessage(Colors.Rose + Cuboids2.msg.messages.get("noCuboidFoundOnCommand"));
+            return;
+        }
 	    if ((cubeNode.getCuboid().playerIsOwner(player.getName())) || 
 	      ((player.canUseCommand("/cIgnoreRestrictions")) || (player.canUseCommand("/cAreaMod")))) {
 	      if (Cuboids2.treeHandler.loadSingle(cube, player.getWorld().getType().name())) {
