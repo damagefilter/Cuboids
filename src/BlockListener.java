@@ -341,10 +341,9 @@ public class BlockListener extends PluginListener{
 		}
 	}
     
+    
     @Override
-    public boolean onBlockUpdate(Block block) {
-        //it appears that this hook only likes water and ice smelt. So no farmland protection yet.
-        //I still let it here, just in case.
-    	return Cuboids2.cuboids.isFarmlandProtected(block);
+    public boolean onBlockUpdate(Block oldBlock, int newBlockId) {
+        return Cuboids2.cuboids.isFarmlandProtected(oldBlock);
     }
 }
