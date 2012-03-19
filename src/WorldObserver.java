@@ -292,32 +292,4 @@ public class WorldObserver {
 		}
 	}
 	
-	/**
-	 * Runs through the world at the specified coords and returns the one where there is
-	 * enough room to spawn so that spawned creatures wouldn't get stuck, mind you
-	 * they might get stuck in a 3 block high hole in the middle of nowhere :P
-	 * @param v
-	 * @return
-	 */
-	public static Vector getValidSpawnPosition(Vector v, int worldDimension) {
-	    if((v.getBlockY() < 0) || (v.getBlockY() > 255)) {
-	        return null;
-	    }
-	    Block checkAbove = null;
-	    Block checkBelow = null;
-	    Block level = null;
-	    World w = etc.getServer().getWorld(worldDimension);
-	    
-	    //starting at 6 as everything below is unlikely to be a good spawn position
-	    for(int i = 6; i < 255; i++) {
-	        //TODO: do some smart reference push-around to save some lookups
-	        checkAbove = w.getBlockAt(v.getBlockX(), i+1, v.getBlockZ());
-	        checkBelow = w.getBlockAt(v.getBlockX(), i-1, v.getBlockZ());
-	        level = w.getBlockAt(v.getBlockX(), i, v.getBlockZ());
-	        if((checkAbove.getType() == 0) && (checkBelow.getType() == 0) && (level.getType() == 0)) {
-	            return new Vector(v.getX(), i, v.getZ());
-	        }
-	    }
-	    return null;
-	}
 }

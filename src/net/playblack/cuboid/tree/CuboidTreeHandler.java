@@ -1,13 +1,10 @@
 package net.playblack.cuboid.tree;
 
 import java.util.ArrayList;
-import java.util.Timer;
-
 import net.playblack.EventLogger;
 import net.playblack.ToolBox;
 import net.playblack.cuboid.CuboidE;
 import net.playblack.cuboid.CuboidMessages;
-import net.playblack.cuboid.CuboidSaveThread;
 import net.playblack.datasource.BaseData;
 import net.playblack.mcutils.Vector;
 
@@ -24,7 +21,6 @@ public class CuboidTreeHandler {
 	 */
 	ArrayList<CuboidTree> treeList = new ArrayList<CuboidTree>(0);
 	CuboidMessages messages = new CuboidMessages();
-	Timer saveTimer = new Timer();
 	public EventLogger log;
 
 	BaseData ds;
@@ -34,14 +30,6 @@ public class CuboidTreeHandler {
 	public CuboidTreeHandler(EventLogger log, BaseData ds) {
 		this.log = log;
 		this.ds = ds;
-	}
-	public void scheduleSave(long delay) {
-		log.logMessage("Cuboids2: Scheduling next save in "+delay+" seconds.", "INFO");
-		saveTimer.schedule(new CuboidSaveThread(delay, this), delay);
-	}
-	
-	public void cancelSaves() {
-		saveTimer.cancel();
 	}
 	
 	/*

@@ -9,7 +9,7 @@ public class Cuboids2Config {
 
 	//Plugin Specific information:
 	private String name="Cuboids2";
-	private String version = "1.7.0";
+	private String version = "1.8.0";
 	private boolean verbose = false;
 	
 	//Behaviour settings
@@ -425,11 +425,11 @@ public class Cuboids2Config {
 	}
 	
 	public long getHealDelay() {
-		return (healDelay*6000);
+		return (healDelay);
 	}
 	
 	public long getSaveDelay() {
-		return (saveDelay*60000);
+		return (saveDelay);
 	}
 	
 	public int getHealPower() {

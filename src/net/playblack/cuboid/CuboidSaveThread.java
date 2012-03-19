@@ -1,8 +1,5 @@
 package net.playblack.cuboid;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import net.playblack.cuboid.tree.CuboidTreeHandler;
 
 /**
@@ -10,11 +7,10 @@ import net.playblack.cuboid.tree.CuboidTreeHandler;
  * @author Chris
  *
  */
-public class CuboidSaveThread extends TimerTask {
+public class CuboidSaveThread implements Runnable {
 
 	long delay;
 	CuboidTreeHandler handler;
-	static Timer timer = new Timer();
 	public CuboidSaveThread(long delay, CuboidTreeHandler handler) {
 		this.delay = delay;
 		this.handler = handler;
@@ -24,10 +20,7 @@ public class CuboidSaveThread extends TimerTask {
 	public void run() {
 		System.out.println("Cuboids2: Saving ...");
 		handler.save(false, false);
-		System.out.println("Cuboids2: Next save in "+delay+" seconds");
-		timer.schedule(new CuboidSaveThread(delay, handler), delay);
-		
-		
+		System.out.println("Cuboids2: Next save in "+delay+" minutes");
 	}
 
 }

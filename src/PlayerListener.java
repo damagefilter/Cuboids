@@ -37,26 +37,17 @@ public class PlayerListener extends PluginListener {
 	
 	@Override
 	public void onDisconnect(Player player) {
-		Vector v = new Vector(player.getX(), player.getY(), player.getZ());
-		Vector to = new Vector(0,0,0);
-		//TODO: Add a plain remove here to make sure the disconnected player surely is out
-		Cuboids2.cuboids.removePlayerWithin(player, v, to);
+		Cuboids2.cuboids.removeFromAllAreas(player.getName());
 	}
 	
 	@Override
 	public void onBan(Player mod, Player player, String reason) {
-		Vector v = new Vector(player.getX(), player.getY(), player.getZ());
-		Vector to = new Vector(0,0,0);
-		//TODO: Add a plain remove here to make sure the disconnected player surely is out
-		Cuboids2.cuboids.removePlayerWithin(player, v, to);
+	    Cuboids2.cuboids.removeFromAllAreas(player.getName());
 	}
 	
 	@Override
 	public void onKick(Player mod, Player player, String reason) {
-		Vector v = new Vector(player.getX(), player.getY(), player.getZ());
-		Vector to = new Vector(0,0,0);
-		//TODO: Add a plain remove here to make sure the disconnected player surely is out
-		Cuboids2.cuboids.removePlayerWithin(player, v, to);
+	    Cuboids2.cuboids.removeFromAllAreas(player.getName());
 	}
 	
 	@Override
@@ -88,6 +79,11 @@ public class PlayerListener extends PluginListener {
 	
 	@Override
 	public boolean onDamage(PluginLoader.DamageType type, BaseEntity attacker, BaseEntity defender, int amount) {
+	    if(defender.isPlayer()) {
+	        if((defender.getPlayer().getHealth() - amount) <= 0) {
+	            Cuboids2.cuboids.removeFromAllAreas(defender.getPlayer().getName());
+	        }
+	    }
 		return Cuboids2.cuboids.canTakeDamage(type, attacker, defender);
 	}
 

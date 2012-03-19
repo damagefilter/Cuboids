@@ -272,7 +272,7 @@ public class CuboidSelection {
 	 * Expand the selection vertically from top to bottom
 	 */
 	public void expandVert() {
-		origin.setY(127);
+		origin.setY(255);
 		offset.setY(0);
 	}
 	

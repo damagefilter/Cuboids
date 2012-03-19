@@ -24,9 +24,9 @@ import net.playblack.mcutils.Vector;
  */
 public class CuboidDeserializer {
     
-    private ArrayList<String>blockData = new ArrayList<String>();
-    private HashMap<Integer, String>extraData = new HashMap<Integer, String>();
-    private CuboidSelection cuboid;
+    protected ArrayList<String>blockData = new ArrayList<String>();
+    protected HashMap<Integer, String>extraData = new HashMap<Integer, String>();
+    protected CuboidSelection cuboid;
     /**
      * Prepared stuff for deserializing. Please check for file_exists before calling this
      * and send the according world name along.
@@ -37,7 +37,6 @@ public class CuboidDeserializer {
         String blockLocation = "plugins/cuboids2/backups/blocks_"+world.toUpperCase()+"_"+name;
         String extrasLocation = "plugins/cuboids2/backups/contents_"+world.toUpperCase()+"_"+name;
         cuboid = new CuboidSelection();
-        
         try {
             //get file input streams
             FileInputStream fstreamBlocks = new FileInputStream(blockLocation);

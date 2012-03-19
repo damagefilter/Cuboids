@@ -108,8 +108,6 @@ public class FlatfileData extends BaseData {
 	            }
 	            return;
 	          }
-
-	          //System.out.println("Cuboids2: Failed to load a Cuboid Area from file. It does not exist!");
 	          log.logMessage("Cuboids2: Failed to load a Cuboid Area from file. It does not exist!", "WARNING");
 	          return;
 	        }
@@ -119,8 +117,8 @@ public class FlatfileData extends BaseData {
 	      log.logMessage("Cuboids2: Failed to load a Cuboid Area from file. It does not exist!", "WARNING");
 	      return;
 	    }
-	    catch (Exception e) {
-	      log.logMessage("Cuboids2: Failed to load a Cuboid Area from file. "+e.getMessage(), "WARNING");
+	    catch (IOException e) {
+	      log.logMessage("Cuboids2: Failed to load a Cuboid Area from file. (IOException - Read/Write issue!!) "+e.getMessage(), "WARNING");
 	      e.printStackTrace();
 	    }return;
 	}
@@ -137,7 +135,7 @@ public class FlatfileData extends BaseData {
 				BufferedReader reader;
 				//StringBuilder props = new StringBuilder();
 				String path = "plugins/cuboids2/cuboids/";
-				File folder = new File("plugins/cuboids2/cuboids/");
+				File folder = new File(path);
 				 if(!folder.exists()) {
 					 folder.mkdirs();
 				 }
@@ -332,7 +330,7 @@ public class FlatfileData extends BaseData {
 		csv.append(node.getCuboid().isTntSecure());csv.append(",");
 		csv.append(node.getCuboid().isFarmland());csv.append(",");
 		//1.4.0 stuff
-		csv.append(node.getCuboid().isRestricted());
+		csv.append(node.getCuboid().isRestricted());csv.append(",");
 		//1.8
 		csv.append(node.getCuboid().ishMob());
 		

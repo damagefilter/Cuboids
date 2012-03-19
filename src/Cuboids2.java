@@ -48,7 +48,7 @@ public class Cuboids2 extends Plugin{
 	public void disable() {
 		//etc.getServer().messageAll("Disabling Cuboids2!");
 		listener.saveCuboidData();
-		treeHandler.cancelSaves();
+		cuboids.terminateThreads();
 		unregisterListeners();
 		registeredListeners.clear();
 		eventLog.logMessage(msg.messages.get("onDisable"), "INFO");

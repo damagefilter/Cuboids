@@ -1486,6 +1486,10 @@ public class CommandListener extends PluginListener {
 							Cuboids2.cuboids.toggleFarmland(player, split[1]);
 							return true;
 						}
+						if(split[3].equalsIgnoreCase("hmob") || split[3].equalsIgnoreCase("hmobs")) {
+                            Cuboids2.cuboids.toggleHmobs(player, split[1]);
+                            return true;
+                        }
 						if(split[3].equalsIgnoreCase("sanctuary-animalspawn") || split[3].equalsIgnoreCase("animalspawn")) {
 							Cuboids2.cuboids.toggleSanctuaryAnimals(player, split[1]);
 							return true;

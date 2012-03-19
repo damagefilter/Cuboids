@@ -7,8 +7,10 @@ import java.util.concurrent.TimeUnit;
 import net.playblack.EventLogger;
 import net.playblack.ToolBox;
 import net.playblack.cuboid.CuboidE;
+import net.playblack.cuboid.CuboidSaveThread;
 import net.playblack.cuboid.CuboidSelection;
 import net.playblack.cuboid.tree.CuboidNode;
+import net.playblack.cuboid.tree.CuboidTree;
 
 import net.playblack.mcutils.Vector;
 
@@ -36,8 +38,7 @@ public class CuboidProtectionInterface {
 	/**
 	 * Default constructor, creates a new Cuboids2.treeHandler for data tree
 	 */
-	public CuboidProtectionInterface(EventLogger log)
-	  {
+	public CuboidProtectionInterface(EventLogger log) {
 		this.log = log;
 		conv = new CuboidsConverter(log);
 	    if (this.conv.loadCuboids()) {
@@ -62,7 +63,8 @@ public class CuboidProtectionInterface {
 	      log.logMessage("Cuboids2: Finished the sorting for you. Please remove/move away the old files now.", "INFO");
 	    }
 	    Cuboids2.treeHandler.load();
-	    Cuboids2.treeHandler.scheduleSave(Cuboids2.cfg.getSaveDelay());
+	    threadManager.scheduleAtFixedRate(new CuboidSaveThread(Cuboids2.cfg.getSaveDelay(), Cuboids2.treeHandler), Cuboids2.cfg.getSaveDelay(), Cuboids2.cfg.getSaveDelay(), TimeUnit.MINUTES); //CuboidSaveThread
+	    threadManager.scheduleAtFixedRate(new HMobTask(Cuboids2.treeHandler.getTreeList()), 0, 30, TimeUnit.SECONDS); //hmobs spawner
 	  }
 
 	/**
@@ -1190,6 +1192,49 @@ public class CuboidProtectionInterface {
 		return false;
 	}
 	
+	public boolean toggleHmobs(Player player, String cubeName) {
+	    CuboidE cube = findCuboid(player.getWorld().getType().name(), cubeName);
+        if(cube != null) {
+            if(cube.playerIsOwner(player.getName()) || player.canUseCommand("/cAreaMod")|| player.canUseCommand("/cIgnoreRestrictions")) {
+                if(!player.canUseCommand("/cfirespread")) {
+                    if(!player.canUseCommand("/cIgnoreRestrictions")) {
+                        player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
+                        return false;
+                    }
+                }
+                if(cube.ishMob()) {
+                    if(Cuboids2.cfg.allowHmobs()) {
+                        cube.sethMob(false);
+                        player.sendMessage(Colors.LightGreen+"HMobs are disabled!");
+                    }
+                    else {
+                        player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("optionDisabled"));
+                        return false;
+                    }
+                }
+                else {
+                    if(Cuboids2.cfg.allowHmobs()) {
+                        cube.sethMob(true);
+                        player.sendMessage(Colors.LightGreen+"HMobs are enabled!");
+                    }
+                    else {
+                        player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("optionDisabled"));
+                        return false;
+                    }
+                }
+                Cuboids2.treeHandler.updateCuboidNode(cube);
+                return true;
+            }
+            else {
+                player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("playerNotOwner"));
+                return false;
+            }
+        }
+        player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("noCuboidFoundOnCommand"));
+        return false;
+        
+    }
+	
 	/**
 	 * add Entity (group or player) to the list of allowed things in this cuboid
 	 * @param player
@@ -1380,6 +1425,18 @@ public class CuboidProtectionInterface {
 		}
 	}
 	
+	/**
+	 * Remove a playername from all cuboids (on disconnect, kick, ban etc)
+	 * @param player
+	 */
+	public void removeFromAllAreas(String player) {
+	    ArrayList<CuboidTree> tree = Cuboids2.treeHandler.getTreeList();
+	    for(CuboidTree t : tree) {
+	        for(CuboidNode node : t.toList()) {
+	            node.getCuboid().removePlayerWithin(player);
+	        }
+	    }
+	}
 	/**
 	 * Removes a player to the list of players inside this area. 
 	 * This has nothing to do with the allowance list.
@@ -1862,4 +1919,11 @@ public class CuboidProtectionInterface {
 	    else
 	      player.sendMessage(Colors.Rose + Cuboids2.msg.messages.get("playerNotOwner"));
 	  }
+	/**
+	 * Destroys thread manager and sends interrupt signals to all running threads
+	 */
+	public void terminateThreads() {
+	    threadManager.shutdown();
+	}
+
 }
