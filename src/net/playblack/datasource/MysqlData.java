@@ -58,7 +58,7 @@ public class MysqlData extends BaseData {
 						"`welcome` varchar(120) DEFAULT NULL," +
 						"`wheatControl` varchar(5) DEFAULT NULL," +
 						"`world` varchar(45) DEFAULT NULL," +
-						"`hmob` varchar(5) DEFAULT NULL, " +
+						"`hmob` varchar(5) DEFAULT NULL," +
 						"PRIMARY KEY (`id`)" +
 						") ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1");
 				ps.execute();
