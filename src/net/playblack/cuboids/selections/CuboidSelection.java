@@ -53,6 +53,10 @@ public class CuboidSelection implements ISelection {
         offset = v2;
         blockList = blocks;
     }
+    public CuboidSelection(LinkedHashMap<Vector, CBlock> blocks) {
+        blockList = blocks;
+    }
+
     /**
      * Set the current origin vector
      * @param o

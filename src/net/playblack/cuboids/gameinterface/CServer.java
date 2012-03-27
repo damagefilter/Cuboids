@@ -53,14 +53,14 @@ public abstract class CServer {
      * Give me an instance of your server implementation!
      * @param server
      */
-    public static void setInstance(CServer server) {
+    public static void setServer(CServer server) {
         instance = server;
     }
     /**
      * Return the current server instance
      * @return
      */
-    public static CServer getInstance() {
+    public static CServer getServer() {
         return instance;
     }
     
@@ -77,4 +77,16 @@ public abstract class CServer {
      * @return
      */
     public abstract String getItemName(int id);
+    
+    /**
+     * Get the number of online players
+     * @return
+     */
+    public abstract int getPlayersOnline();
+    
+    /**
+     * Get the number of max. allowed players on the server
+     * @return
+     */
+    public abstract int getMaxPlayers();
 }

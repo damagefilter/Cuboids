@@ -28,19 +28,19 @@ public class HMobTask implements Runnable {
         switch(index) {
             case 0:
                 
-                return CServer.getInstance().getMob("CaveSpider", world);
+                return CServer.getServer().getMob("CaveSpider", world);
             case 1:
-                return CServer.getInstance().getMob("Creeper", world);
+                return CServer.getServer().getMob("Creeper", world);
             case 2:
-                return CServer.getInstance().getMob("Enderman", world);
+                return CServer.getServer().getMob("Enderman", world);
             case 3:
-                return CServer.getInstance().getMob("Skeleton", world);
+                return CServer.getServer().getMob("Skeleton", world);
             case 4:
-                return CServer.getInstance().getMob("Spider", world);
+                return CServer.getServer().getMob("Spider", world);
             case 5:
-                return CServer.getInstance().getMob("Zombie", world);
+                return CServer.getServer().getMob("Zombie", world);
             default:
-                return CServer.getInstance().getMob("Zombie", world);
+                return CServer.getServer().getMob("Zombie", world);
         }
     }
 
@@ -53,7 +53,7 @@ public class HMobTask implements Runnable {
                     continue;
                 }
                 if((node.getCuboid().ishMob()) && (node.getCuboid().getPlayersWithin().size() > 0)) {
-                    CWorld w = CServer.getInstance().getWorld(node.getWorld());
+                    CWorld w = CServer.getServer().getWorld(node.getWorld());
                     if(w.getTime() < 13000) {
                         //It's not night, don't bother spawning things
                         continue;

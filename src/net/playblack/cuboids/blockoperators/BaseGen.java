@@ -72,10 +72,11 @@ public abstract class BaseGen implements IShapeGen {
     
     /**
      * Fill the current selection with blocks that are currently in the world
+     * @param returnSelection true if you want to return the selection instead of overwriting the blocks of the internal one
      */
-    protected void scanWorld() {
+    protected CuboidSelection scanWorld(boolean returnSelection) {
         if(selection == null || (!selection.isComplete())) {
-            return;
+            return null;
         }
         CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset());
         if(selection.getBlockList().isEmpty()) {
@@ -109,6 +110,10 @@ public abstract class BaseGen implements IShapeGen {
                 }
             }
         }
+        if(returnSelection) {
+            return tmp;
+        }
         selection.setBlockList(tmp.getBlockList());
+        return null;
     }
 }

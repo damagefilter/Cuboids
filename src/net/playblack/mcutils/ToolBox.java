@@ -73,7 +73,7 @@ public class ToolBox {
             i = (short)Integer.parseInt(data);
         }
         catch(NumberFormatException e) {
-            short x = (short)CServer.getInstance().getItemId(data);
+            short x = (short)CServer.getServer().getItemId(data);
             if(x == 0 && data.equalsIgnoreCase("air")) {
                 return x;
             }
@@ -84,7 +84,7 @@ public class ToolBox {
                 return -1;
             }
         }
-        if(CServer.getInstance().getItemName(i).equalsIgnoreCase(String.valueOf(i))) {
+        if(CServer.getServer().getItemName(i).equalsIgnoreCase(String.valueOf(i))) {
             return -1;
         }
         return i;

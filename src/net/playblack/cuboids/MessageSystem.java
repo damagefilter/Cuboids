@@ -67,6 +67,7 @@ public class MessageSystem {
         messages.put("selectionDeleted", "The blocks in your selection have been removed!");
         
         messages.put("brushSet", "Your brush properties have been set");
+        messages.put("copiedToClipboard", "Blocks have been copied to your personal clipboard");
         // *************************************************
         //
         // *************************************************

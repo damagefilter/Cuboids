@@ -8,5 +8,5 @@ public interface IShapeGen {
      * Execute the block operation and also do a new undo step
      * @param simulate
      */
-    public boolean execute(CPlayer player, boolean simulate);
+    public boolean execute(CPlayer player, boolean newHistory);
 }

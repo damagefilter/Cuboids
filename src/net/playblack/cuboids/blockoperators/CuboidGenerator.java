@@ -1,8 +1,10 @@
 package net.playblack.cuboids.blockoperators;
 
+import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
+import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
 
@@ -46,17 +48,11 @@ public class CuboidGenerator extends BaseGen {
     }
     
     @Override
-    public boolean execute(CPlayer player, boolean simulate) {
-        if(!simulate) {
-            //TODO: history.makeHistory(player); //new step in history
-        }
-        scanWorld();
+    public boolean execute(CPlayer player, boolean newHistory) {
+        CuboidSelection original = scanWorld(true);
+        selection.setBlockList(original.getBlockList());
         if(replace) {
-            scanWorld();
             for(Vector position : selection.getBlockList().keySet()) {
-                if(!simulate) {
-                    //TODO: history.remember(player,block)
-                }
                 if(selection.getBlock(position).equals(toReplace)) {
                     selection.setBlock(position, block);
                 }
@@ -64,11 +60,11 @@ public class CuboidGenerator extends BaseGen {
         }
         else {
             for(Vector position : selection.getBlockList().keySet()) {
-                if(!simulate) {
-                    //TODO: history.remember(player,block)
-                }
                 selection.setBlock(position, block);
             }
+        }
+        if(newHistory) {
+            SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(original, selection));
         }
         boolean result = modifyWorld();
         return result;
