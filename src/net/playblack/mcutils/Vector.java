@@ -1,17 +1,8 @@
 package net.playblack.mcutils;
 
-import java.io.Serializable;
 import java.util.Random;
 
-import net.playblack.exceptions.DeserializeException;
-
-/**
-* Vector object that holds x,y,z coordinates for a point in 3D space.
-* 
-* @author Chris
-*/
-@SuppressWarnings("serial")
-public class Vector implements Serializable
+public class Vector
 {
     private double x, y, z;
 
@@ -49,8 +40,8 @@ public class Vector implements Serializable
 
    /**
     * Retrieve X component of Vector
-	* @return double x
-	*/
+    * @return double x
+    */
     public double getX() {
         return x;
     }
@@ -58,66 +49,66 @@ public class Vector implements Serializable
    
 
    /**
-	* Set x component with native double
-	* @param x
-	*/
+    * Set x component with native double
+    * @param x
+    */
     public void setX(double x) {
         this.x = x;
     }
 
    /**
-	* Set x component with a int2double conversion
-	* @param x
-	*/
+    * Set x component with a int2double conversion
+    * @param x
+    */
     public void setX(int x) {
         this.x = (double)x;
     }
 
     /**
      * Retrieve Y component of Vector
- 	 * @return double y
- 	 */
+     * @return double y
+     */
     public double getY() {
         return y;
     }
 
 
     /**
-	 * Set y component with native double
-	 * @param y
-	 */
+     * Set y component with native double
+     * @param y
+     */
     public void setY(double y) {
         this.y = y;
     }
 
    /**
-	* Set y component with a int2double conversion
-	* @param y
-	*/
+    * Set y component with a int2double conversion
+    * @param y
+    */
     public void setY(int y) {
         this.y = (double)y;
     }
 
     /**
      * Retrieve Z component of Vector
- 	 * @return double z
- 	 */
+     * @return double z
+     */
     public double getZ() {
         return z;
     }
     
     /**
-	 * Set y component with native double
-	 * @param z
-	 */
+     * Set y component with native double
+     * @param z
+     */
     public void setZ(double z) {
         this.z = z;
     }
 
    /**
-	* Set z component with a int2double conversion
-	* @param z
-	*/
+    * Set z component with a int2double conversion
+    * @param z
+    */
     public void setZ(int z) {
         this.z = (double)z;
     }
@@ -140,11 +131,11 @@ public class Vector implements Serializable
      * @return
      */
     public double getVectorLength() {
-    	double power =  (Math.pow(getX(), 2) +
-    					Math.pow(getY(), 2) +
-    					Math.pow(getZ(), 2));
-    	
-    	return Math.sqrt(power);
+        double power =  (Math.pow(getX(), 2) +
+                        Math.pow(getY(), 2) +
+                        Math.pow(getZ(), 2));
+        
+        return Math.sqrt(power);
     }
 
     /**
@@ -153,12 +144,12 @@ public class Vector implements Serializable
      * @return double The Distance
      */
     public double getDistance(Vector v) {
-    	double distPower = (
-    			Math.pow(v.getX() - this.getX(), 2) +
-    			Math.pow(v.getY() - this.getY(), 2) +
-    			Math.pow(v.getZ() - this.getZ(), 2)
-    			);
-    	return Math.sqrt(distPower);
+        double distPower = (
+                Math.pow(v.getX() - this.getX(), 2) +
+                Math.pow(v.getY() - this.getY(), 2) +
+                Math.pow(v.getZ() - this.getZ(), 2)
+                );
+        return Math.sqrt(distPower);
     }
     
     /**
@@ -167,12 +158,12 @@ public class Vector implements Serializable
      * @return double The Distance
      */
     public static double getDistance(Vector v1, Vector v2) {
-    	double distPower = (
-    			Math.pow(v1.getX() - v2.getX(), 2) +
-    			Math.pow(v1.getY() - v2.getY(), 2) +
-    			Math.pow(v1.getZ() - v2.getZ(), 2)
-    			);
-    	return Math.sqrt(distPower);
+        double distPower = (
+                Math.pow(v1.getX() - v2.getX(), 2) +
+                Math.pow(v1.getY() - v2.getY(), 2) +
+                Math.pow(v1.getZ() - v2.getZ(), 2)
+                );
+        return Math.sqrt(distPower);
     }
 
     
@@ -182,10 +173,10 @@ public class Vector implements Serializable
      * @return double The Distance
      */
     public static double getDistance(double p1, double p2) {
-    	double distPower = (
-    			Math.pow(p1 - p2, 2)
-    			);
-    	return Math.sqrt(distPower);
+        double distPower = (
+                Math.pow(p1 - p2, 2)
+                );
+        return Math.sqrt(distPower);
     }
     
     /**
@@ -194,13 +185,13 @@ public class Vector implements Serializable
      * @return double The Distance
      */
     public double getSquareDistance(Vector v) {
-    	double distPower = (
-    			Math.pow(v.getX() - this.getX(), 2) +
-    			Math.pow(v.getY() - this.getY(), 2) +
-    			Math.pow(v.getZ() - this.getZ(), 2)
-    			);
-    	
-    	return distPower;
+        double distPower = (
+                Math.pow(v.getX() - this.getX(), 2) +
+                Math.pow(v.getY() - this.getY(), 2) +
+                Math.pow(v.getZ() - this.getZ(), 2)
+                );
+        
+        return distPower;
     }
     
     /*
@@ -215,17 +206,33 @@ public class Vector implements Serializable
      * @param v2
      * @return new Vector holding the amount of blocks in each direction.
      */
-    public static Vector getAreaVolume(Vector v1, Vector v2) {
-    	Vector min = Vector.getMinor(v1, v2);
-    	Vector max = Vector.getMajor(v1, v2);
-    	double x = (Vector.getDistance(max.getX(), min.getX()));
-    	double y = (Vector.getDistance(max.getY(), min.getY()));
-    	double z = (Vector.getDistance(max.getZ(), min.getZ()));
-    	
-    	return new Vector(
-    			x,
-    			y,
-    			z);
+    public static Vector getAreaVolumeVector(Vector v1, Vector v2) {
+        Vector min = Vector.getMinor(v1, v2);
+        Vector max = Vector.getMajor(v1, v2);
+        double x = (Vector.getDistance(max.getX(), min.getX()));
+        double y = (Vector.getDistance(max.getY(), min.getY()));
+        double z = (Vector.getDistance(max.getZ(), min.getZ()));
+        
+        return new Vector(
+                x,
+                y,
+                z);
+    }
+    
+    /**
+     * Get the number of blocks that are encompassed by the given two vectors
+     * @param v1
+     * @param v2
+     * @return
+     */
+    public static double getAreaVolume(Vector v1, Vector v2) {
+        Vector min = Vector.getMinor(v1, v2);
+        Vector max = Vector.getMajor(v1, v2);
+        double x = (Vector.getDistance(max.getX(), min.getX()));
+        double y = (Vector.getDistance(max.getY(), min.getY()));
+        double z = (Vector.getDistance(max.getZ(), min.getZ()));
+        
+        return x*y*z;
     }
     /**
      * Check if this vector is contained within the range of the given two
@@ -234,17 +241,17 @@ public class Vector implements Serializable
      * @return
      */
     public boolean isWithin(Vector min, Vector max) {
-    	if(
-    			this.getBlockX() >= min.getBlockX() && this.getBlockX() <= max.getBlockX()
-    		&&	this.getBlockY() >= min.getBlockY() && this.getBlockY() <= max.getBlockY()
-    		&&	this.getBlockZ() >= min.getBlockZ() && this.getBlockZ() <= max.getBlockZ()
-    			
-    	  ) {
-    		return true;
-    	}
-    	else {
-    		return false;
-    	}
+        if(
+                this.getBlockX() >= min.getBlockX() && this.getBlockX() <= max.getBlockX()
+            &&  this.getBlockY() >= min.getBlockY() && this.getBlockY() <= max.getBlockY()
+            &&  this.getBlockZ() >= min.getBlockZ() && this.getBlockZ() <= max.getBlockZ()
+                
+          ) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
     /**
@@ -254,18 +261,18 @@ public class Vector implements Serializable
      * @return Major Vector, null if something went wrong
      */
     public static Vector getMajor(Vector v1, Vector v2) {
-    	double dv1 = v1.getVectorLength();
-    	double dv2 = v2.getVectorLength();
-    	double max = Math.max(v1.getVectorLength(), v2.getVectorLength());
-    	if(max == dv1) {
-    		return v1;
-    	}
-    	else if(max == dv2) {
-    		return v2;
-    	}
-    	else {
-    		return null;
-    	}
+        double dv1 = v1.getVectorLength();
+        double dv2 = v2.getVectorLength();
+        double max = Math.max(v1.getVectorLength(), v2.getVectorLength());
+        if(max == dv1) {
+            return v1;
+        }
+        else if(max == dv2) {
+            return v2;
+        }
+        else {
+            return null;
+        }
     }
     
     /**
@@ -275,26 +282,26 @@ public class Vector implements Serializable
      * @return Minor Vector, null if something went wrong
      */
     public static Vector getMinor(Vector v1, Vector v2) {
-    	double dv1 = v1.getVectorLength();
-    	double dv2 = v2.getVectorLength();
-    	double min = Math.min(v1.getVectorLength(), v2.getVectorLength());
-    	if(min == dv1) {
-    		return v1;
-    	}
-    	else if(min == dv2) {
-    		return v2;
-    	}
-    	else {
-    		return null;
-    	}
+        double dv1 = v1.getVectorLength();
+        double dv2 = v2.getVectorLength();
+        double min = Math.min(v1.getVectorLength(), v2.getVectorLength());
+        if(min == dv1) {
+            return v1;
+        }
+        else if(min == dv2) {
+            return v2;
+        }
+        else {
+            return null;
+        }
     }
 
    /**
-	* Checks if another object is equivalent.
-	*
-	* @param obj
-	* @return whether the other object is equivalent
-	*/
+    * Checks if another object is equivalent.
+    *
+    * @param obj
+    * @return whether the other object is equivalent
+    */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Vector)) {
@@ -307,13 +314,13 @@ public class Vector implements Serializable
 
     
    /**
-	* Gets the minimum components of two vectors.
-	*
-	* @param v1
-	* @param v2
-	* @return minimum
-	*/
-	    public static Vector getMinimum(Vector v1, Vector v2) {
+    * Gets the minimum components of two vectors.
+    *
+    * @param v1
+    * @param v2
+    * @return minimum
+    */
+        public static Vector getMinimum(Vector v1, Vector v2) {
         return new Vector(
                 Math.min(v1.getX(), v2.getX()),
                 Math.min(v1.getY(), v2.getY()),
@@ -321,12 +328,12 @@ public class Vector implements Serializable
     }
     
    /**
-	* Gets the maximum components of two vectors.
-	*
-	* @param v1
-	* @param v2
-	* @return maximum
-	*/
+    * Gets the maximum components of two vectors.
+    *
+    * @param v1
+    * @param v2
+    * @return maximum
+    */
     public static Vector getMaximum(Vector v1, Vector v2) {
         return new Vector(
                 Math.max(v1.getX(), v2.getX()),
@@ -370,9 +377,9 @@ public class Vector implements Serializable
      * @return new Vector
      */
     public static Vector getBlockVector(Vector v) {
-    	return new Vector((int)Math.floor(v.getX()),
-    					  (int)Math.floor(v.getY()),
-    					  (int)Math.floor(v.getZ()));
+        return new Vector((int)Math.floor(v.getX()),
+                          (int)Math.floor(v.getY()),
+                          (int)Math.floor(v.getZ()));
     }
     
     /**
@@ -380,7 +387,7 @@ public class Vector implements Serializable
      * @return int x
      */
     public int getBlockX() {
-    	return (int)Math.floor(getX());
+        return (int)Math.floor(getX());
     }
     
     /**
@@ -388,7 +395,7 @@ public class Vector implements Serializable
      * @return int y
      */
     public int getBlockY() {
-    	return (int)Math.floor(getY());
+        return (int)Math.floor(getY());
     }
     
     /**
@@ -396,14 +403,14 @@ public class Vector implements Serializable
      * @return int z
      */
     public int getBlockZ() {
-    	return (int)Math.floor(getZ());
+        return (int)Math.floor(getZ());
     }
     
     @Override
     public String toString() {
-    	return  "x: "+getX()+
-    			", y: "+getY()+
-    			", z: "+getZ();
+        return  "x: "+getX()+
+                ", y: "+getY()+
+                ", z: "+getZ();
     }
     
     /**
@@ -417,11 +424,11 @@ public class Vector implements Serializable
                 .append(Double.valueOf(z)).append("]");
     }
     
-    public static Vector deserialize(String data) throws DeserializeException {
+    public static Vector deserialize(String data){
         data = data.replace("[", "").replace("]", "");
         String[] values = data.split(",");
         if(values.length != 3) {
-            throw new DeserializeException("Could not deserialize Vector object. Invalid serialized data!", data);
+            //throw new DeserializeException("Could not deserialize Vector object. Invalid serialized data!", data);
         }
         Vector tr = new Vector(0,0,0);
         tr.setX(Double.parseDouble(values[0]));
