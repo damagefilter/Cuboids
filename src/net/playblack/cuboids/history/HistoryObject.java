@@ -52,6 +52,12 @@ public class HistoryObject {
         modifiedBlocks = modified;
     }
     
+    /**
+     * Create new HistoryObject by 2 CuboidSelections.
+     * Probably the most common way of making history
+     * @param original
+     * @param modified
+     */
     public HistoryObject(CuboidSelection original, CuboidSelection modified) {
         blocksBefore = original.getBlockList();
         modifiedBlocks = modified.getBlockList();

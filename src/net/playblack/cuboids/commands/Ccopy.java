@@ -9,7 +9,7 @@ import net.playblack.cuboids.selections.SelectionManager;
 
 
 /**
- * Set the brush properties
+ * Copy a selection into the clipboard
  * @author Chris
  *
  */
@@ -34,7 +34,6 @@ public class Ccopy extends BaseCommand {
         
         SelectionManager selectionManager = SelectionManager.getInstance();
         CuboidSelection sel = selectionManager.getPlayerSelection(player.getName());
-        //work-around .... :/
         GenericGenerator gen = new GenericGenerator(sel, player.getWorld());
         gen.getWorldContent(sel);
         sel.setOrigin(player.getPosition());

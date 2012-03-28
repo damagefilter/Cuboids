@@ -116,4 +116,12 @@ public abstract class BaseGen implements IShapeGen {
         selection.setBlockList(tmp.getBlockList());
         return null;
     }
+    
+    /**
+     * Return a cuboid selection with the current world content of the world you passed along in the constructor!
+     * @return
+     */
+    public void getWorldContent(CuboidSelection sel) {
+        sel = scanWorld(true);
+    }
 }

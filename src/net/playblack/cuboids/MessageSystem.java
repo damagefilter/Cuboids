@@ -68,6 +68,8 @@ public class MessageSystem {
         
         messages.put("brushSet", "Your brush properties have been set");
         messages.put("copiedToClipboard", "Blocks have been copied to your personal clipboard");
+        messages.put("selectionPasted", "Your selection has been pasted into the world!");
+        messages.put("selectionMoved", "Your selection has been moved!");
         // *************************************************
         //
         // *************************************************
@@ -85,6 +87,9 @@ public class MessageSystem {
         errors.put("selectionNotDeleted", "The blocks in your selection have not been removed!");
         errors.put("cuboidNotCreated", "Your Cuboid has not been created. Choose a different name!");
         errors.put("invalidRadius", "The selected radius is invalid. What did you do, put a char instead of a number? Dude!");
+        errors.put("invalidCardinalDirection", "You specified an invalid cardinal direction! Use SOUTH/WEST/NORTH/EAST/UP/DOWN");
+        errors.put("selectionNotMoved", "Your selection has not been moved! Blocks seem to be move resistant. Try again.");
+        errors.put("selectionNotPasted", "Your selection has not been pasted. The bugmonster ate it!");
         
     }
     public static MessageSystem getInstance() {

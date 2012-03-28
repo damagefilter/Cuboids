@@ -50,6 +50,7 @@ public class Highprotect extends BaseCommand {
             ms.successMessage(player, "cuboidCreated");
         }
         else {
+            ms.failMessage(player, "selectionIncomplete");
             ms.failMessage(player, "cuboidNotCreated");
         }
     }

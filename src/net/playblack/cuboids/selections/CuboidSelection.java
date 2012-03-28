@@ -57,6 +57,18 @@ public class CuboidSelection implements ISelection {
         blockList = blocks;
     }
 
+    public CuboidSelection(CuboidSelection sel) {
+        this.origin = sel.getOrigin();
+        this.offset = sel.getOffset();
+        this.blockList = sel.getBlockList();
+    }
+
+    public CuboidSelection(Vector origin, Vector offset, int size) {
+        this.origin = origin;
+        this.offset = offset;
+        blockList = new LinkedHashMap<Vector,CBlock>(size);
+    }
+
     /**
      * Set the current origin vector
      * @param o

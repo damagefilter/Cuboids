@@ -38,7 +38,18 @@ public class Vector
         this.z = 0;
     }
 
-   /**
+    /**
+     * Copy constructor copies the primitives
+     * @param key
+     */
+   public Vector(Vector key) {
+        this.x = key.x;
+        this.y = key.y;
+        this.z = key.z;
+    }
+
+
+/**
     * Retrieve X component of Vector
     * @return double x
     */
