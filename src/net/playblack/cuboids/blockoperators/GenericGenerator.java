@@ -23,9 +23,8 @@ public class GenericGenerator extends BaseGen {
     }
     @Override
     public boolean execute(CPlayer player, boolean newHistory) {
-        CuboidSelection world = scanWorld(true);
-        
         if(newHistory) {
+            CuboidSelection world = scanWorld(true);
             SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
         boolean result = modifyWorld();

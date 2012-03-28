@@ -1,6 +1,5 @@
-planning:
-Command manager -> BaseCommand -> CommandClasses (Objects handling command input)
-
-ServerInterface -> get new worlds -> get other players
-
-Entity Abstraction -> BaseEntity -> IPlayer(implements BaseEntity) -> IMob(implements BaseEntity) -> more shit ->getHealth
+cwalls now supports multiple materials for walls ceiling and floor
+added redo command
+cundo now allows undoing actions of other players
+changed block definition syntax. Example: /cfill cloth:8 instead of /cfill cloth 8
+cceiling and cfloor now have a -r flag that will add/subtract the defined height to the current player position.

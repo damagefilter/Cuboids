@@ -41,7 +41,7 @@ public class VectorOffsetGenerator extends BaseGen {
      * @param sel
      * @return
      */
-    private CuboidSelection calculateOffset() {
+    private void calculateOffset() {
       //selection.setOffset(position);
         double x_distance = position.getX() - 
                             selection.getOrigin().getX();
@@ -52,16 +52,14 @@ public class VectorOffsetGenerator extends BaseGen {
         double z_distance = position.getZ() - 
                             selection.getOrigin().getZ();
         
-        CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset(), selection.getBlockList().size());
         synchronized(lock) {
             for(Vector key : selection.getBlockList().keySet()) {
                 CBlock b = selection.getBlockList().get(key);
-                tmp.setBlock(new Vector(key.getX()+x_distance, key.getY()+y_distance, key.getZ()+z_distance), b);
+                selection.setBlock(new Vector(key.getX()+x_distance, key.getY()+y_distance, key.getZ()+z_distance), b);
             }
         }   
         //We spare us the recalculation of the bounding rectangle as scanWorld() will take only the blocks regardless of
         //origin and offset if blocklist is not empty
-        return tmp;
     }
     @Override
     public boolean execute(CPlayer player, boolean newHistory) {

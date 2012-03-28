@@ -2,6 +2,12 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 
+/**
+ * A base command.
+ * Totally not took the idea from CanaryMods BaseCommand :P
+ * @author Chris
+ *
+ */
 public abstract class BaseCommand {
     protected String toolTip;
     protected int minParams;

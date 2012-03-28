@@ -70,6 +70,20 @@ public class MessageSystem {
         messages.put("copiedToClipboard", "Blocks have been copied to your personal clipboard");
         messages.put("selectionPasted", "Your selection has been pasted into the world!");
         messages.put("selectionMoved", "Your selection has been moved!");
+        messages.put("wallsCreated", "The walls have been build!");
+        messages.put("facesCreated", "Selection faces have been outlined!");
+        messages.put("sphereCreated", "A sphere has been created!");
+        messages.put("pyramidCreated", "A pyramid has been created! Egyptian spirits!");
+        messages.put("discCreated", "A cylinder has been created!");
+        messages.put("circleCreated", "A circle has been created!");
+        messages.put("undoDone", "Undo successful!");
+        messages.put("redoDone", "Redo successful!");
+        messages.put("ceilingSet", "Ceiling level has been set!");
+        messages.put("floorSet", "Floor level has been set!");
+        messages.put("selectionExpanded", "Selection has been expanded! (Bottom-to-Top)");
+        messages.put("backupSuccess", "Cuboid backup stored!"); 
+        messages.put("restoreSuccess", "Cuboid has been restored!");
+        messages.put("cuboidUpdated", "Cuboid has been updated!");
         // *************************************************
         //
         // *************************************************
@@ -79,7 +93,7 @@ public class MessageSystem {
         errors.put("cuboidNotFoundOnCommand", "There was no Cuboid with the provided name!");
         errors.put("cuboidNotRemovedHasChilds", "Cuboid was not removed. It has child elements!");
         errors.put("cuboidNotRemovedNotFound", "Cuboid was not removed. It was not found!");
-        errors.put("cuboidNotRemovedError", "Cuboid was not removed. Unknown error occured :S");
+        errors.put("cuboidNotRemovedError", "Cuboid was not removed. Bugmonster ate the code :S");
         errors.put("invalidBlock", "The provided block was invalid!");
         errors.put("selectionIncomplete", "The selection is not completed. Please set start and end point!");
         errors.put("selectionNotFilled", "Your selection was not filled!");
@@ -90,7 +104,14 @@ public class MessageSystem {
         errors.put("invalidCardinalDirection", "You specified an invalid cardinal direction! Use SOUTH/WEST/NORTH/EAST/UP/DOWN");
         errors.put("selectionNotMoved", "Your selection has not been moved! Blocks seem to be move resistant. Try again.");
         errors.put("selectionNotPasted", "Your selection has not been pasted. The bugmonster ate it!");
-        
+        errors.put("originNotSet", "You must specify the first point for this operation!");
+        errors.put("wallsNotCreated", "Walls were not created!");
+        errors.put("sphereNotCreated", "Your sphere has not been created!");
+        errors.put("pyramidNotCreated", "Your pyramid has not been created!");
+        errors.put("discNotCreated", "Cylinder/circle not created!");
+        errors.put("invalidHeight", "The height you specified was invalid! (How can you fail at this?)");
+        errors.put("undoDisabled", "Undo is disabled!");
+        errors.put("restoreFail", "Cuboid restore has failed!");
     }
     public static MessageSystem getInstance() {
         if(ms == null) {
@@ -133,5 +154,9 @@ public class MessageSystem {
      */
     public void customFailMessage(CPlayer player, String message) {
         player.notify(message);
+    }
+    
+    public static void customMessage(CPlayer player, String color, String message) {
+        player.sendMessage(color+message);
     }
 }

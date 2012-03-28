@@ -121,7 +121,8 @@ public abstract class BaseGen implements IShapeGen {
      * Return a cuboid selection with the current world content of the world you passed along in the constructor!
      * @return
      */
-    public void getWorldContent(CuboidSelection sel) {
+    public CuboidSelection getWorldContent(CuboidSelection sel) {
         sel = scanWorld(true);
+        return sel;
     }
 }

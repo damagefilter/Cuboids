@@ -75,15 +75,15 @@ public class Cwalls extends BaseCommand {
         
         if(gen.execute(player, true)) {
             if(onlyWalls) {
-                ms.successMessage(player, "wallsBuild");
+                ms.successMessage(player, "wallsCreated");
             }
             else {
-                ms.successMessage(player, "facesBuild");
+                ms.successMessage(player, "facesCreated");
             }
         }
         else {
             ms.failMessage(player, "selectionIncomplete");
-            ms.failMessage(player, "wallsNotBuild");
+            ms.failMessage(player, "wallsNotCreated");
         }
         return;
     }

@@ -35,7 +35,7 @@ public class Ccopy extends BaseCommand {
         SelectionManager selectionManager = SelectionManager.getInstance();
         CuboidSelection sel = selectionManager.getPlayerSelection(player.getName());
         GenericGenerator gen = new GenericGenerator(sel, player.getWorld());
-        gen.getWorldContent(sel);
+        sel = gen.getWorldContent(sel);
         sel.setOrigin(player.getPosition());
         SessionManager.getInstance().setClipboard(player.getName(), sel);
         ms.successMessage(player, "copiedToClipboard");

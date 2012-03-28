@@ -85,11 +85,11 @@ public class OffsetGenerator extends BaseGen {
      * @param sel
      * @return
      */
-    private CuboidSelection calculateOffset() {
-        CuboidSelection tmp = new CuboidSelection(selection);
+    private void calculateOffset() {
+       // CuboidSelection tmp = new CuboidSelection(selection);
         CBlock air = new CBlock(0,0);
-        for(Vector key : tmp.getBlockList().keySet()) {
-            CBlock original = tmp.getBlock(key);
+        for(Vector key : selection.getBlockList().keySet()) {
+            CBlock original = selection.getBlock(key);
             Vector originalPosition = new Vector(key);
             switch(direction) {
                 case 0:
@@ -110,12 +110,11 @@ public class OffsetGenerator extends BaseGen {
                     key = new Vector(key.getX(), key.getY()-distance, key.getZ());
                     break;
                 }
-            tmp.setBlock(key, original);
+            selection.setBlock(key, original);
             //Set the old position to be nothing
-            tmp.setBlock(originalPosition, air);
+            selection.setBlock(originalPosition, air);
         }
-        recalculateBoundingRectangle(tmp);
-        return tmp;
+        recalculateBoundingRectangle(selection);
     }
     @Override
     public boolean execute(CPlayer player, boolean newHistory) {

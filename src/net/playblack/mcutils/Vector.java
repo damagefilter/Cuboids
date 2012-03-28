@@ -2,6 +2,8 @@ package net.playblack.mcutils;
 
 import java.util.Random;
 
+import net.playblack.cuboids.exceptions.DeserializeException;
+
 public class Vector
 {
     private double x, y, z;
@@ -435,11 +437,11 @@ public class Vector
                 .append(Double.valueOf(z)).append("]");
     }
     
-    public static Vector deserialize(String data){
+    public static Vector deserialize(String data) throws DeserializeException{
         data = data.replace("[", "").replace("]", "");
         String[] values = data.split(",");
         if(values.length != 3) {
-            //throw new DeserializeException("Could not deserialize Vector object. Invalid serialized data!", data);
+            throw new DeserializeException("Could not deserialize Vector object. Invalid serialized data!", data);
         }
         Vector tr = new Vector(0,0,0);
         tr.setX(Double.parseDouble(values[0]));

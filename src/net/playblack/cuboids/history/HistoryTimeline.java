@@ -53,7 +53,7 @@ public class HistoryTimeline {
      * @param rem
      */
     public void remember(HistoryObject rem) {
-        if(rem.getModifiedBlocks().size() == 0) {
+        if((rem.getModifiedBlocks().size() == 0) || (!Config.getInstance().isAllowUndo())) {
             return;
         }
         purgeHistory();

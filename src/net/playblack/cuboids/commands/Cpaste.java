@@ -15,7 +15,7 @@ import net.playblack.cuboids.selections.CuboidSelection;
 public class Cpaste extends BaseCommand {
 
     public Cpaste() {
-        super("Paste a selection from clipboard relative to your position: /ccopy", 1);
+        super("Paste a selection from clipboard relative to your position: /cpaste", 1);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.playblack.cuboids.blocks;
 
+import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.mcutils.ToolBox;
 
 /**
@@ -94,6 +95,38 @@ public class CBlock {
         return false;
     }
     
+    /**
+     * Serialize this Block into a StringBuilder. This returns [type,data]
+     * @return
+     */
+    public StringBuilder serialize() {
+        return new StringBuilder().append("[")
+                .append(Short.toString(type)).append(",")
+                .append(Byte.toString(data)).append("]");
+    }
+    
+    public static CBlock deserialize(String serialized) throws DeserializeException {
+        serialized = serialized.replace("[", "").replace("]", "");
+        CBlock tr = null;
+        String[] values = serialized.split(",");
+        if(values.length != 2) {
+            throw new DeserializeException("Could not deserialize CBlock object. Invalid serialized data!", serialized);
+        }
+        short type = Short.parseShort(values[0]);
+        byte data = Byte.parseByte(values[1]);
+        if(type == 54) {
+            tr = new ChestBlock();
+            tr.setData(data);
+        }
+        else if(type == 63) {
+            tr = new SignBlock();
+            tr.setData(data);
+        }
+        else {
+            tr = new CBlock(type, data);
+        }
+        return tr;
+    }
     /**
      * Parse a new block from a string.
      * Syntax: BlockId:Data or only blockId
