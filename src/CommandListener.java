@@ -1,4 +1,3 @@
-
 import java.io.File;
 
 import net.playblack.blocks.WorldBlock;
@@ -1581,6 +1580,10 @@ public class CommandListener extends PluginListener {
 		 * **************************************************
 		 */
 		if(split[0].equalsIgnoreCase("/cloadfrom")) {
+			if(!player.canUseCommand("/cIgnoreRestrictions")) {
+				player.sendMessage(Colors.Rose+Cuboids2.msg.messages.get("permissionDenied"));
+				return true;
+			}
 			  if (split.length >= 2) {
 				  if(split[1].equalsIgnoreCase("mysql")) {
 					  Cuboids2.loadFromDatabase();
