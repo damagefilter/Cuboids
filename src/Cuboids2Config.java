@@ -9,7 +9,7 @@ public class Cuboids2Config {
 
 	//Plugin Specific information:
 	private String name="Cuboids2";
-	private String version = "1.8.0";
+	private String version = "1.8.2";
 	private boolean verbose = false;
 	
 	//Behaviour settings
