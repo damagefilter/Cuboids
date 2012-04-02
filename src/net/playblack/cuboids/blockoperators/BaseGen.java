@@ -58,16 +58,7 @@ public abstract class BaseGen implements IShapeGen {
         if((testBlock.getType() == block.getType()) && (testBlock.getData() == block.getData())) {
             return;
         }
-        
-        //Types are not equal so, we can change that 
-        if(testBlock.getType() != block.getType()) {
-            world.setBlockAt(block.getType(), coords);
-        }
-        
-        //Data is not equal so we can change that too
-        if(testBlock.getData() != (Byte)block.getData()) {
-            world.setBlockData(block.getData(), coords);
-        }
+        world.setBlockAt(coords, block);
     }
     
     /**

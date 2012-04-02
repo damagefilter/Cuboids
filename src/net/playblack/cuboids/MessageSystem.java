@@ -84,16 +84,42 @@ public class MessageSystem {
         messages.put("backupSuccess", "Cuboid backup stored!"); 
         messages.put("restoreSuccess", "Cuboid has been restored!");
         messages.put("cuboidUpdated", "Cuboid has been updated!");
+        messages.put("prioritySet", "Cuboid priority has been set");
+        messages.put("parentSet", "Cuboids parent has been set"); 
+        
+        messages.put("cuboidSaved", "Cuboid has been saved!");
+        messages.put("cuboidSavedAll", "Cuboid has been saved!");
+        messages.put("cuboidLoaded", "Cuboid has been loaded!");
+        messages.put("cuboidLoadedAll", "Cuboids have been loaded!");
+        
+        messages.put("globalPvpOn", "Global pvp enabled!"); 
+        messages.put("globalPvpOff", "Global pvp disabled!");
+        messages.put("globalCreeperOn", "Global Creeper protection enabled!"); 
+        messages.put("globalCreeperOff", "Global Creeper protection disabled!");
+        messages.put("globalSanctuaryOn", "Global Sanctuary enabled!"); 
+        messages.put("globalSanctuaryOff", "Global Sanctuary disabled!");
+        messages.put("globalSanctuaryASOn", "Global Sanctuary animal spawn enabled!"); 
+        messages.put("globalSanctuaryASOff", "Global Sanctuary animal spawn disabled!");
+        messages.put("globalTntOn", "Global TNT protection enabled!"); 
+        messages.put("globalTntOff", "Global TNT protection disabled!");
+        messages.put("globalProtectionOn", "Global protection enabled!"); 
+        messages.put("globalProtectionOff", "Global protection disabled!");
+        messages.put("globalLavaOn", "Global Lavaflow control enabled!"); 
+        messages.put("globalLavaOff", "Global Lavaflow control disabled!");
+        messages.put("globalWaterOn", "Global Waterflow control enabled!"); 
+        messages.put("globalWaterOff", "Global Waterflow control disabled!");
         // *************************************************
         //
         // *************************************************
         errors.put("permissionDenied", "You don't have permission to do this!");
+        errors.put("invalidCharacters", "Name contains invalid characters!");
         errors.put("playerNotOwner", "You don't own this area!");
         errors.put("optionDisabled", "This option is disabled!");
         errors.put("cuboidNotFoundOnCommand", "There was no Cuboid with the provided name!");
         errors.put("cuboidNotRemovedHasChilds", "Cuboid was not removed. It has child elements!");
         errors.put("cuboidNotRemovedNotFound", "Cuboid was not removed. It was not found!");
         errors.put("cuboidNotRemovedError", "Cuboid was not removed. Bugmonster ate the code :S");
+        errors.put("cuboidExists", "A cuboid with this name already exists!");
         errors.put("invalidBlock", "The provided block was invalid!");
         errors.put("selectionIncomplete", "The selection is not completed. Please set start and end point!");
         errors.put("selectionNotFilled", "Your selection was not filled!");
@@ -110,8 +136,12 @@ public class MessageSystem {
         errors.put("pyramidNotCreated", "Your pyramid has not been created!");
         errors.put("discNotCreated", "Cylinder/circle not created!");
         errors.put("invalidHeight", "The height you specified was invalid! (How can you fail at this?)");
+        errors.put("invalidPriority", "You specified an invalid priority!");
         errors.put("undoDisabled", "Undo is disabled!");
         errors.put("restoreFail", "Cuboid restore has failed!");
+        errors.put("priorityNotSet", "Cuboid Priority has not been set");
+        errors.put("parentNotSet", "Cuboids parent has not been set");
+        errors.put("notWithinSpecifiedParent", "Cuboid is not within the specified parent node.");
     }
     public static MessageSystem getInstance() {
         if(ms == null) {

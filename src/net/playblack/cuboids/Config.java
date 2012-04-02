@@ -140,6 +140,10 @@ public class Config {
         }
         return instance;
     }
+    
+    public void updateGlobalSettings(CuboidE props) {
+        global = props;
+    }
     /**
      * @return the allowProtection
      */

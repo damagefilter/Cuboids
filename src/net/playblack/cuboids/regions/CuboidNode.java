@@ -116,6 +116,14 @@ public class CuboidNode {
     }
     
     /**
+     * Get the dimension for this node
+     * @return
+     */
+    public String getDimension() {
+        return element.getDimension();
+    }
+    
+    /**
      * Get name of wrapped cuboid
      * @return
      */

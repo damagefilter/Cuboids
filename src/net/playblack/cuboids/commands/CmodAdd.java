@@ -31,6 +31,11 @@ public class CmodAdd extends BaseCommand {
                 return;
             }
         }
+        if(command[1].matches("[,:]")) {
+            ms.failMessage(player, "invalidCharacters");
+            ms.failMessage(player, "cuboidNotCreated");
+            return;
+        }
         CuboidE defaultC = Config.getInstance().getDefaultCuboidSetting(player);
         CuboidSelection selection = SelectionManager.getInstance().getPlayerSelection(player.getName());
         if(!selection.isComplete()) {
@@ -39,11 +44,14 @@ public class CmodAdd extends BaseCommand {
         }
         CuboidE cube = new CuboidE(selection.getOrigin(), selection.getOffset());
         cube.overwriteProperties(defaultC);
+        cube.setName(command[1]);
+        cube.setWorld(player.getWorld().getFqName());
         cube.addPlayer("o:"+player.getName());
         if(CuboidInterface.getInstance().addCuboid(cube)) {
             ms.successMessage(player, "cuboidCreated");
         }
         else {
+            ms.failMessage(player, "cuboidExists");
             ms.failMessage(player, "cuboidNotCreated");
         }
     }

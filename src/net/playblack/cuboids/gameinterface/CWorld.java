@@ -11,10 +11,12 @@ import net.playblack.mcutils.Vector;
  */
 public abstract class CWorld {
     /**
-     * Get world name
+     * Get fully qualified (unique) world name
+     * @implementation This must be a _ divided concatenation of the actual world name and the current dimension.
+     * For example: mountainWorld_NORMAL or mountainWorld_NETHER etc
      * @return
      */
-    public abstract String getName();
+    public abstract String getFqName();
     /**
      * Get this worlds ID
      * @return
@@ -22,7 +24,7 @@ public abstract class CWorld {
     public abstract int getId();
     
     /**
-     * Get the block form the current position
+     * Get the block from the current position
      * @implementation This must check for chests, double chests and signs and send the corresponding block! This must also do position corrections for block positions
      * @param position
      * @return
@@ -73,7 +75,7 @@ public abstract class CWorld {
     public abstract long getTime();
     
     /**
-     * Get the highest valid y position for this x-z coordinate
+     * Get the ground level - that is the last block before air (sky)
      * @param x
      * @param z
      * @return

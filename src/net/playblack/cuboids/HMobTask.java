@@ -53,7 +53,7 @@ public class HMobTask implements Runnable {
                     continue;
                 }
                 if((node.getCuboid().ishMob()) && (node.getCuboid().getPlayersWithin().size() > 0)) {
-                    CWorld w = CServer.getServer().getWorld(node.getWorld());
+                    CWorld w = CServer.getServer().getWorld(node.getWorld(), node.getDimension());
                     if(w.getTime() < 13000) {
                         //It's not night, don't bother spawning things
                         continue;

@@ -32,7 +32,7 @@ public class Crestore extends BaseCommand {
                 return;
             }
         }
-        String world = player.getWorld().getName();
+        String world = player.getWorld().getFqName();
         File f = new File("plugins/cuboids2/backups/blocks_"+world+"_"+command[1]);
         if(f.exists()) {
             CuboidDeserializer des = new CuboidDeserializer(command[1], world);

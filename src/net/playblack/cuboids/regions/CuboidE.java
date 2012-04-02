@@ -233,8 +233,22 @@ public class CuboidE {
      * Get the name of the world we're in
      * @return
      */
+    public String getDimension() {
+        //expected syntax: WORLDNAME_DIMENSION
+        String[] split = world.split("_");
+        if(split.length == 2) {
+            return split[1]; //return dimension as that is what it always did
+        }
+        return world; //fallback
+    }
+    
     public String getWorld() {
-        return world;
+        String[] split = world.split("_");
+        //expected syntax: WORLDNAME_DIMENSION
+        if(split.length == 2) {
+            return split[0]; 
+        }
+        return world; //fallback
     }
     
     /**
@@ -682,7 +696,7 @@ public class CuboidE {
      * @return true if cuboid is inside another, false otherwise
      */
     public boolean cuboidIsWithin(Vector v1, Vector v2, boolean complete, String world) {
-        if(this.getWorld().equalsIgnoreCase(world)) {
+        if(this.getDimension().equalsIgnoreCase(world)) {
             Vector min = Vector.getMinimum(v1, v2);
             Vector max = Vector.getMaximum(v1, v2);
             

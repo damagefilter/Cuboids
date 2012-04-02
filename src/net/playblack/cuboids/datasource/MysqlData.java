@@ -124,7 +124,7 @@ public class MysqlData implements BaseData {
 		PreparedStatement ps = getConnection().prepareStatement("SELECT id FROM nodes" +
 				" WHERE name=? AND world=?");
 		ps.setString(1, node.getCuboid().getName());
-		ps.setString(2, node.getCuboid().getWorld());
+		ps.setString(2, node.getCuboid().getDimension());
 		ResultSet rs = ps.executeQuery();
 		if(rs.next()) {
 			return true;
@@ -168,10 +168,10 @@ public class MysqlData implements BaseData {
 				" world=?" +
 				" hmob=?" +
 				" WHERE name=? AND world=?");
-		ps.setString(27, ""+cube.getWorld());
+		ps.setString(27, ""+cube.getDimension());
 		ps.setString(26, ""+cube.getName());
 		ps.setString(25, ""+cube.ishMob());
-		ps.setString(24, ""+cube.getWorld());
+		ps.setString(24, ""+cube.getDimension());
 		ps.setString(23, ""+cube.isFarmland());
 		ps.setString(22, ""+cube.getWelcome());
 		ps.setString(21, ""+cube.isWaterControl());
@@ -258,7 +258,7 @@ public class MysqlData implements BaseData {
 				"?," +
 				"?)");
 		ps.setString(25, ""+cube.ishMob());
-		ps.setString(24, ""+cube.getWorld());
+		ps.setString(24, ""+cube.getDimension());
 		ps.setString(23, ""+cube.isFarmland());
 		ps.setString(22, ""+cube.getWelcome());
 		ps.setString(21, ""+cube.isWaterControl());
@@ -410,14 +410,14 @@ public class MysqlData implements BaseData {
 		for(int i = 0; i < nodelist.size(); i++) {
 			//System.out.println("Running: "+i);
 			if(nodelist.get(i).getCuboid().getParent() == null) {
-				if(handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getWorld())) {
+				if(handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getDimension())) {
 					nodelist.remove(i);
 					i=-1;
 				}
 				else {
 					//System.out.println("Cuboids2: Root Node: "+nodelist.get(i).getCuboid().getName());
 					if(nodelist.get(i) != null 
-							&& !handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getWorld())) 
+							&& !handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getDimension())) 
 					{
 						//System.out.println("Adding root node now.");
 						handler.addRoot(nodelist.get(i));
@@ -432,9 +432,9 @@ public class MysqlData implements BaseData {
 		//Sorting parents here:
 		for(int i = 0; i < nodelist.size(); i++) {
 			if(nodelist.get(i).getCuboid().getParent() != null) {
-				CuboidNode parent = handler.getCuboidByName(nodelist.get(i).getCuboid().getParent(), nodelist.get(i).getCuboid().getWorld());
+				CuboidNode parent = handler.getCuboidByName(nodelist.get(i).getCuboid().getParent(), nodelist.get(i).getCuboid().getDimension());
 				if(parent != null
-						&& !handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getWorld())) {
+						&& !handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getDimension())) {
 					parent.addChild(nodelist.get(i));
 					nodelist.remove(i);
 					i = -1;
@@ -460,7 +460,7 @@ public class MysqlData implements BaseData {
 			ArrayList<CuboidE> list = resultSetToCuboid(ps.executeQuery());
 			for(CuboidE cube : list) {
 				if (cube != null) {
-		            if (handler.cuboidExists(cube.getName(), cube.getWorld())) {
+		            if (handler.cuboidExists(cube.getName(), cube.getDimension())) {
 		              handler.updateCuboidNode(cube);
 		            }
 		            else {
@@ -486,7 +486,7 @@ public class MysqlData implements BaseData {
 		try {
 			PreparedStatement ps = getConnection().prepareStatement("DELETE FROM nodes WHERE name=? AND world=?");
 			ps.setString(1, node.getCuboid().getName());
-			ps.setString(2, node.getCuboid().getWorld());
+			ps.setString(2, node.getCuboid().getDimension());
 			ps.execute();
 		}
 		catch(SQLException e) {

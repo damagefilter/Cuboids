@@ -34,7 +34,7 @@ public class RegionPropertiesManager {
      * @return true if we can attack, false otherwise
      */
     public boolean canAttack(IBaseEntity attacker, IBaseEntity defender) {
-        CuboidE cube = regions.getActiveCuboid(defender.getPosition(), defender.getWorld().getName()).getCuboid();
+        CuboidE cube = regions.getActiveCuboid(defender.getPosition(), defender.getWorld().getFqName()).getCuboid();
         //PVP allowed. alright.
         if(cube.isAllowedPvp()) {
             return true;
@@ -165,7 +165,7 @@ public class RegionPropertiesManager {
     }
     
     public boolean canModifyBlock(CPlayer player, CBlock block) {
-        CuboidE cube = regions.getActiveCuboid(player.getPosition(), player.getWorld().getName()).getCuboid();
+        CuboidE cube = regions.getActiveCuboid(player.getPosition(), player.getWorld().getFqName()).getCuboid();
         if((player.hasPermission("cIgnoreRestrictions") || player.hasPermission("cAreaMod")) || (!cube.isProtected())) {
             //No further checks required
             return true;

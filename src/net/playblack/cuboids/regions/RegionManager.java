@@ -35,6 +35,13 @@ public class RegionManager {
         return instance;
     }
     
+    /**
+     * This must be called after the global settings in Config have changed!!!
+     * @param props
+     */
+    public void updateGlobalSettings() {
+        global = new CuboidNode(Config.getInstance().getGlobalSettings());
+    }
     /*
      * *********************************************************************************
      * LOAD / SAVE / RELOAD / STUFF
@@ -101,7 +108,7 @@ public class RegionManager {
      * @return
      */
     public boolean addCuboid(CuboidE cube) {
-        if(cuboidExists(cube.getName(), cube.getWorld())) {
+        if(cuboidExists(cube.getName(), cube.getDimension())) {
             log.logMessage("Cuboids2: Cuboid already exists :O", "INFO");
             return false;
         }
@@ -112,7 +119,7 @@ public class RegionManager {
         }   
         else {
             for(CuboidNode root : rootNodes) {               
-                if(root.getWorld().equalsIgnoreCase(cube.getWorld())) {                 
+                if(root.getWorld().equalsIgnoreCase(cube.getDimension())) {                 
                     for(CuboidNode node: root.toList()) {                   
                         if(node.getCuboid().getName().equalsIgnoreCase(cube.getParent())) {
                             cube.hasChanged = true;
@@ -138,7 +145,7 @@ public class RegionManager {
         else {
             for(CuboidNode root : rootNodes) {
                 
-                if(root.getWorld().equalsIgnoreCase(cube.getCuboid().getWorld())) {
+                if(root.getWorld().equalsIgnoreCase(cube.getCuboid().getDimension())) {
                     
                     for(CuboidNode node: root.toList()) {
                         
@@ -241,7 +248,7 @@ public class RegionManager {
                     addRoot(child);
                     saveSingle(child);
                     parentNode = getCuboidByName(child.getParent(), 
-                      child.getCuboid().getWorld());
+                      child.getCuboid().getDimension());
                     
                     if (parentNode != null) {
                       parentNode.getChilds().remove(child);
@@ -333,13 +340,13 @@ public class RegionManager {
         for(CuboidNode tree : rootNodes) {
             for(CuboidNode node : tree.toList()) {
                 //parent = null;
-                parent = getCuboidByName(node.getCuboid().getParent(), node.getCuboid().getWorld());
+                parent = getCuboidByName(node.getCuboid().getParent(), node.getCuboid().getDimension());
                 if(parent != null) {
                     //Check if the child is truley completely inside its parent
                     if (!node.getCuboid().cuboidIsWithin(parent.getCuboid().getMinorPoint(), 
                                                          parent.getCuboid().getMajorPoint(), 
                                                          true, 
-                                                         parent.getCuboid().getWorld())) {
+                                                         parent.getCuboid().getDimension())) {
                         //If not, remove the parent and set to null
                         node.getCuboid().setParent(ToolBox.stringToNull("null"));
                         node.getCuboid().hasChanged=true;
@@ -372,7 +379,7 @@ public class RegionManager {
     public boolean updateCuboidNode(CuboidE cube)
     {
       for (CuboidNode tree : rootNodes) {
-        if (tree.getWorld().equalsIgnoreCase(cube.getWorld())) {
+        if (tree.getWorld().equalsIgnoreCase(cube.getDimension())) {
           for (CuboidNode node : tree.toList()) {
               //log.logMessage("Unfolding Tree in updateCuboidNode - looking for "+cube.getName(), "INFO");
             if (!node.getName().equalsIgnoreCase(cube.getName())) {
@@ -391,7 +398,7 @@ public class RegionManager {
                        addNode(node);
                        return true;
                   }
-                  if (cuboidExists(cube.getParent(), cube.getWorld())) {
+                  if (cuboidExists(cube.getParent(), cube.getDimension())) {
                       //log.logMessage("Parent Exists, setting data!", "INFO");
                       node.getCuboid().hasChanged = true;
                       node.setCuboid(cube);
@@ -405,7 +412,7 @@ public class RegionManager {
             if ((cube.getParent() != null) && (!node.getParent().equalsIgnoreCase(cube.getParent())))
             {
                // log.logMessage("Parent Node has changed!!", "INFO");
-                  if (cuboidExists(cube.getParent(), cube.getWorld())) {
+                  if (cuboidExists(cube.getParent(), cube.getDimension())) {
                       //log.logMessage("Parent Node has changed!!", "INFO");
                     CuboidNode newNode = createNode(cube);
                     newNode.setChilds(node.getChilds());
@@ -529,7 +536,7 @@ public class RegionManager {
         ArrayList<CuboidNode> childs = new ArrayList<CuboidNode>();
         //System.out.println("Checking for possible childs in "+c.getName());
         for(CuboidNode tree : rootNodes) {
-            if(tree.getWorld().equalsIgnoreCase(node.getCuboid().getWorld())) {
+            if(tree.getWorld().equalsIgnoreCase(node.getCuboid().getDimension())) {
                 for(CuboidNode n : tree.toList()) {
                     //if(n.getCuboid().isWithin(c.getFirstPoint()) && n.getCuboid().isWithin(c.getSecondPoint())) {
                     if(n.getCuboid().cuboidIsWithin(c.getMajorPoint(), c.getMinorPoint(), true)) {
@@ -632,9 +639,9 @@ public class RegionManager {
         //log.logMessage("Going to find a suitable parent for "+cube.getName(), "INFO");
         ArrayList<CuboidNode> list = new ArrayList<CuboidNode>(0);
         for(CuboidNode tree : rootNodes) {
-            if(tree.getWorld().equalsIgnoreCase(cube.getWorld())) {
+            if(tree.getWorld().equalsIgnoreCase(cube.getDimension())) {
                 for(CuboidNode node : tree.toList()) {
-                    if(cube.cuboidIsWithin(node.getCuboid().getMajorPoint(), node.getCuboid().getMinorPoint(), true, node.getCuboid().getWorld())) {
+                    if(cube.cuboidIsWithin(node.getCuboid().getMajorPoint(), node.getCuboid().getMinorPoint(), true, node.getCuboid().getDimension())) {
                         //log.logMessage("Adding possible parent to list!", "INFO");
                         list.add(node);
                     }

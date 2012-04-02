@@ -37,7 +37,7 @@ public class Protect extends BaseCommand {
             ms.failMessage(player, "selectionIncomplete");
             return;
         }
-        selection.setWorld(player.getWorld().getName());
+        selection.setWorld(player.getWorld().getFqName());
         CuboidE cube = selection.toCuboid(player, command);
         if(Config.getInstance().isAllowProtection()) {
             cube.setProtection(true); //force protection if is allowed regardless of other default settings

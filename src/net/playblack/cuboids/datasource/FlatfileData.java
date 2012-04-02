@@ -38,7 +38,7 @@ public class FlatfileData implements BaseData {
 			 if(!folder.exists()) {
 				 folder.mkdirs();
 			 }
-			 BufferedWriter out = new BufferedWriter(new FileWriter(path+node.getCuboid().getWorld()+"_"+node.getCuboid().getName()+".node"));	
+			 BufferedWriter out = new BufferedWriter(new FileWriter(path+node.getCuboid().getDimension()+"_"+node.getCuboid().getName()+".node"));	
 			 out.write(cuboidToCsv(node));
 			 out.close();
 		} catch (FileNotFoundException e) {
@@ -100,7 +100,7 @@ public class FlatfileData implements BaseData {
 	          String props = reader.readLine();
 	          CuboidE cube = csvToCuboid(props);
 	          if (cube != null) {
-	            if (handler.cuboidExists(cube.getName(), cube.getWorld())) {
+	            if (handler.cuboidExists(cube.getName(), cube.getDimension())) {
 	              handler.updateCuboidNode(cube);
 	            }
 	            else {
@@ -161,14 +161,14 @@ public class FlatfileData implements BaseData {
 			for(int i = 0; i < nodelist.size(); i++) {
 				//System.out.println("Running: "+i);
 				if(nodelist.get(i).getCuboid().getParent() == null) {
-					if(handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getWorld())) {
+					if(handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getDimension())) {
 						nodelist.remove(i);
 						i=-1;
 					}
 					else {
 						//System.out.println("Cuboids2: Root Node: "+nodelist.get(i).getCuboid().getName());
 						if(nodelist.get(i) != null 
-								&& !handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getWorld())) 
+								&& !handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getDimension())) 
 						{
 							//System.out.println("Adding root node now.");
 							handler.addRoot(nodelist.get(i));
@@ -183,9 +183,9 @@ public class FlatfileData implements BaseData {
 			//System.out.println("Cuboids2: Parenting Child Nodes");
 			for(int i = 0; i < nodelist.size(); i++) {
 				if(nodelist.get(i).getCuboid().getParent() != null) {
-					CuboidNode parent = handler.getCuboidByName(nodelist.get(i).getCuboid().getParent(), nodelist.get(i).getCuboid().getWorld());
+					CuboidNode parent = handler.getCuboidByName(nodelist.get(i).getCuboid().getParent(), nodelist.get(i).getCuboid().getDimension());
 					if(parent != null
-							&& !handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getWorld())) {
+							&& !handler.cuboidExists(nodelist.get(i).getCuboid().getName(), nodelist.get(i).getCuboid().getDimension())) {
 						//System.out.println("Cuboids2: Add child: "+nodelist.get(i).getCuboid().getName());
 						//System.out.println("to parent: "+parent.getCuboid().getName());
 						parent.addChild(nodelist.get(i));
@@ -270,7 +270,7 @@ public class FlatfileData implements BaseData {
 		csv.append(node.getCuboid().getName());csv.append(",");
 		csv.append(node.getCuboid().getParent());csv.append(",");
 		csv.append(node.getCuboid().getPriority());csv.append(",");
-		csv.append(node.getCuboid().getWorld());csv.append(",");
+		csv.append(node.getCuboid().getDimension());csv.append(",");
 		
 		csv.append(node.getCuboid().getMinorPoint().getX());csv.append(",");
 		csv.append(node.getCuboid().getMinorPoint().getY());csv.append(",");
@@ -338,7 +338,7 @@ public class FlatfileData implements BaseData {
 	}
 	@Override
 	public void removeNode(CuboidNode node) {
-		File file = new File("plugins/cuboids2/cuboids/"+node.getCuboid().getWorld()+"_"+node.getCuboid().getName()+".node");
+		File file = new File("plugins/cuboids2/cuboids/"+node.getCuboid().getDimension()+"_"+node.getCuboid().getName()+".node");
 		if(file.exists()) {
 			file.delete();
 		}

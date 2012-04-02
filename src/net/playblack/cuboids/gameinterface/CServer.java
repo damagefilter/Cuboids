@@ -11,7 +11,7 @@ public abstract class CServer {
      * @param name
      * @return
      */
-    public abstract CWorld getWorld(String name);
+    public abstract CWorld getWorld(String name, String dimension);
     
     /**
      * Get a world by its id
