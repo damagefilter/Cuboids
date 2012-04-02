@@ -16,7 +16,13 @@ public abstract class CWorld {
      * For example: mountainWorld_NORMAL or mountainWorld_NETHER etc
      * @return
      */
-    public abstract String getFqName();
+    public abstract String getName();
+    
+    /**
+     * Get the current dimension
+     * @return
+     */
+    public abstract int getDimension();
     /**
      * Get this worlds ID
      * @return
@@ -113,4 +119,18 @@ public abstract class CWorld {
      * @param v
      */
     public abstract void setBlockData(byte data, Vector v);
+    
+    /**
+     * Return the name of a dimension by its Id (NETHER, NORMAL, END, EXTRABREIT, etc)
+     * @param dim
+     * @return
+     */
+    public abstract String dimensionFromId(int dim);
+
+    /**
+     * Get a name combination for the world consisting of 
+     * WorldName_WorldDimension
+     * @return
+     */
+    public abstract String getFilePrefix();
 }

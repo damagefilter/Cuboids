@@ -9,19 +9,8 @@ import net.playblack.cuboids.gameinterface.CWorld;
 public class CanaryServer extends CServer {
 
     @Override
-    public CWorld getWorld(String name, String dimension) {
-        if(dimension.equalsIgnoreCase("NORMAL")) {
-            return new CanaryWorld(etc.getServer().getWorld(name)[0]);
-        }
-        else if(dimension.equalsIgnoreCase("NETHER")) {
-            return new CanaryWorld(etc.getServer().getWorld(name)[1]);
-        }
-        else if(dimension.equalsIgnoreCase("END")) {
-            return new CanaryWorld(etc.getServer().getWorld(name)[2]);
-        }
-        else {
-            return new CanaryWorld(etc.getServer().getWorld(name)[0]);
-        }
+    public CWorld getWorld(String name, int dimension) {
+        return new CanaryWorld(etc.getServer().getWorld(name)[dimension]);
     }
 
     @Override

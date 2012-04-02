@@ -33,13 +33,13 @@ public class Cbackup extends BaseCommand {
                 return;
             }
         }
-        CuboidE node = RegionManager.getInstance().getCuboidByName(command[1], player.getWorld().getFqName()).getCuboid();
+        CuboidE node = RegionManager.getInstance().getCuboidByName(command[1], player.getWorld().getName(), player.getWorld().getDimension()).getCuboid();
         if(node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod")) {
             GenericGenerator gen = new GenericGenerator(new CuboidSelection(node.getFirstPoint(), node.getSecondPoint()), player.getWorld());
             CuboidSelection tmp = new CuboidSelection(node.getFirstPoint(), node.getSecondPoint()); 
             tmp = gen.getWorldContent(tmp);
             CuboidSerializer ser = new FlatFileSerializer(tmp);
-            ser.save(command[1], player.getWorld().getFqName());
+            ser.save(command[1], player.getWorld().getFilePrefix());
             ms.successMessage(player, "backupSuccess");
         }
         else {

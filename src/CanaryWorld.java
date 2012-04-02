@@ -16,7 +16,7 @@ public class CanaryWorld extends CWorld {
         world = w;
     }
     @Override
-    public String getFqName() {
+    public String getFilePrefix() {
         //TODO: put FQ Name here once the stuff is clear!
         return world.getType().name();
     }
@@ -214,6 +214,18 @@ public class CanaryWorld extends CWorld {
 
         }
         return nItem;
+    }
+    @Override
+    public String getName() {
+        return world.getName();
+    }
+    @Override
+    public int getDimension() {
+        return world.getType().getId();
+    }
+    @Override
+    public String dimensionFromId(int dim) {
+        return World.Dimension.fromId(dim).name();
     }
 
 }

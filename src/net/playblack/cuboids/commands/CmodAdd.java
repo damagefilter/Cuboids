@@ -45,7 +45,8 @@ public class CmodAdd extends BaseCommand {
         CuboidE cube = new CuboidE(selection.getOrigin(), selection.getOffset());
         cube.overwriteProperties(defaultC);
         cube.setName(command[1]);
-        cube.setWorld(player.getWorld().getFqName());
+        cube.setWorld(player.getWorld().getName());
+        cube.setDimension(player.getWorld().getDimension());
         cube.addPlayer("o:"+player.getName());
         if(CuboidInterface.getInstance().addCuboid(cube)) {
             ms.successMessage(player, "cuboidCreated");

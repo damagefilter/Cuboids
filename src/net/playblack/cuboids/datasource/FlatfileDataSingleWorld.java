@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.CuboidNode;
 import net.playblack.cuboids.regions.RegionManager;
@@ -22,11 +24,11 @@ import net.playblack.mcutils.Vector;
  * @author Chris
  *
  */
-public class FlatfileData implements BaseData {
+public class FlatfileDataSingleWorld implements BaseData {
 
 	private Object lock = new Object();
 	private EventLogger log;
-	public FlatfileData(EventLogger log) {
+	public FlatfileDataSingleWorld(EventLogger log) {
 		this.log = log;
 	}
 	@Override
@@ -38,7 +40,9 @@ public class FlatfileData implements BaseData {
 			 if(!folder.exists()) {
 				 folder.mkdirs();
 			 }
-			 BufferedWriter out = new BufferedWriter(new FileWriter(path+node.getWorld()+"_"+node.getDimension()+"_"+node.getCuboid().getName()+".node"));	
+			 CWorld world = CServer.getServer().getWorld(node.getWorld(), node.getDimension());
+			 String dimName = world.dimensionFromId(node.getDimension());
+			 BufferedWriter out = new BufferedWriter(new FileWriter(path+dimName+"_"+node.getCuboid().getName()+".node"));	
 			 out.write(cuboidToCsv(node));
 			 out.close();
 		} catch (FileNotFoundException e) {
@@ -46,7 +50,6 @@ public class FlatfileData implements BaseData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 	/**
@@ -67,11 +70,14 @@ public class FlatfileData implements BaseData {
 			 if(!folder.exists()) {
 				 folder.mkdirs();
 			 }
+			 CWorld world;// = CServer.getServer().getWorld(node.getWorld(), node.getDimension());
+             String dimName;// = world.dimensionFromId(node.getDimension());
 			 for(CuboidNode root : treeList) {
-
 				 for(CuboidNode saveNode : root.toList() ) {
 					 if(saveNode.getCuboid().hasChanged || force == true) {
-						 BufferedWriter out = new BufferedWriter(new FileWriter(path+root.getWorld()+"_"+root.getDimension()+"_"+saveNode.getCuboid().getName()+".node"));	
+					     world = CServer.getServer().getWorld(saveNode.getWorld(), saveNode.getDimension());
+					     dimName = world.dimensionFromId(saveNode.getDimension());
+						 BufferedWriter out = new BufferedWriter(new FileWriter(path+dimName+"_"+saveNode.getName()+".node"));	
 						 out.write(cuboidToCsv(saveNode));
 						 out.close();
 						 saveNode.getCuboid().hasChanged = false;
@@ -207,6 +213,7 @@ public class FlatfileData implements BaseData {
 	 */
 	private CuboidE csvToCuboid(String str) {
 	    String[] csv = str.split(",");
+	    //log.logMessage("Cuboids split amount: "+csv.length+" for "+csv[0], "INFO");
 	    if (csv.length >= 23) {
 	      CuboidE cube = new CuboidE();
 	      cube.setName(csv[0]);
@@ -217,40 +224,45 @@ public class FlatfileData implements BaseData {
 	      cube.setPriority(Integer.parseInt(csv[2]));
 
 	      cube.setWorld(csv[3]);
-	      cube.setDimension(Integer.parseInt(csv[4]));
 
-	      Vector v1 = new Vector(Double.parseDouble(csv[5]), 
-	        Double.parseDouble(csv[6]), 
-	        Double.parseDouble(csv[7]));
+	      Vector v1 = new Vector(Double.parseDouble(csv[4]), 
+	        Double.parseDouble(csv[5]), 
+	        Double.parseDouble(csv[6]));
 
-	      Vector v2 = new Vector(Double.parseDouble(csv[8]), 
-	        Double.parseDouble(csv[9]), 
-	        Double.parseDouble(csv[10]));
+	      Vector v2 = new Vector(Double.parseDouble(csv[7]), 
+	        Double.parseDouble(csv[8]), 
+	        Double.parseDouble(csv[9]));
 	      cube.setPoints(v1, v2);
-	      cube.setCreeperSecure(ToolBox.stringToBoolean(csv[11]));
-	      cube.setHealing(ToolBox.stringToBoolean(csv[12]));
-	      cube.setProtection(ToolBox.stringToBoolean(csv[13]));
-	      cube.setSanctuary(ToolBox.stringToBoolean(csv[14]));
-	      cube.setSanctuarySpawnAnimals(ToolBox.stringToBoolean(csv[15]));
-	      cube.setAllowPvp(ToolBox.stringToBoolean(csv[16]));
-	      cube.setFreeBuild(ToolBox.stringToBoolean(csv[17]));
-	      cube.setBlockFireSpread(ToolBox.stringToBoolean(csv[18]));
-	      cube.setWelcome(ToolBox.stringToNull(csv[19]));
-	      cube.setFarewell(ToolBox.stringToNull(csv[20]));
+	      cube.setCreeperSecure(ToolBox.stringToBoolean(csv[10]));
+	      cube.setHealing(ToolBox.stringToBoolean(csv[11]));
+	      cube.setProtection(ToolBox.stringToBoolean(csv[12]));
+	      cube.setSanctuary(ToolBox.stringToBoolean(csv[13]));
+	      cube.setSanctuarySpawnAnimals(ToolBox.stringToBoolean(csv[14]));
+	      cube.setAllowPvp(ToolBox.stringToBoolean(csv[15]));
+	      cube.setFreeBuild(ToolBox.stringToBoolean(csv[16]));
+	      cube.setBlockFireSpread(ToolBox.stringToBoolean(csv[17]));
+	      cube.setWelcome(ToolBox.stringToNull(csv[18]));
+	      cube.setFarewell(ToolBox.stringToNull(csv[19]));
+	      csv[20] = csv[20].replace("{COMMA}", ",");
 	      csv[21] = csv[21].replace("{COMMA}", ",");
 	      csv[22] = csv[22].replace("{COMMA}", ",");
-	      csv[23] = csv[23].replace("{COMMA}", ",");
-	      cube.addPlayer(csv[21]);
-	      cube.addGroup(csv[22]);
-	      cube.addTabuCommand(csv[23]);
-    	  cube.setLavaControl(ToolBox.stringToBoolean(csv[24]));
-    	  cube.setWaterControl(ToolBox.stringToBoolean(csv[25]));
-    	  cube.setTntSecure(ToolBox.stringToBoolean(csv[26]));
-    	  cube.setFarmland(ToolBox.stringToBoolean(csv[27]));
-    	  cube.setRestriction(ToolBox.stringToBoolean(csv[28]));
-    	  cube.sethMob(ToolBox.stringToBoolean(csv[29]));
+	      cube.addPlayer(csv[20]);
+	      cube.addGroup(csv[21]);
+	      cube.addTabuCommand(csv[22]);
+	      //V 1.2.0 stuff current max lenght:27
+	    	  cube.setLavaControl(ToolBox.stringToBoolean(csv[23]));
+	    	  cube.setWaterControl(ToolBox.stringToBoolean(csv[24]));
+	    	  cube.setTntSecure(ToolBox.stringToBoolean(csv[25]));
+	    	  cube.setFarmland(ToolBox.stringToBoolean(csv[26]));
+	    	  cube.setRestriction(ToolBox.stringToBoolean(csv[27]));
+	    //V 1.4.0 stuff current max lenght:28
+	      if(csv.length >= 29) {
+	    	  cube.sethMob(ToolBox.stringToBoolean(csv[28]));
+	      }
+	     // log.logMessage("Returning Cube while loading area."+csv[0], "INFO");
 	      return cube;
 	    }
+	   // log.logMessage("Returning Null while loading area."+csv[0], "INFO");
 	    return null;
 	  }
 	
@@ -264,7 +276,6 @@ public class FlatfileData implements BaseData {
 		csv.append(node.getCuboid().getName());csv.append(",");
 		csv.append(node.getCuboid().getParent());csv.append(",");
 		csv.append(node.getCuboid().getPriority());csv.append(",");
-		csv.append(node.getCuboid().getWorld());csv.append(",");
 		csv.append(node.getCuboid().getDimension());csv.append(",");
 		
 		csv.append(node.getCuboid().getMinorPoint().getX());csv.append(",");
@@ -318,18 +329,22 @@ public class FlatfileData implements BaseData {
 			 clist = "no_commands";
 		 }
 		 csv.append(clist);csv.append(",");
+		 
+		//V 1.2.0 stuff
 		csv.append(node.getCuboid().isLavaControl());csv.append(",");
 		csv.append(node.getCuboid().isWaterControl());csv.append(",");
 		csv.append(node.getCuboid().isTntSecure());csv.append(",");
 		csv.append(node.getCuboid().isFarmland());csv.append(",");
+		//1.4.0 stuff
 		csv.append(node.getCuboid().isRestricted());csv.append(",");
+		//1.8
 		csv.append(node.getCuboid().ishMob());
 		
 		return csv.toString();
 	}
 	@Override
 	public void removeNode(CuboidNode node) {
-		File file = new File("plugins/cuboids2/cuboids/"+node.getWorld()+"_"+ node.getDimension() +"_"+node.getName()+".node");
+		File file = new File("plugins/cuboids2/cuboids/"+node.getCuboid().getDimension()+"_"+node.getCuboid().getName()+".node");
 		if(file.exists()) {
 			file.delete();
 		}

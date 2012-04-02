@@ -134,7 +134,7 @@ public class MessageSystem {
         errors.put("wallsNotCreated", "Walls were not created!");
         errors.put("sphereNotCreated", "Your sphere has not been created!");
         errors.put("pyramidNotCreated", "Your pyramid has not been created!");
-        errors.put("discNotCreated", "Cylinder/circle not created!");
+        errors.put("discNotCreated", "Cylinder/circle/disk not created!");
         errors.put("invalidHeight", "The height you specified was invalid! (How can you fail at this?)");
         errors.put("invalidPriority", "You specified an invalid priority!");
         errors.put("undoDisabled", "Undo is disabled!");

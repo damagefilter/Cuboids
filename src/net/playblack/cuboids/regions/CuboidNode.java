@@ -119,7 +119,7 @@ public class CuboidNode {
      * Get the dimension for this node
      * @return
      */
-    public String getDimension() {
+    public int getDimension() {
         return element.getDimension();
     }
     
@@ -144,5 +144,36 @@ public class CuboidNode {
      */
     public ArrayList<CuboidNode> toList() {
         return null;
+    }
+    
+    /**
+     * Check if the given cuboidNode is in the same world and dimension as this one
+     * @param test
+     * @return true if dimension and world are the same, false otherwise
+     */
+    public boolean equalWorlds(CuboidNode test) {
+        if((element.getDimension() == test.getDimension()) && (element.getWorld().equalsIgnoreCase(test.getWorld()))) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Check if the given cuboidE is in the same world and dimension as this CuboidNodes attached CuboidE
+     * @param test
+     * @return
+     */
+    public boolean equalWorlds(CuboidE test) {
+        return element.equalWorlds(test);
+    }
+    
+    /**
+     * Check this node matches the gven world and dimension requirements (it's inside that)
+     * @param world
+     * @param dimension
+     * @return
+     */
+    public boolean equalWorlds(String world, int dimension) {
+        return element.equalWorlds(world, dimension);
     }
 }

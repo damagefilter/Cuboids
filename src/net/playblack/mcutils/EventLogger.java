@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 public class EventLogger {
 	private Logger log;
 	private HashMap<String,AreaMessages> arealog = new HashMap<String,AreaMessages>();
+	private StringBuilder cacheMessage = new StringBuilder();
 	private static EventLogger instance = null;
 	
 	/**
@@ -40,17 +41,36 @@ public class EventLogger {
 	public void logMessage(String message, String level) {
 		if(level.equalsIgnoreCase("INFO")) {
 			//log.info(message);
-			log.log(Level.INFO, message);
+			log.log(Level.INFO, "Cuboids2: " + message);
 		}
 		else if(level.equalsIgnoreCase("WARNING")) {
-			log.log(Level.WARNING, message);
+			log.log(Level.WARNING, "Cuboids2: " + message);
 			//log.warning(message);
 		}
 		else if(level.equalsIgnoreCase("SEVERE")) {
 			//log.severe(message);
-			log.log(Level.SEVERE, message);
+			log.log(Level.SEVERE, "Cuboids2: " + message);
 		}
 	}
+	
+	/**
+	 * Append text to the logging cache.
+	 * The reults will be filed as single block entry when cache gets logged.
+	 * @param msg
+	 */
+	public void cacheMessage(String msg) {
+	    this.cacheMessage.append(msg);
+	}
+	
+	/**
+	 * Log cached messages as one and clear the cache for new stuff
+	 * @param level
+	 */
+	public void logCachedMessage(String level) {
+	    logMessage(cacheMessage.toString(), level);
+	    cacheMessage = new StringBuilder();
+	}
+	
 	/**
 	 * Log an event that has happened inside an area.
 	 * @param area

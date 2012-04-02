@@ -57,24 +57,4 @@ public interface IBaseEntity {
      * @return
      */
     public double getZ();
-    
-    
-    /**
-     * Set X position
-     * @return
-     */
-    public double setX(double x);
-    
-    /**
-     * Set Y Position
-     * @return
-     */
-    public double setY(double y);
-    
-    /**
-     * Set Z Position
-     * @return
-     */
-    public double setZ(double z);
-    
 }

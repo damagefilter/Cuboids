@@ -88,6 +88,8 @@ public class CuboidE {
      * Name of the world this cuboidE is valid for
      */
     private String world; 
+    
+    private int dimension;
 
     public CuboidE(Vector origin, Vector offset) {
         point1 = origin;
@@ -141,6 +143,18 @@ public class CuboidE {
 
     public void setWorld(String world) {
         this.world = world;
+    }
+    
+    public String getWorld() {
+        return world;
+    }
+
+    public void setDimension(int dimension) {
+        this.dimension = dimension;
+    }
+    
+    public int getDimension() {
+        return dimension;
     }
 
     /**
@@ -229,27 +243,6 @@ public class CuboidE {
         return tntSecure;
     }
     
-    /**
-     * Get the name of the world we're in
-     * @return
-     */
-    public String getDimension() {
-        //expected syntax: WORLDNAME_DIMENSION
-        String[] split = world.split("_");
-        if(split.length == 2) {
-            return split[1]; //return dimension as that is what it always did
-        }
-        return world; //fallback
-    }
-    
-    public String getWorld() {
-        String[] split = world.split("_");
-        //expected syntax: WORLDNAME_DIMENSION
-        if(split.length == 2) {
-            return split[0]; 
-        }
-        return world; //fallback
-    }
     
     /**
      * Get this Cuboids Priority.
@@ -695,8 +688,8 @@ public class CuboidE {
      * @param world The World Name to check against
      * @return true if cuboid is inside another, false otherwise
      */
-    public boolean cuboidIsWithin(Vector v1, Vector v2, boolean complete, String world) {
-        if(this.getDimension().equalsIgnoreCase(world)) {
+    public boolean cuboidIsWithin(Vector v1, Vector v2, String world, int dimension, boolean complete) {
+        if(this.equalWorlds(world, dimension)) {
             Vector min = Vector.getMinimum(v1, v2);
             Vector max = Vector.getMaximum(v1, v2);
             
@@ -720,6 +713,64 @@ public class CuboidE {
         else {
             return false;
         }
+    }
+    
+    /**
+     * Check if this cuboid is inside the given one
+     * @param cube
+     * @param complete true to check if it is inside with both edges
+     * @return
+     */
+    public boolean cuboidIsWithin(CuboidE cube, boolean complete) {
+        if(this.equalWorlds(cube)) {
+            Vector min = Vector.getMinimum(cube.getFirstPoint(), cube.getSecondPoint());
+            Vector max = Vector.getMaximum(cube.getFirstPoint(), cube.getSecondPoint());
+            
+            if(complete == true) {
+                if(point1.isWithin(min, max) && point2.isWithin(min, max)) {
+                    return true;
+                }
+                else { 
+                    return false;
+                }
+            }
+            else {
+                if(point1.isWithin(min, max) || point2.isWithin(min, max)) {
+                    return true;
+                }
+                else { 
+                    return false;
+                }
+            }
+        }
+        else {
+            return false;
+        }
+    }
+    
+    /**
+     * Check if this cuboidE is in the same world and dimension as the given one
+     * @param test
+     * @return
+     */
+    public boolean equalWorlds(CuboidE test) {
+        if((this.getDimension() == test.getDimension()) && (this.getWorld().equalsIgnoreCase(test.getWorld()))) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Check if this cuboidE matches the given world and dimension (is in it)
+     * @param world
+     * @param dimension
+     * @return
+     */
+    public boolean equalWorlds(String world, int dimension) {
+        if((this.getDimension() == dimension) && (this.getWorld().equalsIgnoreCase(world))) {
+            return true;
+        }
+        return false;
     }
     
     /**

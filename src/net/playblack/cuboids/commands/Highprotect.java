@@ -38,8 +38,9 @@ public class Highprotect extends BaseCommand {
             return;
         }
         selection.expandVert();
-        selection.setWorld(player.getWorld().getFqName());
+        selection.setWorld(player.getWorld().getName());
         CuboidE cube = selection.toCuboid(player, command);
+        cube.setDimension(player.getWorld().getDimension());
         if(Config.getInstance().isAllowProtection()) {
             cube.setProtection(true); //force protection if is allowed regardless of other default settings
         }
