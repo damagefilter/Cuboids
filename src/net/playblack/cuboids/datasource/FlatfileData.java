@@ -26,6 +26,7 @@ public class FlatfileData implements BaseData {
 
 	private Object lock = new Object();
 	private EventLogger log;
+	
 	public FlatfileData(EventLogger log) {
 		this.log = log;
 	}
@@ -55,8 +56,8 @@ public class FlatfileData implements BaseData {
 	@Override
 	public void saveAll(ArrayList<CuboidNode> treeList, boolean silent, boolean force) {
 		if(!silent) {
-			//System.out.println("Cuboids2: Saving Cuboid Trees to files...");
-			log.logMessage("Cuboids2: Saving Cuboid Nodes (your areas)", "INFO");
+			//System.out.println("  Saving Cuboid Trees to files...");
+			log.logMessage("Saving Cuboid Nodes (your areas)", "INFO");
 			log.logMessage("Saving to fatfile backend ...", "INFO");
 		}
 		//cleanTreeFiles();
@@ -108,17 +109,17 @@ public class FlatfileData implements BaseData {
 	            }
 	            return;
 	          }
-	          log.logMessage("Cuboids2: Failed to load a Cuboid Area from file. It does not exist!", "WARNING");
+	          log.logMessage("Failed to load a Cuboid Area from file. It does not exist!", "WARNING");
 	          return;
 	        }
 
 	      }
 
-	      log.logMessage("Cuboids2: Failed to load a Cuboid Area from file. It does not exist!", "WARNING");
+	      log.logMessage("Failed to load a Cuboid Area from file. It does not exist!", "WARNING");
 	      return;
 	    }
 	    catch (IOException e) {
-	      log.logMessage("Cuboids2: Failed to load a Cuboid Area from file. (IOException - Read/Write issue!!) "+e.getMessage(), "WARNING");
+	      log.logMessage("Failed to load a Cuboid Area from file. (IOException - Read/Write issue!!) "+e.getMessage(), "WARNING");
 	      e.printStackTrace();
 	    }return;
 	}
@@ -152,12 +153,12 @@ public class FlatfileData implements BaseData {
 	            }
 	        }
 			catch (Exception e) {
-				log.logMessage("Cuboids2: Failed to load Cuboid Data files! "+e.getMessage(), "SEVERE");
+				log.logMessage("Failed to load Cuboid Data files! "+e.getMessage(), "SEVERE");
 				e.printStackTrace();
 	        }
 			
 			//Create root nodes
-			//System.out.println("Cuboids2: Processing Node Files ...");
+			//System.out.println(" : Processing Node Files ...");
 			for(int i = 0; i < nodelist.size(); i++) {
 				//System.out.println("Running: "+i);
 				if(nodelist.get(i).getCuboid().getParent() == null) {
@@ -166,7 +167,7 @@ public class FlatfileData implements BaseData {
 						i=-1;
 					}
 					else {
-						//System.out.println("Cuboids2: Root Node: "+nodelist.get(i).getCuboid().getName());
+						//System.out.println(" : Root Node: "+nodelist.get(i).getCuboid().getName());
 						if(nodelist.get(i) != null 
 								&& !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(),nodelist.get(i).getDimension())) 
 						{
@@ -180,13 +181,13 @@ public class FlatfileData implements BaseData {
 				}
 			}
 			//Sort parents
-			//System.out.println("Cuboids2: Parenting Child Nodes");
+			//System.out.println(" : Parenting Child Nodes");
 			for(int i = 0; i < nodelist.size(); i++) {
 				if(nodelist.get(i).getCuboid().getParent() != null) {
 					CuboidNode parent = handler.getCuboidByName(nodelist.get(i).getParent(), nodelist.get(i).getWorld(),nodelist.get(i).getDimension());
 					if(parent != null
 							&& !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(),nodelist.get(i).getDimension())) {
-						//System.out.println("Cuboids2: Add child: "+nodelist.get(i).getCuboid().getName());
+						//System.out.println(" : Add child: "+nodelist.get(i).getCuboid().getName());
 						//System.out.println("to parent: "+parent.getCuboid().getName());
 						parent.addChild(nodelist.get(i));
 						nodelist.remove(i);
@@ -195,7 +196,7 @@ public class FlatfileData implements BaseData {
 				}
 			}
 			handler.cleanParentRelations();
-			log.logMessage("Cuboids2: Cuboids loaded successfully", "INFO");
+			log.logMessage("Cuboids loaded successfully", "INFO");
 		}
     }
 	

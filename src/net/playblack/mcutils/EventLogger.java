@@ -16,6 +16,7 @@ public class EventLogger {
 	private Logger log;
 	private HashMap<String,AreaMessages> arealog = new HashMap<String,AreaMessages>();
 	private StringBuilder cacheMessage = new StringBuilder();
+	private boolean cacheRunning = false;
 	private static EventLogger instance = null;
 	
 	/**
@@ -39,6 +40,10 @@ public class EventLogger {
 	 * @param level the log level, can use INFO, WARNING and SEVERE
 	 */
 	public void logMessage(String message, String level) {
+	    if(cacheRunning) {
+	        cacheMessage(message, true);
+	        return;
+	    }
 		if(level.equalsIgnoreCase("INFO")) {
 			//log.info(message);
 			log.log(Level.INFO, "Cuboids2: " + message);
@@ -58,8 +63,14 @@ public class EventLogger {
 	 * The reults will be filed as single block entry when cache gets logged.
 	 * @param msg
 	 */
-	public void cacheMessage(String msg) {
-	    this.cacheMessage.append(msg);
+	public void cacheMessage(String msg, boolean newLine) {
+	    if(!cacheRunning) {
+	        cacheRunning = true;
+	    }
+	    cacheMessage.append(msg);
+	    if(newLine) {
+	        cacheMessage.append(System.getProperty("line.separator"));
+	    }
 	}
 	
 	/**
@@ -69,6 +80,7 @@ public class EventLogger {
 	public void logCachedMessage(String level) {
 	    logMessage(cacheMessage.toString(), level);
 	    cacheMessage = new StringBuilder();
+	    cacheRunning = false;
 	}
 	
 	/**

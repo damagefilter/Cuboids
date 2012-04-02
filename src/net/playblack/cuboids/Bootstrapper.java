@@ -1,6 +1,7 @@
 package net.playblack.cuboids;
 
 import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.EventLogger;
 
 /**
@@ -13,9 +14,23 @@ public class Bootstrapper {
     public Bootstrapper(CServer server) {
         EventLogger log = EventLogger.getInstance();
         log.logMessage("Loading ...", "INFO");
-        log.cacheMessage("Server interface... ");
+        
+        //------------------------------------------------------
+        log.cacheMessage("Server interface... ", false);
         CServer.setServer(server);
-        log.cacheMessage("done!");
+        log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
+        
+        //------------------------------------------------------
+        log.cacheMessage("Cuboid Nodes...", true);
+        RegionManager.getInstance().load();
+        log.cacheMessage("done!", false);
+        log.logCachedMessage("INFO");
+        //------------------------------------------------------
+        log.cacheMessage("Cuboid Nodes...", true);
+        RegionManager.getInstance().load();
+        log.cacheMessage("done!", false);
+        log.logCachedMessage("INFO");
+        
     }
 }
