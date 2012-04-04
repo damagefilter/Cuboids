@@ -28,6 +28,13 @@ public abstract class CServer {
     public abstract ArrayList<CPlayer> getPlayers(CWorld world);
     
     /**
+     * Get a palyer by the name
+     * @param name
+     * @return
+     */
+    public abstract CPlayer getPlayer(String name);
+    
+    /**
      * Schedule a task in the server queue
      * @param delay
      * @param task

@@ -36,6 +36,8 @@ public class EventLogger {
 	
 	/**
 	 * Directly send a message to the server log.
+	 * If there is a cache active, this will be appended to the cache instead
+	 * so the order of task execution keeps synchronized in the resulting logs.
 	 * @param message
 	 * @param level the log level, can use INFO, WARNING and SEVERE
 	 */

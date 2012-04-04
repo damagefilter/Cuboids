@@ -314,10 +314,12 @@ public class RegionManager {
                 CuboidE cube = tree.getCuboid();
                 CuboidNode parent = getPossibleParent(cube);
                 if(parent != null) {
-                    if(parent.getCuboid().getName().equalsIgnoreCase(cube.getName())) {
+                    if(parent.getName().equalsIgnoreCase(cube.getName())) {
+                        //The child will always fit in itself and as its within the list, 
+                        //we need to skip it
                         continue;
                     }
-                    cube.setParent(parent.getCuboid().getName());
+                    cube.setParent(parent.getName());
                     if(cube.getPriority() <= parent.getCuboid().getPriority()) {
                         cube.setPriority(parent.getCuboid().getPriority()+1);
                     }

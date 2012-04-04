@@ -10,7 +10,7 @@ import net.playblack.mcutils.Vector;
  * @author Chris
  *
  */
-public abstract class CuboidShell {
+public interface CuboidShell {
     public abstract boolean getProtection();
     public abstract boolean getRestricted();
     public abstract boolean getPvp();

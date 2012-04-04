@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.playblack.cuboids.gameinterface.CMob;
 import net.playblack.cuboids.gameinterface.CPlayer;
@@ -8,9 +9,15 @@ import net.playblack.cuboids.gameinterface.CWorld;
 
 public class CanaryServer extends CServer {
 
+    protected HashMap<String, CWorld> worlds = new HashMap<String, CWorld>(5);
     @Override
     public CWorld getWorld(String name, int dimension) {
-        return new CanaryWorld(etc.getServer().getWorld(name)[dimension]);
+        if(worlds.containsKey(name+dimension)) {
+            return worlds.get(name+dimension);
+        }
+        CanaryWorld world = new CanaryWorld(etc.getServer().getWorld(name)[dimension]);
+        worlds.put(name+dimension, world);
+        return world;
     }
 
     @Override
@@ -22,6 +29,14 @@ public class CanaryServer extends CServer {
     public ArrayList<CPlayer> getPlayers(CWorld world) {
         return null;
     }
+    @Override
+    public CPlayer getPlayer(String name) {
+        Player p = etc.getServer().matchPlayer(name);
+        if(p == null) {
+            return null;
+        }
+        return new CanaryPlayer(p);
+    }
 
     @Override
     public void scheduleTask(long delay, Runnable task) {
@@ -30,13 +45,12 @@ public class CanaryServer extends CServer {
 
     @Override
     public void scheduleTask(long delay, long intervall, Runnable task) {
-        // TODO Auto-generated method stub
+        etc.getServer().addToServerQueue(task, delay);
     }
 
     @Override
     public CMob getMob(String name, CWorld world) {
-        //TODO implement some mobs!
-        return null;
+        return new CanaryMob(new Mob(name, etc.getServer().getWorld(world.getName())[world.getDimension()]));
     }
 
     @Override

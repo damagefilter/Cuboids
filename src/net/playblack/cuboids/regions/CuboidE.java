@@ -47,6 +47,8 @@ public class CuboidE {
      */
     private ArrayList<String> groupList = new ArrayList<String>();
     
+    private ArrayList<Integer> restrictedItems = new ArrayList<Integer>();
+    
     /**
      * List of commands that should be denied in this area.
      */
@@ -487,6 +489,28 @@ public class CuboidE {
         }
     }
     
+    /**
+     * Add items to regions restricted items list
+     * @param id
+     */
+    public void addRestrictedItem(int id) {
+        restrictedItems.add(Integer.valueOf(id));
+    }
+    
+    /**
+     * Remove items to regions restricted items list
+     * @param id
+     */
+    public void removeRestrictedItem(int id) {
+        restrictedItems.remove(Integer.valueOf(id));
+    }
+    
+    public boolean isItemRestricted(int id) {
+        if(restrictedItems.contains(Integer.valueOf(id))) {
+            return true;
+        }
+        return false;
+    }
     /**
      * Add a player name to the list of allowed player names.
      * @param playerName String

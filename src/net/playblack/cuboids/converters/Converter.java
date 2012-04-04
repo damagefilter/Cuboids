@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.RegionManager;
 
-public abstract class Converter {
+/**
+ * Convert foreign Cuboid file formats to native CuboidE.
+ * @author Chris
+ *
+ */
+public class Converter {
     protected ArrayList<CuboidShell> shells;
     
     protected CuboidE toCuboidE(CuboidShell shell) {
@@ -35,12 +40,30 @@ public abstract class Converter {
         cube.setWorld(shell.getWorld());
         return cube;
     }
-    public void convert() {
+    private void convert() {
         RegionManager regions = RegionManager.getInstance();
         for(CuboidShell shell : shells) {
-            //Sorting
+            regions.addRoot(toCuboidE(shell));
         }
+        //now that we have all the fancy and unsorted roots added, lets sort them.
+        regions.autoSortCuboidAreas();
     }
     
-    public abstract void loadFiles();
+    /**
+     * This will execute a load with the given cuboid loader and
+     * then write the results to the CuboidSehll arraylist.
+     * Returns false if there were no files to convert
+     * @param loader
+     */
+    public boolean convertFiles(Loader loader) {
+        if(!shells.isEmpty()) {
+            shells.clear();
+        }
+        shells = loader.load();
+        if(shells.size() > 0) {
+            convert();
+            return true;
+        }
+        return false;
+    }
 }

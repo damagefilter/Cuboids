@@ -1,2 +1,9 @@
 TODO:
 add item enchantment interface
+
+- added world factory in server
+- implemented CMob as CanaryMob
+- finished CuboidD converter
+- started some std action handling like block clicking and fire setting etc
+- started adding per-node itemlists for operable items (need to put it into backend and cuboid serialization)
+- finished bootstrapper

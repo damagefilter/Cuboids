@@ -7,6 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import net.playblack.cuboids.Config;
+import net.playblack.cuboids.CuboidSaveTask;
 import net.playblack.cuboids.HMobTask;
 import net.playblack.cuboids.HealThread;
 import net.playblack.cuboids.MessageSystem;
@@ -14,6 +15,7 @@ import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
@@ -40,14 +42,14 @@ public class CuboidInterface {
      */
     private CuboidInterface() {
         regions = RegionManager.getInstance();
-        //properties = new RegionPropertiesManager(r, log);
-        //this.log = log;
         ms = MessageSystem.getInstance();
+        Config cfg = Config.getInstance();
         threadManager.scheduleAtFixedRate(
                 new HMobTask(), 
                 20, 
                 20, 
                 TimeUnit.SECONDS);
+        threadManager.scheduleAtFixedRate(new CuboidSaveTask(), 1, cfg.getSaveDelay(), TimeUnit.MINUTES);
     }
     
     public static CuboidInterface getInstance() {
@@ -807,6 +809,11 @@ public class CuboidInterface {
         else {
             return true;
         }
+    }
+    
+    public boolean isFireProof(Vector position, CWorld world) {
+        CuboidE cube = regions.getActiveCuboid(position, world.getName(),world.getDimension()).getCuboid();
+        return cube.isBlockFireSpread();
     }
     
     /**

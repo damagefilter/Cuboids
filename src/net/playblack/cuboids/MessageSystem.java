@@ -108,6 +108,8 @@ public class MessageSystem {
         messages.put("globalLavaOff", "Global Lavaflow control disabled!");
         messages.put("globalWaterOn", "Global Waterflow control enabled!"); 
         messages.put("globalWaterOff", "Global Waterflow control disabled!");
+        messages.put("firstPointSet", "First point has been set!");
+        messages.put("secondPointSet", "Second point has been set!");
         // *************************************************
         //
         // *************************************************
@@ -175,6 +177,15 @@ public class MessageSystem {
      */
     public void notification(CPlayer player, String message) {
         player.sendMessage(ColorManager.Yellow + message);
+    }
+    
+    /**
+     * Send a message from the messages list in yellow to the player
+     * @param player
+     * @param messageKey
+     */
+    public void yellowNote(CPlayer player, String messageKey) {
+        player.sendMessage(ColorManager.Yellow + messages.get(messageKey));
     }
     
     /**
