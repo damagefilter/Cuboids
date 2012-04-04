@@ -1,6 +1,7 @@
 package net.playblack.cuboids.gameinterface;
 
 import net.playblack.cuboids.blocks.CItem;
+import net.playblack.mcutils.Vector;
 
 public abstract class CPlayer implements IBaseEntity{
     
@@ -65,5 +66,12 @@ public abstract class CPlayer implements IBaseEntity{
      * @param items
      */
     public abstract void setInventory(CItem[] items);
+    
+    /**
+     * Teleport a player to the position v in world world
+     * @param v
+     * @param world
+     */
+    public abstract void teleportTo(Vector v);
     
 }

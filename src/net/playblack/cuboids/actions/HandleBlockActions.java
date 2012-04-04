@@ -14,11 +14,11 @@ public class HandleBlockActions {
      * @param itemId
      * @return True if player can, false otherwise
      */
-    public static boolean handleOperableItems(CPlayer player, int itemId) {
+    public static boolean handleOperableItems(CPlayer player, Vector position, int itemId) {
         if(player.hasPermission("cIgnoreRestrictions")) {
             return true;
         }
-        CuboidE cube = RegionManager.getInstance().getActiveCuboid( player.getPosition(), 
+        CuboidE cube = RegionManager.getInstance().getActiveCuboid( position, 
                                                                     player.getWorld().getName(), 
                                                                     player.getWorld().getDimension()).getCuboid();
         if(cube.playerIsAllowed(player.getName(), player.getGroups())) {

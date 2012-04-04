@@ -671,5 +671,20 @@ public class RegionManager {
     public ArrayList<CuboidNode> getRootNodeList() {
         return rootNodes;
     }
+
+    /**
+     * Effectively remove player from within all areas
+     * @param name
+     */
+    public void removeFromAllAreas(String name) {
+        for(CuboidNode tree : rootNodes) {
+            for(CuboidNode node : tree.toList()) {
+                if(node.getCuboid().playerIsWithin(name)) {
+                    node.getCuboid().removePlayerWithin(name);
+                }
+            }
+        }
+        
+    }
     
 }

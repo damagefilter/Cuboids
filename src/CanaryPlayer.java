@@ -128,5 +128,11 @@ public class CanaryPlayer extends CPlayer {
             //might happen because of derp
         }
     }
+    @Override
+    public void teleportTo(Vector v) {
+        Location location = new Location(player.getWorld(), v.getX(), v.getY(), v.getZ(), player.getRotation(), player.getPitch());
+        player.teleportTo(location);
+        
+    }
 
 }
