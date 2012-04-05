@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class CmodRemove extends BaseCommand {
+public class CmodRemove extends CBaseCommand {
 
     public CmodRemove() {
         super("Remove a new Cuboid: /cmod <area> remove/delete", 3);

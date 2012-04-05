@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class CmodMove extends BaseCommand {
+public class CmodMove extends CBaseCommand {
 
     public CmodMove() {
         super("Move a Cuboid: /cmod <area> move/resize", 3);

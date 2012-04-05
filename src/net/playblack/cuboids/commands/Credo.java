@@ -14,7 +14,7 @@ import net.playblack.mcutils.ToolBox;
  * @author Chris
  *
  */
-public class Credo extends BaseCommand {
+public class Credo extends CBaseCommand {
 
     public Credo() {
         super("Redo block operations: /credo <steps>", 1,2);

@@ -13,6 +13,7 @@ import net.playblack.cuboids.HealThread;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.blocks.CItem;
+import net.playblack.cuboids.gameinterface.CMob;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
@@ -824,6 +825,16 @@ public class CuboidInterface {
     public boolean isTntSecure(Vector position, CWorld world) {
         CuboidE cube = regions.getActiveCuboid(position, world.getName(),world.getDimension()).getCuboid();
         return cube.isTntSecure();
+    }
+    
+    public boolean sanctuarySpawnsMobs(CMob mob) {
+        CuboidE cube = regions.getActiveCuboid(mob.getPosition(), mob.getWorld().getName(), mob.getWorld().getDimension()).getCuboid();
+        return cube.sanctuarySpawnAnimals();
+    }
+    
+    public boolean isSanctuary(Vector position, CWorld world) {
+        CuboidE cube = regions.getActiveCuboid(position, world.getName(), world.getDimension()).getCuboid();
+        return cube.isSanctuary();
     }
     
     /**

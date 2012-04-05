@@ -13,7 +13,7 @@ import net.playblack.mcutils.ToolBox;
  * @author Chris
  *
  */
-public class Cpyramid extends BaseCommand {
+public class Cpyramid extends CBaseCommand {
 
     
     public Cpyramid() {

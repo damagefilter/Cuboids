@@ -15,7 +15,7 @@ import net.playblack.cuboids.selections.CuboidSelection;
  * @author Chris
  *
  */
-public class Cbackup extends BaseCommand {
+public class Cbackup extends CBaseCommand {
 
     public Cbackup() {
         super("Backup a cuboid area: /cbackup <area>", 2);

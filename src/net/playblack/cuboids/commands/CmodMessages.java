@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class CmodMessages extends BaseCommand {
+public class CmodMessages extends CBaseCommand {
 
     private boolean setFarewell = false;
     public CmodMessages(String action) {

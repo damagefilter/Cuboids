@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class Cmod extends BaseCommand {
+public class Cmod extends CBaseCommand {
 
     public Cmod(String action) {
         super("Cmod: /cmod <area> "+action, 3);

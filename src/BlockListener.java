@@ -2,6 +2,7 @@ import java.util.HashSet;
 
 import net.playblack.cuboids.actions.BlockActionHandler;
 import net.playblack.cuboids.actions.BrushHandler;
+import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
@@ -75,6 +76,14 @@ public class BlockListener extends PluginListener {
     }
     
     @Override
+    public boolean onBlockBreak(Player player, Block b) {
+        Vector p = new Vector(b.getX(), b.getY(), b.getZ());
+        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
+        
+        return !CuboidInterface.getInstance().canModifyBlock(cplayer, p);
+    }
+    
+    @Override
     public boolean onBlockPlace(Player player, Block blockPlaced, Block b, Item itemInHand) {
         Vector p = new Vector(b.getX(), b.getY(), b.getZ());
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
@@ -87,7 +96,7 @@ public class BlockListener extends PluginListener {
     public boolean onExplode(Block b, OEntity entity, HashSet blocksaffected) {
         Vector p = new Vector(b.getX(), b.getY(), b.getZ());
         CWorld world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
-        BlockActionHandler.handleExplosions(world, p);
+        return BlockActionHandler.handleExplosions(world, p);
     }
     
     @Override
@@ -95,5 +104,14 @@ public class BlockListener extends PluginListener {
         Vector p = new Vector(b.getX(), b.getY(), b.getZ());
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
         return !BlockActionHandler.handleIgnition(cplayer, p, cplayer.getWorld(), b.getStatus());
+    }
+    
+    @Override
+    public boolean onFlow(Block b, Block blockTo) {
+        Vector p = new Vector(b.getX(), b.getY(), b.getZ());
+        CBlock block = new CBlock(b.getType(), b.getData());
+        CWorld world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
+        
+        return !CuboidInterface.getInstance().canFlow(block, p, world.getName(), world.getDimension());
     }
 }

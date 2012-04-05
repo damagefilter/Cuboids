@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class CmodParent extends BaseCommand {
+public class CmodParent extends CBaseCommand {
 
     public CmodParent() {
         super("Set cuboid parent: /cmod <area> parent <parent_name>", 4);

@@ -10,7 +10,7 @@ import net.playblack.mcutils.ToolBox;
  * @author Chris
  *
  */
-public class CmodPriority extends BaseCommand {
+public class CmodPriority extends CBaseCommand {
 
     public CmodPriority() {
         super("Set cuboid priority: /cmod <area> priority <level>", 4);

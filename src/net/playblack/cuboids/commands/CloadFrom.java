@@ -13,7 +13,7 @@ import net.playblack.mcutils.EventLogger;
  * @author Chris
  *
  */
-public class CloadFrom extends BaseCommand {
+public class CloadFrom extends CBaseCommand {
     public CloadFrom() {
         super("Load cuboids: /cloadfrom <mysql/flatfile>", 2);
     }

@@ -14,7 +14,7 @@ import net.playblack.mcutils.ToolBox;
  * @author Chris
  *
  */
-public class Cundo extends BaseCommand {
+public class Cundo extends CBaseCommand {
 
     public Cundo() {
         super("Undo block operations: /cundo [steps] [player]", 1,3);

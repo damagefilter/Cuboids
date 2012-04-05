@@ -12,7 +12,7 @@ import net.playblack.cuboids.selections.SelectionManager;
  * @author Chris
  *
  */
-public class Cdel extends BaseCommand {
+public class Cdel extends CBaseCommand {
 
     public Cdel() {
         super("Remove contents of a selection: /cdel", 1);

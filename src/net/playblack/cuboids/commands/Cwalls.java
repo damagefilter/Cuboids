@@ -12,7 +12,7 @@ import net.playblack.cuboids.selections.SelectionManager;
  * @author Chris
  *
  */
-public class Cwalls extends BaseCommand {
+public class Cwalls extends CBaseCommand {
 
     private boolean onlyWalls;
     

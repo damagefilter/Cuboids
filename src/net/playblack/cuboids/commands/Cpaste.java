@@ -12,7 +12,7 @@ import net.playblack.cuboids.selections.CuboidSelection;
  * @author Chris
  *
  */
-public class Cpaste extends BaseCommand {
+public class Cpaste extends CBaseCommand {
 
     public Cpaste() {
         super("Paste a selection from clipboard relative to your position: /cpaste", 1);

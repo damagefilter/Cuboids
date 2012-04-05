@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class CmodAllowEntity extends BaseCommand {
+public class CmodAllowEntity extends CBaseCommand {
 
     public CmodAllowEntity() {
         super("Allow an entity in cuboid: /cmod <area> allow <player g:group o:owner>", 4);

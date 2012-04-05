@@ -13,7 +13,7 @@ import net.playblack.mcutils.ToolBox;
  * @author Chris
  *
  */
-public class Csphere extends BaseCommand {
+public class Csphere extends CBaseCommand {
 
     
     public Csphere() {

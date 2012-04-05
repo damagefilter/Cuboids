@@ -9,7 +9,7 @@ import net.playblack.cuboids.selections.SelectionManager;
  * @author Chris
  *
  */
-public class CmodExpand extends BaseCommand {
+public class CmodExpand extends CBaseCommand {
 
     public CmodExpand() {
         super("Expand the current cuboid selection: /cmod expand", 2);

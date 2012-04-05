@@ -12,7 +12,7 @@ import net.playblack.cuboids.selections.SelectionManager;
  * @author Chris
  *
  */
-public class Cmove extends BaseCommand {
+public class Cmove extends CBaseCommand {
 
     public Cmove() {
         super("Move the contents of a selection: /cmove <distance> <NORTH/EAST/SOUTH/WEST/UP/DOWN>", 1);

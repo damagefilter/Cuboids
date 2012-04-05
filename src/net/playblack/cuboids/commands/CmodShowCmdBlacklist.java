@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class CmodShowCmdBlacklist extends BaseCommand {
+public class CmodShowCmdBlacklist extends CBaseCommand {
 
     public CmodShowCmdBlacklist() {
         super("Show blacklisted commands: /cmod <area> cmdblacklist", 3);

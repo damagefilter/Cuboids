@@ -13,7 +13,7 @@ import net.playblack.cuboids.selections.SelectionManager;
  * @author Chris
  *
  */
-public class Ccopy extends BaseCommand {
+public class Ccopy extends CBaseCommand {
 
     public Ccopy() {
         super("Copy a selection into your clipboard: /ccopy", 1);

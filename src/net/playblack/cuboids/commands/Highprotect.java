@@ -13,7 +13,7 @@ import net.playblack.cuboids.selections.SelectionManager;
  * @author Chris
  *
  */
-public class Highprotect extends BaseCommand {
+public class Highprotect extends CBaseCommand {
 
     public Highprotect() {
         super("High-Protect an area: /highprotect <player/group..><area name>", 3);

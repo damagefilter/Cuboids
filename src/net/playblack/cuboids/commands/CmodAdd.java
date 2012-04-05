@@ -13,7 +13,7 @@ import net.playblack.cuboids.selections.SelectionManager;
  * @author Chris
  *
  */
-public class CmodAdd extends BaseCommand {
+public class CmodAdd extends CBaseCommand {
 
     public CmodAdd() {
         super("Add a new Cuboid: /cmod <area> add/create", 3);

@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class Csave extends BaseCommand {
+public class Csave extends CBaseCommand {
     
     private boolean saveAll = false;
     public Csave(boolean saveAll) {

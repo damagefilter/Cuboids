@@ -8,7 +8,7 @@ import net.playblack.cuboids.gameinterface.CPlayer;
  * @author Chris
  *
  */
-public abstract class BaseCommand {
+public abstract class CBaseCommand {
     protected String toolTip;
     protected int minParams;
     protected int maxParams;
@@ -19,7 +19,7 @@ public abstract class BaseCommand {
      * @param minParams
      * @param maxParams
      */
-    public BaseCommand(String toolTip, int minParams, int maxParams) {
+    public CBaseCommand(String toolTip, int minParams, int maxParams) {
         this.toolTip = toolTip;
         this.minParams = minParams;
         this.maxParams = maxParams;
@@ -30,7 +30,7 @@ public abstract class BaseCommand {
      * @param toolTip
      * @param minParams
      */
-    public BaseCommand(String toolTip, int minParams) {
+    public CBaseCommand(String toolTip, int minParams) {
         this.toolTip = toolTip;
         this.minParams = minParams;
         this.maxParams = -1;

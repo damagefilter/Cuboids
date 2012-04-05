@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class ToggleAreaProperty extends BaseCommand {
+public class ToggleAreaProperty extends CBaseCommand {
 
     public ToggleAreaProperty() {
         super("Toggle Area properties: /cmod <area> toggle <property>", 4);

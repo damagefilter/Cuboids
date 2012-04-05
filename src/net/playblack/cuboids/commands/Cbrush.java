@@ -12,7 +12,7 @@ import net.playblack.mcutils.ToolBox;
  * @author Chris
  *
  */
-public class Cbrush extends BaseCommand {
+public class Cbrush extends CBaseCommand {
 
     public Cbrush() {
         super("Set the property of a brush: /cbrush <radius> <block>:[data]", 3);

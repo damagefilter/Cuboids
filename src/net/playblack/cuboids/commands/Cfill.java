@@ -12,7 +12,7 @@ import net.playblack.cuboids.selections.SelectionManager;
  * @author Chris
  *
  */
-public class Cfill extends BaseCommand {
+public class Cfill extends CBaseCommand {
 
     public Cfill() {
         super("Fill a selection: /cfill <block id>:[data]", 2);

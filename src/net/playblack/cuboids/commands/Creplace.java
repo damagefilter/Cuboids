@@ -12,7 +12,7 @@ import net.playblack.cuboids.selections.SelectionManager;
  * @author Chris
  *
  */
-public class Creplace extends BaseCommand {
+public class Creplace extends CBaseCommand {
 
     public Creplace() {
         super("Replace blocks in a selection: /creplace <block>:[data] <substitute>:[data]", 3);

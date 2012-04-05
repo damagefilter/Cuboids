@@ -166,17 +166,14 @@ public class BlockActionHandler {
     }
     
     /**
-     * Check if a player can place a block
+     * Handle explosions
      * @param player
      * @param position
      * @return
      */
     public static boolean handleExplosions(CWorld world, Vector position) {
         CuboidInterface ci = CuboidInterface.getInstance();
-        if(ci.isCreeperSecure(position, world)) {
-            return true;
-        }
-        else if(ci.isTntSecure(position, world)) {
+        if(ci.isCreeperSecure(position, world) || ci.isTntSecure(position, world)) {
             return true;
         }
         else {

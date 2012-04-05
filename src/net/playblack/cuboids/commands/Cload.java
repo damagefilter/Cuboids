@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class Cload extends BaseCommand {
+public class Cload extends CBaseCommand {
     public Cload() {
         super("Load a cuboid: /cload <area>", 2);
     }

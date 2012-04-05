@@ -11,7 +11,7 @@ import net.playblack.cuboids.regions.RegionManager;
  * @author Chris
  *
  */
-public class ToggleGlobalProperty extends BaseCommand {
+public class ToggleGlobalProperty extends CBaseCommand {
 
     public ToggleGlobalProperty() {
         super("Toggle Global properties: /cmod toggle <property>", 4);

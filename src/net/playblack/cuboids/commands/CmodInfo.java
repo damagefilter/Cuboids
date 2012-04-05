@@ -8,7 +8,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  * @author Chris
  *
  */
-public class CmodInfo extends BaseCommand {
+public class CmodInfo extends CBaseCommand {
 
     public CmodInfo() {
         super("Explain a Cuboid: /cmod <area> info", 3);

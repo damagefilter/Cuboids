@@ -13,7 +13,7 @@ import net.playblack.mcutils.Vector;
  * @author Chris
  *
  */
-public class Cfloor extends BaseCommand {
+public class Cfloor extends CBaseCommand {
 
     public Cfloor() {
         super("Set floorlevel, use -r: player pos - height: /cfloor <height> [-r]", 2,3);

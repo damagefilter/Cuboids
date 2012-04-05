@@ -13,7 +13,7 @@ import net.playblack.mcutils.ToolBox;
  * @author Chris
  *
  */
-public class Cdisc extends BaseCommand {
+public class Cdisc extends CBaseCommand {
 
     private boolean fill;
     

@@ -13,7 +13,7 @@ import net.playblack.mcutils.Vector;
  * @author Chris
  *
  */
-public class Cceiling extends BaseCommand {
+public class Cceiling extends CBaseCommand {
 
     public Cceiling() {
         super("Set ceiling level, use -r: player pos + height: /cceiling <height> [-r]", 2,3);

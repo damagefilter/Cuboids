@@ -9,7 +9,7 @@ import net.playblack.mcutils.ToolBox;
  * @author Chris
  *
  */
-public class CmodList extends BaseCommand {
+public class CmodList extends CBaseCommand {
 
     public CmodList() {
         super("List areas in the recent world: /cmod list [page]", 2,3);

@@ -14,7 +14,7 @@ import net.playblack.cuboids.selections.CuboidSelection;
  * @author Chris
  *
  */
-public class Crestore extends BaseCommand {
+public class Crestore extends CBaseCommand {
 
     public Crestore() {
         super("Restore a cuboid area from backup: /crestore <area>", 2);

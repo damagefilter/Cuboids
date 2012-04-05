@@ -13,7 +13,7 @@ import net.playblack.cuboids.selections.SelectionManager;
  * @author Chris
  *
  */
-public class Protect extends BaseCommand {
+public class Protect extends CBaseCommand {
 
     public Protect() {
         super("Protect an area: /protect <player/group..><area name>", 3);
