@@ -816,6 +816,16 @@ public class CuboidInterface {
         return cube.isBlockFireSpread();
     }
     
+    public boolean isCreeperSecure(Vector position, CWorld world) {
+        CuboidE cube = regions.getActiveCuboid(position, world.getName(),world.getDimension()).getCuboid();
+        return cube.isCreeperSecure();
+    }
+    
+    public boolean isTntSecure(Vector position, CWorld world) {
+        CuboidE cube = regions.getActiveCuboid(position, world.getName(),world.getDimension()).getCuboid();
+        return cube.isTntSecure();
+    }
+    
     /**
      * Check if that command is on the restricted commands list
      * @param player

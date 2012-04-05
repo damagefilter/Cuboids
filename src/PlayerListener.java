@@ -1,5 +1,5 @@
 import net.playblack.cuboids.SessionManager;
-import net.playblack.cuboids.actions.HandleBlockActions;
+import net.playblack.cuboids.actions.BlockActionHandler;
 import net.playblack.cuboids.actions.HandleDamage;
 import net.playblack.cuboids.actions.HandlePlayerMovement;
 import net.playblack.cuboids.gameinterface.CPlayer;
@@ -80,11 +80,11 @@ public class PlayerListener extends PluginListener {
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
         //25d == flint&steel
         if(item.getItemId() == 259) {
-            return !HandleBlockActions.handleLighter(cplayer, new Vector(blockClicked.getX(), blockClicked.getY(), blockClicked.getZ()));
+            return !BlockActionHandler.handleLighter(cplayer, new Vector(blockClicked.getX(), blockClicked.getY(), blockClicked.getZ()));
         }
         if(item.getItemId() == 326 || item.getItemId() == 327) {
             Vector v = new Vector(blockPlaced.getX(), blockPlaced.getY(), blockPlaced.getZ());
-            return !HandleBlockActions.handleOperableItems(cplayer, v, item.getItemId());
+            return !BlockActionHandler.handleOperableItems(cplayer, v, item.getItemId());
         }
         return false;
     }
