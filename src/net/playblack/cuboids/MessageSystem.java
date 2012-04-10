@@ -144,6 +144,8 @@ public class MessageSystem {
         errors.put("priorityNotSet", "Cuboid Priority has not been set");
         errors.put("parentNotSet", "Cuboids parent has not been set");
         errors.put("notWithinSpecifiedParent", "Cuboid is not within the specified parent node.");
+        errors.put("invalidAreaProperty", "Unknown area property. Did not toggle!");
+        errors.put("invalidGlobalProperty", "Unknown global property. Did not toggle!");
     }
     public static MessageSystem getInstance() {
         if(ms == null) {

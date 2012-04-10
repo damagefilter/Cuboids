@@ -55,6 +55,9 @@ public class PlayerListener extends PluginListener {
     
     @Override
     public boolean onDamage(PluginLoader.DamageType type, BaseEntity attacker, BaseEntity defender, int amount) {
+        if(attacker == null) {
+            return false;
+        }
         if(defender.isPlayer()) {
             if(attacker.isMob()) {
                 Player p = defender.getPlayer();

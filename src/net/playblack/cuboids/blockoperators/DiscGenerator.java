@@ -64,11 +64,7 @@ public class DiscGenerator extends BaseGen {
     
     private void createDisc() {
         Vector center = selection.getOrigin();
-        if(selection.getOffset() == null) {
-            //A little work around to evaluate true
-            //when modifyWorld is issued as it needs the selection to be complete
-            selection.setOffset(center);
-        }
+        selection.clearBlocks();
         int Xmin = center.getBlockX() - radius;
         int Xmax = center.getBlockX() + radius;
         int Ymin = (height + center.getBlockY() >= center.getBlockY()) ? center.getBlockY() : height + center.getBlockY();
@@ -94,12 +90,12 @@ public class DiscGenerator extends BaseGen {
     @Override
     public boolean execute(CPlayer player, boolean newHistory) {
         createDisc();
-        CuboidSelection world = scanWorld(true);
+        CuboidSelection world = scanWorld(true, false);
         
         if(newHistory) {
             SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
-        boolean result = modifyWorld();
+        boolean result = modifyWorld(false);
         return result;
     }
 }

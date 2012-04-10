@@ -2,6 +2,7 @@ package net.playblack.cuboids;
 
 import net.playblack.cuboids.converters.Converter;
 import net.playblack.cuboids.converters.Loader;
+import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.RegionManager;
@@ -25,21 +26,21 @@ public class Bootstrapper {
         log.logMessage("Loading ...", "INFO");
         
         //------------------------------------------------------
-        log.cacheMessage("Configuration ...", true);
+        log.cacheMessage("Configuration ...", false);
         Config.getInstance(); //init this thing for a first time
-        log.cacheMessage("done!", true);
+        log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
         
         //------------------------------------------------------
         log.cacheMessage("Server interface... ", false);
         CServer.setServer(server);
-        log.cacheMessage("done!", true);
+        log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
         
         //------------------------------------------------------
-        log.cacheMessage("Tasks ...", true);
+        log.cacheMessage("Tasks ...", false);
         CuboidInterface.getInstance(); //init this thing for a first time
-        log.cacheMessage("done!", true);
+        log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
         
         //------------------------------------------------------
@@ -57,17 +58,18 @@ public class Bootstrapper {
             }
         }
         if(hasConverted) {
-            log.cacheMessage("done", true);
+            log.cacheMessage("done", false);
         }
         else {
-            log.cacheMessage("Nothing foreign to load found", true);
+            log.cacheMessage("Nothing foreign to load found", false);
         }
         log.logCachedMessage("INFO");
         
         //------------------------------------------------------
         log.cacheMessage("Native Cuboid Nodes...", true);
         RegionManager.getInstance().load();
-        log.cacheMessage("done!", true);
+        log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
+        FlatfileDataLegacy.cleanupFiles();
     }
 }

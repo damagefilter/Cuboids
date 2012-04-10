@@ -36,8 +36,9 @@ public class Cundo extends CBaseCommand {
             ms.failMessage(player, "undoDisabled");
             return; //from a morality standpoint, this should never be disabled but there you go.
         }
-        int steps;
+        int steps=1;
         String subject = player.getName();
+        
         if(command.length == 3) {
             subject = command[2];
             steps = ToolBox.parseInt(command[1]);
@@ -45,11 +46,10 @@ public class Cundo extends CBaseCommand {
                 steps = 1;
             }
         }
-        if(command.length == 2) {
+        else if(command.length == 2) {
             steps = ToolBox.parseInt(command[1]);
-            if(steps == -1) {
+            if(steps < 1) {
                 steps = 1;
-                subject = command[1];
             }
         }
         else {
@@ -60,7 +60,6 @@ public class Cundo extends CBaseCommand {
             CuboidSelection sel = SessionManager.getInstance().getPlayerHistory(subject).undo();
             if(sel == null) {
                 ms.notification(player, "Nothing left to undo!");
-                ms.successMessage(player, "undoDone");
                 return;
             }
             GenericGenerator gen = new GenericGenerator(sel, player.getWorld());

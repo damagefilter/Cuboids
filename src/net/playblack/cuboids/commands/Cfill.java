@@ -47,7 +47,7 @@ public class Cfill extends CBaseCommand {
         //Create the block generator
         CuboidGenerator gen = new CuboidGenerator(template, player.getWorld());
         gen.setBlock(b);
-        if(gen.execute(player, false)) {
+        if(gen.execute(player, true)) {
             ms.successMessage(player, "selectionFilled");
         }
         else {

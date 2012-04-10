@@ -50,6 +50,9 @@ public class SessionManager {
      * @return
      */
     public HistoryTimeline getPlayerHistory(String name) {
+        if(!playerHistories.containsKey(name)) {
+            playerHistories.put(name, new HistoryTimeline());
+        }
         return playerHistories.get(name);
     }
     

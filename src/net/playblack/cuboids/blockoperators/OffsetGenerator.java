@@ -118,12 +118,17 @@ public class OffsetGenerator extends BaseGen {
     }
     @Override
     public boolean execute(CPlayer player, boolean newHistory) {
+        selection.clearBlocks();
+        scanWorld(false, true);
         calculateOffset();
-        CuboidSelection world = scanWorld(true);
+        CuboidSelection world = scanWorld(true, true);
+        if(world == null) {
+            return false;
+        }
         if(newHistory) {
             SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
-        boolean result = modifyWorld();
+        boolean result = modifyWorld(true);
         return result;
     }
 }

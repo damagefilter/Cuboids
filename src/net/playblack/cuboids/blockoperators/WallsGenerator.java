@@ -61,6 +61,9 @@ public class WallsGenerator extends BaseGen {
     }
     
     private CuboidSelection createWalls() {
+        if(!selection.isComplete()) {
+            return null;
+        }
         selection.sortEdges(true);
         CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset());
         synchronized (lock) {
@@ -94,13 +97,19 @@ public class WallsGenerator extends BaseGen {
     }
     @Override
     public boolean execute(CPlayer player, boolean newHistory) {
-        createWalls();
-        CuboidSelection world = scanWorld(true);
-        
+        selection.clearBlocks();
+        selection = createWalls();
+        if(selection == null) {
+            return false;
+        }
+        CuboidSelection world = scanWorld(true, true);
+        if(world == null) {
+            return false;
+        }
         if(newHistory) {
             SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
-        boolean result = modifyWorld();
+        boolean result = modifyWorld(true);
         return result;
     }
 }

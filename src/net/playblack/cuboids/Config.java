@@ -61,7 +61,7 @@ public class Config {
     
     private static Config instance = null;
     private Config() {
-        PropsFile pluginSetting = new PropsFile("plugins/cuboids2/setting.properties");
+        PropsFile pluginSetting = new PropsFile("plugins/cuboids2/settings.properties");
         PropsFile cuboidSetting = new PropsFile("plugins/cuboids2/cuboid.properties");
         PropsFile dsSetting = new PropsFile("plugins/cuboids2/data.properties");
         

@@ -76,6 +76,9 @@ public class CanaryPlayer extends CPlayer {
     @Override
     public CItem getItemInHand() {
         Item i = player.getItemStackInHand();
+        if(i == null) {
+            return new CItem(0,(short)0,0);
+        }
         return new CItem(i.getItemId(), (short)i.getDamage(), i.getSlot());
     }
 

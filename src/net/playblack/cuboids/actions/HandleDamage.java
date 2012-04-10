@@ -2,7 +2,7 @@ package net.playblack.cuboids.actions;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
-import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.mcutils.Vector;
 
 public class HandleDamage {
@@ -14,11 +14,7 @@ public class HandleDamage {
      * @return
      */
     public static boolean handleMobDamage(Vector position, CWorld world) {
-        boolean sanctuary = RegionManager.getInstance()
-                .getActiveCuboid(position, world.getName(), world.getDimension())
-                .getCuboid()
-                .isSanctuary();
-        if(sanctuary) {
+        if(CuboidInterface.getInstance().isSanctuary(position, world)) {
             return false;
         }
         return true;
@@ -31,11 +27,7 @@ public class HandleDamage {
      * @return
      */
     public static boolean handlePvpDamage(CPlayer attacker, CPlayer defender) {
-        boolean pvpSecure = RegionManager.getInstance()
-                .getActiveCuboid(defender.getPosition(), defender.getWorld().getName(), defender.getWorld().getDimension())
-                .getCuboid()
-                .isAllowedPvp();
-        if(pvpSecure) {
+        if(!CuboidInterface.getInstance().isPvpEnabled(defender.getPosition(), defender.getWorld())) {
             if(attacker.hasPermission("cIgnoreRestrictions")) {
                 return true;
             }

@@ -14,7 +14,7 @@ import net.playblack.cuboids.regions.RegionManager;
 public class ToggleGlobalProperty extends CBaseCommand {
 
     public ToggleGlobalProperty() {
-        super("Toggle Global properties: /cmod toggle <property>", 4);
+        super("Toggle Global properties: /cmod toggle <property>", 3);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ToggleGlobalProperty extends CBaseCommand {
             }
         }
         
-        if(command[2].equalsIgnoreCase("creeper")) {
+        else if(command[2].equalsIgnoreCase("creeper")) {
             if(setting.isCreeperSecure()) {
                 setting.setCreeperSecure(false);
                 MessageSystem.getInstance().successMessage(player, "globalCreeperOff");
@@ -48,7 +48,7 @@ public class ToggleGlobalProperty extends CBaseCommand {
             }
         }
         
-        if(command[2].equalsIgnoreCase("sanctuary")) {
+        else if(command[2].equalsIgnoreCase("sanctuary")) {
             if(setting.isSanctuary()) {
                 setting.setSanctuary(false);
                 MessageSystem.getInstance().successMessage(player, "globalSanctuaryOff");
@@ -58,7 +58,7 @@ public class ToggleGlobalProperty extends CBaseCommand {
             }
         }
         
-        if(command[2].equalsIgnoreCase("animalspawn")) {
+        else if(command[2].equalsIgnoreCase("animalspawn")) {
             if(setting.sanctuarySpawnAnimals()) {
                 setting.setSanctuarySpawnAnimals(false);
                 MessageSystem.getInstance().successMessage(player, "globalSanctuaryASOff");
@@ -68,7 +68,7 @@ public class ToggleGlobalProperty extends CBaseCommand {
             }
         }
         
-        if(command[2].equalsIgnoreCase("tnt")) {
+        else if(command[2].equalsIgnoreCase("tnt")) {
             if(setting.isTntSecure()) {
                 setting.setTntSecure(false);
                 MessageSystem.getInstance().successMessage(player, "globalTntOff");
@@ -78,7 +78,7 @@ public class ToggleGlobalProperty extends CBaseCommand {
             }
         }
         
-        if(command[2].equalsIgnoreCase("protection") || command[2].equalsIgnoreCase("protect")) {
+        else if(command[2].equalsIgnoreCase("protection") || command[2].equalsIgnoreCase("protect")) {
             if(setting.isProtected()) {
                 setting.setProtection(false);
                 MessageSystem.getInstance().successMessage(player, "globalProtectionOff");
@@ -87,7 +87,7 @@ public class ToggleGlobalProperty extends CBaseCommand {
                 MessageSystem.getInstance().successMessage(player, "globalProtectionOn");
             }
         }
-        if(command[2].equalsIgnoreCase("lava") || command[2].equalsIgnoreCase("lavaflow")) {
+        else if(command[2].equalsIgnoreCase("lava") || command[2].equalsIgnoreCase("lavaflow")) {
             if(setting.isLavaControl()) {
                 setting.setLavaControl(false);
                 MessageSystem.getInstance().successMessage(player, "globalLavaOff");
@@ -97,7 +97,7 @@ public class ToggleGlobalProperty extends CBaseCommand {
             }
         }
         
-        if(command[2].equalsIgnoreCase("water") || command[2].equalsIgnoreCase("waterflow")) {
+        else if(command[2].equalsIgnoreCase("water") || command[2].equalsIgnoreCase("waterflow")) {
             if(setting.isWaterControl()) {
                 setting.setLavaControl(false);
                 MessageSystem.getInstance().successMessage(player, "globalWaterOff");
@@ -105,6 +105,10 @@ public class ToggleGlobalProperty extends CBaseCommand {
                 setting.setWaterControl(true);
                 MessageSystem.getInstance().successMessage(player, "globalWaterOn");
             }
+        }
+        else {
+            MessageSystem.getInstance().failMessage(player, "invalidGlobalProperty");
+            return; //prevent config updating - not needed here
         }
         Config.getInstance().updateGlobalSettings(setting);
         RegionManager.getInstance().updateGlobalSettings();

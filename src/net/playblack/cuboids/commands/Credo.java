@@ -50,8 +50,8 @@ public class Credo extends CBaseCommand {
         for(int i = 0; i<steps;i++) {
             CuboidSelection sel = SessionManager.getInstance().getPlayerHistory(player.getName()).redo();
             if(sel == null) {
-                ms.notification(player, "Nothing more to redo recorded!");
-                ms.successMessage(player, "redoDone");
+                ms.notification(player, "Nothing lef to redo!");
+                //ms.successMessage(player, "redoDone");
                 return;
             }
             GenericGenerator gen = new GenericGenerator(sel, player.getWorld());

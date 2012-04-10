@@ -27,9 +27,9 @@ public class BlockListener extends PluginListener {
         boolean pointResult = BlockActionHandler.handleSetPoints(
                 cplayer, 
                 p, 
-                true);
+                true, false);
         if(!pointResult) {
-            return BlockActionHandler.handleOperableItems(
+            return !BlockActionHandler.handleOperableItems(
                     cplayer, 
                     p, 
                     b.getType());
@@ -50,7 +50,7 @@ public class BlockListener extends PluginListener {
         HitBlox hb = new HitBlox(player);
         Block b = hb.getFaceBlock();
         Vector p = new Vector(b.getX(), b.getY(), b.getZ());
-        BlockActionHandler.handleSetPoints(cplayer, p, false);
+        BlockActionHandler.handleSetPoints(cplayer, p, false, true);
         BrushHandler.handleBrush(cplayer, p);
         theTime = System.currentTimeMillis(); //Set time counter
     }
@@ -63,9 +63,9 @@ public class BlockListener extends PluginListener {
         boolean pointResult = BlockActionHandler.handleSetPoints(
                 cplayer, 
                 p, 
-                true);
+                false, false);
         if(!pointResult) {
-            return BlockActionHandler.handleOperableItems(
+            return !BlockActionHandler.handleOperableItems(
                     cplayer, 
                     p, 
                     b.getType());
@@ -87,7 +87,6 @@ public class BlockListener extends PluginListener {
     public boolean onBlockPlace(Player player, Block blockPlaced, Block b, Item itemInHand) {
         Vector p = new Vector(b.getX(), b.getY(), b.getZ());
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
-        
         return !CuboidInterface.getInstance().canModifyBlock(cplayer, p);
     }
     
@@ -102,8 +101,17 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onIgnite(Block b, Player player) {
         Vector p = new Vector(b.getX(), b.getY(), b.getZ());
-        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
-        return !BlockActionHandler.handleIgnition(cplayer, p, cplayer.getWorld(), b.getStatus());
+        CPlayer cplayer = null;
+        CWorld world = null;
+        
+        if(player != null) {
+            cplayer = CServer.getServer().getPlayer(player.getName());
+            world = cplayer.getWorld();
+        }
+        else {
+            world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
+        }
+        return !BlockActionHandler.handleIgnition(cplayer, p, world, b.getStatus());
     }
     
     @Override
@@ -111,7 +119,6 @@ public class BlockListener extends PluginListener {
         Vector p = new Vector(b.getX(), b.getY(), b.getZ());
         CBlock block = new CBlock(b.getType(), b.getData());
         CWorld world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
-        
-        return !CuboidInterface.getInstance().canFlow(block, p, world.getName(), world.getDimension());
+        return !BlockActionHandler.handleFlow(block, p, world);
     }
 }

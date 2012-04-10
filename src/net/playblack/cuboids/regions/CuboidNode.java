@@ -143,7 +143,21 @@ public class CuboidNode {
      * @return
      */
     public ArrayList<CuboidNode> toList() {
-        return null;
+        ArrayList<CuboidNode>  list = new ArrayList<CuboidNode>(0);
+        traverse(this, list);
+        return list;
+    }
+    
+    /**
+     * pre-order traversal, yay :D
+     * @param element
+     * @param list
+     */
+    private void traverse(CuboidNode element, ArrayList<CuboidNode> list) {
+        list.add(element);
+        for (CuboidNode data : element.getChilds()) {
+            traverse(data, list);
+        }
     }
     
     /**

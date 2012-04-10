@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.CuboidNode;
 import net.playblack.cuboids.regions.RegionManager;
@@ -60,6 +61,7 @@ public class MysqlData implements BaseData {
 						"`world` varchar(45) DEFAULT NULL," +
 						"`dimension` int(1) DEFAULT NULL," +
 						"`hmob` varchar(5) DEFAULT NULL, " +
+						"`tabuItems` varchar(500) DEFAULT NULL, " +
 						"PRIMARY KEY (`id`)" +
 						") ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1");
 				ps.execute();
@@ -115,6 +117,19 @@ public class MysqlData implements BaseData {
 		}
 		return csv.toString();
 	}
+	
+	private String integerListToCsv(ArrayList<Integer> list) {
+        StringBuilder csv = new StringBuilder();
+        if(!list.isEmpty() && list != null) {
+            for(Integer entry : list) {
+                csv.append(entry).append(",");
+            }
+        }
+        if(csv.length() > 0) {
+            csv.deleteCharAt(csv.length()-1);
+        }
+        return csv.toString();
+    }
 	/**
 	 * Check if the given Node has a save in the database already
 	 * @param node
@@ -169,11 +184,13 @@ public class MysqlData implements BaseData {
 				" wheatControl=?," +
 				" world=?," +
 				" dimension=?," +
-				" hmob=?" +
+				" hmob=?," +
+				" tabuItems=?" +
 				" WHERE name=? AND world=? AND dimension=?");
-		ps.setInt(29, cube.getDimension());
-		ps.setString(28, ""+cube.getDimension());
-		ps.setString(27, ""+cube.getName());
+		ps.setInt(30, cube.getDimension());
+		ps.setString(29, ""+cube.getWorld());
+		ps.setString(28, ""+cube.getName());
+		ps.setString(27, ""+integerListToCsv(cube.getRestrictedItems()));
 		ps.setString(26, ""+cube.ishMob());
 		ps.setInt(25, cube.getDimension());
 		ps.setString(24, ""+cube.getWorld());
@@ -181,7 +198,7 @@ public class MysqlData implements BaseData {
 		ps.setString(22, ""+cube.getWelcome());
 		ps.setString(21, ""+cube.isWaterControl());
 		ps.setString(20, ""+cube.isTntSecure());
-		ps.setString(19, ""+listToCsv(cube.tabuCommands));
+		ps.setString(19, ""+listToCsv(cube.getTabuCommands()));
 		ps.setString(18, ""+cube.sanctuarySpawnAnimals());
 		ps.setString(17, ""+cube.isSanctuary());
 		ps.setString(16, ""+cube.isRestricted());
@@ -236,7 +253,8 @@ public class MysqlData implements BaseData {
 				"wheatControl," +
 				"world, " +
 				"dimension, " +
-				"hmob)" +
+				"hmob," +
+				"tabuItems)" +
 				
 				"VALUES(" +
 				"?," +
@@ -263,7 +281,10 @@ public class MysqlData implements BaseData {
 				"?," +
 				"?," +
 				"?," +
+				"?," +
+				"?," +
 				"?)");
+		ps.setString(27, this.integerListToCsv(cube.getRestrictedItems()));
 		ps.setString(26, ""+cube.ishMob());
 		ps.setInt(25, cube.getDimension());
 		ps.setString(24, ""+cube.getWorld());
@@ -271,7 +292,7 @@ public class MysqlData implements BaseData {
 		ps.setString(22, ""+cube.getWelcome());
 		ps.setString(21, ""+cube.isWaterControl());
 		ps.setString(20, ""+cube.isTntSecure());
-		ps.setString(19, ""+listToCsv(cube.tabuCommands));
+		ps.setString(19, ""+listToCsv(cube.getTabuCommands()));
 		ps.setString(18, ""+cube.sanctuarySpawnAnimals());
 		ps.setString(17, ""+cube.isSanctuary());
 		ps.setString(16, ""+cube.isRestricted());
@@ -321,8 +342,28 @@ public class MysqlData implements BaseData {
 			if(ToolBox.stringToNull(rs.getString("welcome")) != null) {
 				cube.setWelcome(ToolBox.stringToNull(rs.getString("welcome")));
 			}
-			cube.setWorld(rs.getString("world"));
-			cube.setDimension(rs.getInt("dimension"));
+			
+			// ---------------------- LEGACY LOADING ------------------------
+			String world = rs.getString("world");
+			if(world.equalsIgnoreCase("NORMAL")) {
+			    cube.setDimension(0);
+			    cube.setWorld(CServer.getServer().getDefaultWorld().getName());
+			}
+			else if(world.equalsIgnoreCase("NETHER")) {
+			    cube.setDimension(-1);
+			    cube.setWorld(CServer.getServer().getDefaultWorld().getName());
+			}
+			else if(world.equalsIgnoreCase("END")) {
+                cube.setDimension(1);
+                cube.setWorld(CServer.getServer().getDefaultWorld().getName());
+            }
+			else {
+			    cube.setDimension(rs.getInt("dimension"));
+			    cube.setWorld(world);
+			}
+	         // ---------------------- LEGACY LOADING END ------------------------
+			
+			
 			cube.sethMob(ToolBox.stringToBoolean(rs.getString("hmob")));
 			
 			/* ***********************************************************
@@ -354,6 +395,8 @@ public class MysqlData implements BaseData {
 			if(!rs.getString("groupList").equalsIgnoreCase("no_groups")) {
 				cube.addGroup(rs.getString("groupList"));
 			}
+			cube.addRestrictedItem(rs.getString("tabuItems"));
+			cube.addTabuCommand(rs.getString("tabuCommands"));
 			list.add(cube);
 		}
 		return list;
@@ -386,7 +429,7 @@ public class MysqlData implements BaseData {
 		}
 		for(CuboidNode tree : treeList) {
 			for(CuboidNode node : tree.toList()) {
-				if(node.getCuboid().hasChanged || force == true) {					
+				if(node.getCuboid().hasChanged || force == true) {
 					saveCuboid(node);
 				}
 			}
@@ -406,6 +449,7 @@ public class MysqlData implements BaseData {
 		}
 		catch(SQLException e) {
 			log.logMessage("Cuboids2: Failed to load Cuboid Nodes. Reason: "+e.getMessage(), "SEVERE");
+			e.printStackTrace();
 			return;
 		}
 		//turning into a node list
@@ -441,7 +485,7 @@ public class MysqlData implements BaseData {
 		//Sorting parents here:
 		for(int i = 0; i < nodelist.size(); i++) {
 			if(nodelist.get(i).getCuboid().getParent() != null) {
-				CuboidNode parent = handler.getCuboidByName(nodelist.get(i).getParent(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension());
+				CuboidNode parent = handler.getCuboidNodeByName(nodelist.get(i).getParent(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension());
 				if(parent != null
 						&& !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
 					parent.addChild(nodelist.get(i));

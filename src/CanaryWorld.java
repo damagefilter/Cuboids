@@ -165,7 +165,6 @@ public class CanaryWorld extends CWorld {
                 
             }
         }
-
     }
 
     @Override

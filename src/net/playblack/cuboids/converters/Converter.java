@@ -56,8 +56,8 @@ public class Converter {
      * @param loader
      */
     public boolean convertFiles(Loader loader) {
-        if(!shells.isEmpty()) {
-            shells.clear();
+        if(shells == null || !shells.isEmpty()) {
+            shells = new ArrayList<CuboidShell>();
         }
         shells = loader.load();
         if(shells.size() > 0) {

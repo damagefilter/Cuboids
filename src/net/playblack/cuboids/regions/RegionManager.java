@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.datasource.BaseData;
+import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
@@ -14,7 +15,7 @@ import net.playblack.mcutils.Vector;
  *
  */
 public class RegionManager {
-    private ArrayList<CuboidNode> rootNodes;
+    private ArrayList<CuboidNode> rootNodes = new ArrayList<CuboidNode>(15);
     public EventLogger log;
     private BaseData dataSource;
     private ArrayList<CuboidNode> nodeList = new ArrayList<CuboidNode>();
@@ -52,6 +53,8 @@ public class RegionManager {
      * Load all cuboids from the data source
      */
     public void load() {
+        //load for old files
+        new FlatfileDataLegacy(log).loadAll(this);
         dataSource.loadAll(this);
     }
     
@@ -80,7 +83,7 @@ public class RegionManager {
      * @return
      */
     public boolean saveSingle(String name, String world, int dimension) {      
-        dataSource.saveCuboid(getCuboidByName(name, world, dimension));
+        dataSource.saveCuboid(getCuboidNodeByName(name, world, dimension));
         return true;
     }
     
@@ -200,7 +203,7 @@ public class RegionManager {
                 return "REMOVED";
               }
 
-              CuboidNode parent = getCuboidByName(node.getParent(), node.getWorld(), node.getDimension());
+              CuboidNode parent = getCuboidNodeByName(node.getParent(), node.getWorld(), node.getDimension());
               if (parent != null) {
                   //Cuboid as a parent so we take it and remove the cuboid from the parents child list
                 parent.getChilds().remove(node);
@@ -222,7 +225,7 @@ public class RegionManager {
                     return "REMOVED";
                   }
 
-                  CuboidNode parent = getCuboidByName(node.getParent(), node.getWorld(), node.getDimension());
+                  CuboidNode parent = getCuboidNodeByName(node.getParent(), node.getWorld(), node.getDimension());
                   if (parent != null) {
                       //We have a parent
                       for(CuboidNode childNode : node.getChilds()) {
@@ -247,7 +250,7 @@ public class RegionManager {
                     child.getCuboid().setParent(ToolBox.stringToNull("null"));
                     addRoot(child);
                     saveSingle(child);
-                    parentNode = getCuboidByName(child.getParent(), 
+                    parentNode = getCuboidNodeByName(child.getParent(), 
                       child.getWorld(), child.getDimension());
                     
                     if (parentNode != null) {
@@ -260,7 +263,7 @@ public class RegionManager {
                   return "REMOVED";
                 }
                 else {
-                    CuboidNode parent = getCuboidByName(node.getParent(), node.getWorld(), node.getDimension());
+                    CuboidNode parent = getCuboidNodeByName(node.getParent(), node.getWorld(), node.getDimension());
                     for (CuboidNode child : node.getChilds()) {
                         //Make childs root nodes
                       //child.getCuboid().setParent(ToolBox.stringToNull("null"));
@@ -342,7 +345,7 @@ public class RegionManager {
         for(CuboidNode tree : rootNodes) {
             for(CuboidNode node : tree.toList()) {
                 //parent = null;
-                parent = getCuboidByName(node.getParent(), node.getWorld(), node.getDimension());
+                parent = getCuboidNodeByName(node.getParent(), node.getWorld(), node.getDimension());
                 if(parent != null) {
                     //Check if the child is truley completely inside its parent
                     if (!node.getCuboid().cuboidIsWithin(parent.getCuboid(), true)) {
@@ -481,13 +484,17 @@ public class RegionManager {
      * *********************************************************************************
      */
     
+    
     /**
      * This will return the cuboid with the highest priority at the Vector given
      * or the global settings if there was no cuboid at the given vector
-     * 
-     * @return CuboidE
+     * @param v
+     * @param world
+     * @param dimension
+     * @param ignoreGlobal set true if you don't want to have the global settings to be passed along
+     * @return
      */
-    public CuboidNode getActiveCuboid(Vector v, String world, int dimension) {
+    public CuboidNode getActiveCuboid(Vector v, String world, int dimension, boolean ignoreGlobal) {
         nodeList.clear();
         if (v == null) {
             return global;
@@ -505,7 +512,10 @@ public class RegionManager {
             }
         }
         if(nodeList.isEmpty()) {
-            return global;
+            if(!ignoreGlobal) {
+                return global;
+            }
+            return null;
         }
         CuboidNode max = null;
         for (CuboidNode node : nodeList) {
@@ -615,12 +625,32 @@ public class RegionManager {
      * @param world
      * @return CuboidNode or null
      */
-    public CuboidNode getCuboidByName(String name, String world, int dimension) {
+    public CuboidNode getCuboidNodeByName(String name, String world, int dimension) {
         for(CuboidNode tree : rootNodes) {
             if(tree.equalWorlds(world, dimension)) {
                 for(CuboidNode node : tree.toList()) {
                     if(node.getName().equalsIgnoreCase(name)) {
                         return node;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Return the CuboidE with the given name or null if not existent
+     * @param name
+     * @param world
+     * @param dimension
+     * @return
+     */
+    public CuboidE getCuboidByName(String name, String world, int dimension) {
+        for(CuboidNode tree : rootNodes) {
+            if(tree.equalWorlds(world, dimension)) {
+                for(CuboidNode node : tree.toList()) {
+                    if(node.getName().equalsIgnoreCase(name)) {
+                        return node.getCuboid();
                     }
                 }
             }

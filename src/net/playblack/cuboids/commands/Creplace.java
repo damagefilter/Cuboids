@@ -51,7 +51,7 @@ public class Creplace extends CBaseCommand {
         gen.setReplace(true);
         gen.setBlock(sub);
         gen.setBlockToReplace(b);
-        if(gen.execute(player, false)) {
+        if(gen.execute(player, true)) {
             ms.successMessage(player, "selectionReplaced");
         }
         else {

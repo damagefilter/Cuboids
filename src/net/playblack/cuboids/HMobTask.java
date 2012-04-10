@@ -24,7 +24,7 @@ public class HMobTask implements Runnable {
         rnd = new Random();
     }
     
-    private CMob getRandomNotchMob(CWorld world, int index) {
+    private CMob getRandomhMob(CWorld world, int index) {
         switch(index) {
             case 0:
                 
@@ -63,10 +63,10 @@ public class HMobTask implements Runnable {
                     int mobIndex = rnd.nextInt(6);
                     Vector random = Vector.randomVector(node.getCuboid().getFirstPoint(), node.getCuboid().getSecondPoint());
                     for(int i = 0; i < maxMobs; i++) {
-                        CMob mob = getRandomNotchMob(w, mobIndex);
+                        CMob mob = getRandomhMob(w, mobIndex);
                         mob.setX(random.getX());
                         mob.setY(w.getHighestBlock(random.getBlockX(), random.getBlockZ()));
-                        mob.setZ(random.getZ());
+                        mob.setZ(random.getBlockZ());
                         mob.spawn();
                     }
                 }

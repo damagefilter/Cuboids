@@ -20,6 +20,14 @@ public abstract class CServer {
      */
     public abstract CWorld getWorld(int id);
     
+    public abstract CWorld getDefaultWorld();
+    /**
+     * Get the id of a dimension by its name
+     * @param name
+     * @return
+     */
+    public abstract int getDimensionId(String name);
+    
     /**
      * Get a list of all players in a world
      * @param world

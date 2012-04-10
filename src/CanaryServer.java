@@ -72,4 +72,15 @@ public class CanaryServer extends CServer {
     public int getMaxPlayers() {
         return etc.getInstance().getPlayerLimit();
     }
+
+    @Override
+    public int getDimensionId(String name) {
+        return World.Dimension.valueOf(name).getId();
+    }
+
+    @Override
+    public CWorld getDefaultWorld() {
+        World def = etc.getServer().getDefaultWorld();
+        return getWorld(def.getName(), def.getType().getId());
+    }
 }

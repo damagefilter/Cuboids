@@ -26,9 +26,9 @@ public class CuboidSelection implements ISelection {
      * Empty CTOR
      */
     public CuboidSelection() {
-        origin = new Vector(0,0,0);
-        offset = new Vector(0,0,0);
-        blockList = new LinkedHashMap<Vector,CBlock>((int)Vector.getAreaVolume(origin, offset));
+        origin = null;
+        offset = null;
+        blockList = new LinkedHashMap<Vector,CBlock>();
     }
     
     /**

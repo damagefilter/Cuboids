@@ -361,7 +361,6 @@ public class Vector
      * @return
      */
     public static Vector randomVector(Vector v1, Vector v2) {
-        System.out.println("getting random vector");
         Vector smaller = Vector.getMinimum(v1, v2);
         Vector bigger = Vector.getMaximum(v1, v2);
         Random rnd = new Random();
@@ -372,9 +371,6 @@ public class Vector
         double x = smaller.getX() + rnd.nextInt((int)distanceX);
         double y = smaller.getY() + rnd.nextInt((int)distanceY);
         double z = smaller.getZ() + rnd.nextInt((int)distanceZ);
-        System.out.println("X: "+x);
-        System.out.println("Y: "+y);
-        System.out.println("Z: "+z);
         return new Vector(x,y,z);
     }
     

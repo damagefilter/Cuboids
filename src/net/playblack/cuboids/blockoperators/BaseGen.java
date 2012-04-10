@@ -18,10 +18,14 @@ public abstract class BaseGen implements IShapeGen {
     /**
      * Modify the world with the already computed block changes!
      */
-    protected boolean modifyWorld() {
-        if(selection == null || (!selection.isComplete())) {
+    protected boolean modifyWorld(boolean requireSelectionComplete) {
+        if((selection == null) || selection.getBlockList().isEmpty()) {
             return false;
         }
+        if(requireSelectionComplete && !selection.isComplete()) {
+            return false;
+        }
+        
         //NOTE: World must have been scanned before this operation!
         synchronized (lock) {
             for(Vector v : selection.getBlockList().keySet()) {
@@ -65,12 +69,17 @@ public abstract class BaseGen implements IShapeGen {
      * Fill the current selection with blocks that are currently in the world
      * @param returnSelection true if you want to return the selection instead of overwriting the blocks of the internal one
      */
-    protected CuboidSelection scanWorld(boolean returnSelection) {
-        if(selection == null || (!selection.isComplete())) {
+    protected CuboidSelection scanWorld(boolean returnSelection, boolean requireCompleteSelection) {
+        if(selection == null) {
             return null;
         }
-        CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset());
+        if(requireCompleteSelection && !selection.isComplete()) {
+            return null;
+        }
+        CuboidSelection tmp = new CuboidSelection();
         if(selection.getBlockList().isEmpty()) {
+            tmp.setOffset(selection.getOffset());
+            tmp.setOrigin(selection.getOrigin());
             int length_x = (int)Vector.getDistance(selection.getOrigin().getX(), selection.getOffset().getX())+1;
             int length_y = (int)Vector.getDistance(selection.getOrigin().getY(), selection.getOffset().getY())+1;
             int length_z = (int)Vector.getDistance(selection.getOrigin().getZ(), selection.getOffset().getZ())+1;
@@ -113,7 +122,7 @@ public abstract class BaseGen implements IShapeGen {
      * @return
      */
     public CuboidSelection getWorldContent(CuboidSelection sel) {
-        sel = scanWorld(true);
+        sel = scanWorld(true, true);
         return sel;
     }
 }

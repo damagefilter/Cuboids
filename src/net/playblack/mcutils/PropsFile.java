@@ -40,7 +40,7 @@ public class PropsFile {
         try {
             String line = null;
             while((line = prop.readLine()) != null) {
-                if(line.startsWith("#")) {
+                if(line.startsWith("#") || line.isEmpty()) {
                     continue;
                 }
                 String[] split = line.split("=");

@@ -4,11 +4,10 @@ import java.util.HashMap;
 
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
-import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.CuboidInterface;
-import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.Vector;
@@ -24,13 +23,10 @@ public class BlockActionHandler {
         if(player.hasPermission("cIgnoreRestrictions")) {
             return true;
         }
-        CuboidE cube = RegionManager.getInstance().getActiveCuboid( position, 
-                                                                    player.getWorld().getName(), 
-                                                                    player.getWorld().getDimension()).getCuboid();
-        if(cube.playerIsAllowed(player.getName(), player.getGroups())) {
+        if(CuboidInterface.getInstance().playerIsAllowed(player, position, player.getWorld())) {
             return true;
         }
-        if(cube.isItemRestricted(itemId)) {
+        if(CuboidInterface.getInstance().itemIsRestricted(position, player.getWorld(), itemId)) {
             return false;
         }
         return true;
@@ -64,7 +60,6 @@ public class BlockActionHandler {
      * Set points for a player selection
      * @param player
      * @param point
-     * @param setOffset True to set offset instead of origin
      */
     private static boolean setFixedPointSingleAction(CPlayer player, Vector point) {
         if(!player.hasPermission("cIgnoreRestrictions")) {
@@ -126,9 +121,10 @@ public class BlockActionHandler {
      * @param point
      * @param setOffset This must be true on rightclick!!! false otherwise!
      * NOTE: This has NO EFFECT if double action tool is disabled!
+     * @return false if no points had to be set!
      */
-    public static boolean handleSetPoints(CPlayer player, Vector point, boolean setOffset) {
-        if(player.getItemInHand().getId() == Config.getInstance().getRegionItem()) {
+    public static boolean handleSetPoints(CPlayer player, Vector point, boolean setOffset, boolean remote) {
+        if((player.getItemInHand().getId() == Config.getInstance().getRegionItem()) && (!remote)) {
             if(Config.getInstance().isUseDoubleAction()) {
                 return setFixedPointDoubleAction(player, point, setOffset);
             }
@@ -136,7 +132,7 @@ public class BlockActionHandler {
                 return setFixedPointSingleAction(player, point);
             }
         }
-        if(player.getItemInHand().getId() == Config.getInstance().getRemoteRegionItem()) {
+        if((player.getItemInHand().getId() == Config.getInstance().getRemoteRegionItem()) && (remote)) {
             return setFixedPointSingleAction(player, point);
         }
         return false;
@@ -186,18 +182,25 @@ public class BlockActionHandler {
      * @param player
      * @param v
      * @param blockStatus 2 = lighter, 3+ natural firespread - player may be null in this case
+     * @return True if position can ignite, false otherwise
      */
     public static boolean handleIgnition(CPlayer player, Vector v, CWorld world, int blockStatus) {
         CuboidInterface ci = CuboidInterface.getInstance();
         if(blockStatus == 2) { //lighter shall be 2
-            if(ci.canModifyBlock(player, v)) {
-                return true;
-            }
-            return false;
+            return ci.canModifyBlock(player, v);
         }
-        else if(blockStatus > 2) { //natural firespread
-            return ci.isFireProof(v, world);
+        else { //natural firespread
+            return !ci.isFireProof(v, world);
         }
-        return true;
+    }
+    
+    /**
+     * Check if a block can flow
+     * @param v
+     * @param world
+     * @return false if block can flow
+     */
+    public static boolean handleFlow(CBlock block, Vector v, CWorld world) {
+        return !CuboidInterface.getInstance().hasFlowControl(block, v, world.getName(), world.getDimension());
     }
 }

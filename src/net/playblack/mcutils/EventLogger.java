@@ -80,9 +80,9 @@ public class EventLogger {
 	 * @param level
 	 */
 	public void logCachedMessage(String level) {
+	    cacheRunning = false;
 	    logMessage(cacheMessage.toString(), level);
 	    cacheMessage = new StringBuilder();
-	    cacheRunning = false;
 	}
 	
 	/**

@@ -3,6 +3,7 @@ package net.playblack.cuboids.regions;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
 
@@ -52,7 +53,7 @@ public class CuboidE {
     /**
      * List of commands that should be denied in this area.
      */
-    public ArrayList<String> tabuCommands = new ArrayList<String>();
+    private ArrayList<String> tabuCommands = new ArrayList<String>();
     
     public boolean hasChanged=false;
     
@@ -494,7 +495,27 @@ public class CuboidE {
      * @param id
      */
     public void addRestrictedItem(int id) {
+        if(id < 0) {
+            return;
+        }
         restrictedItems.add(Integer.valueOf(id));
+    }
+    
+    /**
+     * Add one or more comma seperated items from string to the restricted items list
+     * @param items
+     */
+    public void addRestrictedItem(String items) {
+        if(items == null) {
+            return;
+        }
+        if(items.contains(",")) {
+            String[]itemList = items.split(",");
+            for(String item : itemList) {
+                addRestrictedItem(ToolBox.parseInt(item));
+            }
+        }
+        addRestrictedItem(ToolBox.parseInt(items));
     }
     
     /**
@@ -505,12 +526,22 @@ public class CuboidE {
         restrictedItems.remove(Integer.valueOf(id));
     }
     
+    /**
+     * Check if item is restricted
+     * @param id
+     * @return true if item is restricted, false otherwise
+     */
     public boolean isItemRestricted(int id) {
         if(restrictedItems.contains(Integer.valueOf(id))) {
             return true;
         }
         return false;
     }
+    
+    public ArrayList<Integer> getRestrictedItems() {
+        return restrictedItems;
+    }
+    
     /**
      * Add a player name to the list of allowed player names.
      * @param playerName String
@@ -614,6 +645,9 @@ public class CuboidE {
         }
     }
     
+    public ArrayList<String> getTabuCommands() {
+        return this.tabuCommands;
+    }
     public boolean commandIsRestricted(String command) {
         if(tabuCommands.contains(command) || tabuCommands.contains(command.substring(1))) {
             return true;
@@ -862,6 +896,7 @@ public class CuboidE {
         }
         return false;
     }
+    
     
     /**
      * Check if a given player is the owner of this cuboid. That is to say, if his name is inside the list of players as o:.

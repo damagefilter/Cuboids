@@ -1,4 +1,5 @@
 import net.playblack.cuboids.gameinterface.CMob;
+import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.mcutils.Vector;
 
@@ -9,11 +10,20 @@ import net.playblack.mcutils.Vector;
  */
 public class CanaryMob extends CMob {
     private Mob mob;
+    protected CWorld world;
     public CanaryMob(OEntityLiving entity) {
         mob = new Mob(entity);
+        world = CServer.getServer().getWorld(mob.getWorld().getName(), mob.getWorld().getType().getId());
+        if(world == null) {
+            System.out.println("World was null, creating new wrapper!");
+        }
     }
     public CanaryMob(Mob entity) {
         mob = entity;
+        world = CServer.getServer().getWorld(mob.getWorld().getName(), mob.getWorld().getType().getId());
+        if(world == null) {
+            System.out.println("World was null, creating new wrapper!");
+        }
     }
     @Override
     public int getHealth() {
@@ -32,7 +42,7 @@ public class CanaryMob extends CMob {
 
     @Override
     public CWorld getWorld() {
-        return null;
+        return world;
     }
 
     @Override
@@ -51,7 +61,6 @@ public class CanaryMob extends CMob {
     public double getX() {
         return mob.getX();
     }
-
     @Override
     public double getY() {
         return mob.getY();
