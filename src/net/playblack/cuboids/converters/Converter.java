@@ -38,6 +38,8 @@ public class Converter {
         cube.setWaterControl(shell.getWaterControl());
         cube.setWelcome(shell.getWelcome());
         cube.setWorld(shell.getWorld());
+        cube.setPhysics(shell.getPhysics());
+        cube.setEnderControl(shell.getEnderControl());
         return cube;
     }
     private void convert() {

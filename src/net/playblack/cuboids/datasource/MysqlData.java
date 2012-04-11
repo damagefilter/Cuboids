@@ -403,6 +403,8 @@ public class MysqlData implements BaseData {
 			}
 			cube.addRestrictedItem(rs.getString("tabuItems"));
 			cube.addTabuCommand(rs.getString("tabuCommands"));
+			cube.setPhysics(ToolBox.stringToBoolean(rs.getString("physics")));
+			cube.setEnderControl(ToolBox.stringToBoolean(rs.getString("enderControl")));
 			list.add(cube);
 		}
 		return list;
