@@ -12,12 +12,13 @@ public class CanaryWorld extends CWorld {
 
     private World world;
     
+    private ArrayList<CBlock> blockCache = new ArrayList<CBlock>(20);
+    
     public CanaryWorld(World w) {
         world = w;
     }
     @Override
     public String getFilePrefix() {
-        //TODO: put FQ Name here once the stuff is clear!
         return world.getType().name();
     }
 
@@ -50,7 +51,7 @@ public class CanaryWorld extends CWorld {
                 }
                 return bc;
             }
-            return new CBlock(54, 0); //fallback, empty chest
+            return recycleBlock((short)54, (byte)0);//new CBlock(54, 0); //fallback, empty chest
         }
         
         //Or maybe ... a sign?
@@ -68,7 +69,8 @@ public class CanaryWorld extends CWorld {
         }
         //or are we a simple world block?
         else {
-            return new CBlock((short)b.getType(), (byte)b.getData());
+            //return new CBlock((short)b.getType(), (byte)b.getData());
+            return recycleBlock((short)b.getType(), (byte)b.getData());
         }
     }
 
@@ -170,7 +172,19 @@ public class CanaryWorld extends CWorld {
     @Override
     public void setBlockData(byte data, Vector v) {
         world.setBlockData(v.getBlockX(), v.getBlockY(), v.getBlockZ(), data);
+    }
 
+    @Override
+    public String getName() {
+        return world.getName();
+    }
+    @Override
+    public int getDimension() {
+        return world.getType().getId();
+    }
+    @Override
+    public String dimensionFromId(int dim) {
+        return World.Dimension.fromId(dim).name();
     }
     
     /**
@@ -214,17 +228,27 @@ public class CanaryWorld extends CWorld {
         }
         return nItem;
     }
-    @Override
-    public String getName() {
-        return world.getName();
-    }
-    @Override
-    public int getDimension() {
-        return world.getType().getId();
-    }
-    @Override
-    public String dimensionFromId(int dim) {
-        return World.Dimension.fromId(dim).name();
+    
+    /**
+     * Recycle a block instance to reduce load on the GC
+     * @param type
+     * @param data
+     * @return
+     */
+    private CBlock recycleBlock(short type, byte data) {
+        for(CBlock block : blockCache) {
+            if(block.equals(type, data)) {
+                return block;
+            }
+        }
+        if(blockCache.size() > 50) {
+            while(blockCache.size() > 45) {
+                blockCache.remove(0);
+            }
+        }
+        CBlock toRet = new CBlock(type, data);
+        blockCache.add(toRet);
+        return toRet;
     }
 
 }

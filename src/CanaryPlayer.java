@@ -107,6 +107,9 @@ public class CanaryPlayer extends CPlayer {
         Item[] canaryItems= player.getInventory().getContents();
         CItem[] items = new CItem[canaryItems.length];
         for(int i = 0; i < canaryItems.length; i++) {
+            if(canaryItems[i] == null) {
+                continue;
+            }
             items[i] = new CItem(canaryItems[i].getItemId(),
                     canaryItems[i].getDamage(),
                     canaryItems[i].getAmount(),
@@ -117,8 +120,14 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public void setInventory(CItem[] items) {
+        if(items == null) {
+            return;
+        }
         Item[] canaryItems = new Item[items.length];
         for(int i = 0; i < items.length; i++) {
+            if(items[i] == null) {
+                continue;
+            }
             canaryItems[i] = new Item(items[i].getId(),
                     items[i].getAmount(),
                     items[i].getSlot(),

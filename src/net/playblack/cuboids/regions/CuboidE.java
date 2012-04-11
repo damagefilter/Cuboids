@@ -87,6 +87,9 @@ public class CuboidE {
     private String farewell=null;
     
     private boolean hMob=false;
+    
+    private boolean physics=false;
+    private boolean enderControl=false;
     /**
      * Name of the world this cuboidE is valid for
      */
@@ -982,6 +985,14 @@ public class CuboidE {
             flaglist.append(", hMob");
         }
         
+        if(hasEnderControl()) {
+            flaglist.append(", endercontrol");
+        }
+        
+        if(isPhysicsDisabled()) {
+            flaglist.append(", no-physics");
+        }
+        
         flaglist.append(" area");
         
         if(welcome != null && farewell != null) {
@@ -1031,16 +1042,23 @@ public class CuboidE {
             flaglist.append(", Fireproof");
         }
         if(isLavaControl()) {
-            flaglist.append(", lava-secure");
+            flaglist.append(", Lavasecure");
         }
         if(isWaterControl()) {
-            flaglist.append(", water-secure");
+            flaglist.append(", Watersecure");
         }
         if(isFarmland()) {
-            flaglist.append(", farmland");
+            flaglist.append(", Farmland");
         }
         if(ishMob()) {
             flaglist.append(", hmob");
+        }
+        if(hasEnderControl()) {
+            flaglist.append(", endercontrol");
+        }
+        
+        if(isPhysicsDisabled()) {
+            flaglist.append(", No Physics");
         }
         
         if(welcome != null && farewell != null) {
@@ -1123,6 +1141,8 @@ public class CuboidE {
         flags.put("restriction", this.isRestricted());
         
         flags.put("hmob", this.ishMob());
+        flags.put("enderControl", this.enderControl);
+        flags.put("physics", this.physics);
         return flags;
         }
     
@@ -1136,6 +1156,34 @@ public class CuboidE {
                 (int)Vector.getDistance(point1.getBlockZ(), point2.getBlockZ());
     }
     
+    /**
+     * @return the physics
+     */
+    public boolean isPhysicsDisabled() {
+        return physics;
+    }
+
+    /**
+     * @param physics the physics to set
+     */
+    public void setPhysics(boolean physics) {
+        this.physics = physics;
+    }
+
+    /**
+     * @return the enderControl
+     */
+    public boolean hasEnderControl() {
+        return enderControl;
+    }
+
+    /**
+     * @param enderControl the enderControl to set
+     */
+    public void setEnderControl(boolean enderControl) {
+        this.enderControl = enderControl;
+    }
+
     /**
      * This takes a cuboid and overrides the local properties<br>
      * with the ones given inside cube
@@ -1166,5 +1214,7 @@ public class CuboidE {
         setTntSecure(((Boolean)props.get("tntSecure")).booleanValue());
         setRestriction(((Boolean)props.get("restriction")).booleanValue());
         sethMob(((Boolean)props.get("hmob")).booleanValue());
+        setEnderControl((Boolean)props.get("enderControl").booleanValue());
+        setPhysics((Boolean)props.get("physics").booleanValue());
     }
 }

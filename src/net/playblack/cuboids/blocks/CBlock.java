@@ -84,6 +84,16 @@ public class CBlock {
     }
     
     /**
+     * Check if this block has those numbers
+     * @param type
+     * @param data
+     * @return
+     */
+    public boolean equals(short type, byte data) {
+        return ((getType() == type) && (getData() == data));
+    }
+    
+    /**
      * Only check if the type is equal
      * @param b
      * @return

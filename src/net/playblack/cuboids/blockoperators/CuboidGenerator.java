@@ -51,6 +51,7 @@ public class CuboidGenerator extends BaseGen {
     public boolean execute(CPlayer player, boolean newHistory) {
         selection.clearBlocks();
         scanWorld(false, true);
+        
         if(replace) {
             for(Vector position : selection.getBlockList().keySet()) {
                 if(selection.getBlock(position).equals(toReplace)) {
@@ -59,16 +60,20 @@ public class CuboidGenerator extends BaseGen {
             }
         }
         else {
+            System.out.println("Setting blocks in selection!");
             for(Vector position : selection.getBlockList().keySet()) {
                 selection.setBlock(position, block);
             }
+            System.out.println("done!");
         }
         if(newHistory) {
+            System.out.println("Creating undo");
             CuboidSelection world = scanWorld(true, true);
             SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
-       
+        System.out.println("calling modifyWorld");
         boolean result = modifyWorld(true);
+        System.out.println("Done. Result: "+result);
         return result;
     }
 }

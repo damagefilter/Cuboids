@@ -2,6 +2,7 @@ import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.actions.BlockActionHandler;
 import net.playblack.cuboids.actions.HandleDamage;
 import net.playblack.cuboids.actions.HandlePlayerMovement;
+import net.playblack.cuboids.actions.ItemDropHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.RegionManager;
@@ -80,15 +81,34 @@ public class PlayerListener extends PluginListener {
         if(player.canUseCommand("/cIgnoreRestrictions")) {
             return false; //allow
         }
+        if(blockPlaced == null) {
+            blockPlaced = blockClicked;
+        }
+        else if(blockClicked == null) {
+            blockClicked = blockPlaced;
+        }
+        if((blockClicked == null) && (blockPlaced == null)) {
+            //pretty dirty fallback but there's no other position that would be "valid enough"
+            blockPlaced = new Block(0, (int)player.getX(), (int)player.getY(), (int)player.getZ());
+        }
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
+        Vector v = new Vector(blockPlaced.getX(), blockPlaced.getY(), blockPlaced.getZ());
+        
+        
         //25d == flint&steel
         if(item.getItemId() == 259) {
             return !BlockActionHandler.handleLighter(cplayer, new Vector(blockClicked.getX(), blockClicked.getY(), blockClicked.getZ()));
         }
+        //buckets
         if(item.getItemId() == 326 || item.getItemId() == 327) {
-            Vector v = new Vector(blockPlaced.getX(), blockPlaced.getY(), blockPlaced.getZ());
-            return !BlockActionHandler.handleOperableItems(cplayer, v, item.getItemId());
+            return BlockActionHandler.handleBucketPlacement(cplayer, v);
         }
-        return false;
+        return !BlockActionHandler.handleOperableItems(cplayer, v, item.getItemId());
+    }
+    
+    @Override
+    public boolean onItemDrop(Player player, ItemEntity item) {
+        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
+        return ItemDropHandler.handleItemDrop(cplayer, cplayer.getPosition());
     }
 }

@@ -49,6 +49,9 @@ public class BlockListener extends PluginListener {
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
         HitBlox hb = new HitBlox(player);
         Block b = hb.getFaceBlock();
+        if(b == null) {
+            return;
+        }
         Vector p = new Vector(b.getX(), b.getY(), b.getZ());
         BlockActionHandler.handleSetPoints(cplayer, p, false, true);
         BrushHandler.handleBrush(cplayer, p);
@@ -120,5 +123,12 @@ public class BlockListener extends PluginListener {
         CBlock block = new CBlock(b.getType(), b.getData());
         CWorld world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
         return !BlockActionHandler.handleFlow(block, p, world);
+    }
+    
+    @Override
+    public boolean onBlockPhysics(Block block, boolean placed) {
+        return BlockActionHandler.handlePhysics(new Vector(block.getX(), block.getY(), block.getZ()), 
+                CServer.getServer().getWorld(block.getWorld().getName(), block.getWorld().getType().getId()), 
+                block.getType());
     }
 }

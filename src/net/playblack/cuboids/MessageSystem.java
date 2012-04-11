@@ -58,6 +58,12 @@ public class MessageSystem {
         messages.put("tntSecureSpawnEnabled", "Tnt Security is now enabled!");
         messages.put("tntSecureDisabled", "Tnt Security is now disabled!");
         
+        messages.put("physicsControlOn", "Physics Control is now enabled!");
+        messages.put("physicsControlOff", "Physics Control is now disabled!");
+        
+        messages.put("enderControlOn", "Enderman Control is now enabled!");
+        messages.put("enderControlOff", "Enderman Control is now disabled!");
+        
         messages.put("cuboidRemoved", "Cuboid was successfully removed");
         messages.put("cuboidCreated", "Your Cuboid has been created!");
         messages.put("cuboidMoved", "Your Cuboid has been moved!");
@@ -108,6 +114,12 @@ public class MessageSystem {
         messages.put("globalLavaOff", "Global Lavaflow control disabled!");
         messages.put("globalWaterOn", "Global Waterflow control enabled!"); 
         messages.put("globalWaterOff", "Global Waterflow control disabled!");
+        messages.put("globalPhysicsControlOn", "Global Physics control enabled!"); 
+        messages.put("globalPhysicsControlOff", "Global Physics control disabled!");
+        
+        messages.put("globalEnderControlOn", "Global Enderman control enabled!"); 
+        messages.put("globalEnderControlOff", "Global Enderman control disabled!");
+        
         messages.put("firstPointSet", "First point has been set!");
         messages.put("secondPointSet", "Second point has been set!");
         // *************************************************
@@ -169,7 +181,7 @@ public class MessageSystem {
      * @param messageKey
      */
     public void successMessage(CPlayer player, String messageKey) {
-        player.sendMessage(ColorManager.Green + messages.get(messageKey));
+        player.sendMessage(ColorManager.LightGreen + messages.get(messageKey));
     }
     
     /**

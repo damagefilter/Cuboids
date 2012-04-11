@@ -477,7 +477,7 @@ public class CuboidInterface {
     }
     
     /**
-     * Toggle sanctuary on or off in this area
+     * Toggle tnt on or off in this area
      * @param player
      * @param cuboid
      */
@@ -505,6 +505,63 @@ public class CuboidInterface {
         cube.hasChanged=true;
     }
     
+    /**
+     * Toggle physics on or off in this area
+     * @param player
+     * @param cuboid
+     */
+    public void togglePhysics(CPlayer player, String cuboid) {
+        if(!Config.getInstance().isAllowPhysics()) {
+            ms.failMessage(player, "optionDisabled");
+            return;
+        }
+        CuboidE cube = regions.getCuboidByName(cuboid, player.getWorld().getName(), player.getWorld().getDimension());
+        if(cube ==  null) {
+            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            return;
+        }
+        if(!permissionCheckOnToggle(cube, player, "cphysics")) {
+            return;
+        }
+        if(cube.isPhysicsDisabled()) {
+            cube.setPhysics(false);
+            ms.successMessage(player, "physicsControlOff");
+        }
+        else {
+            cube.setPhysics(true);
+            ms.successMessage(player, "physicsControlOn");
+        }
+        cube.hasChanged=true;
+    }
+    
+    /**
+     * Toggle physics on or off in this area
+     * @param player
+     * @param cuboid
+     */
+    public void toggleEnderControl(CPlayer player, String cuboid) {
+        if(!Config.getInstance().isAllowEnderControl()) {
+            ms.failMessage(player, "optionDisabled");
+            return;
+        }
+        CuboidE cube = regions.getCuboidByName(cuboid, player.getWorld().getName(), player.getWorld().getDimension());
+        if(cube ==  null) {
+            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            return;
+        }
+        if(!permissionCheckOnToggle(cube, player, "cendercontrol")) {
+            return;
+        }
+        if(cube.hasEnderControl()) {
+            cube.setEnderControl(false);
+            ms.successMessage(player, "enderControlOff");
+        }
+        else {
+            cube.setEnderControl(true);
+            ms.successMessage(player, "enderControlOn");
+        }
+        cube.hasChanged=true;
+    }
     /*
      * **************************************************************************************
      * **************************************************************************************
@@ -803,18 +860,14 @@ public class CuboidInterface {
     public boolean hasFlowControl(CBlock block, Vector v, String world, int dimension) {
         CuboidE cube = regions.getActiveCuboid(v, world, dimension, false).getCuboid();
         //LAVA
-        System.out.println("Flow controlling cuboid "+cube.getName());
         if(block.getType() == 10 || block.getType() == 11) {
-            System.out.println("Handling lava! Cube is controlled: "+cube.isLavaControl());
             return cube.isLavaControl();
         }
         //WATER
         if(block.getType() == 8 || block.getType() == 9) {
-            System.out.println("Handling water! Cube is controlled: "+cube.isWaterControl());
             return cube.isWaterControl();
         }
         else {
-            System.out.println("Handling nothing!");
             return false;
         }
     }
@@ -825,6 +878,7 @@ public class CuboidInterface {
      * @param v
      * @param block
      * @return true if a player can use a bucket
+     * @deprecated
      */
     public boolean canPlaceBucket(CPlayer player, Vector v, CBlock block) {
         if(player.hasPermission("cIgnoreRestrictions")) {
@@ -856,6 +910,24 @@ public class CuboidInterface {
         else {
             return canModifyBlock(player, cube);
         }
+    }
+    
+    /**
+     * Check if player can place bucket
+     * @param player
+     * @param v
+     * @param item
+     * @return False if player can place bucket, false otherwise
+     */
+    public boolean isLiquidControlled(CPlayer player, Vector v) {
+        if(player.hasPermission("cIgnoreRestrictions")) {
+            return false;
+        }
+        CuboidE cube = regions.getActiveCuboid(v, player.getWorld().getName(),player.getWorld().getDimension(), false).getCuboid();
+        if(cube.getName().equals("__GLOBAL__")) {
+            return (cube.isLavaControl() || cube.isWaterControl());
+        }
+        return (cube.isLavaControl() || cube.isWaterControl());
     }
     
     /**
@@ -918,6 +990,21 @@ public class CuboidInterface {
     public boolean isPvpEnabled(Vector position, CWorld world) {
         CuboidE cube = regions.getActiveCuboid(position, world.getName(), world.getDimension(), false).getCuboid();
         return cube.isAllowedPvp();
+    }
+    
+    public boolean isCreative(Vector position, CWorld world) {
+        CuboidE cube = regions.getActiveCuboid(position, world.getName(), world.getDimension(), false).getCuboid();
+        return cube.isFreeBuild();
+    }
+    
+    public boolean isPhysicsControlled(Vector position, CWorld world) {
+        CuboidE cube = regions.getActiveCuboid(position, world.getName(), world.getDimension(), false).getCuboid();
+        return cube.isPhysicsDisabled();
+    }
+    
+    public boolean isEnderControlled(Vector position, CWorld world) {
+        CuboidE cube = regions.getActiveCuboid(position, world.getName(), world.getDimension(), false).getCuboid();
+        return cube.hasEnderControl();
     }
     
     public boolean playerIsAllowed(CPlayer player, Vector position, CWorld world) {

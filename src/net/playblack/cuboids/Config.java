@@ -37,6 +37,8 @@ public class Config {
     private boolean allowHmobs = false;
     private boolean allowWelcome = false;
     private boolean allowFarewell = false;
+    private boolean allowPhysics = false;
+    private boolean allowEnderControl = false;
   //global area settings go into this
     private CuboidE global = new CuboidE();
     
@@ -94,6 +96,8 @@ public class Config {
         allowHmobs = pluginSetting.getBoolean("allow-hmobs", false);
         allowWelcome = pluginSetting.getBoolean("allow-welcome-message", true);
         allowFarewell = pluginSetting.getBoolean("allow-farewell-message", true);
+        allowPhysics = pluginSetting.getBoolean("allow-physics-control", true);
+        allowEnderControl = pluginSetting.getBoolean("allow-enderman-control", true);
         verbose = pluginSetting.getBoolean("verbose",true);
         
         //Default setting for new cuboids
@@ -111,6 +115,8 @@ public class Config {
         defaultSettings.setTntSecure(cuboidSetting.getBoolean("default-tnt-secure", false));
         defaultSettings.setRestriction(cuboidSetting.getBoolean("default-restriction", false));
         defaultSettings.sethMob(cuboidSetting.getBoolean("default-hmob", false));
+        defaultSettings.setEnderControl(cuboidSetting.getBoolean("default-enderman-control", false));
+        defaultSettings.setPhysics(cuboidSetting.getBoolean("default-physics-control", false));
          
         //Global Settings
         global.setName("__GLOBAL__");
@@ -123,6 +129,8 @@ public class Config {
         global.setProtection(cuboidSetting.getBoolean("protection-global", false));
         global.setLavaControl(cuboidSetting.getBoolean("stop-lava-flow-global", false));
         global.setWaterControl(cuboidSetting.getBoolean("stop-water-flow-global", false));
+        global.setPhysics(cuboidSetting.getBoolean("physics-control-global", false));
+        global.setEnderControl(cuboidSetting.getBoolean("enderman-control-global", false));
 
         String dataSource = dsSetting.getString("data-source", "flatfile");
         if(dataSource.equalsIgnoreCase("mysql")) {
@@ -374,6 +382,14 @@ public class Config {
         return allowUndo;
     }
     
+    public boolean isAllowPhysics() {
+        return allowPhysics;
+    }
+    
+    public boolean isAllowEnderControl() {
+        return allowEnderControl;
+    }
+    
     public CuboidE getDefaultCuboidSetting(CPlayer player) {
         CuboidE flags = new CuboidE();
         //PVP
@@ -472,6 +488,19 @@ public class Config {
             flags.sethMob(defaultSettings.ishMob());
         } else {
             flags.sethMob(false);
+        }
+        
+        //PHYSICS
+        if(allowPhysics && (player.hasPermission("cphysics") || player.hasPermission("cIgnoreRestrictions"))) {
+            flags.setPhysics(defaultSettings.isPhysicsDisabled());
+        } else {
+            flags.setPhysics(false);
+        }
+        //ENDERCONTROL
+        if(allowEnderControl && (player.hasPermission("cendercontrol") || player.hasPermission("cIgnoreRestrictions"))) {
+            flags.setEnderControl(defaultSettings.hasEnderControl());
+        } else {
+            flags.setEnderControl(false);
         }
         return flags;
     }

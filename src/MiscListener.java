@@ -1,6 +1,11 @@
+
+
+import net.playblack.cuboids.actions.BlockActionHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.Vector;
 
 
 public class MiscListener extends PluginListener{
@@ -23,5 +28,11 @@ public class MiscListener extends PluginListener{
         else {
             return PluginLoader.HookResult.DEFAULT_ACTION;
         }
+    }
+    
+    @Override
+    public boolean onEndermanPickup(Enderman entity, Block block) {
+        CWorld world = CServer.getServer().getWorld(entity.getWorld().getName(), entity.getWorld().getType().getId());
+        return BlockActionHandler.handleEndermanPickup(new Vector(block.getX(), block.getY(), block.getZ()), world);
     }
 }

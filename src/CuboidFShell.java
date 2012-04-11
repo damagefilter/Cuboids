@@ -1,78 +1,79 @@
 import java.util.ArrayList;
 
 import net.playblack.cuboids.converters.CuboidShell;
+import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Vector;
 
 
-public class CuboidDShell implements CuboidShell {
+public class CuboidFShell implements CuboidShell {
 
-    CuboidD cuboid;
-    public CuboidDShell(CuboidD cuboid) {
-        this.cuboid = cuboid;
+    private PropertiesFile file;
+    public CuboidFShell(PropertiesFile prop) {
+        this.file = prop;
     }
     @Override
     public boolean getProtection() {
-        return cuboid.protection;
+        return file.getBoolean("protection");
     }
 
     @Override
     public boolean getRestricted() {
-        return cuboid.restricted;
+        return file.getBoolean("restricted");
     }
 
     @Override
     public boolean getPvp() {
-        return cuboid.PvP;
+        return file.getBoolean("PvP");
     }
 
     @Override
     public boolean getHealing() {
-        return cuboid.heal;
+        return file.getBoolean("heal");
     }
 
     @Override
     public boolean getCreeper() {
-        return cuboid.creeper;
+        return file.getBoolean("creeper");
     }
 
     @Override
     public boolean getSanctuary() {
-        return cuboid.sanctuary;
+        return file.getBoolean("sanctuary");
     }
 
     @Override
     public boolean getWaterControl() {
-        return false;
+        return file.getBoolean("water");
     }
 
     @Override
     public boolean getLavaControl() {
-        return false;
+        return file.getBoolean("lava");
     }
 
     @Override
     public boolean getCreative() {
-        return false;
+        return file.getBoolean("creative");
     }
 
     @Override
     public boolean getFireProof() {
-        return false;
+        return file.getBoolean("fire");
     }
 
     @Override
     public boolean getTntSecure() {
-        return false;
+        return file.getBoolean("tnt");
     }
 
     @Override
     public boolean getAnimalSpawn() {
-        return true;
+        return file.getBoolean("animals");
     }
 
     @Override
     public int getDimension() {
-        return 0; //default dimension (overworld)
+        return file.getInt("dimension");
     }
 
     @Override
@@ -82,33 +83,47 @@ public class CuboidDShell implements CuboidShell {
 
     @Override
     public String getWorld() {
-        return cuboid.world;
+        return CServer.getServer().getDefaultWorld().getName();
     }
 
     @Override
     public String getName() {
-        return cuboid.name;
+        return file.getString("name");
     }
 
     @Override
     public String getFarewell() {
-        return cuboid.farewellMessage;
+        String msg = file.getString("farewellMessage");
+        if(msg != null && msg.length() == 0) {
+            return null;
+        }
+        return msg;
     }
 
     @Override
     public String getWelcome() {
-        return cuboid.welcomeMessage;
+        String msg = file.getString("welcomeMessage");
+        if(msg != null && msg.length() == 0) {
+            return null;
+        }
+        return msg;
     }
 
     @Override
     public ArrayList<String> tabuCommands() {
-        return cuboid.disallowedCommands;
+        String[] cmds = file.getString("disallowedCommands").split(",");
+        ArrayList<String> ret = new ArrayList<String>(cmds.length);
+        for(String name : cmds) {
+            ret.add(name);
+        }
+        return ret;
     }
 
     @Override
     public ArrayList<String> getPlayerlist() {
         ArrayList<String>players = new ArrayList<String>(2);
-        for(String name : cuboid.allowedPlayers) {
+        String[] a = file.getString("allowedPlayers").split(",");
+        for(String name : a) {
             if(name.startsWith("g:")) {
                 continue;
             }
@@ -120,7 +135,8 @@ public class CuboidDShell implements CuboidShell {
     @Override
     public ArrayList<String> getGrouplist() {
         ArrayList<String>groups = new ArrayList<String>(2);
-        for(String name : cuboid.allowedPlayers) {
+        String[] a = file.getString("allowedPlayers").split(",");
+        for(String name : a) {
             if(!name.startsWith("g:")) {
                 continue;
             }
@@ -131,12 +147,12 @@ public class CuboidDShell implements CuboidShell {
 
     @Override
     public Vector getOrigin() {
-        return new Vector(cuboid.coords[0], cuboid.coords[1], cuboid.coords[2]);
+        return new Vector(file.getInt("X1"), file.getInt("Y1"), file.getInt("Z1"));
     }
 
     @Override
     public Vector getOffset() {
-        return new Vector(cuboid.coords[3], cuboid.coords[4], cuboid.coords[5]);
+        return new Vector(file.getInt("X2"), file.getInt("Y2"), file.getInt("Z2"));
     }
 
     @Override
@@ -150,11 +166,11 @@ public class CuboidDShell implements CuboidShell {
     }
     @Override
     public boolean getEnderControl() {
-        return false;
+        return file.getBoolean("enderman");
     }
     @Override
     public boolean getPhysics() {
-        return false;
+        return file.getBoolean("physics");
     }
 
 }

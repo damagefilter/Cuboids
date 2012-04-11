@@ -49,7 +49,7 @@ public class Bootstrapper {
         if(loaders != null) {
             Converter c = new Converter();
             for(Loader loader : loaders) {
-                log.cacheMessage("Loading "+loader.getImplementationVersion()+"... ", false);
+                log.cacheMessage("Checking for "+loader.getImplementationVersion()+"... ", true);
                 if(c.convertFiles(loader)) {
                     if(hasConverted == false) {
                         hasConverted = true;

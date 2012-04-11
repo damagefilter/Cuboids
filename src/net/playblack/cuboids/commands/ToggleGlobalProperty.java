@@ -106,6 +106,26 @@ public class ToggleGlobalProperty extends CBaseCommand {
                 MessageSystem.getInstance().successMessage(player, "globalWaterOn");
             }
         }
+        
+        else if(command[2].equalsIgnoreCase("physics")) {
+            if(setting.isPhysicsDisabled()) {
+                setting.setPhysics(false);
+                MessageSystem.getInstance().successMessage(player, "globalPhysicsControlOff");
+            } else {
+                setting.setPhysics(true);
+                MessageSystem.getInstance().successMessage(player, "globalPhysicsControlOn");
+            }
+        }
+        
+        else if(command[2].equalsIgnoreCase("enderman") || command[2].equalsIgnoreCase("endercontrol")) {
+            if(setting.hasEnderControl()) {
+                setting.setEnderControl(false);
+                MessageSystem.getInstance().successMessage(player, "globalEnderControlOff");
+            } else {
+                setting.setEnderControl(true);
+                MessageSystem.getInstance().successMessage(player, "globalEnderControlOn");
+            }
+        }
         else {
             MessageSystem.getInstance().failMessage(player, "invalidGlobalProperty");
             return; //prevent config updating - not needed here

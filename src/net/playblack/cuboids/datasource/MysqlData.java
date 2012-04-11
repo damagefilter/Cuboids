@@ -62,6 +62,8 @@ public class MysqlData implements BaseData {
 						"`dimension` int(1) DEFAULT NULL," +
 						"`hmob` varchar(5) DEFAULT NULL, " +
 						"`tabuItems` varchar(500) DEFAULT NULL, " +
+						"`physics` varchar(5) DEFAULT NULL, " +
+						"`enderControl` varchar(5) DEFAULT NULL, " +
 						"PRIMARY KEY (`id`)" +
 						") ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1");
 				ps.execute();
@@ -185,12 +187,16 @@ public class MysqlData implements BaseData {
 				" world=?," +
 				" dimension=?," +
 				" hmob=?," +
-				" tabuItems=?" +
+				" tabuItems=?," +
+				" physics=?," +
+				" enderControl=?" +
 				" WHERE name=? AND world=? AND dimension=?");
-		ps.setInt(30, cube.getDimension());
-		ps.setString(29, ""+cube.getWorld());
-		ps.setString(28, ""+cube.getName());
-		ps.setString(27, ""+integerListToCsv(cube.getRestrictedItems()));
+		ps.setInt(32, cube.getDimension());
+		ps.setString(31, ""+cube.getWorld());
+		ps.setString(30, ""+cube.getName());
+		ps.setString(29, ""+cube.hasEnderControl());
+		ps.setString(28, ""+cube.isPhysicsDisabled());
+		ps.setString(27, integerListToCsv(cube.getRestrictedItems()));
 		ps.setString(26, ""+cube.ishMob());
 		ps.setInt(25, cube.getDimension());
 		ps.setString(24, ""+cube.getWorld());

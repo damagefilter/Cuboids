@@ -251,6 +251,8 @@ public class FlatfileData implements BaseData {
     	  cube.setRestriction(ToolBox.stringToBoolean(csv[28]));
     	  cube.sethMob(ToolBox.stringToBoolean(csv[29]));
     	  cube.addRestrictedItem(csv[30].replace("{COMMA}", ","));
+    	  cube.setPhysics(ToolBox.stringToBoolean(csv[31]));
+    	  cube.setEnderControl(ToolBox.stringToBoolean(csv[32]));
 	      return cube;
 	    }
 	    return null;
@@ -341,7 +343,9 @@ public class FlatfileData implements BaseData {
 		csv.append(node.getCuboid().isFarmland());csv.append(",");
 		csv.append(node.getCuboid().isRestricted());csv.append(",");
 		csv.append(node.getCuboid().ishMob()).append(",");
-		csv.append(iList);
+		csv.append(iList).append(",");
+		csv.append(node.getCuboid().isPhysicsDisabled()).append(",");
+		csv.append(node.getCuboid().hasEnderControl()).append(",");
 		
 		return csv.toString();
 	}

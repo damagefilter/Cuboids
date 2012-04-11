@@ -70,7 +70,6 @@ public class HistoryTimeline {
     public CuboidSelection undo() {
         pointer--;
         if(pointer >= 0) {
-            System.out.println("Pointer at undo: "+pointer);
             return new CuboidSelection(history.get(pointer).getBlocksBefore());
         }
         else {
@@ -85,7 +84,6 @@ public class HistoryTimeline {
      */
     public CuboidSelection redo() {
         if(pointer < history.size()) {
-            System.out.println("Pointer at redo: "+pointer);
             CuboidSelection ret = new CuboidSelection(history.get(pointer).getModifiedBlocks());
             pointer++;
             return ret;

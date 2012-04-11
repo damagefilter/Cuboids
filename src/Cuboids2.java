@@ -14,7 +14,7 @@ public class Cuboids2 extends Plugin {
 
     @Override
     public void enable() {
-        Loader[] loaders = new Loader[] {new CuboidDLoader()};
+        Loader[] loaders = new Loader[] {new CuboidDLoader(), new CuboidFLoader()};
         new Bootstrapper(new CanaryServer(), loaders);
         
         PlayerListener playerListener = new PlayerListener();
@@ -39,7 +39,9 @@ public class Cuboids2 extends Plugin {
         etc.getLoader().addListener(PluginLoader.Hook.BAN, playerListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.DISCONNECT, playerListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.TELEPORT, playerListener, this, PluginListener.Priority.MEDIUM);
+        etc.getLoader().addListener(PluginLoader.Hook.ITEM_DROP, playerListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.FLOW, blockListener, this, PluginListener.Priority.MEDIUM);
+        etc.getLoader().addListener(PluginLoader.Hook.BLOCK_PHYSICS, blockListener, this, PluginListener.Priority.MEDIUM);
     }
 
 }

@@ -33,6 +33,16 @@ public class BlockActionHandler {
     }
     
     /**
+     * Returns false if a player can place a bucket, false otherwise
+     * @param player
+     * @param position
+     * @return
+     */
+    public static boolean handleBucketPlacement(CPlayer player, Vector position) {
+        return CuboidInterface.getInstance().isLiquidControlled(player, position);
+    }
+    
+    /**
      * Check if a player can use a lighter
      * @param player
      * @param position
@@ -202,5 +212,30 @@ public class BlockActionHandler {
      */
     public static boolean handleFlow(CBlock block, Vector v, CWorld world) {
         return !CuboidInterface.getInstance().hasFlowControl(block, v, world.getName(), world.getDimension());
+    }
+    
+    /**
+     * Returns true if physics should not be done
+     * @param position
+     * @param world
+     * @param blockId if this is not snd or gravel this method will return false
+     * @return
+     */
+    public static boolean handlePhysics(Vector position, CWorld world, int blockId) {
+        if((blockId == 12) || (blockId == 13)) {
+            return CuboidInterface.getInstance().isPhysicsControlled(position, world);
+        }
+        return false;
+    }
+    
+    /**
+     * Returns true if endermen should not pick up blocks
+     * @param position
+     * @param world
+     * @param blockId
+     * @return
+     */
+    public static boolean handleEndermanPickup(Vector position, CWorld world) {
+        return CuboidInterface.getInstance().isEnderControlled(position, world);
     }
 }

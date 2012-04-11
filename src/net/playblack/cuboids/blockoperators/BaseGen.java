@@ -92,8 +92,8 @@ public abstract class BaseGen implements IShapeGen {
             size.setY(length_y);
             size.setZ(length_z);
             synchronized(lock) {
-                for(int x = 0; x < length_x; ++x) {     
-                    for(int y = 0; y < length_y; ++y) {     
+                for(int x = 0; x < length_x; ++x) {
+                    for(int y = 0; y < length_y; ++y) {
                         for(int z = 0; z < length_z; ++z) {
                             Vector current = new Vector(min.getX()+x, min.getY()+y, min.getZ()+z);
                             tmp.setBlock(current, world.getBlockAt(current));

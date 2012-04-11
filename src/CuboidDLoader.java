@@ -14,7 +14,6 @@ public class CuboidDLoader implements Loader {
 
     @Override
     public ArrayList<CuboidShell> load() {
-        EventLogger.getInstance().logMessage("Loading CuboidD", "INFO");
         ArrayList<CuboidShell> shells = new ArrayList<CuboidShell>(20); 
         try {
             File cuboidDPath = new File("cuboids/areas/");
@@ -22,7 +21,7 @@ public class CuboidDLoader implements Loader {
                 //Does not exists, return empty shell list
                 return shells;
             }
-            if(new File("cuboids/areas/").listFiles().length > 0) {
+            if(cuboidDPath.listFiles().length > 0) {
                 File test = new File("plugins/cuboids2/backups_cuboidD/");
                 if(!test.exists()) {
                     test.mkdirs();

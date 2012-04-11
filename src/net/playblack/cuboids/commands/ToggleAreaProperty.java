@@ -91,6 +91,16 @@ public class ToggleAreaProperty extends CBaseCommand {
             CuboidInterface.getInstance().toggleTntSecure(player, command[1]);
             return;
         }
+        
+        else if(command[3].equalsIgnoreCase("physics")) {
+            CuboidInterface.getInstance().togglePhysics(player, command[1]);
+            return;
+        }
+        
+        else if(command[3].equalsIgnoreCase("enderman") || command[3].equalsIgnoreCase("endercontrol")) {
+            CuboidInterface.getInstance().toggleEnderControl(player, command[1]);
+            return;
+        }
         else {
             MessageSystem.getInstance().failMessage(player, "invalidAreaProperty");
             return;
