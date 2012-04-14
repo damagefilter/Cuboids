@@ -8,22 +8,12 @@ import net.playblack.mcutils.Vector;
  * @author Chris
  *
  */
-public class CanaryMob extends CMob {
+public class CanaryMob implements CMob {
     private Mob mob;
     protected CWorld world;
-    public CanaryMob(OEntityLiving entity) {
-        mob = new Mob(entity);
-        world = CServer.getServer().getWorld(mob.getWorld().getName(), mob.getWorld().getType().getId());
-        if(world == null) {
-            System.out.println("World was null, creating new wrapper!");
-        }
-    }
     public CanaryMob(Mob entity) {
         mob = entity;
         world = CServer.getServer().getWorld(mob.getWorld().getName(), mob.getWorld().getType().getId());
-        if(world == null) {
-            System.out.println("World was null, creating new wrapper!");
-        }
     }
     @Override
     public int getHealth() {
@@ -84,19 +74,26 @@ public class CanaryMob extends CMob {
     @Override
     public void setX(double x) {
         mob.setX(x);
-
     }
 
     @Override
     public void setY(double y) {
         mob.setY(y);
-
     }
 
     @Override
     public void setZ(double z) {
         mob.setZ(z);
-
+    }
+    
+    @Override
+    public boolean isMob() {
+        return mob.isMob();
+    }
+    
+    @Override
+    public boolean isAnimal() {
+        return mob.isAnimal();
     }
 
 }

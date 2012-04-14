@@ -977,7 +977,7 @@ public class CuboidInterface {
         return cube.isTntSecure();
     }
     
-    public boolean sanctuarySpawnsMobs(CMob mob) {
+    public boolean sanctuarySpawnsAnimals(CMob mob) {
         CuboidNode cube = regions.getActiveCuboid(mob.getPosition(), mob.getWorld().getName(), mob.getWorld().getDimension(), false);
         return cube.getCuboid().sanctuarySpawnAnimals();
     }

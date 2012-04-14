@@ -1,6 +1,7 @@
 
 
 import net.playblack.cuboids.actions.BlockActionHandler;
+import net.playblack.cuboids.actions.MiscHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
@@ -12,7 +13,7 @@ public class MiscListener extends PluginListener{
     
     @Override
     public boolean onMobSpawn(Mob mob) {
-        return !CuboidInterface.getInstance().sanctuarySpawnsMobs(new CanaryMob(mob));
+        return !MiscHandler.canSpawn(new CanaryMob(mob));
     }
     
     @Override

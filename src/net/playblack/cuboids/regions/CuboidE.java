@@ -929,86 +929,6 @@ public class CuboidE {
         return false;
     }
     
-    /*
-     * ***********************************************************
-     * INFORMATION RETRIEVAL 
-     * Please note: This only goes as far as it gets with information
-     * that can be retrieved without Canary. Reason:
-     * We don't want the cuboid objects to have direct dependencies to anything
-     * related to Canary. For that there is an interface.
-     * ***********************************************************
-     */
-    
-    public String getFlagList() {
-        StringBuilder flaglist = new StringBuilder();
-        flaglist.append("This is a ");
-        if(isAllowedPvp()) {
-            flaglist.append("PvP") ;
-        }
-        else {
-            flaglist.append("No PvP");
-        }
-        if(isCreeperSecure()) {
-            flaglist.append(", Creeper Secure");
-        }
-        if(isTntSecure()) {
-            flaglist.append(", TNT Secure");
-        }
-        if(isHealingArea()) {
-            flaglist.append(", Healing");
-        }
-        if(isProtected()) {
-            flaglist.append(", Protected");
-        }
-        if(isRestricted()) {
-            flaglist.append(", Restricted");
-        }
-        if(isSanctuary()) {
-            flaglist.append(", Sanctuary");
-        }
-        if(isFreeBuild()) {
-            flaglist.append(", Freebuild");
-        }
-        if(isBlockFireSpread()) {
-            flaglist.append(", Fireproof");
-        }
-        if(isLavaControl()) {
-            flaglist.append(", Lava secure");
-        }
-        if(isWaterControl()) {
-            flaglist.append(", Water secure");
-        }
-        if(isFarmland()) {
-            flaglist.append(", Farmland");
-        }
-        if(ishMob()) {
-            flaglist.append(", hMob");
-        }
-        
-        if(hasEnderControl()) {
-            flaglist.append(", endercontrol");
-        }
-        
-        if(isPhysicsDisabled()) {
-            flaglist.append(", no-physics");
-        }
-        
-        flaglist.append(" area");
-        
-        if(welcome != null && farewell != null) {
-            flaglist.append(" with Welcome and Farewell message.");
-            return flaglist.toString();
-        }
-        if(welcome != null) {
-            flaglist.append(" with a Welcome message.");
-        }
-        if(farewell != null) {
-            flaglist.append(" with a Farewell message.");
-        }
-        return flaglist.toString();
-        
-    }
-    
     public String getFlagListSimple() {
         StringBuilder flaglist = new StringBuilder();
         if(isAllowedPvp()) {
@@ -1054,16 +974,11 @@ public class CuboidE {
             flaglist.append(", hmob");
         }
         if(hasEnderControl()) {
-            flaglist.append(", endercontrol");
+            flaglist.append(", Endercontrol");
         }
         
         if(isPhysicsDisabled()) {
             flaglist.append(", No Physics");
-        }
-        
-        if(welcome != null && farewell != null) {
-            flaglist.append(", Welcome + Farewell");
-            return flaglist.toString();
         }
         if(welcome != null) {
             flaglist.append(", Welcome");

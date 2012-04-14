@@ -1,29 +1,42 @@
 package net.playblack.cuboids.gameinterface;
 
-public abstract class CMob implements IBaseEntity {
+public interface CMob extends IBaseEntity {
     
     /**
      * Kill this mob
      */
-    public abstract void kill();
+    public void kill();
     
     /**
      * Spawn this mob
      */
-    public abstract void spawn();
+    public void spawn();
     
     /**
      * Set X
      */
-    public abstract void setX(double x);
+    public void setX(double x);
     
     /**
      * Set Y
      */
-    public abstract void setY(double y);
+    public void setY(double y);
     
     /**
      * Set Z
      */
-    public abstract void setZ(double z);
+    public void setZ(double z);
+    
+    /**
+     * Check if this mob is a hostile mob
+     * @return
+     */
+    public boolean isMob();
+    
+    /**
+     * Check if this mob is an animal
+     * @return
+     */
+    public boolean isAnimal();
+    
 }

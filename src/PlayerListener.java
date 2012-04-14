@@ -1,5 +1,5 @@
 import net.playblack.cuboids.actions.BlockActionHandler;
-import net.playblack.cuboids.actions.HandleDamage;
+import net.playblack.cuboids.actions.MiscHandler;
 import net.playblack.cuboids.actions.HandlePlayerMovement;
 import net.playblack.cuboids.actions.ItemDropHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
@@ -61,12 +61,12 @@ public class PlayerListener extends PluginListener {
         if(defender.isPlayer()) {
             if(attacker.isMob()) {
                 Player p = defender.getPlayer();
-                return !HandleDamage.handleMobDamage(
+                return !MiscHandler.handleMobDamage(
                         new Vector(p.getX(), p.getY(), p.getZ()), 
                         CServer.getServer().getWorld(p.getWorld().getName(), p.getWorld().getType().getId()));
             }
             if(attacker.isPlayer()) {
-                return !HandleDamage.handlePvpDamage(
+                return !MiscHandler.handlePvpDamage(
                         CServer.getServer().getPlayer(attacker.getName()), 
                         CServer.getServer().getPlayer(defender.getName()));
             }

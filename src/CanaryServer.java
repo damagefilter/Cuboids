@@ -10,7 +10,16 @@ import net.playblack.cuboids.gameinterface.CWorld;
 public class CanaryServer extends CServer {
 
     protected HashMap<String, CWorld> worlds = new HashMap<String, CWorld>(5);
-    private HashMap<String,CPlayer> playerList = new HashMap<String, CPlayer>(CServer.getServer().getMaxPlayers());
+    private HashMap<String,CPlayer> playerList;
+    
+    /**
+     * DO <b>NOT</b> initialize the server at ANY OTHER place than in the Bootstrapper Constructor!!!!!
+     * If you do, you will <b>DIE!</b>
+     */
+    public CanaryServer() {
+        playerList = new HashMap<String, CPlayer>(etc.getInstance().getPlayerLimit());
+    }
+    
     @Override
     public CWorld getWorld(String name, int dimension) {
         if(worlds.containsKey(name+dimension)) {
