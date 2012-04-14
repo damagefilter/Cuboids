@@ -18,10 +18,11 @@ public class BrushHandler {
         if(player.getItemInHand().getId() == Config.getInstance().getSculptItem()) {
             if((player.hasPermission("cWorldMod") && player.hasPermission("cbrush")) || player.hasPermission("cIgnoreRestrictions")) {
                 PlayerSelection selection = SelectionManager.getInstance().getPlayerSelection(player.getName());
+                selection.setOrigin(point);
                 SphereGenerator gen = new SphereGenerator(selection, player.getWorld());
                 gen.setRadius(selection.getBrushRadius());
                 gen.setMaterial(new CBlock(selection.getBrushType(), selection.getBrushData()));
-                gen.setHollow(false);
+                gen.setHollow(true);
                 gen.execute(player, true);
             }
         }

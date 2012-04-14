@@ -122,6 +122,8 @@ public class MessageSystem {
         
         messages.put("firstPointSet", "First point has been set!");
         messages.put("secondPointSet", "Second point has been set!");
+        
+        messages.put("pointsLoaded", "The areas points have been loaded into your selection.");
         // *************************************************
         //
         // *************************************************

@@ -10,6 +10,7 @@ import net.playblack.cuboids.gameinterface.CWorld;
 public class CanaryServer extends CServer {
 
     protected HashMap<String, CWorld> worlds = new HashMap<String, CWorld>(5);
+    private HashMap<String,CPlayer> playerList = new HashMap<String, CPlayer>(CServer.getServer().getMaxPlayers());
     @Override
     public CWorld getWorld(String name, int dimension) {
         if(worlds.containsKey(name+dimension)) {
@@ -31,11 +32,11 @@ public class CanaryServer extends CServer {
     }
     @Override
     public CPlayer getPlayer(String name) {
-        Player p = etc.getServer().matchPlayer(name);
-        if(p == null) {
-            return null;
+        if(!playerList.containsKey(name)) {
+            Player p = etc.getServer().matchPlayer(name);
+            playerList.put(name, new CanaryPlayer(p));
         }
-        return new CanaryPlayer(p);
+        return playerList.get(name);
     }
 
     @Override

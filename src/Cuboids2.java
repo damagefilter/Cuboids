@@ -42,6 +42,8 @@ public class Cuboids2 extends Plugin {
         etc.getLoader().addListener(PluginLoader.Hook.ITEM_DROP, playerListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.FLOW, blockListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.BLOCK_PHYSICS, blockListener, this, PluginListener.Priority.MEDIUM);
+        etc.getLoader().addListener(PluginLoader.Hook.BLOCK_UPDATE, blockListener, this, PluginListener.Priority.MEDIUM);
+        etc.getLoader().addListener(PluginLoader.Hook.ENDERMAN_PICKUP, miscListener, this, PluginListener.Priority.MEDIUM); //TODO: COMMIT THIS
     }
 
 }

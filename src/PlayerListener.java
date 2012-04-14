@@ -1,4 +1,3 @@
-import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.actions.BlockActionHandler;
 import net.playblack.cuboids.actions.HandleDamage;
 import net.playblack.cuboids.actions.HandlePlayerMovement;
@@ -35,7 +34,7 @@ public class PlayerListener extends PluginListener {
     public void onPlayerMove(Player player, Location from, Location to) {
         Vector vTo = new Vector(to.x, to.y, to.z);
         Vector vFrom = new Vector(from.x, from.y, from.z);
-        CPlayer cplayer = SessionManager.getInstance().getPlayer(player.getName());
+        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
         
         HandlePlayerMovement.handleAreaTrespassing(cplayer, vFrom, vTo);
         HandlePlayerMovement.handleCuboidAreas(cplayer, vFrom, vTo);  
@@ -48,7 +47,7 @@ public class PlayerListener extends PluginListener {
         }
         Vector vTo = new Vector(to.x, to.y, to.z);
         Vector vFrom = new Vector(from.x, from.y, from.z);
-        CPlayer cplayer = SessionManager.getInstance().getPlayer(player.getName());
+        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
         
         HandlePlayerMovement.handleCuboidAreas(cplayer, vFrom, vTo);
         return false; //allow tp    

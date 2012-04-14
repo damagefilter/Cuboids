@@ -1007,6 +1007,11 @@ public class CuboidInterface {
         return cube.hasEnderControl();
     }
     
+    public boolean isFarmland(Vector position, CWorld world) {
+        CuboidE cube = regions.getActiveCuboid(position, world.getName(), world.getDimension(), false).getCuboid();
+        return cube.isFarmland();
+    }
+    
     public boolean playerIsAllowed(CPlayer player, Vector position, CWorld world) {
         CuboidNode node = regions.getActiveCuboid(position, world.getName(), world.getDimension(), true);
         if(node == null) {
@@ -1482,7 +1487,7 @@ public class CuboidInterface {
         }
         CBlock current = player.getWorld().getBlockAt(position);
         MessageSystem.customMessage(player, ColorManager.Blue, "Block: " + 
-                CServer.getServer().getItemName(current.getType()) + " " +
+                CServer.getServer().getItemName(current.getType()) + "(" + current.getType() +") : " +
                 current.getData());
     }
     

@@ -1,5 +1,8 @@
 package net.playblack.cuboids.blockoperators;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.selections.CuboidSelection;
@@ -10,10 +13,21 @@ public abstract class BaseGen implements IShapeGen {
     protected CuboidSelection selection;
     protected CWorld world;
     protected Object lock = new Object();
+    /**
+     * List of block id's that need to be put last into the world
+     */
+    private ArrayList<Integer> queueables = new ArrayList<Integer>();
+    
+    //List of said blocks
+    HashMap<Vector, CBlock> placeLast = new HashMap<Vector, CBlock>(); 
     
     public BaseGen(CuboidSelection selection, CWorld world) {
         this.selection = selection;
         this.world = world;
+        queueables.add(6); queueables.add(27); queueables.add(28); queueables.add(43); queueables.add(44);
+        queueables.add(50);queueables.add(54); queueables.add(64); queueables.add(65); queueables.add(66);queueables.add(69);
+        queueables.add(75); queueables.add(76); queueables.add(77); queueables.add(78); queueables.add(93);
+        queueables.add(94);
     }
     /**
      * Modify the world with the already computed block changes!
@@ -25,12 +39,21 @@ public abstract class BaseGen implements IShapeGen {
         if(requireSelectionComplete && !selection.isComplete()) {
             return false;
         }
-        
         //NOTE: World must have been scanned before this operation!
+        
+        //Process blocks, 1st run
         synchronized (lock) {
             for(Vector v : selection.getBlockList().keySet()) {
-                changeBlock(selection.getBlock(v), v, world);
+                changeBlock(selection.getBlock(v), v, world, false);
             }
+        }
+        
+        //process queued blocks
+        synchronized (lock) {
+            for(Vector v : placeLast.keySet()) {
+                changeBlock(placeLast.get(v), v, world, true);
+            }
+            placeLast.clear();
         }
         return true;
     }
@@ -54,12 +77,17 @@ public abstract class BaseGen implements IShapeGen {
      * @param coords
      * @param world
      */
-    protected void changeBlock(CBlock block, Vector coords, CWorld world) {
+    protected void changeBlock(CBlock block, Vector coords, CWorld world, boolean queuedRun) {
         preloadChunk(coords, world);
         CBlock testBlock = world.getBlockAt(coords);
         
         //If the block in the world is the same as the one we want to set, we don't need to set - return
         if((testBlock.getType() == block.getType()) && (testBlock.getData() == block.getData())) {
+            return;
+        }
+        if((queueables.contains(Integer.valueOf(block.getType()))) && (queuedRun == false)) {
+            //queue for later placement if we're not in the queued run already
+            placeLast.put(coords, block);
             return;
         }
         world.setBlockAt(coords, block);

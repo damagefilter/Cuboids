@@ -163,6 +163,12 @@ public class CommandListener extends PluginListener {
                 return true;
             }
             
+            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("loadpoints")) {
+                command = new CmodLoad();
+                command.execute(cplayer, split);
+                return true;
+            }
+            
             if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("restore")) {
                 command = new Crestore();
                 command.execute(cplayer, split);

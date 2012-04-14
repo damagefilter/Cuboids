@@ -344,7 +344,6 @@ public class RegionManager {
         CuboidNode parent;
         for(CuboidNode tree : rootNodes) {
             for(CuboidNode node : tree.toList()) {
-                //parent = null;
                 parent = getCuboidNodeByName(node.getParent(), node.getWorld(), node.getDimension());
                 if(parent != null) {
                     //Check if the child is truley completely inside its parent
@@ -581,10 +580,12 @@ public class RegionManager {
             return list;
         }
         for(CuboidNode tree : rootNodes) {
-            if(tree.getCuboid().isWithin(v) && tree.getWorld().equalsIgnoreCase(world)) {
-                for(CuboidNode node : tree.toList()) {
-                    if(node.getCuboid().isWithin(v)) {
-                        list.add(node.getCuboid());
+            if(tree.equalWorlds(world, dimension)) {
+                if(tree.getCuboid().isWithin(v)) {
+                    for(CuboidNode node : tree.toList()) {
+                        if(node.getCuboid().isWithin(v)) {
+                            list.add(node.getCuboid());
+                        }
                     }
                 }
             }

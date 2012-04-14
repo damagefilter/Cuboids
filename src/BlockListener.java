@@ -131,4 +131,10 @@ public class BlockListener extends PluginListener {
                 CServer.getServer().getWorld(block.getWorld().getName(), block.getWorld().getType().getId()), 
                 block.getType());
     }
+    
+    @Override
+    public boolean onBlockUpdate(Block b, int newBlockId) {
+        CWorld world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
+        return BlockActionHandler.handleFarmland(new Vector(b.getX(), b.getY(), b.getZ()), world, b.getType(), newBlockId);
+    }
 }

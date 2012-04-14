@@ -422,6 +422,12 @@ public class Vector
                 ", z: "+getZ();
     }
     
+    public String explain() {
+        return  "x: "+getBlockX()+
+                ", y: "+getBlockY()+
+                ", z: "+getBlockZ();
+    }
+    
     /**
      * Serialize this Vector into a Stringbuilder. This returns [x,y,z]
      * @return

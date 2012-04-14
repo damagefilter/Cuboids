@@ -10,6 +10,7 @@ import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Vector;
 public class BlockActionHandler {
     private static HashMap<String, Boolean> setOffsetList = new HashMap<String, Boolean>();
@@ -85,12 +86,14 @@ public class BlockActionHandler {
         if(setOffsetList.get(player.getName())) {
             selection.setOffset(point);
             MessageSystem.getInstance().yellowNote(player, "secondPointSet");
+            MessageSystem.customMessage(player, ColorManager.LightGray, point.explain());
             setOffsetList.put(player.getName(), Boolean.valueOf(false));
             return true;
         }
         else {
             selection.setOrigin(point);
             MessageSystem.getInstance().yellowNote(player, "firstPointSet");
+            MessageSystem.customMessage(player, ColorManager.LightGray, point.explain());
             setOffsetList.put(player.getName(), Boolean.valueOf(true));
             return true;
         }
@@ -113,12 +116,14 @@ public class BlockActionHandler {
         if(setOffset) {
             selection.setOffset(point);
             MessageSystem.getInstance().yellowNote(player, "secondPointSet");
+            MessageSystem.customMessage(player, ColorManager.LightGray, point.explain());
             setOffsetList.put(player.getName(), Boolean.valueOf(false));
             return true;
         }
         else {
             selection.setOrigin(point);
             MessageSystem.getInstance().yellowNote(player, "firstPointSet");
+            MessageSystem.customMessage(player, ColorManager.LightGray, point.explain());
             setOffsetList.put(player.getName(), Boolean.valueOf(true));
             return true;
         }
@@ -237,5 +242,23 @@ public class BlockActionHandler {
      */
     public static boolean handleEndermanPickup(Vector position, CWorld world) {
         return CuboidInterface.getInstance().isEnderControlled(position, world);
+    }
+
+    /**
+     * Return true if there is farmland protection, false otherwise
+     * @param point
+     * @param world
+     * @param type
+     * @return
+     */
+    public static boolean handleFarmland(Vector point, CWorld world, int type, int newType) {
+//        System.out.println("handle block update");
+        if(type == 60) {
+            if(newType != 60) {
+                return CuboidInterface.getInstance().isFarmland(point, world);
+            }
+        }
+        return false;
+        
     }
 }
