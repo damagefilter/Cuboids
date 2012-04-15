@@ -4,10 +4,13 @@ import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.GenericGenerator;
 import net.playblack.cuboids.datasource.CuboidSerializer;
 import net.playblack.cuboids.datasource.FlatFileSerializer;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.selections.CuboidSelection;
+import net.playblack.mcutils.EventLogger;
 
 
 /**
@@ -37,7 +40,15 @@ public class Cbackup extends CBaseCommand {
         if(node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod")) {
             GenericGenerator gen = new GenericGenerator(new CuboidSelection(node.getFirstPoint(), node.getSecondPoint()), player.getWorld());
             CuboidSelection tmp = new CuboidSelection(node.getFirstPoint(), node.getSecondPoint()); 
-            tmp = gen.getWorldContent(tmp);
+            try {
+                tmp = gen.getWorldContent(tmp);
+            } catch (BlockEditLimitExceededException e) {
+                EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+                ms.customFailMessage(player, e.getMessage());
+                e.printStackTrace();
+            } catch (SelectionIncompleteException e) {
+                MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+            }
             CuboidSerializer ser = new FlatFileSerializer(tmp);
             ser.save(command[1], player.getWorld().getFilePrefix());
             ms.successMessage(player, "backupSuccess");

@@ -140,7 +140,7 @@ public class RegionManager {
      * Extend the tree by adding a new node
      * @param cube
      */
-    private void addNode(CuboidNode cube) {
+    public void addNode(CuboidNode cube) {
         if(cube.getCuboid().getParent() == null) {
             addRoot(cube);
             saveSingle(cube);
@@ -152,7 +152,7 @@ public class RegionManager {
                     
                     for(CuboidNode node: root.toList()) {
                         
-                        if(node.getCuboid().getName().equalsIgnoreCase(cube.getCuboid().getParent())) {
+                        if(node.getName().equalsIgnoreCase(cube.getParent())) {
                             
                             node.addChild(cube);
                             cube.getCuboid().hasChanged = true;

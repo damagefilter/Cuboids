@@ -1098,7 +1098,7 @@ public class CuboidInterface {
         }
         
         if(cube.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod") 
-                || player.hasPermission("/cIgnoreRestrictions") || player.hasPermission("/cdelete")) {
+                || player.hasPermission("cIgnoreRestrictions") || player.hasPermission("cdelete")) {
                 String response = regions.removeCuboid(cube, false);
                 
                 if(response.equalsIgnoreCase("NOT_REMOVED_HAS_CHILDS")) {
@@ -1145,7 +1145,7 @@ public class CuboidInterface {
         }
         if(cube.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod")|| player.hasPermission("cIgnoreRestrictions")) {
             if(!player.hasPermission("callow")) {
-                if(!player.hasPermission("/cIgnoreRestrictions")) {
+                if(!player.hasPermission("cIgnoreRestrictions")) {
                     ms.failMessage(player, "permissionDenied");
                     return false;
                 }
@@ -1226,13 +1226,6 @@ public class CuboidInterface {
         if(cube != null) {
             if(cube.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod") || player.hasPermission("cIgnoreRestrictions")) {
                 
-                if(!player.hasPermission("callow")) {
-                    if(!player.hasPermission("cIgnoreRestrictions")) {
-                        ms.failMessage(player, "permissionDenied");
-                        return false;
-                    }
-                }
-                
                 for(int i = 3; i < command.length; i++) {
                     cube.removeRestrictedItem(CServer.getServer().getItemId(command[i]));
                 }
@@ -1255,13 +1248,6 @@ public class CuboidInterface {
         CuboidE cube = regions.getCuboidByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
         if(cube != null) {
             if(cube.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod") || player.hasPermission("cIgnoreRestrictions")) {
-                
-                if(!player.hasPermission("callow")) {
-                    if(!player.hasPermission("cIgnoreRestrictions")) {
-                        ms.failMessage(player, "permissionDenied");
-                        return false;
-                    }
-                }
                 
                 for(int i = 3; i < command.length; i++) {
                     cube.addRestrictedItem(CServer.getServer().getItemId(command[i]));
@@ -1343,10 +1329,10 @@ public class CuboidInterface {
     public boolean resize(CPlayer player, String cuboidName) {
         CuboidE cube = regions.getCuboidByName(cuboidName, player.getWorld().getName(), player.getWorld().getDimension());
         if(cube != null) {
-            if(cube.playerIsOwner(player.getName()) || player.hasPermission("/cAreaMod") || player.hasPermission("/cIgnoreRestrictions")) {
-                if(!player.hasPermission("/cIgnoreRestrictions")) {
-                    if(!player.hasPermission("/cmove")) {
-                        if(!player.hasPermission("/cAreaMod")) {
+            if(cube.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod") || player.hasPermission("cIgnoreRestrictions")) {
+                if(!player.hasPermission("cIgnoreRestrictions")) {
+                    if(!player.hasPermission("cmove")) {
+                        if(!player.hasPermission("cAreaMod")) {
                             ms.failMessage(player, "permissionDenied");
                             return false;
                         }
@@ -1558,7 +1544,7 @@ public class CuboidInterface {
             ms.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
-        if(!player.hasPermission("/cIgnoreRestrictions")) {
+        if(!player.hasPermission("cIgnoreRestrictions")) {
             if(!(cube.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod"))) {
                 ms.failMessage(player, "permissionDenied");
                 return;

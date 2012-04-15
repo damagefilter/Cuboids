@@ -3,8 +3,11 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blockoperators.VectorOffsetGenerator;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
+import net.playblack.mcutils.EventLogger;
 
 
 /**
@@ -34,11 +37,21 @@ public class Cpaste extends CBaseCommand {
         CuboidSelection sel = SessionManager.getInstance().getClipboard(player.getName());
         VectorOffsetGenerator gen = new VectorOffsetGenerator(sel, player.getWorld());
         gen.setOffsetVector(player.getPosition());
-        if(gen.execute(player, true)) {
-            ms.successMessage(player, "selectionPasted");
-        }
-        else {
-            ms.failMessage(player, "selectionNotPasted");
+        try {
+            try {
+                if(gen.execute(player, true)) {
+                    ms.successMessage(player, "selectionPasted");
+                }
+                else {
+                    ms.failMessage(player, "selectionNotPasted");
+                }
+            } catch (SelectionIncompleteException e) {
+                MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+            }
+        } catch (BlockEditLimitExceededException e) {
+            EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+            ms.customFailMessage(player, e.getMessage());
+            e.printStackTrace();
         }
     }
 }

@@ -1,11 +1,15 @@
 package net.playblack.cuboids.actions;
 
 import net.playblack.cuboids.Config;
+import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.SphereGenerator;
 import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.PlayerSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.Vector;
 
 public class BrushHandler {
@@ -23,7 +27,15 @@ public class BrushHandler {
                 gen.setRadius(selection.getBrushRadius());
                 gen.setMaterial(new CBlock(selection.getBrushType(), selection.getBrushData()));
                 gen.setHollow(true);
-                gen.execute(player, true);
+                try {
+                    gen.execute(player, true);
+                } catch (BlockEditLimitExceededException e) {
+                    EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+                    MessageSystem.getInstance().customFailMessage(player, e.getMessage());
+                    e.printStackTrace();
+                } catch (SelectionIncompleteException e) {
+                    MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+                }
             }
         }
     }

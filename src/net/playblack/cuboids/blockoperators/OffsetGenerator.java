@@ -2,6 +2,8 @@ package net.playblack.cuboids.blockoperators;
 
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
@@ -52,7 +54,7 @@ public class OffsetGenerator extends BaseGen {
         this.distance = distance;
     }
     
-    private void recalculateBoundingRectangle(CuboidSelection tmp) {
+    private CuboidSelection recalculateBoundingRectangle(CuboidSelection tmp) {
         switch(direction) {
             case 0:
                 tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin().getY(), tmp.getOrigin().getZ()-distance));
@@ -78,6 +80,7 @@ public class OffsetGenerator extends BaseGen {
                 tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset().getY()-distance, tmp.getOffset().getZ()));
                 break;
             }
+        return tmp;
     }
     /**
      * This returns a CuboidSelection containing the _final_ move result.
@@ -88,36 +91,40 @@ public class OffsetGenerator extends BaseGen {
     private void calculateOffset() {
        // CuboidSelection tmp = new CuboidSelection(selection);
         CBlock air = new CBlock(0,0);
+        CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset());
         for(Vector key : selection.getBlockList().keySet()) {
             CBlock original = selection.getBlock(key);
-            Vector originalPosition = new Vector(key);
+            Vector newPos = new Vector(0,0,0);
             switch(direction) {
                 case 0:
-                    key = new Vector(key.getX(), key.getY(), key.getZ()-distance);
+                    newPos = new Vector(key.getX(), key.getY(), key.getZ()-distance);
                     break;
                 case 1:
-                    key = new Vector(key.getX()-distance, key.getY(), key.getZ());
+                    newPos = new Vector(key.getX()-distance, key.getY(), key.getZ());
                 case 2:
-                    key = new Vector(key.getX(), key.getY(), key.getZ()+distance);
+                    newPos = new Vector(key.getX(), key.getY(), key.getZ()+distance);
                     break;
                 case 3:
-                    key = new Vector(key.getX()+distance, key.getY(), key.getZ());
+                    newPos = new Vector(key.getX()+distance, key.getY(), key.getZ());
                     break;
                 case 4:
-                    key = new Vector(key.getX(), key.getY()+distance, key.getZ());
+                    newPos = new Vector(key.getX(), key.getY()+distance, key.getZ());
                     break;
                 case 5:
-                    key = new Vector(key.getX(), key.getY()-distance, key.getZ());
+                    newPos = new Vector(key.getX(), key.getY()-distance, key.getZ());
                     break;
                 }
-            selection.setBlock(key, original);
+            tmp.setBlock(newPos, original);
             //Set the old position to be nothing
-            selection.setBlock(originalPosition, air);
+            tmp.setBlock(key, air);
         }
-        recalculateBoundingRectangle(selection);
+        tmp = recalculateBoundingRectangle(tmp);
+        selection.setOrigin(tmp.getOrigin());
+        selection.setOffset(tmp.getOffset());
+        selection.setBlockList(tmp.getBlockList());
     }
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         selection.clearBlocks();
         scanWorld(false, true);
         calculateOffset();
@@ -128,7 +135,9 @@ public class OffsetGenerator extends BaseGen {
         if(newHistory) {
             SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
+        System.out.println("Modify world...");
         boolean result = modifyWorld(true);
+        System.out.println("Result: "+result);
         return result;
     }
 }

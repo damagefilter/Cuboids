@@ -252,7 +252,6 @@ public class BlockActionHandler {
      * @return
      */
     public static boolean handleFarmland(Vector point, CWorld world, int type, int newType) {
-//        System.out.println("handle block update");
         if(type == 60) {
             if(newType != 60) {
                 return CuboidInterface.getInstance().isFarmland(point, world);

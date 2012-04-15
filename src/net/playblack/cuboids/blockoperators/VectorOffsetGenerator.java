@@ -1,8 +1,12 @@
 package net.playblack.cuboids.blockoperators;
 
 
+import java.util.LinkedHashMap;
+
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
@@ -17,6 +21,7 @@ import net.playblack.mcutils.Vector;
 public class VectorOffsetGenerator extends BaseGen {
 
     private Vector position;
+    private LinkedHashMap<Vector, CBlock> originalPositions;
     /**
      * The selection you pass along here will be written into the world!
      * @param selection
@@ -51,19 +56,21 @@ public class VectorOffsetGenerator extends BaseGen {
         
         double z_distance = position.getZ() - 
                             selection.getOrigin().getZ();
-        
+        CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset());
         synchronized(lock) {
             for(Vector key : selection.getBlockList().keySet()) {
                 CBlock b = selection.getBlockList().get(key);
-                selection.setBlock(new Vector(key.getX()+x_distance, key.getY()+y_distance, key.getZ()+z_distance), b);
+                tmp.setBlock(new Vector(key.getX()+x_distance, key.getY()+y_distance, key.getZ()+z_distance), b);
             }
+            originalPositions = selection.getBlockList();
+            selection.setBlockList(tmp.getBlockList());
         }   
         //We spare us the recalculation of the bounding rectangle as scanWorld() will take only the blocks regardless of
         //origin and offset if blocklist is not empty
     }
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) {
-        selection.clearBlocks();
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
+        //selection.clearBlocks(); //<- do not clear here, we need the blocks for pasting, idiot!
         scanWorld(false, true);
         calculateOffset();
         CuboidSelection world = scanWorld(true, true);
@@ -74,6 +81,8 @@ public class VectorOffsetGenerator extends BaseGen {
             SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
         boolean result = modifyWorld(true);
+        //Reset positions for pasting the stuff again.
+        selection.setBlockList(originalPositions);
         return result;
     }
 }

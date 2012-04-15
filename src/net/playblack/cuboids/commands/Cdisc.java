@@ -3,9 +3,12 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.DiscGenerator;
 import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 
 /**
@@ -87,17 +90,25 @@ public class Cdisc extends CBaseCommand {
         gen.setRadius(radius);
         gen.setHollow(fill);
         
-        if(gen.execute(player, true)) {
-            if(fill) {
-                ms.successMessage(player, "discCreated");
+        try {
+            if(gen.execute(player, true)) {
+                if(fill) {
+                    ms.successMessage(player, "discCreated");
+                }
+                else {
+                    ms.successMessage(player, "circleCreated");
+                }
             }
             else {
-                ms.successMessage(player, "circleCreated");
+                ms.failMessage(player, "selectionIncomplete");
+                ms.failMessage(player, "discNotCreated");
             }
-        }
-        else {
-            ms.failMessage(player, "selectionIncomplete");
-            ms.failMessage(player, "discNotCreated");
+        } catch (BlockEditLimitExceededException e) {
+            EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+            ms.customFailMessage(player, e.getMessage());
+            e.printStackTrace();
+        } catch (SelectionIncompleteException e) {
+            MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
         }
         return;
     }

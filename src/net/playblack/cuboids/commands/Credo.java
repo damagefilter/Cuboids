@@ -4,8 +4,11 @@ import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blockoperators.GenericGenerator;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
+import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 
 
@@ -17,7 +20,7 @@ import net.playblack.mcutils.ToolBox;
 public class Credo extends CBaseCommand {
 
     public Credo() {
-        super("Redo block operations: /credo <steps>", 1,2);
+        super("Redo block operations: /credo [steps] [player]", 1,3);
     }
 
     @Override
@@ -36,26 +39,40 @@ public class Credo extends CBaseCommand {
             ms.failMessage(player, "undoDisabled");
             return; //from a morality standpoint, this should never be disabled but there you go.
         }
-        int steps;
-        if(command.length == 2) {
+        int steps=1;
+        String subject = player.getName();
+        
+        if(command.length == 3) {
+            subject = command[2];
             steps = ToolBox.parseInt(command[1]);
             if(steps == -1) {
                 steps = 1;
             }
         }
-        else {
-            steps = 1;
+        else if(command.length == 2) {
+            steps = ToolBox.parseInt(command[1]);
+            if(steps < 1) {
+                steps = 1;
+            }
         }
         
         for(int i = 0; i<steps;i++) {
-            CuboidSelection sel = SessionManager.getInstance().getPlayerHistory(player.getName()).redo();
+            CuboidSelection sel = SessionManager.getInstance().getPlayerHistory(subject).redo();
             if(sel == null) {
                 ms.notification(player, "Nothing lef to redo!");
                 //ms.successMessage(player, "redoDone");
                 return;
             }
             GenericGenerator gen = new GenericGenerator(sel, player.getWorld());
-            gen.execute(player, false);
+            try {
+                gen.execute(player, false);
+            } catch (BlockEditLimitExceededException e) {
+                EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+                ms.customFailMessage(player, e.getMessage());
+                e.printStackTrace();
+            } catch (SelectionIncompleteException e) {
+                MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+            }
         }
         
         ms.successMessage(player, "redoDone");

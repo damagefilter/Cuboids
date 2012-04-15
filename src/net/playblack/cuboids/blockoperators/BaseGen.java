@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
@@ -37,6 +39,7 @@ public abstract class BaseGen implements IShapeGen {
             return false;
         }
         if(requireSelectionComplete && !selection.isComplete()) {
+            System.out.println("Selection is incomplete!");
             return false;
         }
         //NOTE: World must have been scanned before this operation!
@@ -96,13 +99,24 @@ public abstract class BaseGen implements IShapeGen {
     /**
      * Fill the current selection with blocks that are currently in the world
      * @param returnSelection true if you want to return the selection instead of overwriting the blocks of the internal one
+     * @throws BlockEditLimitExceededException 
+     * @throws SelectionIncompleteException 
      */
-    protected CuboidSelection scanWorld(boolean returnSelection, boolean requireCompleteSelection) {
+    protected CuboidSelection scanWorld(boolean returnSelection, boolean requireCompleteSelection) throws BlockEditLimitExceededException, SelectionIncompleteException {
         if(selection == null) {
             return null;
         }
         if(requireCompleteSelection && !selection.isComplete()) {
-            return null;
+            throw new SelectionIncompleteException("Selection was not complete in "+this.getClass().getSimpleName());
+        }
+        if(selection.getBlockList().isEmpty() && selection.isComplete()) {
+            double areaVolume = selection.getBoundarySize();
+            if(areaVolume > 700000) {
+                throw new BlockEditLimitExceededException("Too many blocks to process in "+this.getClass().getSimpleName()+" ("+areaVolume+" blocks)");
+            }
+        }
+        else if(selection.getBlockList().size() > 700000) {
+            throw new BlockEditLimitExceededException("Too many blocks to process in "+this.getClass().getSimpleName()+" ("+selection.getBlockList().size()+" blocks)");
         }
         CuboidSelection tmp = new CuboidSelection();
         if(selection.getBlockList().isEmpty()) {
@@ -148,8 +162,10 @@ public abstract class BaseGen implements IShapeGen {
     /**
      * Return a cuboid selection with the current world content of the world you passed along in the constructor!
      * @return
+     * @throws BlockEditLimitExceededException 
+     * @throws SelectionIncompleteException 
      */
-    public CuboidSelection getWorldContent(CuboidSelection sel) {
+    public CuboidSelection getWorldContent(CuboidSelection sel) throws BlockEditLimitExceededException, SelectionIncompleteException {
         sel = scanWorld(true, true);
         return sel;
     }

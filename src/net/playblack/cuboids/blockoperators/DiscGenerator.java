@@ -2,6 +2,8 @@ package net.playblack.cuboids.blockoperators;
 
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
@@ -88,7 +90,7 @@ public class DiscGenerator extends BaseGen {
         }
     }
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         createDisc();
         CuboidSelection world = scanWorld(true, false);
         

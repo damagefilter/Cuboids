@@ -159,5 +159,14 @@ public class CBlock {
         }
         return new CBlock(type, data);
     }
+
+    /**
+     * Explain this block
+     * @return
+     */
+    public String explain() {
+        return  "Type: "+getType()+
+                ", Data: "+getData();
+    }
     
 }

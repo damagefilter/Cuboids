@@ -5,8 +5,11 @@ import java.io.File;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.GenericGenerator;
 import net.playblack.cuboids.datasource.CuboidDeserializer;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
+import net.playblack.mcutils.EventLogger;
 
 
 /**
@@ -39,15 +42,25 @@ public class Crestore extends CBaseCommand {
             CuboidSelection restore = des.convert();
             GenericGenerator gen = new GenericGenerator(restore, player.getWorld());
             
-            boolean success = gen.execute(player, true);
-            if(success) {
+            boolean success;
+            try {
+                success = gen.execute(player, true);
+                if(success) {
                 ms.successMessage(player, "restoreSuccess");
                 return;
+                }
+                else {
+                    ms.failMessage(player, "restoreFail");
+                    return;
+                }
+            } catch (BlockEditLimitExceededException e) {
+                EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+                ms.customFailMessage(player, e.getMessage());
+                e.printStackTrace();
+            } catch (SelectionIncompleteException e) {
+                MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
             }
-            else {
-                ms.failMessage(player, "restoreFail");
-                return;
-            }
+            
         }
         else {
             ms.failMessage(player, "restoreFail");

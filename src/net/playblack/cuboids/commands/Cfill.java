@@ -3,9 +3,12 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.CuboidGenerator;
 import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.EventLogger;
 
 /**
  * Fill a cuboid region
@@ -47,12 +50,20 @@ public class Cfill extends CBaseCommand {
         //Create the block generator
         CuboidGenerator gen = new CuboidGenerator(template, player.getWorld());
         gen.setBlock(b);
-        if(gen.execute(player, true)) {
-            ms.successMessage(player, "selectionFilled");
-        }
-        else {
-            ms.failMessage(player, "selectionIncomplete");
-            ms.failMessage(player, "selectionNotFilled");
+        try {
+            if(gen.execute(player, true)) {
+                ms.successMessage(player, "selectionFilled");
+            }
+            else {
+                ms.failMessage(player, "selectionIncomplete");
+                ms.failMessage(player, "selectionNotFilled");
+            }
+        } catch (BlockEditLimitExceededException e) {
+            EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+            ms.customFailMessage(player, e.getMessage());
+            e.printStackTrace();
+        } catch (SelectionIncompleteException e) {
+            MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
         }
         return;
     }

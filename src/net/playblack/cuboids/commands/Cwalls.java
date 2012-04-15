@@ -3,9 +3,12 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.WallsGenerator;
 import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.EventLogger;
 
 /**
  * Create walls along a cuboid selection
@@ -73,17 +76,25 @@ public class Cwalls extends CBaseCommand {
         gen.setFloorMaterial(floor);
         gen.setWallsOnly(onlyWalls);
         
-        if(gen.execute(player, true)) {
-            if(onlyWalls) {
-                ms.successMessage(player, "wallsCreated");
+        try {
+            if(gen.execute(player, true)) {
+                if(onlyWalls) {
+                    ms.successMessage(player, "wallsCreated");
+                }
+                else {
+                    ms.successMessage(player, "facesCreated");
+                }
             }
             else {
-                ms.successMessage(player, "facesCreated");
+                ms.failMessage(player, "selectionIncomplete");
+                ms.failMessage(player, "wallsNotCreated");
             }
-        }
-        else {
-            ms.failMessage(player, "selectionIncomplete");
-            ms.failMessage(player, "wallsNotCreated");
+        } catch (BlockEditLimitExceededException e) {
+            EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+            ms.customFailMessage(player, e.getMessage());
+            e.printStackTrace();
+        } catch (SelectionIncompleteException e) {
+            MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
         }
         return;
     }

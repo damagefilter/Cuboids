@@ -3,9 +3,12 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.CuboidGenerator;
 import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.EventLogger;
 
 /**
  * Replace blocks in a cuboid selection
@@ -51,12 +54,20 @@ public class Creplace extends CBaseCommand {
         gen.setReplace(true);
         gen.setBlock(sub);
         gen.setBlockToReplace(b);
-        if(gen.execute(player, true)) {
-            ms.successMessage(player, "selectionReplaced");
-        }
-        else {
-            ms.failMessage(player, "selectionIncomplete");
-            ms.failMessage(player, "selectionNotReplaced");
+        try {
+            if(gen.execute(player, true)) {
+                ms.successMessage(player, "selectionReplaced");
+            }
+            else {
+                ms.failMessage(player, "selectionIncomplete");
+                ms.failMessage(player, "selectionNotReplaced");
+            }
+        } catch (BlockEditLimitExceededException e) {
+            EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+            ms.customFailMessage(player, e.getMessage());
+            e.printStackTrace();
+        } catch (SelectionIncompleteException e) {
+            MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
         }
         return;
     }

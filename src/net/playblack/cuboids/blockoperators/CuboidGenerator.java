@@ -2,6 +2,8 @@ package net.playblack.cuboids.blockoperators;
 
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
@@ -48,7 +50,7 @@ public class CuboidGenerator extends BaseGen {
     }
     
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         selection.clearBlocks();
         scanWorld(false, true);
         
@@ -60,11 +62,9 @@ public class CuboidGenerator extends BaseGen {
             }
         }
         else {
-            System.out.println("Setting blocks in selection!");
             for(Vector position : selection.getBlockList().keySet()) {
                 selection.setBlock(position, block);
             }
-            System.out.println("done!");
         }
         if(newHistory) {
             System.out.println("Creating undo");

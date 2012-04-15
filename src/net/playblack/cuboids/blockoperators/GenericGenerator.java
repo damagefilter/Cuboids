@@ -1,6 +1,8 @@
 package net.playblack.cuboids.blockoperators;
 
 import net.playblack.cuboids.SessionManager;
+import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
+import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
@@ -22,7 +24,7 @@ public class GenericGenerator extends BaseGen {
         super(selection, world);
     }
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         if(newHistory) {
             CuboidSelection world = scanWorld(true, false);
             SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));

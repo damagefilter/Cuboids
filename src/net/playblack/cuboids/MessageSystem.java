@@ -64,9 +64,10 @@ public class MessageSystem {
         messages.put("enderControlOn", "Enderman Control is now enabled!");
         messages.put("enderControlOff", "Enderman Control is now disabled!");
         
-        messages.put("cuboidRemoved", "Cuboid was successfully removed");
-        messages.put("cuboidCreated", "Your Cuboid has been created!");
-        messages.put("cuboidMoved", "Your Cuboid has been moved!");
+        messages.put("cuboidRemoved", "The Cuboid was successfully removed!");
+        messages.put("cuboidCreated", "The Cuboid has been created!");
+        messages.put("cuboidMoved", "The Cuboid has been moved!");
+        messages.put("cuboidRenamed", "The Cuboid has been renamed!");
         
         messages.put("selectionFilled", "Your selection was filled!");
         messages.put("selectionReplaced", "Your selection was replaced!");
@@ -152,6 +153,7 @@ public class MessageSystem {
         errors.put("pyramidNotCreated", "Your pyramid has not been created!");
         errors.put("discNotCreated", "Cylinder/circle/disk not created!");
         errors.put("invalidHeight", "The height you specified was invalid! (How can you fail at this?)");
+        errors.put("invalidDistance", "The specified distance is invalid.");
         errors.put("invalidPriority", "You specified an invalid priority!");
         errors.put("undoDisabled", "Undo is disabled!");
         errors.put("restoreFail", "Cuboid restore has failed!");
