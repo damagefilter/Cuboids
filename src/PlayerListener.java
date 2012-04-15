@@ -1,6 +1,6 @@
 import net.playblack.cuboids.actions.BlockActionHandler;
-import net.playblack.cuboids.actions.MiscHandler;
 import net.playblack.cuboids.actions.HandlePlayerMovement;
+import net.playblack.cuboids.actions.MiscHandler;
 import net.playblack.cuboids.actions.ItemDropHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -67,8 +67,8 @@ public class PlayerListener extends PluginListener {
             }
             if(attacker.isPlayer()) {
                 return !MiscHandler.handlePvpDamage(
-                        CServer.getServer().getPlayer(attacker.getName()), 
-                        CServer.getServer().getPlayer(defender.getName()));
+                        CServer.getServer().getPlayer(attacker.getPlayer().getName()), 
+                        CServer.getServer().getPlayer(defender.getPlayer().getName()));
             }
         }
         return false;

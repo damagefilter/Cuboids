@@ -23,11 +23,12 @@ public class Bootstrapper {
      */
     public Bootstrapper(CServer server, Loader[] loaders) {
         EventLogger log = EventLogger.getInstance();
-        log.logMessage("Loading ...", "INFO");
+        log.cacheMessage("Loading ", false);
         
         //------------------------------------------------------
-        log.cacheMessage("Configuration ...", false);
         Config.getInstance(); //init this thing for a first time
+        log.cacheMessage("Version ... "+Config.getInstance().getVersion(), true);
+        log.cacheMessage("Configuration ...", false);
         log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
         

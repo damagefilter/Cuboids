@@ -785,7 +785,7 @@ public class CuboidInterface {
         }
         CuboidE cube = regions.getActiveCuboid(position, player.getWorld().getName(), player.getWorld().getDimension(), false).getCuboid();
         if(cube.getName().equals("__GLOBAL__")) {
-            return cube.isProtected();
+            return !cube.isProtected();
         }
         if(cube.isProtected()) {
             if(cube.playerIsAllowed(player.getName(), player.getGroups()) 

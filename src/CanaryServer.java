@@ -25,7 +25,16 @@ public class CanaryServer extends CServer {
         if(worlds.containsKey(name+dimension)) {
             return worlds.get(name+dimension);
         }
-        CanaryWorld world = new CanaryWorld(etc.getServer().getWorld(name)[dimension]);
+        CanaryWorld world = null;
+        if(dimension == 0) {
+            world = new CanaryWorld(etc.getServer().getWorld(name)[0]);
+        }
+        if(dimension == 1) {
+            world = new CanaryWorld(etc.getServer().getWorld(name)[2]);
+        }
+        if(dimension == -1) {
+            world = new CanaryWorld(etc.getServer().getWorld(name)[1]);
+        }
         worlds.put(name+dimension, world);
         return world;
     }
