@@ -47,7 +47,7 @@ public class MiscHandler {
             return !CuboidInterface.getInstance().isSanctuary(mob.getPosition(), mob.getWorld());
         }
         else if(mob.isAnimal()) {
-            return !CuboidInterface.getInstance().sanctuarySpawnsAnimals(mob);
+            return CuboidInterface.getInstance().sanctuarySpawnsAnimals(mob);
         }
         else {
             return true;
