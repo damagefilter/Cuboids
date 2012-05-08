@@ -71,7 +71,7 @@ public class VectorOffsetGenerator extends BaseGen {
     @Override
     public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         //selection.clearBlocks(); //<- do not clear here, we need the blocks for pasting, idiot!
-        scanWorld(false, true);
+        //scanWorld(false, true); //don't fetch again!
         calculateOffset();
         CuboidSelection world = scanWorld(true, true);
         if(world == null) {

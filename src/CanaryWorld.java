@@ -250,5 +250,9 @@ public class CanaryWorld extends CWorld {
         blockCache.add(toRet);
         return toRet;
     }
+    
+    public String toString() {
+        return "CanaryWorld";
+    }
 
 }

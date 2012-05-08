@@ -392,6 +392,18 @@ public class Vector
     }
     
     /**
+     * Calculates the center point between 2 points
+     * @param p1
+     * @param p2
+     * @return Vector between p1 and p2
+     */
+    public static Vector getCenterPoint(Vector p1, Vector p2) {
+        double x = (p1.getX()+p2.getX())/2;
+        double y = (p1.getY()+p2.getY())/2;
+        double z = (p1.getZ()+p2.getZ())/2;
+        return new Vector(x,y,z);
+    }
+    /**
      * Get component X as int
      * @return int x
      */

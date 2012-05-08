@@ -48,6 +48,7 @@ public class Ccopy extends CBaseCommand {
             MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
         }
         sel.setOrigin(player.getPosition());
+        //gen.
         SessionManager.getInstance().setClipboard(player.getName(), sel);
         ms.successMessage(player, "copiedToClipboard");
     }

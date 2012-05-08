@@ -1,10 +1,12 @@
 package net.playblack.cuboids;
 
+//import java.util.concurrent.TimeUnit;
+
 import net.playblack.cuboids.converters.Converter;
 import net.playblack.cuboids.converters.Loader;
 import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.cuboids.regions.CuboidInterface;
+//import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.EventLogger;
 
@@ -23,24 +25,32 @@ public class Bootstrapper {
      */
     public Bootstrapper(CServer server, Loader[] loaders) {
         EventLogger log = EventLogger.getInstance();
-        log.cacheMessage("Loading ", false);
-        
+        log.cacheMessage("Loading Cuboids2 ...", true);
+
         //------------------------------------------------------
-        Config.getInstance(); //init this thing for a first time
-        log.cacheMessage("Version ... "+Config.getInstance().getVersion(), true);
-        log.cacheMessage("Configuration ...", false);
-        log.cacheMessage("done!", false);
+       // log.cacheMessage("Server interface... ", false);
+        CServer.setServer(server);
+        //log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
         
-        //------------------------------------------------------
-        log.cacheMessage("Server interface... ", false);
-        CServer.setServer(server);
-        log.cacheMessage("done!", false);
+      //------------------------------------------------------
+        Config.getInstance(); //init this thing for a first time
+        log.cacheMessage("Version ... "+Config.getInstance().getVersion(), true);
+        //log.cacheMessage("Configuration ...", false);
+        //log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
         
         //------------------------------------------------------
         log.cacheMessage("Tasks ...", false);
-        CuboidInterface.getInstance(); //init this thing for a first time
+        //Debug code
+//        CuboidInterface.getInstance().getThreadmanager().scheduleAtFixedRate(new Runnable() {
+//            
+//            @Override
+//            public void run() {
+//                EventLogger.getInstance().logMessage("Still alive!", "DEBUG");
+//                
+//            }
+//        }, 1, 1, TimeUnit.MINUTES); //init this thing for a first time
         log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
         

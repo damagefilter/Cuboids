@@ -1458,9 +1458,22 @@ public class CuboidInterface {
                 player.sendMessage(ColorManager.Rose+"You can't build in this area");
             }
             
-            player.sendMessage(ColorManager.LightGray+"Flags: " + ColorManager.Yellow+cube.getFlagListSimple());
+            player.sendMessage(ColorManager.LightGray+"Flags: " + ColorManager.Yellow+cube.getFlagList());
             player.sendMessage(ColorManager.LightGray+"Players: " + ColorManager.Yellow+cube.getPlayerList());
             player.sendMessage(ColorManager.LightGray+"Groups: " + ColorManager.Yellow+ cube.getGroupList());
+            
+            String commands = cube.getTabuCommandList();
+            String items = cube.getItemListAsNames();
+            if(!commands.isEmpty()) {
+                player.sendMessage(ColorManager.LightGray+"Disallowed Commands:");
+                player.sendMessage(ColorManager.Yellow + commands);
+            }
+            
+            if(!items.isEmpty()) {
+                player.sendMessage(ColorManager.LightGray+"Disallowed Items:");
+                player.sendMessage(ColorManager.Yellow + items);
+            }
+            
             if(cube.getParent() == null) {
                 player.sendMessage(ColorManager.LightGray+"Parent: " + ColorManager.Yellow+"none");
             }
@@ -1486,9 +1499,21 @@ public class CuboidInterface {
         CuboidE cube = regions.getCuboidByName(name, player.getWorld().getName(),player.getWorld().getDimension());
         if(cube != null) {
             player.sendMessage(ColorManager.LightGray+"---- "+cube.getName()+" ----");
-            player.sendMessage(ColorManager.LightGray+"Flags: "+ColorManager.Yellow+cube.getFlagListSimple());
+            player.sendMessage(ColorManager.LightGray+"Flags: "+ColorManager.Yellow+cube.getFlagList());
             player.sendMessage(ColorManager.LightGray+"Players: "+ColorManager.Yellow+cube.getPlayerList());
             player.sendMessage(ColorManager.LightGray+"Groups: "+ColorManager.Yellow+cube.getGroupList());
+            String commands = cube.getTabuCommandList();
+            String items = cube.getItemListAsNames();
+            if(!commands.isEmpty()) {
+                player.sendMessage(ColorManager.LightGray+"Disallowed Commands:");
+                player.sendMessage(ColorManager.Yellow + commands);
+            }
+            
+            if(!items.isEmpty()) {
+                player.sendMessage(ColorManager.LightGray+"Disallowed Items:");
+                player.sendMessage(ColorManager.Yellow + items);
+            }
+            
             player.sendMessage(ColorManager.LightGray+"Priority: "+ColorManager.Yellow+cube.getPriority());
             if(cube.getParent() == null) {
                 player.sendMessage(ColorManager.LightGray+"Parent: " + ColorManager.Yellow+"none");
@@ -1534,7 +1559,7 @@ public class CuboidInterface {
                 break;
             }
             CuboidE cuboid = cuboids.get(i).getCuboid();
-            MessageSystem.customMessage(player, ColorManager.LightGray, cuboid.getName() + " : " + ColorManager.LightGreen + cuboid.getFlagListSimple());
+            MessageSystem.customMessage(player, ColorManager.LightGray, cuboid.getName() + " : " + ColorManager.LightGreen + cuboid.getFlagList());
         }
     }
     
@@ -1557,5 +1582,9 @@ public class CuboidInterface {
     public void killTasks() {
         threadManager.shutdown();
         
+    }
+    
+    public ScheduledExecutorService getThreadmanager() {
+        return threadManager;
     }
 }

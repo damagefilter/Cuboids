@@ -56,6 +56,11 @@ public class CanaryServer extends CServer {
         }
         return playerList.get(name);
     }
+    
+    @Override
+    public void removePlayer(String player) {
+        playerList.remove(player);
+    }
 
     @Override
     public void scheduleTask(long delay, Runnable task) {
@@ -74,7 +79,22 @@ public class CanaryServer extends CServer {
 
     @Override
     public int getItemId(String itemName) {
-        return etc.getDataSource().getItem(itemName);
+        int id = 0;
+        id = etc.getDataSource().getItem(itemName);
+        if(id != 0 && id >= 0) {
+            return id;
+        }
+        else if(id == 0 && itemName.equalsIgnoreCase("air")) {
+            return id;
+        }
+        else {
+            try {
+                return Integer.valueOf(itemName);
+            }
+            catch(NumberFormatException e) {
+                return -1;
+            }
+        }
     }
 
     @Override

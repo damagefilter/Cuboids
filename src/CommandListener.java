@@ -2,15 +2,18 @@ import net.playblack.cuboids.commands.*;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.EventLogger;
 
 
 public class CommandListener extends PluginListener {
     @Override
     public boolean onCommand(Player player, String[] split) {
+        EventLogger.getInstance().logMessage("Processing command...", "DEBUG");
         SelectionManager.getInstance().getPlayerSelection(player.getName());
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
         CBaseCommand command;
-        
+        EventLogger.getInstance().logMessage("Creating player: "+cplayer.toString(), "DEBUG");
+        EventLogger.getInstance().logMessage("Receiving command: "+etc.combineSplit(0, split, " ").trim(), "DEBUG");
         if(split[0].equalsIgnoreCase("/cdel")) {
             command = new Cdel();
             command.execute(cplayer, split);
@@ -124,6 +127,16 @@ public class CommandListener extends PluginListener {
             command.execute(cplayer, split);
             return true;
         }
+        if(split[0].equalsIgnoreCase("/cbackup")) {
+            command = new Cbackup();
+            command.execute(cplayer, split);
+            return true;
+        }
+        if(split[0].equalsIgnoreCase("/crestore")) {
+            command = new Crestore();
+            command.execute(cplayer, split);
+            return true;
+        }
         if(split.length == 2) {
             if(split[0].equalsIgnoreCase("/cmod") && split[1].equalsIgnoreCase("list")) {
                 command = new CmodList();
@@ -133,6 +146,12 @@ public class CommandListener extends PluginListener {
         }
         
         if(split.length > 2) {
+            
+            if(split[0].equalsIgnoreCase("/cmod") && split[1].equalsIgnoreCase("list")) {
+                command = new CmodList();
+                command.execute(cplayer, split);
+                return true;
+            }
             if(split[0].equalsIgnoreCase("/cmod") && split[1].equalsIgnoreCase("toggle")) {
                 command = new ToggleGlobalProperty();
                 command.execute(cplayer, split);
@@ -163,20 +182,10 @@ public class CommandListener extends PluginListener {
                 return true;
             }
             
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("backup")) {
-                command = new Cbackup();
-                command.execute(cplayer, split);
-                return true;
-            }
+            
             
             if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("loadpoints")) {
                 command = new CmodLoad();
-                command.execute(cplayer, split);
-                return true;
-            }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("restore")) {
-                command = new Crestore();
                 command.execute(cplayer, split);
                 return true;
             }
@@ -240,6 +249,12 @@ public class CommandListener extends PluginListener {
                 return true;
             }
             
+            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("tpto")) {
+                command = new CmodTpTo();
+                command.execute(cplayer, split);
+                return true;
+            }
+            
             if(split[0].equalsIgnoreCase("/cmod") && (split[2].equalsIgnoreCase("resize") || split[2].equalsIgnoreCase("move"))) {
                 command = new CmodMove();
                 command.execute(cplayer, split);
@@ -288,7 +303,7 @@ public class CommandListener extends PluginListener {
             command.execute(cplayer, split);
             return true;
         }
-        
+        EventLogger.getInstance().logMessage("No C2 command - returning false", "DEBUG");
         return false;
     }
 }

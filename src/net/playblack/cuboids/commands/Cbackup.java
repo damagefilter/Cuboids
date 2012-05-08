@@ -46,8 +46,10 @@ public class Cbackup extends CBaseCommand {
                 EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
                 ms.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
+                return;
             } catch (SelectionIncompleteException e) {
                 MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+                return;
             }
             CuboidSerializer ser = new FlatFileSerializer(tmp);
             ser.save(command[1], player.getWorld().getFilePrefix());

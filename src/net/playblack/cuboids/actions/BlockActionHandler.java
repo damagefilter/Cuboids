@@ -30,6 +30,9 @@ public class BlockActionHandler {
         if(CuboidInterface.getInstance().itemIsRestricted(position, player.getWorld(), itemId)) {
             return false;
         }
+        if(Config.getInstance().itemIsRestricted(itemId)) {
+            return false;
+        }
         return true;
     }
     
@@ -139,7 +142,7 @@ public class BlockActionHandler {
      * @return false if no points had to be set!
      */
     public static boolean handleSetPoints(CPlayer player, Vector point, boolean setOffset, boolean remote) {
-        if((player.getItemInHand().getId() == Config.getInstance().getRegionItem()) && (!remote)) {
+        if((player.getItemInHand().getId() == Config.getInstance().getRegionItem()) && !remote) {
             if(Config.getInstance().isUseDoubleAction()) {
                 return setFixedPointDoubleAction(player, point, setOffset);
             }
@@ -147,7 +150,7 @@ public class BlockActionHandler {
                 return setFixedPointSingleAction(player, point);
             }
         }
-        if((player.getItemInHand().getId() == Config.getInstance().getRemoteRegionItem()) && (remote)) {
+        if((player.getItemInHand().getId() == Config.getInstance().getRemoteRegionItem()) && remote) {
             return setFixedPointSingleAction(player, point);
         }
         return false;

@@ -3,6 +3,7 @@ package net.playblack.cuboids.regions;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
@@ -648,6 +649,10 @@ public class CuboidE {
         }
     }
     
+    /**
+     * Return the arraylist containing restricted commands
+     * @return
+     */
     public ArrayList<String> getTabuCommands() {
         return this.tabuCommands;
     }
@@ -658,6 +663,23 @@ public class CuboidE {
         else {
             return false;
         }
+    }
+    
+    /**
+     * Get a list of all commands as CSV string
+     * @return
+     */
+    public String getTabuCommandList() {
+        StringBuilder items = new StringBuilder();
+        for(String i : tabuCommands) {
+            if(!i.isEmpty()) {
+                items.append(i).append(",");
+            }
+        }
+        if(items.length() == 0) {
+            return "";
+        }
+        return items.toString();
     }
     /*
      * ***********************************************************
@@ -929,7 +951,7 @@ public class CuboidE {
         return false;
     }
     
-    public String getFlagListSimple() {
+    public String getFlagList() {
         StringBuilder flaglist = new StringBuilder();
         if(isAllowedPvp()) {
             flaglist.append("PvP");
@@ -953,7 +975,12 @@ public class CuboidE {
             flaglist.append(", Restricted");
         }
         if(isSanctuary()) {
-            flaglist.append(", Sanctuary");
+            if(sanctuarySpawnAnimals()) {
+                flaglist.append(", Sanctuary(animals)");
+            }
+            else {
+                flaglist.append(", Sanctuary(no animals)");
+            }
         }
         if(isFreeBuild()) {
             flaglist.append(", Freebuild");
@@ -1026,6 +1053,17 @@ public class CuboidE {
         else {
             return out;
         }
+    }
+    
+    public String getItemListAsNames() {
+        StringBuilder items = new StringBuilder();
+        for(Integer i : restrictedItems) {
+            items.append(CServer.getServer().getItemName(i.intValue())).append(",");
+        }
+        if(items.length() == 0) {
+            return "";
+        }
+        return items.toString();
     }
     
     public ArrayList<String> getGroupListRaw() {

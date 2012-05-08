@@ -58,6 +58,9 @@ public class CanaryPlayer extends CPlayer {
     }
     @Override
     public void sendMessage(String message) {
+        if(message.length() <= 0 || message.equalsIgnoreCase("null")) {
+            return;
+        }
         player.sendMessage(message);
 
     }
@@ -143,8 +146,18 @@ public class CanaryPlayer extends CPlayer {
     @Override
     public void teleportTo(Vector v) {
         Location location = new Location(player.getWorld(), v.getX(), v.getY(), v.getZ(), player.getRotation(), player.getPitch());
+        if(!this.world.isChunkLoaded(v)) {
+            this.world.loadChunk(v);
+        }
         player.teleportTo(location);
         
+    }
+    
+    public String toString() {
+        return new StringBuilder().append("Wrapped player: ")
+                .append(player.getName()).append("\n")
+                .append("Wrapper: ")
+                .append(this.getClass().getSimpleName()).toString();
     }
 
 }

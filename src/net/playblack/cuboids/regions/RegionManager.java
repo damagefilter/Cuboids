@@ -124,7 +124,7 @@ public class RegionManager {
             for(CuboidNode root : rootNodes) {
                 if(root.equalWorlds(cube)) {
                     for(CuboidNode node: root.toList()) {
-                        if(node.getCuboid().getName().equalsIgnoreCase(cube.getParent())) {
+                        if(node.getCuboid().getName().equals(cube.getParent())) {
                             cube.hasChanged = true;
                             node.addChild(nodee);
                         }
@@ -152,7 +152,7 @@ public class RegionManager {
                     
                     for(CuboidNode node: root.toList()) {
                         
-                        if(node.getName().equalsIgnoreCase(cube.getParent())) {
+                        if(node.getName().equals(cube.getParent())) {
                             
                             node.addChild(cube);
                             cube.getCuboid().hasChanged = true;
@@ -188,118 +188,54 @@ public class RegionManager {
      * @param force
      * @return
      */
-    public String removeCuboid(CuboidE cube, boolean force)
-    {
-      for (CuboidNode tree : rootNodes) {
-        for (CuboidNode node : tree.toList()) {
-          if (node.getName().equalsIgnoreCase(cube.getName())) {
-              //Found proper cuboid
-            if (node.getChilds().size() <= 0) {
-                //has no childs
-              if (node.getCuboid().getParent() == null)
-              {
-                  //cuboid is a tree
-                deleteTree(node.getCuboid().getName());
-                return "REMOVED";
-              }
-
-              CuboidNode parent = getCuboidNodeByName(node.getParent(), node.getWorld(), node.getDimension());
-              if (parent != null) {
-                  //Cuboid as a parent so we take it and remove the cuboid from the parents child list
+    public String removeCuboid(CuboidE cube, boolean force) {
+        CuboidNode node = null;
+        for(CuboidNode tree : rootNodes) {
+            for(CuboidNode n : tree.toList()) {
+                if(n.getName().equals(cube.getName())) {
+                    node = n;
+                    break;
+                }
+            }
+        }
+        if(node == null) {
+            return "NOT_REMOVED_NOT_FOUND";
+        }
+        
+        if(node.getParent() == null) {
+            if(node.getChilds().size() > 0) {
+                for(CuboidNode child : node.getChilds()) {
+                    child.getCuboid().setParent(null);
+                    updateCuboidNode(child.getCuboid());
+                }
+            }
+            deleteTree(node.getName());
+            removeNodeFile(node);
+            autoSortCuboidAreas();
+            return "REMOVED";
+        }
+        else {
+            CuboidNode parent = getCuboidNodeByName(node.getParent(), node.getWorld(), node.getDimension());
+            if(parent != null) {
                 parent.getChilds().remove(node);
                 removeNodeFile(node);
                 return "REMOVED";
-              }
-
-              return "NOT_REMOVED";
             }
             else {
-                if (force) {
-                    //We have childs
-                  if (node.getParent() == null)
-                  {
-                      //we have no parent
-                      //When forcing just remove the whole tree including child nodes
-                      //This also removes the files form disk
-                    deleteTree(node.getCuboid().getName());
-                    return "REMOVED";
-                  }
-
-                  CuboidNode parent = getCuboidNodeByName(node.getParent(), node.getWorld(), node.getDimension());
-                  if (parent != null) {
-                      //We have a parent
-                      for(CuboidNode childNode : node.getChilds()) {
-                          //de-parent child nodes
-                          childNode.getCuboid().setParent(ToolBox.stringToNull(parent.getName()));
-                          childNode.getCuboid().hasChanged=true;
-                          addRoot(childNode);
-                          saveSingle(childNode);
-                      }
-                    parent.getChilds().remove(node);
-
-                    removeNodeFile(node);
-                    return "REMOVED";
-                  }
-
-                  return "NOT_REMOVED";
-                }
-                if (node.getCuboid().getParent() == null)
-                {
-                    CuboidNode parentNode;
-                  for (CuboidNode child : node.getChilds()) {
-                    child.getCuboid().setParent(ToolBox.stringToNull("null"));
-                    addRoot(child);
-                    saveSingle(child);
-                    parentNode = getCuboidNodeByName(child.getParent(), 
-                      child.getWorld(), child.getDimension());
-                    
-                    if (parentNode != null) {
-                      parentNode.getChilds().remove(child);
-                      node.getChilds().remove(child);
-                      removeNodeFile(node);
-                    }
-                  }
-                  deleteTree(node.getCuboid().getName());
-                  return "REMOVED";
-                }
-                else {
-                    CuboidNode parent = getCuboidNodeByName(node.getParent(), node.getWorld(), node.getDimension());
-                    for (CuboidNode child : node.getChilds()) {
-                        //Make childs root nodes
-                      //child.getCuboid().setParent(ToolBox.stringToNull("null"));
-                      child.getCuboid().setParent(ToolBox.stringToNull(parent.getName()));
-                      child.getCuboid().hasChanged = true;
-                      addRoot(child);
-                      saveSingle(child);
-                    }
-                    
-                    if (parent != null) {
-                        parent.getChilds().remove(node);
-                        removeNodeFile(node);
-                    }
-                    else {
-                        deleteTree(node.getName());
-                    }
-                    return "REMOVED";
-                }  
+                return "NOT_REMOVED_CRAZY_ERROR";
             }
-          }
         }
-      }
-
-      return "NOT_REMOVED_NOT_FOUND";
     }
     
     private void deleteTree(String name) {
+        CuboidNode n = null;
         for(CuboidNode root : rootNodes) {
-            if(root.getName().equalsIgnoreCase(name)) {
-                for(CuboidNode node : root.toList()) {
-                    removeNodeFile(node);
-                }
-                removeNodeFile(root);
-                rootNodes.remove(root);
+            if(root.getName().equals(name)) {
+                n = root;
             }
         }
+        removeNodeFile(n);
+        rootNodes.remove(n);
     }
     
     /**
@@ -317,7 +253,7 @@ public class RegionManager {
                 CuboidE cube = tree.getCuboid();
                 CuboidNode parent = getPossibleParent(cube);
                 if(parent != null) {
-                    if(parent.getName().equalsIgnoreCase(cube.getName())) {
+                    if(parent.getName().equals(cube.getName())) {
                         //The child will always fit in itself and as its within the list, 
                         //we need to skip it
                         continue;
@@ -383,12 +319,12 @@ public class RegionManager {
         if (tree.equalWorlds(cube)) {
           for (CuboidNode node : tree.toList()) {
               //log.logMessage("Unfolding Tree in updateCuboidNode - looking for "+cube.getName(), "INFO");
-            if (!node.getName().equalsIgnoreCase(cube.getName())) {
+            if (!node.getName().equals(cube.getName())) {
                 //no match, continue with next set
               continue;
             }
             
-            if ((cube.getParent() != null) && (node.getParent().equalsIgnoreCase(cube.getParent())))
+            if ((cube.getParent() != null) && (node.getParent().equals(cube.getParent())))
             {
                   //log.logMessage("Parent NOT null AND node parent is same!", "INFO");
                   if ((node.getParent() != null) && (node.isRoot()))
@@ -410,7 +346,7 @@ public class RegionManager {
                   return false;
             }
 
-            if ((cube.getParent() != null) && (!node.getParent().equalsIgnoreCase(cube.getParent())))
+            if ((cube.getParent() != null) && (!node.getParent().equals(cube.getParent())))
             {
                // log.logMessage("Parent Node has changed!!", "INFO");
                   if (cuboidExists(cube.getParent(), cube.getWorld(), cube.getDimension())) {
@@ -468,7 +404,7 @@ public class RegionManager {
         for(CuboidNode tree : rootNodes) {
             if(tree.equalWorlds(world, dimension)) {
                 for(CuboidNode node : tree.toList()) {
-                    if(node.getName().equalsIgnoreCase(cube)) {
+                    if(node.getName().equals(cube)) {
                         return true;
                     }
                 }
@@ -550,7 +486,7 @@ public class RegionManager {
                         //System.out.println(n.getCuboid().getName()+" is within "+c.getName());
                         if(n.getParent() == null) {
                         //  System.out.println("We have no parent yet!");
-                            if(n.getName().equalsIgnoreCase(c.getName())) {
+                            if(n.getName().equals(c.getName())) {
                             //  System.out.println("Same name, stupid");
                                 continue;
                             }
@@ -630,7 +566,7 @@ public class RegionManager {
         for(CuboidNode tree : rootNodes) {
             if(tree.equalWorlds(world, dimension)) {
                 for(CuboidNode node : tree.toList()) {
-                    if(node.getName().equalsIgnoreCase(name)) {
+                    if(node.getName().equals(name)) {
                         return node;
                     }
                 }
@@ -650,7 +586,7 @@ public class RegionManager {
         for(CuboidNode tree : rootNodes) {
             if(tree.equalWorlds(world, dimension)) {
                 for(CuboidNode node : tree.toList()) {
-                    if(node.getName().equalsIgnoreCase(name)) {
+                    if(node.getName().equals(name)) {
                         return node.getCuboid();
                     }
                 }
@@ -685,7 +621,7 @@ public class RegionManager {
                     min = list.get(e);
                 }
                 if(min.getCuboid().getPriority() <= list.get(e).getCuboid().getPriority()) {
-                    if(!list.get(e).getName().equalsIgnoreCase(cube.getName())) {
+                    if(!list.get(e).getName().equals(cube.getName())) {
                         min = list.get(e);
                     }
                 }

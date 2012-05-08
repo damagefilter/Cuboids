@@ -58,6 +58,11 @@ public class EventLogger {
 			//log.severe(message);
 			log.log(Level.SEVERE, "Cuboids2: " + message);
 		}
+		else if(level.equalsIgnoreCase("DEBUG")) {
+//		    if(true) { //TODO: set this to a config variable once this bug terror is over!
+//		        log.log(Level.INFO, "Cuboids2: " + message);
+//		    }
+		}
 	}
 	
 	/**

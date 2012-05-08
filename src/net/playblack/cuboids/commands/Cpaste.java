@@ -35,6 +35,10 @@ public class Cpaste extends CBaseCommand {
         }
         
         CuboidSelection sel = SessionManager.getInstance().getClipboard(player.getName());
+        if(sel == null || !sel.isComplete()) {
+            ms.failMessage(player, "clipboardEmpty");
+            return;
+        }
         VectorOffsetGenerator gen = new VectorOffsetGenerator(sel, player.getWorld());
         gen.setOffsetVector(player.getPosition());
         try {

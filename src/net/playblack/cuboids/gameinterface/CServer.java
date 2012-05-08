@@ -43,6 +43,12 @@ public abstract class CServer {
     public abstract CPlayer getPlayer(String name);
     
     /**
+     * Remove player from the server list
+     * @param player
+     */
+    public abstract void removePlayer(String player);
+    
+    /**
      * Schedule a task in the server queue
      * @param delay
      * @param task

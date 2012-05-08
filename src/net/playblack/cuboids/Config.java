@@ -1,11 +1,13 @@
 package net.playblack.cuboids;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.FlatfileData;
 import net.playblack.cuboids.datasource.MysqlData;
 import net.playblack.cuboids.gameinterface.CPlayer;
+import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.PropsFile;
@@ -17,7 +19,7 @@ import net.playblack.mcutils.PropsFile;
  */
 public class Config {
     private String name="Cuboids2";
-    private String version="2.0.0";
+    private String version="2.1.1";
     private boolean verbose=false;
     
     //allow specific parts of the plugin:
@@ -60,6 +62,8 @@ public class Config {
 
     //Cuboids Default Settings
     CuboidE defaultSettings = new CuboidE();
+    
+    ArrayList<Integer> restritedItems;
     
     private static Config instance = null;
     private Config() {
@@ -131,7 +135,16 @@ public class Config {
         global.setWaterControl(cuboidSetting.getBoolean("stop-water-flow-global", false));
         global.setPhysics(cuboidSetting.getBoolean("physics-control-global", false));
         global.setEnderControl(cuboidSetting.getBoolean("enderman-control-global", false));
-
+        
+        String[] itemsList = cuboidSetting.getString("restricted-items", "").split(",");
+        restritedItems = new ArrayList<Integer>(itemsList.length);
+        for(String i : itemsList) {
+            int a = CServer.getServer().getItemId(i);
+            if(a >= 0) {
+                restritedItems.add(a);
+            }
+        }
+        
         String dataSource = dsSetting.getString("data-source", "flatfile");
         if(dataSource.equalsIgnoreCase("mysql")) {
             sqlConfig = new HashMap<String,String>(3);
@@ -516,6 +529,15 @@ public class Config {
         else {
             return new MysqlData(sqlConfig, EventLogger.getInstance());
         }
+    }
+
+    /**
+     * Check if the item is on the global restricted items list
+     * @param itemId
+     * @return
+     */
+    public boolean itemIsRestricted(int itemId) {
+        return restritedItems.contains(Integer.valueOf(itemId));
     }
     
 }

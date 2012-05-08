@@ -546,9 +546,9 @@ public class MysqlData implements BaseData {
 		}
 		try {
 			PreparedStatement ps = getConnection().prepareStatement("DELETE FROM nodes WHERE name=? AND world=? AND dimension=?");
-			ps.setString(1, node.getCuboid().getName());
-			ps.setString(2, node.getCuboid().getWorld());
-			ps.setInt(2, node.getCuboid().getDimension());
+			ps.setString(1, node.getName());
+			ps.setString(2, node.getWorld());
+			ps.setInt(3, node.getDimension());
 			ps.execute();
 		}
 		catch(SQLException e) {

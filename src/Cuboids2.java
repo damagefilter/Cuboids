@@ -6,6 +6,12 @@ import net.playblack.cuboids.regions.RegionManager;
 
 public class Cuboids2 extends Plugin {
 
+    PlayerListener playerListener = new PlayerListener();
+    BlockListener blockListener = new BlockListener();
+    MiscListener miscListener = new MiscListener();
+    CommandListener commandListener = new CommandListener();
+    Bootstrapper b;
+    
     @Override
     public void disable() {
         CuboidInterface.getInstance().killTasks();
@@ -15,13 +21,7 @@ public class Cuboids2 extends Plugin {
     @Override
     public void enable() {
         Loader[] loaders = new Loader[] {new CuboidDLoader(), new CuboidFLoader()};
-        new Bootstrapper(new CanaryServer(), loaders);
-        
-        PlayerListener playerListener = new PlayerListener();
-        BlockListener blockListener = new BlockListener();
-        MiscListener miscListener = new MiscListener();
-        CommandListener commandListener = new CommandListener();
-        
+        b = new Bootstrapper(new CanaryServer(), loaders);
         etc.getLoader().addListener(PluginLoader.Hook.PLAYER_MOVE, playerListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.BLOCK_RIGHTCLICKED, blockListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.BLOCK_DESTROYED, blockListener, this, PluginListener.Priority.MEDIUM);

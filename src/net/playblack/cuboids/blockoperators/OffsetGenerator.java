@@ -101,6 +101,7 @@ public class OffsetGenerator extends BaseGen {
                     break;
                 case 1:
                     newPos = new Vector(key.getX()-distance, key.getY(), key.getZ());
+                    break;
                 case 2:
                     newPos = new Vector(key.getX(), key.getY(), key.getZ()+distance);
                     break;

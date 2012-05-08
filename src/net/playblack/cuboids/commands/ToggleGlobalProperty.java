@@ -87,6 +87,17 @@ public class ToggleGlobalProperty extends CBaseCommand {
                 MessageSystem.getInstance().successMessage(player, "globalProtectionOn");
             }
         }
+        
+        else if(command[2].equalsIgnoreCase("fire") || command[2].equalsIgnoreCase("firespread")) {
+            if(setting.isBlockFireSpread()) {
+                setting.setBlockFireSpread(false);
+                MessageSystem.getInstance().successMessage(player, "globalFirespreadOff");
+            } else {
+                setting.setBlockFireSpread(true);
+                MessageSystem.getInstance().successMessage(player, "globalFirespreadOn");
+            }
+        }
+        
         else if(command[2].equalsIgnoreCase("lava") || command[2].equalsIgnoreCase("lavaflow")) {
             if(setting.isLavaControl()) {
                 setting.setLavaControl(false);

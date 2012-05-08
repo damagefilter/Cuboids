@@ -125,6 +125,8 @@ public class MessageSystem {
         messages.put("secondPointSet", "Second point has been set!");
         
         messages.put("pointsLoaded", "The areas points have been loaded into your selection.");
+        
+        messages.put("playerTeleported", "You have been teleported!");
         // *************************************************
         //
         // *************************************************
@@ -162,6 +164,8 @@ public class MessageSystem {
         errors.put("notWithinSpecifiedParent", "Cuboid is not within the specified parent node.");
         errors.put("invalidAreaProperty", "Unknown area property. Did not toggle!");
         errors.put("invalidGlobalProperty", "Unknown global property. Did not toggle!");
+        errors.put("playerNotTeleportedDenied", "Not teleported! You're not allowed in this area and it is restricted!");
+        errors.put("clipboardEmpty", "There is nothing to paste in your clipboard");
     }
     public static MessageSystem getInstance() {
         if(ms == null) {
