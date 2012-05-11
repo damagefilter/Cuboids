@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Save a single or all cuboids
@@ -12,7 +13,7 @@ public class Csave extends CBaseCommand {
     
     private boolean saveAll = false;
     public Csave(boolean saveAll) {
-        super("Save cuboid(s): /csave" + saveAll != null && (saveAll) ? "-all" : " <area>", 1,2);
+        super("Save cuboid(s): "+ColorManager.Yellow+"/csave" + saveAll != null && (saveAll) ? "-all" : " <area>", 1,2);
         this.saveAll= saveAll; 
     }
 

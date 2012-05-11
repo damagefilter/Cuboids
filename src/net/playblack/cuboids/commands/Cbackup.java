@@ -10,6 +10,7 @@ import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.selections.CuboidSelection;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
 
@@ -21,7 +22,7 @@ import net.playblack.mcutils.EventLogger;
 public class Cbackup extends CBaseCommand {
 
     public Cbackup() {
-        super("Backup a cuboid area: /cbackup <area>", 2);
+        super("Backup a cuboid area: "+ColorManager.Yellow+"/cbackup <area>", 2);
     }
 
     @Override

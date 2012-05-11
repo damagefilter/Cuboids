@@ -5,6 +5,7 @@ import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Toggle global properties
@@ -14,7 +15,7 @@ import net.playblack.cuboids.regions.RegionManager;
 public class ToggleGlobalProperty extends CBaseCommand {
 
     public ToggleGlobalProperty() {
-        super("Toggle Global properties: /cmod toggle <property>", 3);
+        super("Toggle Global properties:"+ColorManager.Yellow+" /cmod toggle <property>", 3);
     }
 
     @Override

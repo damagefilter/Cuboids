@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Set the parent of a cuboid
@@ -11,7 +12,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
 public class CmodParent extends CBaseCommand {
 
     public CmodParent() {
-        super("Set cuboid parent: /cmod <area> parent <parent_name>", 4);
+        super("Set cuboid parent:"+ColorManager.Yellow+" /cmod <area> parent <parent_name>", 4);
     }
 
     @Override

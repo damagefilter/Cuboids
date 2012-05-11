@@ -4,6 +4,7 @@ import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
@@ -16,7 +17,7 @@ import net.playblack.mcutils.Vector;
 public class Cfloor extends CBaseCommand {
 
     public Cfloor() {
-        super("Set floorlevel, use -r: player pos - height: /cfloor <height> [-r]", 2,3);
+        super("Set floorlevel, use -r: player pos - height:"+ColorManager.Yellow+" /cfloor <height> [-r]", 2,3);
     }
 
     @Override

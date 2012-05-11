@@ -14,6 +14,12 @@ public class CommandListener extends PluginListener {
         CBaseCommand command;
         EventLogger.getInstance().logMessage("Creating player: "+cplayer.toString(), "DEBUG");
         EventLogger.getInstance().logMessage("Receiving command: "+etc.combineSplit(0, split, " ").trim(), "DEBUG");
+        if(split[0].equalsIgnoreCase("/chelp")) {
+            command = new Chelp();
+            command.execute(cplayer, split);
+            return true;
+        }
+        
         if(split[0].equalsIgnoreCase("/cdel")) {
             command = new Cdel();
             command.execute(cplayer, split);

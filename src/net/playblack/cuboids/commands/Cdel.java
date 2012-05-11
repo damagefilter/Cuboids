@@ -8,6 +8,7 @@ import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
 /**
@@ -18,7 +19,7 @@ import net.playblack.mcutils.EventLogger;
 public class Cdel extends CBaseCommand {
 
     public Cdel() {
-        super("Remove contents of a selection: /cdel", 1);
+        super("Remove contents of a selection:"+ColorManager.Yellow+" /cdel", 1);
     }
 
     @Override

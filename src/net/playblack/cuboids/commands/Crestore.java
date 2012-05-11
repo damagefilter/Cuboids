@@ -9,6 +9,7 @@ import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
 
@@ -20,7 +21,7 @@ import net.playblack.mcutils.EventLogger;
 public class Crestore extends CBaseCommand {
 
     public Crestore() {
-        super("Restore a cuboid area from backup: /crestore <area>", 2);
+        super("Restore a cuboid area from backup:"+ColorManager.Yellow+" /crestore <area>", 2);
     }
 
     @Override

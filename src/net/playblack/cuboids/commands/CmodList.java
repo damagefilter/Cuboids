@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.ToolBox;
 
 /**
@@ -12,7 +13,7 @@ import net.playblack.mcutils.ToolBox;
 public class CmodList extends CBaseCommand {
 
     public CmodList() {
-        super("List areas in the recent world: /cmod list [page]", 2,3);
+        super("List areas in the recent world:"+ColorManager.Yellow+" /cmod list [page]", 2,3);
     }
 
     @Override

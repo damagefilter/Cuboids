@@ -6,6 +6,7 @@ import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Load cuboid areas edges into player selection
@@ -15,7 +16,7 @@ import net.playblack.cuboids.selections.SelectionManager;
 public class CmodLoad extends CBaseCommand {
 
     public CmodLoad() {
-        super("Load areas points into your selection: /cmod <area> loadpoints", 3);
+        super("Load areas points into your selection:"+ColorManager.Yellow+" /cmod <area> loadpoints", 3);
     }
 
     @Override

@@ -8,6 +8,7 @@ import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
 /**
@@ -20,7 +21,7 @@ public class Cwalls extends CBaseCommand {
     private boolean onlyWalls;
     
     public Cwalls(String variant) {
-        super("Create walls/faces: "+variant+" <wall>:[data] [floor]:[data] [ceiling]:[data]", 2, 4);
+        super("Create walls/faces: "+ColorManager.Yellow+variant+" <wall>:[data] [floor]:[data] [ceiling]:[data]", 2, 4);
         if(variant.equalsIgnoreCase("/cwalls")) {
             onlyWalls = true;
         }

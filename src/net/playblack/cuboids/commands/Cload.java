@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Load a single cuboid
@@ -10,7 +11,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
  */
 public class Cload extends CBaseCommand {
     public Cload() {
-        super("Load a cuboid: /cload <area>", 2);
+        super("Load a cuboid: "+ColorManager.Yellow+"/cload <area>", 2);
     }
 
     @Override

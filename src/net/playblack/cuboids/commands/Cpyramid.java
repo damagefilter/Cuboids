@@ -8,6 +8,7 @@ import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 
@@ -20,7 +21,7 @@ public class Cpyramid extends CBaseCommand {
 
     
     public Cpyramid() {
-        super("Create a sphere: /cpyramid <radius> <block>:[data] [hollow]", 3, 4);
+        super("Create a sphere:"+ColorManager.Yellow+" /cpyramid <radius> <block>:[data] [hollow]", 3, 4);
     }
 
     @Override

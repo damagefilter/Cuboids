@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Move a Cuboid
@@ -11,7 +12,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
 public class CmodMove extends CBaseCommand {
 
     public CmodMove() {
-        super("Move a Cuboid: /cmod <area> move/resize", 3);
+        super("Move a Cuboid: "+ColorManager.Yellow+"/cmod <area> move/resize", 3);
     }
 
     @Override

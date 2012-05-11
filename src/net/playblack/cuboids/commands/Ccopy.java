@@ -8,6 +8,7 @@ import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
 
@@ -19,7 +20,7 @@ import net.playblack.mcutils.EventLogger;
 public class Ccopy extends CBaseCommand {
 
     public Ccopy() {
-        super("Copy a selection into your clipboard: /ccopy", 1);
+        super("Copy a selection into your clipboard: "+ColorManager.Yellow+" /ccopy", 1);
     }
 
     @Override

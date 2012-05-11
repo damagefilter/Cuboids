@@ -3,6 +3,7 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Expand cuboid selection
@@ -12,7 +13,7 @@ import net.playblack.cuboids.selections.SelectionManager;
 public class Cexpand extends CBaseCommand {
 
     public Cexpand() {
-        super("Expand the current cuboid selection: /cexpand", 1);
+        super("Expand the current cuboid selection: "+ColorManager.Yellow+"/cexpand", 1);
     }
 
     @Override

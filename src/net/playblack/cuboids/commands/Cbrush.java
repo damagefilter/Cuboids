@@ -5,6 +5,7 @@ import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.PlayerSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.ToolBox;
 
 /**
@@ -15,7 +16,7 @@ import net.playblack.mcutils.ToolBox;
 public class Cbrush extends CBaseCommand {
 
     public Cbrush() {
-        super("Set the property of a brush: /cbrush <radius> <block>:[data]", 3);
+        super("Set the property of a brush:"+ColorManager.Yellow+" /cbrush <radius> <block>:[data]", 3);
     }
 
     @Override
@@ -25,7 +26,7 @@ public class Cbrush extends CBaseCommand {
         }
         MessageSystem ms = MessageSystem.getInstance();
         if(!player.hasPermission("cIgnoreRestrictions")) {
-            if(!(player.hasPermission("cWorldMod") && player.hasPermission("/cbrush"))) {
+            if(!(player.hasPermission("cWorldMod") && player.hasPermission("cbrush"))) {
                 ms.failMessage(player, "permissionDenied");
                 return;
             }

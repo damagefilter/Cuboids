@@ -7,6 +7,7 @@ import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 
@@ -19,7 +20,7 @@ import net.playblack.mcutils.ToolBox;
 public class Cmove extends CBaseCommand {
 
     public Cmove() {
-        super("Move the contents of a selection: /cmove <distance> <NORTH/EAST/SOUTH/WEST/UP/DOWN>", 3);
+        super("Move the contents of a selection: "+ColorManager.Yellow+"/cmove <distance> <NORTH/EAST/SOUTH/WEST/UP/DOWN>", 3);
     }
 
     @Override

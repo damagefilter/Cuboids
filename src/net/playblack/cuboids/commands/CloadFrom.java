@@ -6,6 +6,7 @@ import net.playblack.cuboids.datasource.FlatfileData;
 import net.playblack.cuboids.datasource.MysqlData;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
 /**
@@ -15,7 +16,7 @@ import net.playblack.mcutils.EventLogger;
  */
 public class CloadFrom extends CBaseCommand {
     public CloadFrom() {
-        super("Load cuboids: /cloadfrom <mysql/flatfile>", 2);
+        super("Load cuboids: "+ColorManager.Yellow+"/cloadfrom <mysql/flatfile>", 2);
     }
 
     @Override

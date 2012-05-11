@@ -8,6 +8,7 @@ import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 
@@ -21,7 +22,7 @@ public class Cdisc extends CBaseCommand {
     private boolean fill;
     
     public Cdisc(String variant) {
-        super("Create disc/circle: "+variant+" <radius> <block>:[data] [height]", 3, 4);
+        super("Create disc/circle: "+ColorManager.Yellow+variant+" <radius> <block>:[data] [height]", 3, 4);
         if(variant.equalsIgnoreCase("/ccircle")) {
             fill = false;
         }

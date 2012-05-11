@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Restrict command in a cuboid
@@ -11,7 +12,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
 public class CmodRestrictCommand extends CBaseCommand {
 
     public CmodRestrictCommand() {
-        super("Remove a new Cuboid: /cmod <area> allowcommand <command,command ...>", 4);
+        super("Restrict a command in your area: "+ColorManager.Yellow+"/cmod <area> restrictcommand <command,command ...>", 4);
     }
 
     @Override

@@ -8,6 +8,7 @@ import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
 /**
@@ -18,7 +19,7 @@ import net.playblack.mcutils.EventLogger;
 public class Creplace extends CBaseCommand {
 
     public Creplace() {
-        super("Replace blocks in a selection: /creplace <block>:[data] <substitute>:[data]", 3);
+        super("Replace blocks in a selection:"+ColorManager.Yellow+" /creplace <block>:[data] <substitute>:[data]", 3);
     }
 
     @Override

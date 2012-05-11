@@ -7,6 +7,7 @@ import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
 
@@ -18,7 +19,7 @@ import net.playblack.mcutils.EventLogger;
 public class Cpaste extends CBaseCommand {
 
     public Cpaste() {
-        super("Paste a selection from clipboard relative to your position: /cpaste", 1);
+        super("Paste a selection from clipboard relative to your position: "+ColorManager.Yellow+"/cpaste", 1);
     }
 
     @Override

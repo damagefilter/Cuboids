@@ -7,6 +7,7 @@ import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Add a new Cuboid
@@ -16,7 +17,7 @@ import net.playblack.cuboids.selections.SelectionManager;
 public class CmodAdd extends CBaseCommand {
 
     public CmodAdd() {
-        super("Add a new Cuboid: /cmod <area> add/create", 3);
+        super("Add a new Cuboid: "+ColorManager.Yellow+"/cmod <area> add/create", 3);
     }
 
     @Override

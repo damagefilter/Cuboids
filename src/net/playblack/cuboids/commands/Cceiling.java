@@ -4,6 +4,7 @@ import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
@@ -16,7 +17,7 @@ import net.playblack.mcutils.Vector;
 public class Cceiling extends CBaseCommand {
 
     public Cceiling() {
-        super("Set ceiling level, use -r: player pos + height: /cceiling <height> [-r]", 2,3);
+        super("Set ceiling level, use -r: player pos + height: "+ColorManager.Yellow+"/cceiling <height> [-r]", 2,3);
     }
 
     @Override

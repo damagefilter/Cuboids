@@ -45,6 +45,9 @@ public abstract class CBaseCommand {
         }
     }
     
+    public String getToolTip() {
+        return toolTip;
+    }
     public abstract void execute(CPlayer player, String[] command);
     
 }

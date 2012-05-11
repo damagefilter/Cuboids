@@ -8,6 +8,7 @@ import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
 /**
@@ -18,7 +19,7 @@ import net.playblack.mcutils.EventLogger;
 public class Cfill extends CBaseCommand {
 
     public Cfill() {
-        super("Fill a selection: /cfill <block id>:[data]", 2);
+        super("Fill a selection: "+ColorManager.Yellow+"/cfill <block id>:[data]", 2);
     }
 
     @Override

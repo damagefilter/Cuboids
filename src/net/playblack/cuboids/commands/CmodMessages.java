@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Set welcome and / or farewell messages
@@ -12,7 +13,7 @@ public class CmodMessages extends CBaseCommand {
 
     private boolean setFarewell = false;
     public CmodMessages(String action) {
-        super("Set area message: /cmod <area> "+action+" <Your message (leave blank to remove message)>", 3);
+        super("Set area message: "+ColorManager.Yellow+"/cmod <area> "+action+" <Your message (leave blank to remove message)>", 3);
         if(action.equalsIgnoreCase("farewell") || action.equalsIgnoreCase("goodbye")) {
             setFarewell = true;
         }

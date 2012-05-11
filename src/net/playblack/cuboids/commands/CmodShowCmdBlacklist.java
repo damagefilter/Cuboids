@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Show the list of blacklisted commands
@@ -11,7 +12,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
 public class CmodShowCmdBlacklist extends CBaseCommand {
 
     public CmodShowCmdBlacklist() {
-        super("Show blacklisted commands: /cmod <area> cmdblacklist", 3);
+        super("Show blacklisted commands:"+ColorManager.Yellow+" /cmod <area> cmdblacklist", 3);
     }
 
     @Override

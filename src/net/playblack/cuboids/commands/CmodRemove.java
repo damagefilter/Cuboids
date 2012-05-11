@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Remove a new Cuboid
@@ -11,7 +12,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
 public class CmodRemove extends CBaseCommand {
 
     public CmodRemove() {
-        super("Remove a new Cuboid: /cmod <area> remove/delete", 3);
+        super("Remove a new Cuboid: "+ColorManager.Yellow+"/cmod <area> remove/delete", 3);
     }
 
     @Override

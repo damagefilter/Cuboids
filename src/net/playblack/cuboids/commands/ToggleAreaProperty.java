@@ -3,6 +3,7 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Toggle an area property of a cuboid
@@ -12,7 +13,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
 public class ToggleAreaProperty extends CBaseCommand {
 
     public ToggleAreaProperty() {
-        super("Toggle Area properties: /cmod <area> toggle <property>", 4);
+        super("Toggle Area properties:"+ColorManager.Yellow+" /cmod <area> toggle <property>", 4);
     }
 
     @Override

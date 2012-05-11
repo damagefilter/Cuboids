@@ -8,6 +8,7 @@ import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 
@@ -20,7 +21,7 @@ import net.playblack.mcutils.ToolBox;
 public class Cundo extends CBaseCommand {
 
     public Cundo() {
-        super("Undo block operations: /cundo [steps] [player]", 1,3);
+        super("Undo block operations:"+ColorManager.Yellow+" /cundo [steps] [player]", 1,3);
     }
 
     @Override

@@ -4,6 +4,7 @@ import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidNode;
 import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Rename a Cuboid
@@ -13,7 +14,7 @@ import net.playblack.cuboids.regions.RegionManager;
 public class CmodRename extends CBaseCommand {
 
     public CmodRename() {
-        super("Rename a Cuboid: /cmod <old area> rename <new area name>", 4);
+        super("Rename a Cuboid: "+ColorManager.Yellow+"/cmod <old area> rename <new area name>", 4);
     }
 
     @Override

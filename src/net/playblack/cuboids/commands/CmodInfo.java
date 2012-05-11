@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Print cuboid information
@@ -11,7 +12,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
 public class CmodInfo extends CBaseCommand {
 
     public CmodInfo() {
-        super("Explain a Cuboid: /cmod <area> info", 3);
+        super("Explain a Cuboid:"+ColorManager.Yellow+" /cmod <area> info", 3);
     }
     @Override
     public void execute(CPlayer player, String[] command) {

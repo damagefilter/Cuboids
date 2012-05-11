@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Allow item in a cuboid
@@ -11,7 +12,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
 public class CmodAllowItem extends CBaseCommand {
 
     public CmodAllowItem() {
-        super("Allow an item in cuboid: /cmod <area> allowitem <item name or item id>", 4);
+        super("Allow an item in cuboid:"+ColorManager.Yellow+" /cmod <area> allowitem <item name or item id>", 4);
     }
 
     @Override

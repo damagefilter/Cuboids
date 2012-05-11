@@ -8,6 +8,7 @@ import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 
@@ -20,7 +21,7 @@ import net.playblack.mcutils.ToolBox;
 public class Credo extends CBaseCommand {
 
     public Credo() {
-        super("Redo block operations: /credo [steps] [player]", 1,3);
+        super("Redo block operations:"+ColorManager.Yellow+" /credo [steps] [player]", 1,3);
     }
 
     @Override

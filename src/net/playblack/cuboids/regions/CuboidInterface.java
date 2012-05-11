@@ -1210,7 +1210,7 @@ public class CuboidInterface {
             }
         }
         else {
-            ms.failMessage(player, "noCuboidFoundOnCommand");
+            ms.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
     }
@@ -1239,7 +1239,7 @@ public class CuboidInterface {
             }
         }
         else {
-            ms.failMessage(player, "noCuboidFoundOnCommand");
+            ms.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
     }
@@ -1262,7 +1262,7 @@ public class CuboidInterface {
             }
         }
         else {
-            ms.failMessage(player, "noCuboidFoundOnCommand");
+            ms.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
     }

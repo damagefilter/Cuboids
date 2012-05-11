@@ -3,6 +3,7 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.ToolBox;
 
 /**
@@ -13,7 +14,7 @@ import net.playblack.mcutils.ToolBox;
 public class CmodPriority extends CBaseCommand {
 
     public CmodPriority() {
-        super("Set cuboid priority: /cmod <area> priority <level>", 4);
+        super("Set cuboid priority:"+ColorManager.Yellow+" /cmod <area> priority <level>", 4);
     }
 
     @Override

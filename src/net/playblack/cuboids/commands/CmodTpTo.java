@@ -4,6 +4,7 @@ import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Vector;
 
 /**
@@ -14,7 +15,7 @@ import net.playblack.mcutils.Vector;
 public class CmodTpTo extends CBaseCommand {
 
     public CmodTpTo() {
-        super("Set cuboid parent: /cmod <area> tpto", 3);
+        super("Set cuboid parent: "+ColorManager.Yellow+"/cmod <area> tpto", 3);
     }
 
     @Override

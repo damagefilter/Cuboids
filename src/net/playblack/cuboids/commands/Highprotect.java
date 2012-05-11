@@ -7,6 +7,7 @@ import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * High-Protect an area
@@ -16,7 +17,7 @@ import net.playblack.cuboids.selections.SelectionManager;
 public class Highprotect extends CBaseCommand {
 
     public Highprotect() {
-        super("High-Protect an area: /highprotect <player/group..><area name>", 3);
+        super("High-Protect an area:"+ColorManager.Yellow+" /highprotect <player/group..><area name>", 3);
     }
 
     @Override

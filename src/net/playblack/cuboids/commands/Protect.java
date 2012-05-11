@@ -7,6 +7,7 @@ import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.ColorManager;
 
 /**
  * Protect an area
@@ -16,7 +17,7 @@ import net.playblack.cuboids.selections.SelectionManager;
 public class Protect extends CBaseCommand {
 
     public Protect() {
-        super("Protect an area: /protect <player/group..><area name>", 3);
+        super("Protect an area:"+ColorManager.Yellow+" /protect <player/group..><area name>", 3);
     }
 
     @Override
