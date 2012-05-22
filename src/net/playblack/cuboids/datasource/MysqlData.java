@@ -327,17 +327,17 @@ public class MysqlData implements BaseData {
             // ---------------------- LEGACY LOADING ------------------------
             String world = rs.getString("world");
             if (world.equalsIgnoreCase("NORMAL")) {
-                removeNode(cube); //Remove from table
                 cube.setDimension(0);
                 cube.setWorld(CServer.getServer().getDefaultWorld().getName());
+                cube.hasChanged = true;
             } else if (world.equalsIgnoreCase("NETHER")) {
-                removeNode(cube); //Remove from table
                 cube.setDimension(-1);
                 cube.setWorld(CServer.getServer().getDefaultWorld().getName());
+                cube.hasChanged = true;
             } else if (world.equalsIgnoreCase("END")) {
-                removeNode(cube); //Remove from table
                 cube.setDimension(1);
                 cube.setWorld(CServer.getServer().getDefaultWorld().getName());
+                cube.hasChanged = true;
             } else {
                 cube.setDimension(rs.getInt("dimension"));
                 cube.setWorld(world);
@@ -547,27 +547,4 @@ public class MysqlData implements BaseData {
         }
 
     }
-    
-    private void removeNode(CuboidE node) {
-        if (getConnection() == null) {
-            log.logMessage(
-                    "Cuboids2: Failed to establish Database Connection, cannot REMOVE Cuboid Nodes!",
-                    "SEVERE");
-            return; // uh oh ...
-        }
-        try {
-            PreparedStatement ps = getConnection()
-                    .prepareStatement(
-                            "DELETE FROM nodes WHERE name=? AND world=? AND dimension=?");
-            ps.setString(1, node.getName());
-            ps.setString(2, node.getWorld());
-            ps.setInt(3, node.getDimension());
-            ps.execute();
-        } catch (SQLException e) {
-            log.logMessage("Cuboids2: Failed to remove a Cuboid Node. Reason: "
-                    + e.getMessage(), "SEVERE");
-            e.printStackTrace();
-        }
-    }
-
 }

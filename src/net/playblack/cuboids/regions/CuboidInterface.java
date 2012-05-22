@@ -1343,7 +1343,8 @@ public class CuboidInterface {
                     ms.failMessage(player, "selectionIncomplete");
                 }
                 cube.setPoints(selection.getOrigin(), selection.getOffset());
-                regions.updateCuboidNode(cube);
+                cube.hasChanged = true;
+                regions.cleanParentRelations();
                 ms.successMessage(player, "cuboidMoved");
                 return true;
             }

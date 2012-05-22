@@ -17,6 +17,11 @@ public class CanaryWorld extends CWorld {
     public CanaryWorld(World w) {
         world = w;
     }
+    
+    public World getHandle() {
+        return world;
+    }
+    
     @Override
     public String getFilePrefix() {
         return world.getType().name();

@@ -117,7 +117,7 @@ public class BlockListener extends PluginListener {
         CWorld world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
 //        EventLogger.getInstance().logMessage("World: "+world.toString()+" ...", "DEBUG");
 //        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
-        return BlockActionHandler.handleExplosions(world, p);
+        return BlockActionHandler.handleExplosions(world, b.getStatus(), p);
     }
     
     @Override

@@ -292,7 +292,8 @@ public class RegionManager {
                     }
                 }
                 else {
-                    getPossibleParent(node.getCuboid());
+                    node.getCuboid().setParent(getPossibleParent(node.getCuboid()).getName());
+                    node.getCuboid().hasChanged = true;
                 }
             }
         }

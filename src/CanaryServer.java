@@ -41,7 +41,7 @@ public class CanaryServer extends CServer {
 
     @Override
     public CWorld getWorld(int id) {
-        return new CanaryWorld(etc.getServer().getWorld(id));
+        return getWorld(etc.getServer().getDefaultWorld().getName(), id);
     }
 
     @Override

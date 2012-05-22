@@ -183,11 +183,15 @@ public class BlockActionHandler {
      * Handle explosions
      * @param player
      * @param position
-     * @return
+     * @return True if explosion must be stopped
      */
-    public static boolean handleExplosions(CWorld world, Vector position) {
+    public static boolean handleExplosions(CWorld world, int status, Vector position) {
+        //1 = tnt, 2 = creeper
         CuboidInterface ci = CuboidInterface.getInstance();
-        if(ci.isCreeperSecure(position, world) || ci.isTntSecure(position, world)) {
+        if((status == 1) && ci.isTntSecure(position, world)) {
+            return true;
+        }
+        else if((status == 2) && ci.isCreeperSecure(position, world)) {
             return true;
         }
         else {
