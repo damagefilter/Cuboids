@@ -175,6 +175,9 @@ public class MysqlData implements BaseData {
      */
     public void mysqlUpdateNode(CuboidNode node) throws SQLException {
         CuboidE cube = node.getCuboid();
+        if(cube.getName().equals(cube.getParent())) {
+            cube.setParent(ToolBox.stringToNull("null"));
+        }
         PreparedStatement ps = getConnection().prepareStatement(
                 "UPDATE nodes" + " SET" + " _parent=?," + " allowPvp=?,"
                         + " blockFireSpread=?," + " creeperSecure=?,"
@@ -412,7 +415,7 @@ public class MysqlData implements BaseData {
         }
         for (CuboidNode tree : treeList) {
             for (CuboidNode node : tree.toList()) {
-                if (node.getCuboid().hasChanged || force == true) {
+                if (node.getCuboid().hasChanged || force ) {
                     saveCuboid(node);
                 }
             }

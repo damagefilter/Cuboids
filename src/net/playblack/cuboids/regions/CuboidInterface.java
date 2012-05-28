@@ -1159,14 +1159,10 @@ public class CuboidInterface {
                 }
             }
             
-            if(regions.updateCuboidNode(cube)) {
-                ms.successMessage(player, "cuboidUpdated");
-                return true;
-            }
-            else {
-                ms.failMessage(player, "cuboidNotUpdated");
-                return false;
-            }
+            regions.updateCuboidNode(cube);
+            ms.successMessage(player, "cuboidUpdated");
+            return true;
+            
         }
         else {
             ms.failMessage(player, "cuboidNotUpdated");
@@ -1341,10 +1337,14 @@ public class CuboidInterface {
                 CuboidSelection selection = SelectionManager.getInstance().getPlayerSelection(player.getName());
                 if(!selection.isComplete()) {
                     ms.failMessage(player, "selectionIncomplete");
+                    return false;
                 }
                 cube.setPoints(selection.getOrigin(), selection.getOffset());
                 cube.hasChanged = true;
-                regions.cleanParentRelations();
+                regions.updateCuboidNode(cube);
+                regions.autoSortCuboidAreas();
+                
+                regions.saveSingle(regions.getCuboidNodeByName(cube.getName(), cube.getWorld(), cube.getDimension()));
                 ms.successMessage(player, "cuboidMoved");
                 return true;
             }
@@ -1401,14 +1401,9 @@ public class CuboidInterface {
                     if(cube.getPriority() <= parentCube.getPriority()) {
                         cube.setPriority(parentCube.getPriority()+1);
                     }
-                        if(regions.updateCuboidNode(cube)) {
-                            ms.successMessage(player, "parentSet");
-                            return;
-                        }
-                    else {
-                        ms.failMessage(player, "parentNotSet");
-                        return;
-                    }
+                    regions.updateCuboidNode(cube);
+                    ms.successMessage(player, "parentSet");
+                    return;
                 }
                 else {
                     ms.failMessage(player, "notWithinSpecifiedParent");

@@ -92,10 +92,16 @@ public class RegionManager {
      * @param node
      */
     public void saveSingle(CuboidNode node) {
+        if(node == null) {
+            return;
+        }
         dataSource.saveCuboid(node);
     }
     
     private void removeNodeFile(CuboidNode node) {
+        if(node == null) {
+            return;
+        }
         dataSource.removeNode(node);
     }
     
@@ -141,6 +147,9 @@ public class RegionManager {
      * @param cube
      */
     public void addNode(CuboidNode cube) {
+        if(cuboidExists(cube.getName(), cube.getWorld(), cube.getDimension())) {
+            return;
+        }
         if(cube.getCuboid().getParent() == null) {
             addRoot(cube);
             saveSingle(cube);
@@ -202,22 +211,26 @@ public class RegionManager {
             return "NOT_REMOVED_NOT_FOUND";
         }
         
-        if(node.getParent() == null) {
-            if(node.getChilds().size() > 0) {
-                for(CuboidNode child : node.getChilds()) {
-                    child.getCuboid().setParent(null);
-                    updateCuboidNode(child.getCuboid());
-                }
+        if(node.getChilds().size() > 0) {
+            for(CuboidNode child : node.getChilds()) {
+                child.getCuboid().setParent(null);
+                updateCuboidNode(child.getCuboid());
             }
+        }
+        
+        if(node.getParent() == null) {
             deleteTree(node.getName());
-            removeNodeFile(node);
             autoSortCuboidAreas();
+            removeNodeFile(node);
             return "REMOVED";
         }
         else {
             CuboidNode parent = getCuboidNodeByName(node.getParent(), node.getWorld(), node.getDimension());
             if(parent != null) {
-                parent.getChilds().remove(node);
+                if(!parent.getName().equals(node.getName())) {
+                    parent.getChilds().remove(node);
+                }
+                removeCuboid(node.getCuboid(), false);
                 removeNodeFile(node);
                 return "REMOVED";
             }
@@ -327,15 +340,15 @@ public class RegionManager {
             
             if ((cube.getParent() != null) && (node.getParent().equals(cube.getParent())))
             {
-                  //log.logMessage("Parent NOT null AND node parent is same!", "INFO");
-                  if ((node.getParent() != null) && (node.isRoot()))
-                  {
-                       //log.logMessage("Old Cuboid is tree! Moving ...", "INFO");
-                       node.getCuboid().hasChanged = true;
-                       deleteTree(node.getName());
-                       addNode(node);
-                       return true;
-                  }
+                  //Uncomment if somethig derps!
+//                if ((node.getParent() != null) && (node.isRoot()))
+//                {
+//                     //log.logMessage("Old Cuboid is tree! Moving ...", "INFO");
+//                     node.getCuboid().hasChanged = true;
+//                     deleteTree(node.getName());
+//                     addNode(node);
+//                     return true;
+//                }
                   if (cuboidExists(cube.getParent(), cube.getWorld(), cube.getDimension())) {
                       //log.logMessage("Parent Exists, setting data!", "INFO");
                       node.getCuboid().hasChanged = true;
@@ -349,6 +362,13 @@ public class RegionManager {
 
             if ((cube.getParent() != null) && (!node.getParent().equals(cube.getParent())))
             {
+                //comment this out if somethign derps!
+                if ((node.getParent() != null) && (node.isRoot()))
+                {
+                     //log.logMessage("Old Cuboid is tree! Moving ...", "INFO");
+                     node.getCuboid().hasChanged = true;
+                     deleteTree(node.getName());
+                }
                // log.logMessage("Parent Node has changed!!", "INFO");
                   if (cuboidExists(cube.getParent(), cube.getWorld(), cube.getDimension())) {
                       //log.logMessage("Parent Node has changed!!", "INFO");

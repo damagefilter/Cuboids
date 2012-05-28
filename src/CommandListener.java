@@ -26,6 +26,12 @@ public class CommandListener extends PluginListener {
             return true;
         }
         
+        if(split[0].equalsIgnoreCase("/cdiag")) {
+            command = new Cdiag();
+            command.execute(cplayer, split);
+            return true;
+        }
+        
         if(split[0].equalsIgnoreCase("/cbrush")) {
             command = new Cbrush();
             command.execute(cplayer, split);
