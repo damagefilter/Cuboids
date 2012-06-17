@@ -2,11 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Chris/Minecraft servers/canaryTest/mc.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://docs.canarymod.net"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Chris/Minecraft servers/canaryTest/minecraft_servero.jar"/>
+	<classpathentry kind="lib" path="E:/development/canary_bins/minecraft_servero.jar"/>
+	<classpathentry kind="lib" path="E:/development/canary_bins/CanaryMod.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

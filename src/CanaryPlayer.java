@@ -30,7 +30,10 @@ public class CanaryPlayer extends CPlayer {
     @Override
     public CWorld getWorld() {
         //Player has switched worlds
-        if(world.getHandle().hashCode() != player.getWorld().hashCode()) {
+        if(world.getHandle().getName() != player.getWorld().getName()) {
+            this.world = new CanaryWorld(player.getWorld());
+        }
+        else if(world.getDimension() != player.getWorld().getType().getId()) {
             this.world = new CanaryWorld(player.getWorld());
         }
         return world;
