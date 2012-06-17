@@ -736,7 +736,7 @@ public class CuboidInterface {
                             if(from.getFarewell() != null) {
                                 ms.notification(player, from.getFarewell());
                             }
-                            if((from.isFreeBuild()) && (!to.isFreeBuild())) {
+                            if(!to.isFreeBuild()) {
                                 if(player.isInCreativeMode()) {
                                     player.setCreative(0);
                                     player.setInventory(playerInventories.get(player.getName()));
