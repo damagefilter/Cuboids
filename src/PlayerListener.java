@@ -1,11 +1,11 @@
 import net.playblack.cuboids.actions.BlockActionHandler;
-import net.playblack.cuboids.actions.HandlePlayerMovement;
+import net.playblack.cuboids.actions.PlayerMovementHandler;
 import net.playblack.cuboids.actions.MiscHandler;
 import net.playblack.cuboids.actions.ItemDropHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.Vector;
+import net.playblack.mcutils.WorldLocation;
 
 
 /**
@@ -35,12 +35,12 @@ public class PlayerListener extends PluginListener {
     
     @Override
     public void onPlayerMove(Player player, Location from, Location to) {
-        Vector vTo = new Vector(to.x, to.y, to.z);
-        Vector vFrom = new Vector(from.x, from.y, from.z);
+        WorldLocation vTo = new WorldLocation((int)to.x, (int)to.y, (int)to.z, to.dimension, to.world);
+        WorldLocation vFrom = new WorldLocation((int)from.x, (int)from.y, (int)from.z, from.dimension, from.world);
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
         
-        HandlePlayerMovement.handleAreaTrespassing(cplayer, vFrom, vTo);
-        HandlePlayerMovement.handleCuboidAreas(cplayer, vFrom, vTo);  
+        PlayerMovementHandler.handleAreaTrespassing(cplayer, vFrom, vTo);
+        PlayerMovementHandler.handleCuboidAreas(cplayer, vFrom, vTo);  
     }
     
     @Override
@@ -48,11 +48,11 @@ public class PlayerListener extends PluginListener {
         if (!player.getWorld().isChunkLoaded((int)to.x, (int)to.y, (int)to.z)) {
             player.getWorld().loadChunk((int)to.x, (int)to.y, (int)to.z);
         }
-        Vector vTo = new Vector(to.x, to.y, to.z);
-        Vector vFrom = new Vector(from.x, from.y, from.z);
-        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
+        WorldLocation vTo = new WorldLocation((int)to.x, (int)to.y, (int)to.z, to.dimension, to.world);
+        WorldLocation vFrom = new WorldLocation((int)from.x, (int)from.y, (int)from.z, from.dimension, from.world);
+        CPlayer cplayer = CServer.getServer().refreshPlayer(player.getName());
         
-        HandlePlayerMovement.handleCuboidAreas(cplayer, vFrom, vTo);
+        PlayerMovementHandler.handleCuboidAreas(cplayer, vFrom, vTo);
         return false; //allow tp    
     }
     
@@ -65,7 +65,7 @@ public class PlayerListener extends PluginListener {
             if(attacker.isMob()) {
                 Player p = defender.getPlayer();
                 return !MiscHandler.handleMobDamage(
-                        new Vector(p.getX(), p.getY(), p.getZ()), 
+                        new WorldLocation((int)p.getX(), (int)p.getY(), (int)p.getZ(), p.getWorld().getType().getId(), p.getWorld().getName()), 
                         CServer.getServer().getWorld(p.getWorld().getName(), p.getWorld().getType().getId()));
             }
             if(attacker.isPlayer()) {
@@ -94,12 +94,12 @@ public class PlayerListener extends PluginListener {
             blockPlaced = new Block(0, (int)player.getX(), (int)player.getY(), (int)player.getZ());
         }
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
-        Vector v = new Vector(blockPlaced.getX(), blockPlaced.getY(), blockPlaced.getZ());
+        WorldLocation v = new WorldLocation(blockPlaced.getX(), blockPlaced.getY(), blockPlaced.getZ(), blockPlaced.getWorld().getName());
         
         
         //25d == flint&steel
         if(item.getItemId() == 259) {
-            return !BlockActionHandler.handleLighter(cplayer, new Vector(blockClicked.getX(), blockClicked.getY(), blockClicked.getZ()));
+            return !BlockActionHandler.handleLighter(cplayer, new WorldLocation(blockClicked.getX(), blockClicked.getY(), blockClicked.getZ(), blockClicked.getWorld().getName()));
         }
         //buckets
         if(item.getItemId() == 326 || item.getItemId() == 327) {
@@ -112,7 +112,7 @@ public class PlayerListener extends PluginListener {
     public boolean onItemDrop(Player player, ItemEntity item) {
         if(!(player == null)) {
             CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
-            return ItemDropHandler.handleItemDrop(cplayer, cplayer.getPosition());
+            return ItemDropHandler.handleItemDrop(cplayer, cplayer.getLocation());
         }
         return false;
     }

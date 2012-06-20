@@ -19,7 +19,7 @@ import net.playblack.mcutils.PropsFile;
  */
 public class Config {
     private String name="Cuboids2";
-    private String version="2.1.2";
+    private String version="2.2.5";
     private boolean verbose=false;
     
     //allow specific parts of the plugin:

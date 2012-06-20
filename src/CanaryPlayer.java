@@ -2,6 +2,7 @@ import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.mcutils.Vector;
+import net.playblack.mcutils.WorldLocation;
 
 
 public class CanaryPlayer extends CPlayer {
@@ -30,7 +31,7 @@ public class CanaryPlayer extends CPlayer {
     @Override
     public CWorld getWorld() {
         //Player has switched worlds
-        if(world.getHandle().getName() != player.getWorld().getName()) {
+        if(player.getWorld().getName() != player.getWorld().getName()) {
             this.world = new CanaryWorld(player.getWorld());
         }
         else if(world.getDimension() != player.getWorld().getType().getId()) {
@@ -165,6 +166,10 @@ public class CanaryPlayer extends CPlayer {
                 .append(player.getName()).append("\n")
                 .append("Wrapper: ")
                 .append(this.getClass().getSimpleName()).toString();
+    }
+    @Override
+    public WorldLocation getLocation() {
+        return new WorldLocation((int)getX(), (int)getY(), (int)getZ(), getWorld().getName());
     }
 
 }

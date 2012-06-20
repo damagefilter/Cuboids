@@ -7,8 +7,7 @@ import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.regions.CuboidInterface;
-//import net.playblack.mcutils.EventLogger;
-import net.playblack.mcutils.Vector;
+import net.playblack.mcutils.WorldLocation;
 
 
 /**
@@ -22,7 +21,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockRightClick(Player player, Block b, Item itemInHand) {
 //        EventLogger.getInstance().logMessage("BlockRightClick...", "DEBUG");
-        Vector p = new Vector(b.getX(), b.getY(), b.getZ());
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
 //        EventLogger.getInstance().logMessage("Player: "+cplayer.toString()+" ...", "DEBUG");
 //        EventLogger.getInstance().logMessage("Position: "+p.toString(), "DEBUG");
@@ -59,7 +58,7 @@ public class BlockListener extends PluginListener {
         if(b == null) {
             return;
         }
-        Vector p = new Vector(b.getX(), b.getY(), b.getZ());
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
 //        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
         BlockActionHandler.handleSetPoints(cplayer, p, false, true);
         BrushHandler.handleBrush(cplayer, p);
@@ -69,7 +68,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockDestroy(Player player, Block b) {
 //        EventLogger.getInstance().logMessage("BlockDestroy...", "DEBUG");
-        Vector p = new Vector(b.getX(), b.getY(), b.getZ());
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
 //        EventLogger.getInstance().logMessage("Player: "+cplayer.toString()+" ...", "DEBUG");
 //        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
@@ -91,7 +90,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockBreak(Player player, Block b) {
 //        EventLogger.getInstance().logMessage("BlockBreak...", "DEBUG");
-        Vector p = new Vector(b.getX(), b.getY(), b.getZ());
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
 //        EventLogger.getInstance().logMessage("Player: "+cplayer.toString()+" ...", "DEBUG");
 //        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
@@ -102,7 +101,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockPlace(Player player, Block blockPlaced, Block b, Item itemInHand) {
 //        EventLogger.getInstance().logMessage("BlockPlace...", "DEBUG");
-        Vector p = new Vector(b.getX(), b.getY(), b.getZ());
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
 //        EventLogger.getInstance().logMessage("Player: "+cplayer.toString()+" ...", "DEBUG");
 //        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
@@ -113,7 +112,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onExplode(Block b, OEntity entity, HashSet blocksaffected) {
 //        EventLogger.getInstance().logMessage("onExplode...", "DEBUG");
-        Vector p = new Vector(b.getX(), b.getY(), b.getZ());
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         CWorld world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
 //        EventLogger.getInstance().logMessage("World: "+world.toString()+" ...", "DEBUG");
 //        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
@@ -123,40 +122,32 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onIgnite(Block b, Player player) {
         //EventLogger.getInstance().logMessage("onIgnite...", "DEBUG");
-        Vector p = new Vector(b.getX(), b.getY(), b.getZ());
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         CPlayer cplayer = null;
-        CWorld world = null;
        // EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
         if(player != null) {
             cplayer = CServer.getServer().getPlayer(player.getName());
-            world = cplayer.getWorld();
         }
-        else {
-            world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
-        }
-//        EventLogger.getInstance().logMessage("World: "+world.toString()+" ...", "DEBUG");
-//        EventLogger.getInstance().logMessage("Player: "+cplayer.toString()+" ...", "DEBUG");
-        return !BlockActionHandler.handleIgnition(cplayer, p, world, b.getStatus());
+        return !BlockActionHandler.handleIgnition(cplayer, p, b.getStatus());
     }
     
     @Override
     public boolean onFlow(Block b, Block blockTo) {
-        Vector p = new Vector(b.getX(), b.getY(), b.getZ());
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         CBlock block = new CBlock(b.getType(), b.getData());
-        CWorld world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
-        return !BlockActionHandler.handleFlow(block, p, world);
+        return !BlockActionHandler.handleFlow(block, p);
     }
     
     @Override
-    public boolean onBlockPhysics(Block block, boolean placed) {
-        return BlockActionHandler.handlePhysics(new Vector(block.getX(), block.getY(), block.getZ()), 
-                CServer.getServer().getWorld(block.getWorld().getName(), block.getWorld().getType().getId()), 
-                block.getType());
+    public boolean onBlockPhysics(Block b, boolean placed) {
+        return BlockActionHandler.handlePhysics(new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName()),
+                CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId()), 
+                b.getType());
     }
     
     @Override
     public boolean onBlockUpdate(Block b, int newBlockId) {
         CWorld world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
-        return BlockActionHandler.handleFarmland(new Vector(b.getX(), b.getY(), b.getZ()), world, b.getType(), newBlockId);
+        return BlockActionHandler.handleFarmland(new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName()), world, b.getType(), newBlockId);
     }
 }

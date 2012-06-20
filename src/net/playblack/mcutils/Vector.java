@@ -6,7 +6,7 @@ import net.playblack.cuboids.exceptions.DeserializeException;
 
 public class Vector
 {
-    private double x, y, z;
+    protected double x, y, z;
 
     /*
      * ******************************************************

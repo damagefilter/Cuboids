@@ -2,7 +2,7 @@ package net.playblack.cuboids.actions;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
-import net.playblack.mcutils.Vector;
+import net.playblack.mcutils.WorldLocation;
 
 public class ItemDropHandler {
     /**
@@ -11,7 +11,7 @@ public class ItemDropHandler {
      * @param v
      * @return Returns true if a player <b>can't</b> drop an item.
      */
-    public static boolean handleItemDrop(CPlayer player, Vector v) {
-        return CuboidInterface.getInstance().isCreative(v, player.getWorld());
+    public static boolean handleItemDrop(CPlayer player, WorldLocation v) {
+        return CuboidInterface.getInstance().isCreative(v);
     }
 }

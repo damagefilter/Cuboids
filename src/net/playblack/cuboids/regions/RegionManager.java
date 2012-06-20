@@ -7,7 +7,7 @@ import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
-import net.playblack.mcutils.Vector;
+import net.playblack.mcutils.WorldLocation;
 
 /**
  * This manages CuboidNodes and takes care of lookups etc
@@ -450,13 +450,13 @@ public class RegionManager {
      * @param ignoreGlobal set true if you don't want to have the global settings to be passed along
      * @return
      */
-    public CuboidNode getActiveCuboid(Vector v, String world, int dimension, boolean ignoreGlobal) {
+    public CuboidNode getActiveCuboid(WorldLocation v, boolean ignoreGlobal) {
         nodeList.clear();
         if (v == null) {
             return global;
         }
         for (CuboidNode tree : rootNodes) {
-            if (tree.equalWorlds(world, dimension)) {
+            if (tree.equalWorlds(v.getWorld(), v.getDimension())) {
                 if (!tree.getCuboid().isWithin(v)) {
                     continue;
                 }
@@ -531,8 +531,8 @@ public class RegionManager {
      * @param world
      * @return
      */
-    public ArrayList<CuboidE> getCuboidsContaining(Vector v, String world, int dimension) {
-        ArrayList<CuboidE> list = new ArrayList<CuboidE>(0);
+    public ArrayList<CuboidE> getCuboidsContaining(WorldLocation v, String world, int dimension) {
+        ArrayList<CuboidE> list = new ArrayList<CuboidE>();
         if(v == null) {
             return list;
         }

@@ -11,6 +11,6 @@ public class ExplainCuboid {
      * @param setOffset True to set offset instead of origin
      */
     public static void explain(CPlayer player) {
-        CuboidInterface.getInstance().explainCuboid(player, player.getPosition());
+        CuboidInterface.getInstance().explainCuboid(player, player.getLocation());
     }
 }

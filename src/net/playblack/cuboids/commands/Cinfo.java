@@ -19,6 +19,6 @@ public class Cinfo extends CBaseCommand {
         if(!parseCommand(player, command)) {
             return;
         }
-       CuboidInterface.getInstance().explainCuboid(player, player.getPosition());
+       CuboidInterface.getInstance().explainCuboid(player, player.getLocation());
     }
 }

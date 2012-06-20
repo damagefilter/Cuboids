@@ -6,6 +6,7 @@ import java.util.HashMap;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
+import net.playblack.mcutils.WorldLocation;
 
 
 /**
@@ -861,7 +862,10 @@ public class CuboidE {
      * @param v
      * @return True: Point is within this cuboid, false otherwise
      */
-    public boolean isWithin(Vector v) {
+    public boolean isWithin(WorldLocation v) {
+        if(!v.getWorld().equals(this.world) || !(v.getDimension() == this.dimension)) {
+            return false;
+        }
         Vector min = Vector.getMinimum(point1, point2);
         Vector max = Vector.getMaximum(point1, point2);
         if(v.isWithin(min, max)) {

@@ -58,6 +58,14 @@ public class CanaryServer extends CServer {
     }
     
     @Override
+    public CPlayer refreshPlayer(String name) {
+        Player p = etc.getServer().matchPlayer(name);
+        playerList.remove(name);
+        playerList.put(name, new CanaryPlayer(p));
+        return playerList.get(name);
+    }
+    
+    @Override
     public void removePlayer(String player) {
         playerList.remove(player);
     }

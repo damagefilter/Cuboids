@@ -43,6 +43,13 @@ public abstract class CServer {
     public abstract CPlayer getPlayer(String name);
     
     /**
+     * Force to update the player reference in the player cache and return the new one
+     * @param name
+     * @return
+     */
+    public abstract CPlayer refreshPlayer(String name);
+    
+    /**
      * Remove player from the server list
      * @param player
      */

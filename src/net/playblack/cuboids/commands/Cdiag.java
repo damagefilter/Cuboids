@@ -24,7 +24,7 @@ public class Cdiag extends CBaseCommand {
             return;
         }
         if(player.hasPermission("cIgnoreRestrictions")) {
-            ArrayList<CuboidE> nodes = RegionManager.getInstance().getCuboidsContaining(player.getPosition(), player.getWorld().getName(), player.getWorld().getDimension());
+            ArrayList<CuboidE> nodes = RegionManager.getInstance().getCuboidsContaining(player.getLocation(), player.getWorld().getName(), player.getWorld().getDimension());
             player.sendMessage(ColorManager.LightGreen+"Cuboids containnig your current location:");
             for(CuboidE cube : nodes) {
                 player.sendMessage(ColorManager.Yellow+"Name: "+ColorManager.LightGray+cube.getName());
