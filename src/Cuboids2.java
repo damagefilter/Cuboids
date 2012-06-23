@@ -46,5 +46,9 @@ public class Cuboids2 extends Plugin {
         etc.getLoader().addListener(PluginLoader.Hook.ENDERMAN_PICKUP, miscListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addCustomListener(new CuboidHookDispatcher());
     }
+    
+    public void initialize() {
+        etc.getLoader().addListener(PluginLoader.Hook.PLAYER_RESPAWN, playerListener, this, PluginListener.Priority.CRITICAL);
+    }
 
 }

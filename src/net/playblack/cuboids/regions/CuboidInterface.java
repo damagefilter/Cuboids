@@ -720,6 +720,10 @@ public class CuboidInterface {
      * @param vTo
      */
     public void removePlayerWithin(CPlayer player, WorldLocation vFrom, WorldLocation vTo) {
+//        if(player.isAdmin()) {
+//            player.sendMessage(ColorManager.Yellow+"From: " + ColorManager.LightGray + vFrom.getBlockX() + ", " + vFrom.getBlockY() + ", " + vFrom.getBlockZ() + ", " + vFrom.getWorld() + ", " + vFrom.getDimension());
+//            player.sendMessage(ColorManager.Yellow+"To:   " + ColorManager.LightGray + vTo.getBlockX() + ", " + vTo.getBlockY() + ", " + vTo.getBlockZ() + ", " + vTo.getWorld() + ", " + vTo.getDimension());
+//        }
         ArrayList<CuboidE> cubesFrom = regions.getCuboidsContaining(vFrom, vFrom.getWorld(), vFrom.getDimension());
         ArrayList<CuboidE> cubesTo = regions.getCuboidsContaining(vTo, vTo.getWorld(), vTo.getDimension());
         for(CuboidE from : cubesFrom) {

@@ -869,11 +869,9 @@ public class CuboidE {
         Vector min = Vector.getMinimum(point1, point2);
         Vector max = Vector.getMaximum(point1, point2);
         if(v.isWithin(min, max)) {
-            //System.out.println("Within found and all.");
             return true; 
         }
         else {
-            //System.out.println("Not within found and all.");
             return false;
         }
     }

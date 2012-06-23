@@ -116,4 +116,14 @@ public class PlayerListener extends PluginListener {
         }
         return false;
     }
+    
+    @Override
+    public void onPlayerRespawn(Player player, Location vTo) {
+        Location vFrom = player.getLocation();
+        if(player.getName().equals("damagefilter")) {
+            player.sendMessage(Colors.Rose+"PLAYER RESPAWN: ");
+          player.sendMessage(Colors.Yellow+"From: " + Colors.LightGray + vFrom.x + ", " + vFrom.y + ", " + vFrom.z + ", " + vFrom.world + ", " + vFrom.dimension);
+          player.sendMessage(Colors.Yellow+"To:   " + Colors.LightGray + vTo.x + ", " + vTo.y + ", " + vTo.z + ", " + vTo.world + ", " + vTo.dimension);
+      }
+    }
 }

@@ -74,4 +74,10 @@ public abstract class CPlayer implements IBaseEntity{
      */
     public abstract void teleportTo(Vector v);
     
+    /**
+     * Check if this player is an admin
+     * @return
+     */
+    public abstract boolean isAdmin();
+    
 }

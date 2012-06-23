@@ -171,5 +171,9 @@ public class CanaryPlayer extends CPlayer {
     public WorldLocation getLocation() {
         return new WorldLocation((int)getX(), (int)getY(), (int)getZ(), getWorld().getName());
     }
+    @Override
+    public boolean isAdmin() {
+        return player.isAdmin();
+    }
 
 }

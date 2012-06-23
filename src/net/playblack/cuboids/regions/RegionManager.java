@@ -230,7 +230,6 @@ public class RegionManager {
                 if(!parent.getName().equals(node.getName())) {
                     parent.getChilds().remove(node);
                 }
-                removeCuboid(node.getCuboid(), false);
                 removeNodeFile(node);
                 return "REMOVED";
             }
@@ -240,6 +239,10 @@ public class RegionManager {
         }
     }
     
+    /**
+     * Delets the WHOLE tree at once, this will also remove ALL child nodes!
+     * @param name
+     */
     private void deleteTree(String name) {
         CuboidNode n = null;
         for(CuboidNode root : rootNodes) {
@@ -256,29 +259,29 @@ public class RegionManager {
      * put them back together. Good as new!
      */
     public void autoSortCuboidAreas() {
-        ArrayList<String> visited = new ArrayList<String>();
         ArrayList<CuboidNode> workerList = new ArrayList<CuboidNode>(0);
         for(CuboidNode tree : rootNodes) {
-            workerList.add(tree);
+            for(CuboidNode node : tree.toList()) {
+                workerList.add(node);
+            }
         }
         for(CuboidNode tree : workerList) {
-            if(!visited.contains(tree.getName())) {
-                CuboidE cube = tree.getCuboid();
-                CuboidNode parent = getPossibleParent(cube);
-                if(parent != null) {
-                    if(parent.getName().equals(cube.getName())) {
-                        //The child will always fit in itself and as its within the list, 
-                        //we need to skip it
-                        continue;
-                    }
-                    cube.setParent(parent.getName());
-                    if(cube.getPriority() <= parent.getCuboid().getPriority()) {
-                        cube.setPriority(parent.getCuboid().getPriority()+1);
-                    }
-                    cube.hasChanged = true;
-                    updateCuboidNode(cube);
+            CuboidE cube = tree.getCuboid();
+            CuboidNode parent = getPossibleParent(cube);
+            //Parent must not be null and also must not have the same name as cube (because then it would be cube)
+            if(parent != null && !(parent.getName().equals(cube.getName()))) {
+                cube.setParent(parent.getName());
+                if(parent.getCuboid().getPriority() < 0) {
+                    //prevent negative priorities
+                    //It doesn't actually have any implications if the priority IS negative
+                    //but it is cleaner if not.
+                    parent.getCuboid().setPriority(0);
                 }
-                visited.add(tree.getName());
+                if(cube.getPriority() <= parent.getCuboid().getPriority()) {
+                    cube.setPriority(parent.getCuboid().getPriority()+1);
+                }
+                cube.hasChanged = true;
+                updateCuboidNode(cube);
             }
         }
         rootNodes = workerList;
@@ -307,6 +310,7 @@ public class RegionManager {
                 else {
                     node.getCuboid().setParent(getPossibleParent(node.getCuboid()).getName());
                     node.getCuboid().hasChanged = true;
+                    updateCuboidNode(node.getCuboid());
                 }
             }
         }
@@ -327,90 +331,94 @@ public class RegionManager {
      * @param cube
      * @return
      */
-    public boolean updateCuboidNode(CuboidE cube)
-    {
-      for (CuboidNode tree : rootNodes) {
-        if (tree.equalWorlds(cube)) {
-          for (CuboidNode node : tree.toList()) {
-              //log.logMessage("Unfolding Tree in updateCuboidNode - looking for "+cube.getName(), "INFO");
-            if (!node.getName().equals(cube.getName())) {
-                //no match, continue with next set
-              continue;
-            }
-            
-            if ((cube.getParent() != null) && (node.getParent().equals(cube.getParent())))
-            {
-                  //Uncomment if somethig derps!
-//                if ((node.getParent() != null) && (node.isRoot()))
-//                {
-//                     //log.logMessage("Old Cuboid is tree! Moving ...", "INFO");
-//                     node.getCuboid().hasChanged = true;
-//                     deleteTree(node.getName());
-//                     addNode(node);
-//                     return true;
-//                }
-                  if (cuboidExists(cube.getParent(), cube.getWorld(), cube.getDimension())) {
-                      //log.logMessage("Parent Exists, setting data!", "INFO");
-                      node.getCuboid().hasChanged = true;
-                      node.setCuboid(cube);
-                  
-                    return true;
-                  }
-                  
-                  return false;
-            }
+    public boolean updateCuboidNode(CuboidE cube) {
+        for (CuboidNode tree : rootNodes) {
+            if (tree.equalWorlds(cube)) {
+                for (CuboidNode node : tree.toList()) {
+                    // log.logMessage("Unfolding Tree in updateCuboidNode - looking for "+cube.getName(),
+                    // "INFO");
+                    if (!node.getName().equals(cube.getName())) {
+                        // no match, continue with next set
+                        continue;
+                    }
+                    if ((cube.getParent() != null)
+                            && (node.getParent().equals(cube.getParent()))) {
+                        // Uncomment if somethig derps!
+                        // if ((node.getParent() != null) && (node.isRoot()))
+                        // {
+                        // //log.logMessage("Old Cuboid is tree! Moving ...",
+                        // "INFO");
+                        // node.getCuboid().hasChanged = true;
+                        // deleteTree(node.getName());
+                        // addNode(node);
+                        // return true;
+                        // }
+                        if (cuboidExists(cube.getParent(), cube.getWorld(),
+                                cube.getDimension())) {
+                            // log.logMessage("Parent Exists, setting data!",
+                            // "INFO");
+                            node.getCuboid().hasChanged = true;
+                            node.setCuboid(cube);
 
-            if ((cube.getParent() != null) && (!node.getParent().equals(cube.getParent())))
-            {
-                //comment this out if somethign derps!
-                if ((node.getParent() != null) && (node.isRoot()))
-                {
-                     //log.logMessage("Old Cuboid is tree! Moving ...", "INFO");
-                     node.getCuboid().hasChanged = true;
-                     deleteTree(node.getName());
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    if ((cube.getParent() != null)
+                            && (!node.getParent().equals(cube.getParent()))) {
+                        // comment this out if somethign derps!
+                        if ((node.getParent() != null) && (node.isRoot())) {
+                            // log.logMessage("Old Cuboid is tree! Moving ...",
+                            // "INFO");
+                            node.getCuboid().hasChanged = true;
+                            deleteTree(node.getName());
+                        }
+                        // log.logMessage("Parent Node has changed!!", "INFO");
+                        if (cuboidExists(cube.getParent(), cube.getWorld(),
+                                cube.getDimension())) {
+                            // log.logMessage("Parent Node has changed!!",
+                            // "INFO");
+                            removeCuboid(node.getCuboid(), true);
+                            CuboidNode newNode = createNode(cube);
+                            CuboidNode parent = getCuboidNodeByName(
+                                    cube.getParent(), cube.getWorld(),
+                                    cube.getDimension());
+                            parent.addChild(newNode);
+                            newNode.getCuboid().hasChanged = true;
+                            addNode(newNode);
+                            return true;
+                        }
+                        return false;
+                    }
+
+                    // If we're here the cuboid has no parent
+                    if (cube.getParent() == null && node.getParent() == null) {
+                        // log.logMessage("Parent is null AND node Parent is null (no structural changes)",
+                        // "INFO");
+                        // Nothing severe changed, only update
+                        cube.hasChanged = true;
+                        node.setCuboid(cube);
+                        return true;
+                    }
+                    if (cube.getParent() == null && node.getParent() != null) {
+                        // log.logMessage("Parent is null AND node Parent is NOT null (converting to tree)",
+                        // "INFO");
+                        CuboidNode newNode = createNode(cube);
+                        newNode.setChilds(node.getChilds());
+                        removeCuboid(node.getCuboid(), true);
+
+                        newNode.getCuboid().hasChanged = true;
+                        addRoot(newNode);
+                        return true;
+                    }
                 }
-               // log.logMessage("Parent Node has changed!!", "INFO");
-                  if (cuboidExists(cube.getParent(), cube.getWorld(), cube.getDimension())) {
-                      //log.logMessage("Parent Node has changed!!", "INFO");
-                    CuboidNode newNode = createNode(cube);
-                    newNode.setChilds(node.getChilds());
-                  
-                    removeCuboid(node.getCuboid(), true);
-                    removeNodeFile(node);
-                    newNode.getCuboid().hasChanged = true;
-                    addNode(newNode);
-                  
-                    return true;
-                  }
-                  
-                  return false;
-            }
 
-          //If we're here the cuboid has no parent
-            if (cube.getParent() == null && node.getParent() == null)
-            {
-                  //log.logMessage("Parent is null AND node Parent is null (no structural changes)", "INFO");
-                //Nothing severe changed, only update
-              cube.hasChanged = true;
-              node.setCuboid(cube);
-              return true;
             }
-            if (cube.getParent() == null && node.getParent() != null) {
-               // log.logMessage("Parent is null AND node Parent is NOT null (converting to tree)", "INFO");
-                CuboidNode newNode = createNode(cube);
-                newNode.setChilds(node.getChilds());
-                removeCuboid(node.getCuboid(), true);
-                
-                newNode.getCuboid().hasChanged = true;
-                addRoot(newNode);
-                return true;
-            }
-          }
 
         }
-
-      }
-      return false;
+        return false;
     }
     
     
@@ -624,7 +632,7 @@ public class RegionManager {
      */
     public CuboidNode getPossibleParent(CuboidE cube) {
         //log.logMessage("Going to find a suitable parent for "+cube.getName(), "INFO");
-        ArrayList<CuboidNode> list = new ArrayList<CuboidNode>(0);
+        ArrayList<CuboidNode> list = new ArrayList<CuboidNode>();
         for(CuboidNode tree : rootNodes) {
             if(tree.equalWorlds(cube)) {
                 for(CuboidNode node : tree.toList()) {
@@ -636,6 +644,7 @@ public class RegionManager {
             }
         }
         if(list.size() > 0) {
+            //Try to find the cuboid with the lowest priority
             CuboidNode min=null;
             for(int e = 0; e<list.size();e++) {
                 if(min == null) {
