@@ -430,7 +430,7 @@ public class MysqlData implements BaseData {
                     "SEVERE");
             return; // uh oh ...
         }
-        ArrayList<CuboidE> list = new ArrayList<CuboidE>(0);
+        ArrayList<CuboidE> list = new ArrayList<CuboidE>();
         try {
             PreparedStatement ps = getConnection().prepareStatement(
                     "SELECT * FROM nodes");
@@ -444,53 +444,49 @@ public class MysqlData implements BaseData {
         // turning into a node list
 
         ArrayList<CuboidNode> nodelist = new ArrayList<CuboidNode>(list.size());
+        ArrayList<CuboidNode> visited = new ArrayList<CuboidNode>(list.size());
         for (CuboidE cube : list) {
             nodelist.add(handler.createNode(cube));
         }
 
         // Creating Root nodes here
         for (int i = 0; i < nodelist.size(); i++) {
-            // System.out.println("Running: "+i);
+            
+            if(visited.contains(nodelist.get(i))) {
+                continue;
+            }
             if (nodelist.get(i).getCuboid().getParent() == null) {
-                if (handler.cuboidExists(nodelist.get(i).getName(), nodelist
-                        .get(i).getWorld(), nodelist.get(i).getDimension())) {
-                    nodelist.remove(i);
-                    i = -1;
-                } else {
-                    // System.out.println("Cuboids2: Root Node: "+nodelist.get(i).getCuboid().getName());
-                    if (nodelist.get(i) != null
-                            && !handler.cuboidExists(nodelist.get(i).getName(),
-                                    nodelist.get(i).getWorld(), nodelist.get(i)
-                                            .getDimension())) {
-                        // System.out.println("Adding root node now.");
+                if (handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
+                    visited.add(nodelist.get(i));
+                    continue;
+                } 
+                else {
+                    if (nodelist.get(i) != null && !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
                         handler.addRoot(nodelist.get(i));
-                        // rootNodes.add(nodelist.get(i));
-                        nodelist.remove(i);
-                        i = -1;
+                        visited.add(nodelist.get(i));
+                        continue;
                     }
                 }
             }
         }
-
+        visited.clear();
         // Sorting parents here:
         for (int i = 0; i < nodelist.size(); i++) {
+            if(visited.contains(nodelist.get(i))) {
+                continue;
+            }
             if (nodelist.get(i).getCuboid().getParent() != null) {
-                CuboidNode parent = handler.getCuboidNodeByName(nodelist.get(i)
-                        .getParent(), nodelist.get(i).getWorld(),
-                        nodelist.get(i).getDimension());
-                if (parent != null
-                        && !handler.cuboidExists(nodelist.get(i).getName(),
-                                nodelist.get(i).getWorld(), nodelist.get(i)
-                                        .getDimension())) {
+                CuboidNode parent = handler.getCuboidNodeByName(nodelist.get(i).getParent(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension());
+                if (parent != null && !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
                     parent.addChild(nodelist.get(i));
-                    nodelist.remove(i);
-                    i = -1;
+                    visited.add(nodelist.get(i));
+                    i = -1; //Count from the beginning again as we might have missed a couple of nodes with a missing parent that now exists
+                    continue;
                 }
             }
         }
         handler.cleanParentRelations();
         handler.log.logMessage("Cuboids2: Cuboids loaded successfully", "INFO");
-        saveAll(handler.getRootNodeList(), false, true);
         return;
     }
 

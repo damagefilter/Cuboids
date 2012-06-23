@@ -144,6 +144,7 @@ public class FlatfileData implements BaseData {
         // log.logMessage("Cuboids2: Loading Cuboid Data", "INFO");
         synchronized (lock) {
             ArrayList<CuboidNode> nodelist = new ArrayList<CuboidNode>();
+            ArrayList<CuboidNode> visited = new ArrayList<CuboidNode>();
             try {
                 // Load node files into a big big (probably) node list
                 // ObjectInputStream ois;
@@ -174,47 +175,39 @@ public class FlatfileData implements BaseData {
                 e.printStackTrace();
             }
 
-            // Create root nodes
-            // System.out.println(" : Processing Node Files ...");
+            // Creating Root nodes here
             for (int i = 0; i < nodelist.size(); i++) {
-                // System.out.println("Running: "+i);
+                
+                if(visited.contains(nodelist.get(i))) {
+                    continue;
+                }
                 if (nodelist.get(i).getCuboid().getParent() == null) {
-                    if (handler.cuboidExists(nodelist.get(i).getName(),
-                            nodelist.get(i).getWorld(), nodelist.get(i)
-                                    .getDimension())) {
-                        nodelist.remove(i);
-                        i = -1;
-                    } else {
-                        // System.out.println(" : Root Node: "+nodelist.get(i).getCuboid().getName());
-                        if (nodelist.get(i) != null
-                                && !handler.cuboidExists(nodelist.get(i)
-                                        .getName(), nodelist.get(i).getWorld(),
-                                        nodelist.get(i).getDimension())) {
-                            // System.out.println("Adding root node now.");
+                    if (handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
+                        visited.add(nodelist.get(i));
+                        continue;
+                    } 
+                    else {
+                        if (nodelist.get(i) != null && !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
                             handler.addRoot(nodelist.get(i));
-                            // rootNodes.add(nodelist.get(i));
-                            nodelist.remove(i);
-                            i = -1;
+                            visited.add(nodelist.get(i));
+                            continue;
                         }
                     }
                 }
             }
-            // Sort parents
-            // System.out.println(" : Parenting Child Nodes");
+            visited.clear();
+            // Sorting parents here:
             for (int i = 0; i < nodelist.size(); i++) {
+                if(visited.contains(nodelist.get(i))) {
+                    continue;
+                }
                 if (nodelist.get(i).getCuboid().getParent() != null) {
-                    CuboidNode parent = handler.getCuboidNodeByName(nodelist
-                            .get(i).getParent(), nodelist.get(i).getWorld(),
-                            nodelist.get(i).getDimension());
-                    if (parent != null
-                            && !handler.cuboidExists(nodelist.get(i).getName(),
-                                    nodelist.get(i).getWorld(), nodelist.get(i)
-                                            .getDimension())) {
-                        // System.out.println(" : Add child: "+nodelist.get(i).getCuboid().getName());
-                        // System.out.println("to parent: "+parent.getCuboid().getName());
+                    CuboidNode parent = handler.getCuboidNodeByName(nodelist.get(i).getParent(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension());
+                    if (parent != null && !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
                         parent.addChild(nodelist.get(i));
-                        nodelist.remove(i);
-                        i = -1;
+                        visited.add(nodelist.get(i));
+                        i = -1; //Count from the beginning again as we might have missed a couple of nodes with a missing parent that now exists
+                        continue;
                     }
                 }
             }

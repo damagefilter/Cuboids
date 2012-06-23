@@ -2,6 +2,8 @@ package net.playblack.cuboids.gameinterface;
 
 import java.util.ArrayList;
 
+import net.playblack.cuboids.InvalidPlayerException;
+
 public abstract class CServer {
     
     private static CServer instance = null;
@@ -36,18 +38,20 @@ public abstract class CServer {
     public abstract ArrayList<CPlayer> getPlayers(CWorld world);
     
     /**
-     * Get a palyer by the name
+     * Get a player by name
      * @param name
      * @return
+     * @throws InvalidPlayerException when given player does not exist (is not online)
      */
-    public abstract CPlayer getPlayer(String name);
+    public abstract CPlayer getPlayer(String name) throws InvalidPlayerException;
     
     /**
      * Force to update the player reference in the player cache and return the new one
      * @param name
      * @return
+     * @throws InvalidPlayerException when given player does not exist (is not online)
      */
-    public abstract CPlayer refreshPlayer(String name);
+    public abstract CPlayer refreshPlayer(String name) throws InvalidPlayerException;
     
     /**
      * Remove player from the server list

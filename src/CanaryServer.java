@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.gameinterface.CMob;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -9,7 +10,7 @@ import net.playblack.cuboids.gameinterface.CWorld;
 
 public class CanaryServer extends CServer {
 
-    protected HashMap<String, CWorld> worlds = new HashMap<String, CWorld>(5);
+    protected HashMap<String, CWorld> worlds = new HashMap<String, CWorld>(3);
     private HashMap<String,CPlayer> playerList;
     
     /**
@@ -25,16 +26,7 @@ public class CanaryServer extends CServer {
         if(worlds.containsKey(name+dimension)) {
             return worlds.get(name+dimension);
         }
-        CanaryWorld world = null;
-        if(dimension == 0) {
-            world = new CanaryWorld(etc.getServer().getWorld(name)[0]);
-        }
-        if(dimension == 1) {
-            world = new CanaryWorld(etc.getServer().getWorld(name)[2]);
-        }
-        if(dimension == -1) {
-            world = new CanaryWorld(etc.getServer().getWorld(name)[1]);
-        }
+        CanaryWorld world = new CanaryWorld(etc.getServer().getWorld(name)[World.Dimension.fromId(dimension).toIndex()]);
         worlds.put(name+dimension, world);
         return world;
     }
@@ -49,17 +41,23 @@ public class CanaryServer extends CServer {
         return null;
     }
     @Override
-    public CPlayer getPlayer(String name) {
+    public CPlayer getPlayer(String name) throws InvalidPlayerException {
         if(!playerList.containsKey(name)) {
             Player p = etc.getServer().matchPlayer(name);
+            if(p == null) {
+                throw new InvalidPlayerException("Cuboids2 cannot find player with this name: "+name+" (Player offline?)");
+            }
             playerList.put(name, new CanaryPlayer(p));
         }
         return playerList.get(name);
     }
     
     @Override
-    public CPlayer refreshPlayer(String name) {
+    public CPlayer refreshPlayer(String name) throws InvalidPlayerException {
         Player p = etc.getServer().matchPlayer(name);
+        if(p == null) {
+            throw new InvalidPlayerException("Cuboids2 cannot find player with this name: "+name+" (Player offline?)");
+        }
         playerList.remove(name);
         playerList.put(name, new CanaryPlayer(p));
         return playerList.get(name);

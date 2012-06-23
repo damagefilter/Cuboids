@@ -39,7 +39,6 @@ public abstract class BaseGen implements IShapeGen {
             return false;
         }
         if(requireSelectionComplete && !selection.isComplete()) {
-            System.out.println("Selection is incomplete!");
             return false;
         }
         //NOTE: World must have been scanned before this operation!

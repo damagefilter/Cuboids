@@ -1,5 +1,6 @@
-import java.util.HashSet;
+import java.util.List;
 
+import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.BlockActionHandler;
 import net.playblack.cuboids.actions.BrushHandler;
 import net.playblack.cuboids.blocks.CBlock;
@@ -20,12 +21,14 @@ public class BlockListener extends PluginListener {
     private long theTime = 0L; //to nerf the armswing hooks sensitivity
     @Override
     public boolean onBlockRightClick(Player player, Block b, Item itemInHand) {
-//        EventLogger.getInstance().logMessage("BlockRightClick...", "DEBUG");
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
-        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
-//        EventLogger.getInstance().logMessage("Player: "+cplayer.toString()+" ...", "DEBUG");
-//        EventLogger.getInstance().logMessage("Position: "+p.toString(), "DEBUG");
-//        EventLogger.getInstance().logMessage("Handling right click action", "DEBUG");
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        CPlayer cplayer;
+        try {
+            cplayer = CServer.getServer().getPlayer(player.getName());
+        } catch (InvalidPlayerException e) {
+            //fallback to manually get a player
+            cplayer = new CanaryPlayer(player);
+        }
         BlockActionHandler.explainPosition(cplayer, p);
         boolean pointResult = BlockActionHandler.handleSetPoints(
                 cplayer, 
@@ -44,22 +47,23 @@ public class BlockListener extends PluginListener {
     
     @Override
     public void onArmSwing(Player player) {
-//        EventLogger.getInstance().logMessage("ArmSwing...", "DEBUG");
         if(System.currentTimeMillis() <= theTime+200) {
-            //break the operation if not enough time has passed.
-            //this is applied to prevent onArmSwing from beeing called uncontrollably
             return;
         }
         
-        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
-//        EventLogger.getInstance().logMessage("Player: "+cplayer.toString()+" ...", "DEBUG");
+        CPlayer cplayer;
+        try {
+            cplayer = CServer.getServer().getPlayer(player.getName());
+        } catch (InvalidPlayerException e) {
+            //fallback to manually get a player
+            cplayer = new CanaryPlayer(player);
+        }
         HitBlox hb = new HitBlox(player);
         Block b = hb.getFaceBlock();
         if(b == null) {
             return;
         }
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
-//        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
         BlockActionHandler.handleSetPoints(cplayer, p, false, true);
         BrushHandler.handleBrush(cplayer, p);
         theTime = System.currentTimeMillis(); //Set time counter
@@ -67,11 +71,14 @@ public class BlockListener extends PluginListener {
     
     @Override
     public boolean onBlockDestroy(Player player, Block b) {
-//        EventLogger.getInstance().logMessage("BlockDestroy...", "DEBUG");
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
-        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
-//        EventLogger.getInstance().logMessage("Player: "+cplayer.toString()+" ...", "DEBUG");
-//        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        CPlayer cplayer;
+        try {
+            cplayer = CServer.getServer().getPlayer(player.getName());
+        } catch (InvalidPlayerException e) {
+            //fallback to manually get a player
+            cplayer = new CanaryPlayer(player);
+        }
         boolean pointResult = BlockActionHandler.handleSetPoints(
                 cplayer, 
                 p, 
@@ -89,44 +96,51 @@ public class BlockListener extends PluginListener {
     
     @Override
     public boolean onBlockBreak(Player player, Block b) {
-//        EventLogger.getInstance().logMessage("BlockBreak...", "DEBUG");
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
-        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
-//        EventLogger.getInstance().logMessage("Player: "+cplayer.toString()+" ...", "DEBUG");
-//        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        CPlayer cplayer;
+        try {
+            cplayer = CServer.getServer().getPlayer(player.getName());
+        } catch (InvalidPlayerException e) {
+            //fallback to manually get a player
+            cplayer = new CanaryPlayer(player);
+        }
         
         return !CuboidInterface.getInstance().canModifyBlock(cplayer, p);
     }
     
     @Override
     public boolean onBlockPlace(Player player, Block blockPlaced, Block b, Item itemInHand) {
-//        EventLogger.getInstance().logMessage("BlockPlace...", "DEBUG");
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
-        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
-//        EventLogger.getInstance().logMessage("Player: "+cplayer.toString()+" ...", "DEBUG");
-//        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        CPlayer cplayer;
+        try {
+            cplayer = CServer.getServer().getPlayer(player.getName());
+        } catch (InvalidPlayerException e) {
+            //fallback to manually get a player
+            cplayer = new CanaryPlayer(player);
+        }
         return !CuboidInterface.getInstance().canModifyBlock(cplayer, p);
     }
     
+    
     @SuppressWarnings("rawtypes")
     @Override
-    public boolean onExplode(Block b, OEntity entity, HashSet blocksaffected) {
-//        EventLogger.getInstance().logMessage("onExplode...", "DEBUG");
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
-        CWorld world = CServer.getServer().getWorld(b.getWorld().getName(), b.getWorld().getType().getId());
-//        EventLogger.getInstance().logMessage("World: "+world.toString()+" ...", "DEBUG");
-//        EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
-        return BlockActionHandler.handleExplosions(world, b.getStatus(), p);
+    public boolean onExplosion(Block b, BaseEntity e, List blocksaffected) {
+        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), e.getWorld().getType().getId(), e.getWorld().getName());
+        return BlockActionHandler.handleExplosions(b.getStatus(), p);
     }
+
     
     @Override
     public boolean onIgnite(Block b, Player player) {
-        //EventLogger.getInstance().logMessage("onIgnite...", "DEBUG");
         WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         CPlayer cplayer = null;
-       // EventLogger.getInstance().logMessage("Position" + p.toString(), "DEBUG");
         if(player != null) {
-            cplayer = CServer.getServer().getPlayer(player.getName());
+            try {
+                cplayer = CServer.getServer().getPlayer(player.getName());
+            } catch (InvalidPlayerException e) {
+                //fallback to manually get a player
+                cplayer = new CanaryPlayer(player);
+            }
         }
         return !BlockActionHandler.handleIgnition(cplayer, p, b.getStatus());
     }

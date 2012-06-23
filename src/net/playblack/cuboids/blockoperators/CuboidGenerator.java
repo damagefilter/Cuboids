@@ -67,13 +67,10 @@ public class CuboidGenerator extends BaseGen {
             }
         }
         if(newHistory) {
-            System.out.println("Creating undo");
             CuboidSelection world = scanWorld(true, true);
             SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
-        System.out.println("calling modifyWorld");
         boolean result = modifyWorld(true);
-        System.out.println("Done. Result: "+result);
         return result;
     }
 }

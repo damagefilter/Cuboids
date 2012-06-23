@@ -186,7 +186,7 @@ public class BlockActionHandler {
      * @param position
      * @return True if explosion must be stopped
      */
-    public static boolean handleExplosions(CWorld world, int status, WorldLocation position) {
+    public static boolean handleExplosions(int status, WorldLocation position) {
         //1 = tnt, 2 = creeper
         CuboidInterface ci = CuboidInterface.getInstance();
         if((status == 1) && ci.isTntSecure(position)) {
@@ -248,7 +248,7 @@ public class BlockActionHandler {
      * @param blockId
      * @return
      */
-    public static boolean handleEndermanPickup(WorldLocation position, CWorld world) {
+    public static boolean handleEndermanPickup(WorldLocation position) {
         return CuboidInterface.getInstance().isEnderControlled(position);
     }
 

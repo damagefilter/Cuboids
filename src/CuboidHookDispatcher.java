@@ -1,3 +1,4 @@
+import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.exceptions.InvalidApiHookException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -35,9 +36,13 @@ public class CuboidHookDispatcher implements PluginInterface {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
             e.printStackTrace();
             return null;
+        } catch (InvalidPlayerException e) {
+            EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+            e.printStackTrace();
+            return null;
         }
     }
-    public Object execute(Object[] args) throws InvalidApiHookException {
+    public Object execute(Object[] args) throws InvalidApiHookException, InvalidPlayerException {
         if(!(args[0] instanceof String)) {
             return null;
         }

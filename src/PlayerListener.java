@@ -1,3 +1,4 @@
+import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.BlockActionHandler;
 import net.playblack.cuboids.actions.PlayerMovementHandler;
 import net.playblack.cuboids.actions.MiscHandler;
@@ -37,10 +38,16 @@ public class PlayerListener extends PluginListener {
     public void onPlayerMove(Player player, Location from, Location to) {
         WorldLocation vTo = new WorldLocation((int)to.x, (int)to.y, (int)to.z, to.dimension, to.world);
         WorldLocation vFrom = new WorldLocation((int)from.x, (int)from.y, (int)from.z, from.dimension, from.world);
-        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
+        CPlayer cplayer;
+        try {
+            cplayer = CServer.getServer().getPlayer(player.getName());
+        } catch (InvalidPlayerException e) {
+            //Fallback
+            cplayer = new CanaryPlayer(player);
+        }
         
         PlayerMovementHandler.handleAreaTrespassing(cplayer, vFrom, vTo);
-        PlayerMovementHandler.handleCuboidAreas(cplayer, vFrom, vTo);  
+        PlayerMovementHandler.handleCuboidAreas(cplayer, vFrom, vTo, false);  
     }
     
     @Override
@@ -50,9 +57,15 @@ public class PlayerListener extends PluginListener {
         }
         WorldLocation vTo = new WorldLocation((int)to.x, (int)to.y, (int)to.z, to.dimension, to.world);
         WorldLocation vFrom = new WorldLocation((int)from.x, (int)from.y, (int)from.z, from.dimension, from.world);
-        CPlayer cplayer = CServer.getServer().refreshPlayer(player.getName());
+        CPlayer cplayer;
+        try {
+            cplayer = CServer.getServer().refreshPlayer(player.getName());
+        } catch (InvalidPlayerException e) {
+            //Fallback
+            cplayer = new CanaryPlayer(player);
+        }
         
-        PlayerMovementHandler.handleCuboidAreas(cplayer, vFrom, vTo);
+        PlayerMovementHandler.handleCuboidAreas(cplayer, vFrom, vTo, true);
         return false; //allow tp    
     }
     
@@ -65,13 +78,17 @@ public class PlayerListener extends PluginListener {
             if(attacker.isMob()) {
                 Player p = defender.getPlayer();
                 return !MiscHandler.handleMobDamage(
-                        new WorldLocation((int)p.getX(), (int)p.getY(), (int)p.getZ(), p.getWorld().getType().getId(), p.getWorld().getName()), 
-                        CServer.getServer().getWorld(p.getWorld().getName(), p.getWorld().getType().getId()));
+                        new WorldLocation((int)p.getX(), (int)p.getY(), (int)p.getZ(), p.getWorld().getType().getId(), p.getWorld().getName()));
             }
             if(attacker.isPlayer()) {
-                return !MiscHandler.handlePvpDamage(
-                        CServer.getServer().getPlayer(attacker.getPlayer().getName()), 
-                        CServer.getServer().getPlayer(defender.getPlayer().getName()));
+                try {
+                    return !MiscHandler.handlePvpDamage(
+                            CServer.getServer().getPlayer(attacker.getPlayer().getName()), 
+                            CServer.getServer().getPlayer(defender.getPlayer().getName()));
+                } catch (InvalidPlayerException e) {
+                    //Fallback
+                    return !MiscHandler.handlePvpDamage(new CanaryPlayer(attacker.getPlayer()), new CanaryPlayer(defender.getPlayer()));
+                }
             }
         }
         return false;
@@ -93,7 +110,13 @@ public class PlayerListener extends PluginListener {
             //pretty dirty fallback but there's no other position that would be "valid enough"
             blockPlaced = new Block(0, (int)player.getX(), (int)player.getY(), (int)player.getZ());
         }
-        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
+        CPlayer cplayer;
+        try {
+            cplayer = CServer.getServer().getPlayer(player.getName());
+        } catch (InvalidPlayerException e) {
+            //Fallback
+            cplayer = new CanaryPlayer(player);
+        }
         WorldLocation v = new WorldLocation(blockPlaced.getX(), blockPlaced.getY(), blockPlaced.getZ(), blockPlaced.getWorld().getName());
         
         
@@ -111,7 +134,13 @@ public class PlayerListener extends PluginListener {
     @Override
     public boolean onItemDrop(Player player, ItemEntity item) {
         if(!(player == null)) {
-            CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
+            CPlayer cplayer;
+            try {
+                cplayer = CServer.getServer().getPlayer(player.getName());
+            } catch (InvalidPlayerException e) {
+                //Fallback
+                cplayer = new CanaryPlayer(player);
+            }
             return ItemDropHandler.handleItemDrop(cplayer, cplayer.getLocation());
         }
         return false;

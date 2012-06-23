@@ -33,6 +33,9 @@ public class CanaryMob implements CMob {
 
     @Override
     public CWorld getWorld() {
+        if(!mob.getWorld().getName().equals(world.getName())) {
+            world = new CanaryWorld(mob.getWorld());
+        }
         return world;
     }
 

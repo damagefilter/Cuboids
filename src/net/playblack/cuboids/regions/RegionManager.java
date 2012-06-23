@@ -684,4 +684,19 @@ public class RegionManager {
         
     }
     
+    /**
+     * Remove the player given from all areas that DO NOT match world and dimension specified in the given location
+     * @param playerName
+     * @param loc
+     */
+    public void removeFromAllAreas(String playerName, WorldLocation loc) {
+        for(CuboidNode tree : rootNodes) {
+            if((!tree.getName().equals(loc.getWorld())) || (tree.getDimension() != loc.getDimension())) {
+                for(CuboidNode node : tree.toList()) {
+                    node.getCuboid().removePlayerWithin(playerName);
+                }
+            }
+        }
+    }
+    
 }

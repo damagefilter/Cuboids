@@ -136,9 +136,7 @@ public class OffsetGenerator extends BaseGen {
         if(newHistory) {
             SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
-        System.out.println("Modify world...");
         boolean result = modifyWorld(true);
-        System.out.println("Result: "+result);
         return result;
     }
 }

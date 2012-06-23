@@ -1,3 +1,4 @@
+import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.commands.*;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -10,7 +11,13 @@ public class CommandListener extends PluginListener {
     public boolean onCommand(Player player, String[] split) {
         EventLogger.getInstance().logMessage("Processing command...", "DEBUG");
         SelectionManager.getInstance().getPlayerSelection(player.getName());
-        CPlayer cplayer = CServer.getServer().getPlayer(player.getName());
+        CPlayer cplayer;
+        try {
+            cplayer = CServer.getServer().getPlayer(player.getName());
+        } catch (InvalidPlayerException e) {
+            //fallback to manually get a player
+            cplayer = new CanaryPlayer(player);
+        }
         CBaseCommand command;
         EventLogger.getInstance().logMessage("Creating player: "+cplayer.toString(), "DEBUG");
         EventLogger.getInstance().logMessage("Receiving command: "+etc.combineSplit(0, split, " ").trim(), "DEBUG");

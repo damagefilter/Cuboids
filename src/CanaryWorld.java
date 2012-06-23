@@ -113,6 +113,9 @@ public class CanaryWorld extends CWorld {
 
     @Override
     public void setBlockAt(short type, byte data, Vector v) {
+        if(Block.Type.fromId(type) == null) { //Invalid Block!
+            return;
+        }
         world.setBlockAt(type, v.getBlockX(), v.getBlockY(), v.getBlockZ());
         if(getBlockAt(v).getData() != data) {
             world.setBlockData(v.getBlockX(), v.getBlockY(), v.getBlockZ(), data);
