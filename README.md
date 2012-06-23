@@ -7,6 +7,7 @@ All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
+
 1. Redistributions of source code must retain the above copyright
    notice, this list of conditions and the following disclaimer.
    
@@ -18,7 +19,7 @@ modification, are permitted provided that the following conditions are met:
    must display the following acknowledgement:
    This product includes software developed by the PlayBlack.
    
-4. Neither the name of PlayBlack/Christoph KSoll nor the
+4. Neither the name of PlayBlack/Christoph Ksoll nor the
    names of its contributors may be used to endorse or promote products
    derived from this software without specific prior written permission.
 

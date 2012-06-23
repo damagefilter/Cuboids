@@ -10,49 +10,55 @@ import net.playblack.mcutils.Vector;
 
 /**
  * Cuboid shaped selection
+ * 
  * @author Christoph Ksoll
- *
+ * 
  */
 public class CuboidSelection implements ISelection {
 
-    protected LinkedHashMap<Vector,CBlock> blockList;
-    
+    protected LinkedHashMap<Vector, CBlock> blockList;
+
     protected String world = "__NOWORLD__";
-    
+
     protected Vector origin;
     protected Vector offset;
-    
+
     /**
      * Empty CTOR
      */
     public CuboidSelection() {
         origin = null;
         offset = null;
-        blockList = new LinkedHashMap<Vector,CBlock>();
+        blockList = new LinkedHashMap<Vector, CBlock>();
     }
-    
+
     /**
      * Construct with vectors
+     * 
      * @param v1
      * @param v2
      */
     public CuboidSelection(Vector v1, Vector v2) {
         origin = v1;
         offset = v2;
-        blockList = new LinkedHashMap<Vector,CBlock>((int)Vector.getAreaVolume(origin, offset));
+        blockList = new LinkedHashMap<Vector, CBlock>(
+                (int) Vector.getAreaVolume(origin, offset));
     }
-    
+
     /**
      * Construct with vectors and a ready-to-use block list
+     * 
      * @param v1
      * @param v2
      * @param blocks
      */
-    public CuboidSelection(Vector v1, Vector v2, LinkedHashMap<Vector,CBlock> blocks) {
+    public CuboidSelection(Vector v1, Vector v2,
+            LinkedHashMap<Vector, CBlock> blocks) {
         origin = v1;
         offset = v2;
         blockList = blocks;
     }
+
     public CuboidSelection(LinkedHashMap<Vector, CBlock> blocks) {
         blockList = blocks;
     }
@@ -66,41 +72,45 @@ public class CuboidSelection implements ISelection {
     public CuboidSelection(Vector origin, Vector offset, int size) {
         this.origin = origin;
         this.offset = offset;
-        blockList = new LinkedHashMap<Vector,CBlock>(size);
+        blockList = new LinkedHashMap<Vector, CBlock>(size);
     }
 
     /**
      * Set the current origin vector
+     * 
      * @param o
      */
     public void setOrigin(Vector o) {
         this.origin = o;
     }
-    
+
     /**
      * Get the current origin vector
+     * 
      * @return
      */
     public Vector getOrigin() {
         return origin;
     }
-    
+
     /**
      * Set current offset Vector
+     * 
      * @param o
      */
     public void setOffset(Vector o) {
         this.offset = o;
     }
-    
+
     /**
      * Get current offset vector
+     * 
      * @return
      */
     public Vector getOffset() {
         return offset;
     }
-    
+
     @Override
     public void setBlock(Vector v, CBlock b) {
         blockList.put(v, b);
@@ -119,7 +129,7 @@ public class CuboidSelection implements ISelection {
     @Override
     public void setBlockList(LinkedHashMap<Vector, CBlock> newList) {
         this.blockList = newList;
-        
+
     }
 
     @Override
@@ -129,7 +139,7 @@ public class CuboidSelection implements ISelection {
 
     @Override
     public long getBoundarySize() {
-        return (long)Vector.getAreaVolume(origin, offset);
+        return (long) Vector.getAreaVolume(origin, offset);
     }
 
     @Override
@@ -140,18 +150,20 @@ public class CuboidSelection implements ISelection {
     @Override
     public void setWorld(String world) {
         this.world = world;
-        
+
     }
-    
+
     /**
      * Sort the selection points.
-     * @param offsetFirst true: offset has the greater components - false: origin has the greater components
+     * 
+     * @param offsetFirst
+     *            true: offset has the greater components - false: origin has
+     *            the greater components
      */
     public void sortEdges(boolean offsetFirst) {
-        if(offsetFirst) {
+        if (offsetFirst) {
             sortEdgesOffsetFirst();
-        }
-        else {
+        } else {
             Vector or_temp = Vector.getMaximum(origin, offset);
             Vector off_temp = Vector.getMinimum(origin, offset);
             origin = or_temp;
@@ -160,8 +172,9 @@ public class CuboidSelection implements ISelection {
     }
 
     /**
-    * Sort the selection edges so offset is the greater one and origin the smaller
-    */
+     * Sort the selection edges so offset is the greater one and origin the
+     * smaller
+     */
     private void sortEdgesOffsetFirst() {
         Vector or_temp = Vector.getMaximum(origin, offset);
         Vector off_temp = Vector.getMinimum(origin, offset);
@@ -171,21 +184,22 @@ public class CuboidSelection implements ISelection {
 
     /**
      * Check if this selection is complete.
+     * 
      * @return
      */
     public boolean isComplete() {
-        if((origin != null) && offset != null) {
+        if ((origin != null) && offset != null) {
             return true;
         }
         return false;
     }
-    
+
     @Override
     public void clearBlocks() {
         blockList.clear();
-        
+
     }
-    
+
     /**
      * Expand the selection vertically from top to bottom
      */
@@ -196,34 +210,34 @@ public class CuboidSelection implements ISelection {
     }
 
     /**
-     * Turn this selection into a CuboidE.
-     * The result is a cuboidE object with the default settings.
+     * Turn this selection into a CuboidE. The result is a cuboidE object with
+     * the default settings.
+     * 
      * @return
      */
     public CuboidE toCuboid(CPlayer player, String[] playerlist) {
         CuboidE cube = new CuboidE();
         String name = null;
         cube.setPoints(this.origin, this.offset);
-        //start at second element for the first would be /highprotect
+        // start at second element for the first would be /highprotect
         for (int i = 1; i < playerlist.length; i++) {
-            if(i == (playerlist.length - 1)) { //last element is name!
+            if (i == (playerlist.length - 1)) { // last element is name!
                 name = playerlist[i];
                 continue;
             }
-          if (playerlist[i].indexOf("o:") != -1) {
-            cube.addPlayer(playerlist[i]);
-          }
-          else if (playerlist[i].indexOf("g:") != -1) {
-            cube.addGroup(playerlist[i]);
-          }
-          else {
-            cube.addPlayer(playerlist[i]);
-          }
+            if (playerlist[i].indexOf("o:") != -1) {
+                cube.addPlayer(playerlist[i]);
+            } else if (playerlist[i].indexOf("g:") != -1) {
+                cube.addGroup(playerlist[i]);
+            } else {
+                cube.addPlayer(playerlist[i]);
+            }
         }
         cube.setWorld(world);
         cube.setName(name);
-        cube.overwriteProperties(Config.getInstance().getDefaultCuboidSetting(player));
-        
+        cube.overwriteProperties(Config.getInstance().getDefaultCuboidSetting(
+                player));
+
         return cube;
     }
 
