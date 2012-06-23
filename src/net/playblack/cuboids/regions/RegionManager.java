@@ -689,11 +689,11 @@ public class RegionManager {
      * @param playerName
      * @param loc
      */
-    public void removeFromAllAreas(String playerName, WorldLocation loc) {
+    public void removeFromAllAreas(String player, WorldLocation loc) {
         for(CuboidNode tree : rootNodes) {
-            if((!tree.getName().equals(loc.getWorld())) || (tree.getDimension() != loc.getDimension())) {
+            if(!tree.getWorld().equals(loc.getWorld()) || tree.getDimension() != loc.getDimension()) {
                 for(CuboidNode node : tree.toList()) {
-                    node.getCuboid().removePlayerWithin(playerName);
+                    node.getCuboid().removePlayerWithin(player);
                 }
             }
         }

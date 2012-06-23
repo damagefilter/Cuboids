@@ -24,17 +24,17 @@ public class PlayerMovementHandler {
      * @param isTeleport True if this was called from a teleport hook
      */
     public static void handleCuboidAreas(CPlayer player, WorldLocation origin, WorldLocation target, boolean isTeleport) {
+        CuboidInterface.getInstance().addPlayerWithin(player, target);
+        CuboidInterface.getInstance().removePlayerWithin(player, origin, target);
         if(isTeleport) {
-            RegionManager.getInstance().removeFromAllAreas(player.getName(), target);
+            RegionManager.getInstance().removeFromAllAreas(player.getName(), player.getLocation());
             CuboidNode targetNode = RegionManager.getInstance().getActiveCuboid(target, true);
             if(targetNode == null || !targetNode.getCuboid().isFreeBuild()) {
-                if(player.isInCreativeMode()) {
+                if(player.isInCreativeMode() && !player.hasPermission("/cIgnoreRestrictions")) { //Ignore this if player has administrative level
                     player.setCreative(0);
                     player.setInventory(CuboidInterface.getInstance().playerInventories.get(player.getName()));
                 }
             }
         }
-        CuboidInterface.getInstance().addPlayerWithin(player, target);
-        CuboidInterface.getInstance().removePlayerWithin(player, origin, target);
     }
 }

@@ -28,7 +28,7 @@ public class Cuboids2 extends Plugin {
         etc.getLoader().addListener(PluginLoader.Hook.BLOCK_PLACE, blockListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.BLOCK_BROKEN, blockListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.COMMAND, commandListener, this, PluginListener.Priority.MEDIUM);
-        etc.getLoader().addListener(PluginLoader.Hook.EXPLODE, blockListener, this, PluginListener.Priority.MEDIUM);
+        etc.getLoader().addListener(PluginLoader.Hook.EXPLOSION, blockListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.DAMAGE, playerListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.MOB_SPAWN, miscListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.COMMAND_CHECK, miscListener, this, PluginListener.Priority.MEDIUM);
