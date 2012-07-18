@@ -75,20 +75,20 @@ public class PlayerListener extends PluginListener {
             return false;
         }
         if(defender.isPlayer()) {
-            if(attacker.isMob()) {
-                Player p = defender.getPlayer();
-                return !MiscHandler.handleMobDamage(
-                        new WorldLocation((int)p.getX(), (int)p.getY(), (int)p.getZ(), p.getWorld().getType().getId(), p.getWorld().getName()));
-            }
             if(attacker.isPlayer()) {
                 try {
-                    return !MiscHandler.handlePvpDamage(
+                    return MiscHandler.handlePvpDamage(
                             CServer.getServer().getPlayer(attacker.getPlayer().getName()), 
                             CServer.getServer().getPlayer(defender.getPlayer().getName()));
                 } catch (InvalidPlayerException e) {
                     //Fallback
-                    return !MiscHandler.handlePvpDamage(new CanaryPlayer(attacker.getPlayer()), new CanaryPlayer(defender.getPlayer()));
+                    return MiscHandler.handlePvpDamage(new CanaryPlayer(attacker.getPlayer()), new CanaryPlayer(defender.getPlayer()));
                 }
+            }
+            else if(attacker.isMob()) {
+                Player p = defender.getPlayer();
+                return !MiscHandler.handleMobDamage(
+                        new WorldLocation((int)p.getX(), (int)p.getY(), (int)p.getZ(), p.getWorld().getType().getId(), p.getWorld().getName()));
             }
         }
         return false;

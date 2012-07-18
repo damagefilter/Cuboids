@@ -30,7 +30,7 @@ public class PlayerMovementHandler {
             RegionManager.getInstance().removeFromAllAreas(player.getName(), player.getLocation());
             CuboidNode targetNode = RegionManager.getInstance().getActiveCuboid(target, true);
             if(targetNode == null || !targetNode.getCuboid().isFreeBuild()) {
-                if(player.isInCreativeMode() && !player.hasPermission("/cIgnoreRestrictions")) { //Ignore this if player has administrative level
+                if(player.isInCreativeMode() && !player.hasPermission("cIgnoreRestrictions")) { //Ignore this if player has administrative level
                     player.setCreative(0);
                     player.setInventory(CuboidInterface.getInstance().playerInventories.get(player.getName()));
                 }

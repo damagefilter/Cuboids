@@ -24,13 +24,15 @@ public class MiscHandler {
      * @return
      */
     public static boolean handlePvpDamage(CPlayer attacker, CPlayer defender) {
-        if(!CuboidInterface.getInstance().isPvpEnabled(defender.getLocation())) {
+        if(CuboidInterface.getInstance().isPvpEnabled(defender.getLocation())) {
+            return true;
+        }
+        else {
             if(attacker.hasPermission("cIgnoreRestrictions")) {
                 return true;
             }
             return false;
         }
-        return true;
     }
     
     /**

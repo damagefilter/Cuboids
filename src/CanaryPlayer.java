@@ -132,6 +132,7 @@ public class CanaryPlayer extends CPlayer {
     @Override
     public void setInventory(CItem[] items) {
         if(items == null) {
+            player.getInventory().clearContents();
             return;
         }
         Item[] canaryItems = new Item[items.length];
