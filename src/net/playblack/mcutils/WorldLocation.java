@@ -3,13 +3,14 @@ package net.playblack.mcutils;
 public class WorldLocation extends Vector {
     private String world;
     private int dimension;
+
     public WorldLocation(int x, int y, int z, String world) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.world = world;
     }
-    
+
     public WorldLocation(int x, int y, int z, int dimension, String world) {
         this.x = x;
         this.y = y;
@@ -26,7 +27,8 @@ public class WorldLocation extends Vector {
     }
 
     /**
-     * @param world the world to set
+     * @param world
+     *            the world to set
      */
     public void setWorld(String world) {
         this.world = world;
@@ -40,7 +42,8 @@ public class WorldLocation extends Vector {
     }
 
     /**
-     * @param dimension the dimension to set
+     * @param dimension
+     *            the dimension to set
      */
     public void setDimension(int dimension) {
         this.dimension = dimension;

@@ -5,7 +5,8 @@ import java.io.Serializable;
 public class CuboidD implements Serializable {
 
     String name = "noname";
-    int[] coords = new int[6];	//	int[]{firstX, firstY, firstZ, secondX, secondY, secondZ}
+    int[] coords = new int[6]; // int[]{firstX, firstY, firstZ, secondX,
+                               // secondY, secondZ}
     boolean protection = false;
     boolean restricted = false;
     boolean trespassing = false;
@@ -25,11 +26,10 @@ public class CuboidD implements Serializable {
     }
 
     public boolean contains(String worldType, int X, int Y, int Z) {
-        if (world.equalsIgnoreCase(worldType) && 
-        		
-        		X >= coords[0] &&  X <= coords[3] 
-        	 && Z >= coords[2] && Z <= coords[5] 
-        	 && Y >= coords[1] && Y <= coords[4]) {
+        if (world.equalsIgnoreCase(worldType) &&
+
+        X >= coords[0] && X <= coords[3] && Z >= coords[2] && Z <= coords[5]
+                && Y >= coords[1] && Y <= coords[4]) {
             return true;
         }
         return false;
@@ -42,10 +42,12 @@ public class CuboidD implements Serializable {
     public boolean isAllowed(Player player) {
         String playerName = player.getName().toLowerCase();
         for (String allowedPlayer : allowedPlayers) {
-            if (allowedPlayer.equalsIgnoreCase(playerName) || allowedPlayer.equalsIgnoreCase("o:" + playerName)) {
+            if (allowedPlayer.equalsIgnoreCase(playerName)
+                    || allowedPlayer.equalsIgnoreCase("o:" + playerName)) {
                 return true;
             }
-            if (allowedPlayer.startsWith("g:") && player.isInGroup(allowedPlayer.substring(2))) {
+            if (allowedPlayer.startsWith("g:")
+                    && player.isInGroup(allowedPlayer.substring(2))) {
                 return true;
             }
         }
@@ -136,7 +138,8 @@ public class CuboidD implements Serializable {
 
     public void printInfos(Player player, boolean players, boolean commands) {
         player.sendMessage(Colors.Yellow + "----    " + this.name + "    ----");
-        player.sendMessage(Colors.Yellow + "World : " + Colors.White + this.world);
+        player.sendMessage(Colors.Yellow + "World : " + Colors.White
+                + this.world);
         String flags = "";
         boolean noflag = true;
         if (this.protection) {
@@ -186,39 +189,46 @@ public class CuboidD implements Serializable {
 
     public void printAllowedPlayers(Player player) {
         if (this.allowedPlayers.size() == 0) {
-            player.sendMessage(Colors.Yellow + "Allowed players : " + Colors.White + "<list is empty>");
+            player.sendMessage(Colors.Yellow + "Allowed players : "
+                    + Colors.White + "<list is empty>");
             return;
         }
         String list = "";
         for (String playerName : this.allowedPlayers) {
             list += " " + playerName;
         }
-        player.sendMessage(Colors.Yellow + "Allowed players :" + Colors.White + list);
+        player.sendMessage(Colors.Yellow + "Allowed players :" + Colors.White
+                + list);
     }
 
     public void printPresentPlayers(Player player) {
         String list = "";
         for (Player p : etc.getServer().getPlayerList()) {
-            if (this.contains(player.getWorld().toString().toLowerCase(), (int) p.getX(), (int) p.getY(), (int) p.getZ())) {
+            if (this.contains(player.getWorld().toString().toLowerCase(),
+                    (int) p.getX(), (int) p.getY(), (int) p.getZ())) {
                 list += " " + p.getName();
             }
         }
         if (list.length() < 2) {
-            player.sendMessage(Colors.Yellow + "Present players : " + Colors.White + "<list is empty>");
+            player.sendMessage(Colors.Yellow + "Present players : "
+                    + Colors.White + "<list is empty>");
         } else {
-            player.sendMessage(Colors.Yellow + "Present players :" + Colors.White + list);
+            player.sendMessage(Colors.Yellow + "Present players :"
+                    + Colors.White + list);
         }
     }
 
     public void printDisallowedCommands(Player player) {
         if (this.disallowedCommands.size() == 0) {
-            player.sendMessage(Colors.Yellow + "Disallowed commands : " + Colors.White + "<list is empty>");
+            player.sendMessage(Colors.Yellow + "Disallowed commands : "
+                    + Colors.White + "<list is empty>");
             return;
         }
         String list = "";
         for (String command : this.disallowedCommands) {
             list += " " + command;
         }
-        player.sendMessage(Colors.Yellow + "Disallowed commands :" + Colors.White + list);
+        player.sendMessage(Colors.Yellow + "Disallowed commands :"
+                + Colors.White + list);
     }
 }

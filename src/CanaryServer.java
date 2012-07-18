@@ -7,27 +7,29 @@ import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
 
-
 public class CanaryServer extends CServer {
 
     protected HashMap<String, CWorld> worlds = new HashMap<String, CWorld>(3);
-    private HashMap<String,CPlayer> playerList;
-    
+    private HashMap<String, CPlayer> playerList;
+
     /**
-     * DO <b>NOT</b> initialize the server at ANY OTHER place than in the Bootstrapper Constructor!!!!!
-     * If you do, you will <b>DIE!</b>
+     * DO <b>NOT</b> initialize the server at ANY OTHER place than in the
+     * Bootstrapper Constructor!!!!! If you do, you will <b>DIE!</b>
      */
     public CanaryServer() {
-        playerList = new HashMap<String, CPlayer>(etc.getInstance().getPlayerLimit());
+        playerList = new HashMap<String, CPlayer>(etc.getInstance()
+                .getPlayerLimit());
     }
-    
+
     @Override
     public CWorld getWorld(String name, int dimension) {
-        if(worlds.containsKey(name+dimension)) {
-            return worlds.get(name+dimension);
+        if (worlds.containsKey(name + dimension)) {
+            return worlds.get(name + dimension);
         }
-        CanaryWorld world = new CanaryWorld(etc.getServer().getWorld(name)[World.Dimension.fromId(dimension).toIndex()]);
-        worlds.put(name+dimension, world);
+        CanaryWorld world = new CanaryWorld(
+                etc.getServer().getWorld(name)[World.Dimension
+                        .fromId(dimension).toIndex()]);
+        worlds.put(name + dimension, world);
         return world;
     }
 
@@ -40,29 +42,34 @@ public class CanaryServer extends CServer {
     public ArrayList<CPlayer> getPlayers(CWorld world) {
         return null;
     }
+
     @Override
     public CPlayer getPlayer(String name) throws InvalidPlayerException {
-        if(!playerList.containsKey(name)) {
+        if (!playerList.containsKey(name)) {
             Player p = etc.getServer().matchPlayer(name);
-            if(p == null) {
-                throw new InvalidPlayerException("Cuboids2 cannot find player with this name: "+name+" (Player offline?)");
+            if (p == null) {
+                throw new InvalidPlayerException(
+                        "Cuboids2 cannot find player with this name: " + name
+                                + " (Player offline?)");
             }
             playerList.put(name, new CanaryPlayer(p));
         }
         return playerList.get(name);
     }
-    
+
     @Override
     public CPlayer refreshPlayer(String name) throws InvalidPlayerException {
         Player p = etc.getServer().matchPlayer(name);
-        if(p == null) {
-            throw new InvalidPlayerException("Cuboids2 cannot find player with this name: "+name+" (Player offline?)");
+        if (p == null) {
+            throw new InvalidPlayerException(
+                    "Cuboids2 cannot find player with this name: " + name
+                            + " (Player offline?)");
         }
         playerList.remove(name);
         playerList.put(name, new CanaryPlayer(p));
         return playerList.get(name);
     }
-    
+
     @Override
     public void removePlayer(String player) {
         playerList.remove(player);
@@ -80,24 +87,22 @@ public class CanaryServer extends CServer {
 
     @Override
     public CMob getMob(String name, CWorld world) {
-        return new CanaryMob(new Mob(name, etc.getServer().getWorld(world.getName())[world.getDimension()]));
+        return new CanaryMob(new Mob(name, etc.getServer().getWorld(
+                world.getName())[world.getDimension()]));
     }
 
     @Override
     public int getItemId(String itemName) {
         int id = 0;
         id = etc.getDataSource().getItem(itemName);
-        if(id != 0 && id >= 0) {
+        if (id != 0 && id >= 0) {
             return id;
-        }
-        else if(id == 0 && itemName.equalsIgnoreCase("air")) {
+        } else if (id == 0 && itemName.equalsIgnoreCase("air")) {
             return id;
-        }
-        else {
+        } else {
             try {
                 return Integer.valueOf(itemName);
-            }
-            catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 return -1;
             }
         }

@@ -11,46 +11,50 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Protect an area
+ * 
  * @author Chris
- *
+ * 
  */
 public class Protect extends CBaseCommand {
 
     public Protect() {
-        super("Protect an area:"+ColorManager.Yellow+" /protect <player/group..><area name>", 3);
+        super("Protect an area:" + ColorManager.Yellow
+                + " /protect <player/group..><area name>", 3);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if(!parseCommand(player, command)) {
+        if (!parseCommand(player, command)) {
             return;
         }
-        //Check for the proper permissions
+        // Check for the proper permissions
         MessageSystem ms = MessageSystem.getInstance();
-        if(!player.hasPermission("cIgnoreRestrictions")) {
-            if(!(player.hasPermission("ccreate")) && player.hasPermission("cprotection")) {
+        if (!player.hasPermission("cIgnoreRestrictions")) {
+            if (!(player.hasPermission("ccreate"))
+                    && player.hasPermission("cprotection")) {
                 ms.failMessage(player, "permissionDenied");
                 return;
             }
         }
-        CuboidSelection selection = SelectionManager.getInstance().getPlayerSelection(player.getName());
-        if(!selection.isComplete()) {
+        CuboidSelection selection = SelectionManager.getInstance()
+                .getPlayerSelection(player.getName());
+        if (!selection.isComplete()) {
             ms.failMessage(player, "selectionIncomplete");
             return;
         }
         selection.setWorld(player.getWorld().getName());
         CuboidE cube = selection.toCuboid(player, command);
         cube.setDimension(player.getWorld().getDimension());
-        if(Config.getInstance().isAllowProtection()) {
-            cube.setProtection(true); //force protection if is allowed regardless of other default settings
+        if (Config.getInstance().isAllowProtection()) {
+            cube.setProtection(true); // force protection if is allowed
+                                      // regardless of other default settings
+        } else {
+            ms.notification(player,
+                    "FYI: The protection option is disabled. The Cuboid will still be created!");
         }
-        else {
-            ms.notification(player, "FYI: The protection option is disabled. The Cuboid will still be created!");
-        }
-        if(CuboidInterface.getInstance().addCuboid(cube)) {
+        if (CuboidInterface.getInstance().addCuboid(cube)) {
             ms.successMessage(player, "cuboidCreated");
-        }
-        else {
+        } else {
             ms.failMessage(player, "selectionIncomplete");
             ms.failMessage(player, "cuboidNotCreated");
         }

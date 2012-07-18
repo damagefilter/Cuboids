@@ -5,7 +5,6 @@ import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.EventLogger;
 
-
 public class CommandListener extends PluginListener {
     @Override
     public boolean onCommand(Player player, String[] split) {
@@ -15,314 +14,346 @@ public class CommandListener extends PluginListener {
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
         } catch (InvalidPlayerException e) {
-            //fallback to manually get a player
+            // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
         CBaseCommand command;
-        EventLogger.getInstance().logMessage("Creating player: "+cplayer.toString(), "DEBUG");
-        EventLogger.getInstance().logMessage("Receiving command: "+etc.combineSplit(0, split, " ").trim(), "DEBUG");
-        if(split[0].equalsIgnoreCase("/chelp")) {
+        EventLogger.getInstance().logMessage(
+                "Creating player: " + cplayer.toString(), "DEBUG");
+        EventLogger.getInstance().logMessage(
+                "Receiving command: " + etc.combineSplit(0, split, " ").trim(),
+                "DEBUG");
+        if (split[0].equalsIgnoreCase("/chelp")) {
             command = new Chelp();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cdel")) {
+
+        if (split[0].equalsIgnoreCase("/cdel")) {
             command = new Cdel();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cdiag")) {
+
+        if (split[0].equalsIgnoreCase("/cdiag")) {
             command = new Cdiag();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cbrush")) {
+
+        if (split[0].equalsIgnoreCase("/cbrush")) {
             command = new Cbrush();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/ccopy")) {
+
+        if (split[0].equalsIgnoreCase("/ccopy")) {
             command = new Ccopy();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cpaste")) {
+
+        if (split[0].equalsIgnoreCase("/cpaste")) {
             command = new Cpaste();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cmove")) {
+
+        if (split[0].equalsIgnoreCase("/cmove")) {
             command = new Cmove();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cwalls")) {
+
+        if (split[0].equalsIgnoreCase("/cwalls")) {
             command = new Cwalls("/cwalls");
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cfaces")) {
+
+        if (split[0].equalsIgnoreCase("/cfaces")) {
             command = new Cwalls("/cfaces");
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cfill")) {
+
+        if (split[0].equalsIgnoreCase("/cfill")) {
             command = new Cfill();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/creplace")) {
+
+        if (split[0].equalsIgnoreCase("/creplace")) {
             command = new Creplace();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/csphere")) {
+
+        if (split[0].equalsIgnoreCase("/csphere")) {
             command = new Csphere();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cpyramid")) {
+
+        if (split[0].equalsIgnoreCase("/cpyramid")) {
             command = new Cpyramid();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/ccircle")) {
+
+        if (split[0].equalsIgnoreCase("/ccircle")) {
             command = new Cdisc("/ccircle");
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cdisc")) {
+
+        if (split[0].equalsIgnoreCase("/cdisc")) {
             command = new Cdisc("/cdisc");
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cundo")) {
+
+        if (split[0].equalsIgnoreCase("/cundo")) {
             command = new Cundo();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/credo")) {
+
+        if (split[0].equalsIgnoreCase("/credo")) {
             command = new Credo();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cceiling") || split[0].equalsIgnoreCase("/cceil")) {
+
+        if (split[0].equalsIgnoreCase("/cceiling")
+                || split[0].equalsIgnoreCase("/cceil")) {
             command = new Cceiling();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cfloor")) {
+
+        if (split[0].equalsIgnoreCase("/cfloor")) {
             command = new Cfloor();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cexpand")) {
+
+        if (split[0].equalsIgnoreCase("/cexpand")) {
             command = new Cexpand();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cinfo")) {
+
+        if (split[0].equalsIgnoreCase("/cinfo")) {
             command = new Cinfo();
             command.execute(cplayer, split);
             return true;
         }
-        if(split[0].equalsIgnoreCase("/cbackup")) {
+        if (split[0].equalsIgnoreCase("/cbackup")) {
             command = new Cbackup();
             command.execute(cplayer, split);
             return true;
         }
-        if(split[0].equalsIgnoreCase("/crestore")) {
+        if (split[0].equalsIgnoreCase("/crestore")) {
             command = new Crestore();
             command.execute(cplayer, split);
             return true;
         }
-        if(split.length == 2) {
-            if(split[0].equalsIgnoreCase("/cmod") && split[1].equalsIgnoreCase("list")) {
+        if (split.length == 2) {
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[1].equalsIgnoreCase("list")) {
                 command = new CmodList();
                 command.execute(cplayer, split);
                 return true;
             }
         }
-        
-        if(split.length > 2) {
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[1].equalsIgnoreCase("list")) {
+
+        if (split.length > 2) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[1].equalsIgnoreCase("list")) {
                 command = new CmodList();
                 command.execute(cplayer, split);
                 return true;
             }
-            if(split[0].equalsIgnoreCase("/cmod") && split[1].equalsIgnoreCase("toggle")) {
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[1].equalsIgnoreCase("toggle")) {
                 command = new ToggleGlobalProperty();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("toggle")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("toggle")) {
                 command = new ToggleAreaProperty();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && (split[2].equalsIgnoreCase("add") || split[2].equalsIgnoreCase("create"))) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && (split[2].equalsIgnoreCase("add") || split[2]
+                            .equalsIgnoreCase("create"))) {
                 command = new CmodAdd();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && (split[2].equalsIgnoreCase("remove") || split[2].equalsIgnoreCase("delete"))) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && (split[2].equalsIgnoreCase("remove") || split[2]
+                            .equalsIgnoreCase("delete"))) {
                 command = new CmodRemove();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("rename")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("rename")) {
                 command = new CmodRename();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("loadpoints")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("loadpoints")) {
                 command = new CmodLoad();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("restrictcommand")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("restrictcommand")) {
                 command = new CmodRestrictCommand();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("allowcommand")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("allowcommand")) {
                 command = new CmodAllowCommand();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("allowitem")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("allowitem")) {
                 command = new CmodAllowItem();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("restrictitem")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("restrictitem")) {
                 command = new CmodRestrictItem();
                 command.execute(cplayer, split);
                 return true;
             }
-            if(split[0].equalsIgnoreCase("/cmod") && (split[2].equalsIgnoreCase("info") || split[2].equalsIgnoreCase("explain"))) {
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && (split[2].equalsIgnoreCase("info") || split[2]
+                            .equalsIgnoreCase("explain"))) {
                 command = new CmodInfo();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && (split[2].equalsIgnoreCase("cmdblacklist") || split[2].equalsIgnoreCase("cmdlist"))) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && (split[2].equalsIgnoreCase("cmdblacklist") || split[2]
+                            .equalsIgnoreCase("cmdlist"))) {
                 command = new CmodShowCmdBlacklist();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && (split[2].equalsIgnoreCase("prio") || split[2].equalsIgnoreCase("priority"))) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && (split[2].equalsIgnoreCase("prio") || split[2]
+                            .equalsIgnoreCase("priority"))) {
                 command = new CmodPriority();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("parent")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("parent")) {
                 command = new CmodParent();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("allow")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("allow")) {
                 command = new CmodAllowEntity();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("disallow")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("disallow")) {
                 command = new CmodDisallowEntity();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && split[2].equalsIgnoreCase("tpto")) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && split[2].equalsIgnoreCase("tpto")) {
                 command = new CmodTpTo();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && (split[2].equalsIgnoreCase("resize") || split[2].equalsIgnoreCase("move"))) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && (split[2].equalsIgnoreCase("resize") || split[2]
+                            .equalsIgnoreCase("move"))) {
                 command = new CmodMove();
                 command.execute(cplayer, split);
                 return true;
             }
-            
-            if(split[0].equalsIgnoreCase("/cmod") && (split[2].equalsIgnoreCase("welcome") || split[2].equalsIgnoreCase("farewell") || split[2].equalsIgnoreCase("goodbye"))) {
+
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && (split[2].equalsIgnoreCase("welcome")
+                            || split[2].equalsIgnoreCase("farewell") || split[2]
+                                .equalsIgnoreCase("goodbye"))) {
                 command = new CmodMessages(split[2]);
                 command.execute(cplayer, split);
                 return true;
             }
         }
-        
-        if(split[0].equalsIgnoreCase("/csave")) {
+
+        if (split[0].equalsIgnoreCase("/csave")) {
             command = new Csave(false);
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/csave-all")) {
+
+        if (split[0].equalsIgnoreCase("/csave-all")) {
             command = new Csave(true);
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cload")) {
+
+        if (split[0].equalsIgnoreCase("/cload")) {
             command = new Cload();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/cloadfrom")) {
+
+        if (split[0].equalsIgnoreCase("/cloadfrom")) {
             command = new CloadFrom();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/protect")) {
+
+        if (split[0].equalsIgnoreCase("/protect")) {
             command = new Protect();
             command.execute(cplayer, split);
             return true;
         }
-        
-        if(split[0].equalsIgnoreCase("/highprotect")) {
+
+        if (split[0].equalsIgnoreCase("/highprotect")) {
             command = new Highprotect();
             command.execute(cplayer, split);
             return true;
         }
-        EventLogger.getInstance().logMessage("No C2 command - returning false", "DEBUG");
+        EventLogger.getInstance().logMessage("No C2 command - returning false",
+                "DEBUG");
         return false;
     }
 }

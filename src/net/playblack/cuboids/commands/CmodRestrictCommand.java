@@ -6,20 +6,23 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Restrict command in a cuboid
+ * 
  * @author Chris
- *
+ * 
  */
 public class CmodRestrictCommand extends CBaseCommand {
 
     public CmodRestrictCommand() {
-        super("Restrict a command in your area: "+ColorManager.Yellow+"/cmod <area> restrictcommand <command,command ...>", 4);
+        super("Restrict a command in your area: " + ColorManager.Yellow
+                + "/cmod <area> restrictcommand <command,command ...>", 4);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if(!parseCommand(player, command)) {
+        if (!parseCommand(player, command)) {
             return;
         }
-       CuboidInterface.getInstance().restrictCommand(player, command, command[1]);
+        CuboidInterface.getInstance().restrictCommand(player, command,
+                command[1]);
     }
 }

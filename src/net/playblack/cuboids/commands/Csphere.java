@@ -14,66 +14,67 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * Create a sphere or ball around a center point
+ * 
  * @author Chris
- *
+ * 
  */
 public class Csphere extends CBaseCommand {
 
-    
     public Csphere() {
-        super("Create a sphere: "+ColorManager.Yellow+"/csphere <radius> <block>:[data] <hollow>", 3, 4);
+        super("Create a sphere: " + ColorManager.Yellow
+                + "/csphere <radius> <block>:[data] <hollow>", 3, 4);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if(!parseCommand(player, command)) {
+        if (!parseCommand(player, command)) {
             return;
         }
-        //Check for the proper permissions
+        // Check for the proper permissions
         MessageSystem ms = MessageSystem.getInstance();
-        if(!player.hasPermission("cIgnoreRestrictions")) {
-            if(!player.hasPermission("cWorldMod")) {
+        if (!player.hasPermission("cIgnoreRestrictions")) {
+            if (!player.hasPermission("cWorldMod")) {
                 ms.failMessage(player, "permissionDenied");
                 return;
             }
         }
-        boolean fill=true;
-        if(command.length == 4) {
+        boolean fill = true;
+        if (command.length == 4) {
             fill = false;
         }
-        
-        //create a new template block
+
+        // create a new template block
         CBlock material = CBlock.parseBlock(command[2]);
-        if(material == null) {
+        if (material == null) {
             ms.failMessage(player, "invalidBlock");
             return;
         }
         int radius = ToolBox.parseInt(command[1]);
-        if(radius == -1) {
+        if (radius == -1) {
             ms.failMessage(player, "invalidRadius");
             return;
         }
-        //prepare the selection
-        CuboidSelection template = SelectionManager.getInstance().getPlayerSelection(player.getName());
-        if(!template.getBlockList().isEmpty()) {
+        // prepare the selection
+        CuboidSelection template = SelectionManager.getInstance()
+                .getPlayerSelection(player.getName());
+        if (!template.getBlockList().isEmpty()) {
             template.clearBlocks();
         }
-        if(template.getOrigin() == null) {
+        if (template.getOrigin() == null) {
             ms.failMessage(player, "originNotSet");
             return;
         }
-        
-        //Create the block generator
+
+        // Create the block generator
         SphereGenerator gen = new SphereGenerator(template, player.getWorld());
         gen.setHollow(fill);
         gen.setMaterial(material);
         gen.setRadius(radius);
-        
+
         try {
-            if(gen.execute(player, true)) {
+            if (gen.execute(player, true)) {
                 ms.successMessage(player, "sphereCreated");
-            }
-            else {
+            } else {
                 ms.failMessage(player, "sphereNotCreated");
                 ms.failMessage(player, "selectionIncomplete");
             }
@@ -82,7 +83,8 @@ public class Csphere extends CBaseCommand {
             ms.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+            MessageSystem.getInstance().failMessage(player,
+                    "selectionIncomplete");
         }
         return;
     }

@@ -11,38 +11,40 @@ import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 
-
 /**
  * Move the contents of a selection, leaving empty space.
+ * 
  * @author Chris
- *
+ * 
  */
 public class Cmove extends CBaseCommand {
 
     public Cmove() {
-        super("Move the contents of a selection: "+ColorManager.Yellow+"/cmove <distance> <NORTH/EAST/SOUTH/WEST/UP/DOWN>", 3);
+        super("Move the contents of a selection: " + ColorManager.Yellow
+                + "/cmove <distance> <NORTH/EAST/SOUTH/WEST/UP/DOWN>", 3);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if(!parseCommand(player, command)) {
+        if (!parseCommand(player, command)) {
             return;
         }
         MessageSystem ms = MessageSystem.getInstance();
-        if(!player.hasPermission("cIgnoreRestrictions")) {
-            if(!player.hasPermission("cWorldMod")) {
+        if (!player.hasPermission("cIgnoreRestrictions")) {
+            if (!player.hasPermission("cWorldMod")) {
                 ms.failMessage(player, "permissionDenied");
                 return;
             }
         }
-        CuboidSelection origin = SelectionManager.getInstance().getPlayerSelection(player.getName());
+        CuboidSelection origin = SelectionManager.getInstance()
+                .getPlayerSelection(player.getName());
         OffsetGenerator gen = new OffsetGenerator(origin, player.getWorld());
-        if(!gen.setDirection(command[2])) {
+        if (!gen.setDirection(command[2])) {
             ms.failMessage(player, "invalidCardinalDirection");
             return;
         }
         int distance = ToolBox.parseInt(command[1]);
-        if(distance < 0) {
+        if (distance < 0) {
             ms.failMessage(player, "invalidDistance");
             return;
         }
@@ -50,10 +52,9 @@ public class Cmove extends CBaseCommand {
         boolean result;
         try {
             result = gen.execute(player, true);
-            if(result) {
+            if (result) {
                 ms.successMessage(player, "selectionMoved");
-            }
-            else {
+            } else {
                 ms.failMessage(player, "selectionIncomplete");
                 ms.failMessage(player, "selectionNotMoved");
             }
@@ -62,8 +63,9 @@ public class Cmove extends CBaseCommand {
             ms.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+            MessageSystem.getInstance().failMessage(player,
+                    "selectionIncomplete");
         }
-        
+
     }
 }

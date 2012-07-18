@@ -6,16 +6,20 @@ import net.playblack.mcutils.WorldLocation;
 
 /**
  * Implements a CanaryMod Mob
+ * 
  * @author Chris
- *
+ * 
  */
 public class CanaryMob implements CMob {
     private Mob mob;
     protected CWorld world;
+
     public CanaryMob(Mob entity) {
         mob = entity;
-        world = CServer.getServer().getWorld(mob.getWorld().getName(), mob.getWorld().getType().getId());
+        world = CServer.getServer().getWorld(mob.getWorld().getName(),
+                mob.getWorld().getType().getId());
     }
+
     @Override
     public int getHealth() {
         return mob.getHealth();
@@ -33,7 +37,7 @@ public class CanaryMob implements CMob {
 
     @Override
     public CWorld getWorld() {
-        if(!mob.getWorld().getName().equals(world.getName())) {
+        if (!mob.getWorld().getName().equals(world.getName())) {
             world = new CanaryWorld(mob.getWorld());
         }
         return world;
@@ -41,7 +45,7 @@ public class CanaryMob implements CMob {
 
     @Override
     public Vector getPosition() {
-        return new Vector(mob.getX(),mob.getY(), mob.getZ());
+        return new Vector(mob.getX(), mob.getY(), mob.getZ());
     }
 
     @Override
@@ -55,6 +59,7 @@ public class CanaryMob implements CMob {
     public double getX() {
         return mob.getX();
     }
+
     @Override
     public double getY() {
         return mob.getY();
@@ -89,20 +94,21 @@ public class CanaryMob implements CMob {
     public void setZ(double z) {
         mob.setZ(z);
     }
-    
+
     @Override
     public boolean isMob() {
         return mob.isMob();
     }
-    
+
     @Override
     public boolean isAnimal() {
         return mob.isAnimal();
     }
-    
+
     @Override
     public WorldLocation getLocation() {
-        return new WorldLocation((int)getX(), (int)getY(), (int)getZ(), world.getName());
+        return new WorldLocation((int) getX(), (int) getY(), (int) getZ(),
+                world.getName());
     }
 
 }

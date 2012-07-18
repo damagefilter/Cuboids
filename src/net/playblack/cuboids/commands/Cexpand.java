@@ -7,29 +7,32 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Expand cuboid selection
+ * 
  * @author Chris
- *
+ * 
  */
 public class Cexpand extends CBaseCommand {
 
     public Cexpand() {
-        super("Expand the current cuboid selection: "+ColorManager.Yellow+"/cexpand", 1);
+        super("Expand the current cuboid selection: " + ColorManager.Yellow
+                + "/cexpand", 1);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if(!parseCommand(player, command)) {
+        if (!parseCommand(player, command)) {
             return;
         }
         MessageSystem ms = MessageSystem.getInstance();
-        if(!player.hasPermission("cIgnoreRestrictions")) {
-            if(!player.hasPermission("cselect")) {
+        if (!player.hasPermission("cIgnoreRestrictions")) {
+            if (!player.hasPermission("cselect")) {
                 ms.failMessage(player, "permissionDenied");
                 return;
             }
         }
-        
-        SelectionManager.getInstance().getPlayerSelection(player.getName()).expandVert();
+
+        SelectionManager.getInstance().getPlayerSelection(player.getName())
+                .expandVert();
         ms.successMessage(player, "selectionExpanded");
     }
 }

@@ -3,13 +3,14 @@ import java.util.ArrayList;
 import net.playblack.cuboids.converters.CuboidShell;
 import net.playblack.mcutils.Vector;
 
-
 public class CuboidDShell implements CuboidShell {
 
     CuboidD cuboid;
+
     public CuboidDShell(CuboidD cuboid) {
         this.cuboid = cuboid;
     }
+
     @Override
     public boolean getProtection() {
         return cuboid.protection;
@@ -72,7 +73,7 @@ public class CuboidDShell implements CuboidShell {
 
     @Override
     public int getDimension() {
-        return 0; //default dimension (overworld)
+        return 0; // default dimension (overworld)
     }
 
     @Override
@@ -107,9 +108,9 @@ public class CuboidDShell implements CuboidShell {
 
     @Override
     public ArrayList<String> getPlayerlist() {
-        ArrayList<String>players = new ArrayList<String>(2);
-        for(String name : cuboid.allowedPlayers) {
-            if(name.startsWith("g:")) {
+        ArrayList<String> players = new ArrayList<String>(2);
+        for (String name : cuboid.allowedPlayers) {
+            if (name.startsWith("g:")) {
                 continue;
             }
             players.add(name);
@@ -119,9 +120,9 @@ public class CuboidDShell implements CuboidShell {
 
     @Override
     public ArrayList<String> getGrouplist() {
-        ArrayList<String>groups = new ArrayList<String>(2);
-        for(String name : cuboid.allowedPlayers) {
-            if(!name.startsWith("g:")) {
+        ArrayList<String> groups = new ArrayList<String>(2);
+        for (String name : cuboid.allowedPlayers) {
+            if (!name.startsWith("g:")) {
                 continue;
             }
             groups.add(name);
@@ -148,10 +149,12 @@ public class CuboidDShell implements CuboidShell {
     public boolean getHmob() {
         return false;
     }
+
     @Override
     public boolean getEnderControl() {
         return false;
     }
+
     @Override
     public boolean getPhysics() {
         return false;

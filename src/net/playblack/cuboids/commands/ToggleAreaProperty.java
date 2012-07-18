@@ -7,103 +7,121 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Toggle an area property of a cuboid
+ * 
  * @author Chris
- *
+ * 
  */
 public class ToggleAreaProperty extends CBaseCommand {
 
     public ToggleAreaProperty() {
-        super("Toggle Area properties:"+ColorManager.Yellow+" /cmod <area> toggle <property>", 4);
+        super("Toggle Area properties:" + ColorManager.Yellow
+                + " /cmod <area> toggle <property>", 4);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        //cmod AREA toggle PROPERTY
-        if(!parseCommand(player, command)) {
+        // cmod AREA toggle PROPERTY
+        if (!parseCommand(player, command)) {
             return;
         }
-        //now, mega über super if monster!!! :D
-        if(command[3].equalsIgnoreCase("creeper")) {
-            CuboidInterface.getInstance().toggleCreeperSecure(player, command[1]);
+        // now, mega über super if monster!!! :D
+        if (command[3].equalsIgnoreCase("creeper")) {
+            CuboidInterface.getInstance().toggleCreeperSecure(player,
+                    command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("farmland") || command[3].equalsIgnoreCase("farm")) {
+
+        else if (command[3].equalsIgnoreCase("farmland")
+                || command[3].equalsIgnoreCase("farm")) {
             CuboidInterface.getInstance().toggleFarmland(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("fire") || command[3].equalsIgnoreCase("firespread")) {
+
+        else if (command[3].equalsIgnoreCase("fire")
+                || command[3].equalsIgnoreCase("firespread")) {
             CuboidInterface.getInstance().toggleFireSpread(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("water") || command[3].equalsIgnoreCase("watercontrol")) {
-            CuboidInterface.getInstance().toggleFlowControl(player, command[1], false);
+
+        else if (command[3].equalsIgnoreCase("water")
+                || command[3].equalsIgnoreCase("watercontrol")) {
+            CuboidInterface.getInstance().toggleFlowControl(player, command[1],
+                    false);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("lava") || command[3].equalsIgnoreCase("lavacontrol")) {
-            CuboidInterface.getInstance().toggleFlowControl(player, command[1], true);
+
+        else if (command[3].equalsIgnoreCase("lava")
+                || command[3].equalsIgnoreCase("lavacontrol")) {
+            CuboidInterface.getInstance().toggleFlowControl(player, command[1],
+                    true);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("freebuild") || command[3].equalsIgnoreCase("creative")) {
+
+        else if (command[3].equalsIgnoreCase("freebuild")
+                || command[3].equalsIgnoreCase("creative")) {
             CuboidInterface.getInstance().toggleFreebuild(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("heal") || command[3].equalsIgnoreCase("healing")) {
+
+        else if (command[3].equalsIgnoreCase("heal")
+                || command[3].equalsIgnoreCase("healing")) {
             CuboidInterface.getInstance().toggleHealing(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("hmob") || command[3].equalsIgnoreCase("hmobs")) {
+
+        else if (command[3].equalsIgnoreCase("hmob")
+                || command[3].equalsIgnoreCase("hmobs")) {
             CuboidInterface.getInstance().toggleHmobs(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("protection") || command[3].equalsIgnoreCase("protect")) {
+
+        else if (command[3].equalsIgnoreCase("protection")
+                || command[3].equalsIgnoreCase("protect")) {
             CuboidInterface.getInstance().toggleProtection(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("pvp")) {
+
+        else if (command[3].equalsIgnoreCase("pvp")) {
             CuboidInterface.getInstance().togglePvp(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("restriction") || command[3].equalsIgnoreCase("restrict")) {
+
+        else if (command[3].equalsIgnoreCase("restriction")
+                || command[3].equalsIgnoreCase("restrict")) {
             CuboidInterface.getInstance().toggleRestriction(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("sanctuary")) {
+
+        else if (command[3].equalsIgnoreCase("sanctuary")) {
             CuboidInterface.getInstance().toggleSanctuary(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("sanctuary-animalspawn") || command[3].equalsIgnoreCase("animalspawn")) {
-            CuboidInterface.getInstance().toggleSanctuaryAnimalSpawn(player, command[1]);
+
+        else if (command[3].equalsIgnoreCase("sanctuary-animalspawn")
+                || command[3].equalsIgnoreCase("animalspawn")) {
+            CuboidInterface.getInstance().toggleSanctuaryAnimalSpawn(player,
+                    command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("tnt")) {
+
+        else if (command[3].equalsIgnoreCase("tnt")) {
             CuboidInterface.getInstance().toggleTntSecure(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("physics")) {
+
+        else if (command[3].equalsIgnoreCase("physics")) {
             CuboidInterface.getInstance().togglePhysics(player, command[1]);
             return;
         }
-        
-        else if(command[3].equalsIgnoreCase("enderman") || command[3].equalsIgnoreCase("endercontrol")) {
-            CuboidInterface.getInstance().toggleEnderControl(player, command[1]);
+
+        else if (command[3].equalsIgnoreCase("enderman")
+                || command[3].equalsIgnoreCase("endercontrol")) {
+            CuboidInterface.getInstance()
+                    .toggleEnderControl(player, command[1]);
             return;
-        }
-        else {
-            MessageSystem.getInstance().failMessage(player, "invalidAreaProperty");
+        } else {
+            MessageSystem.getInstance().failMessage(player,
+                    "invalidAreaProperty");
             return;
         }
     }

@@ -15,26 +15,36 @@ import net.playblack.mcutils.Vector;
 public class BrushHandler {
     /**
      * Handle brush action, make undo etc and execute in world
+     * 
      * @param player
      * @param point
      */
     public static void handleBrush(CPlayer player, Vector point) {
-        if(player.getItemInHand().getId() == Config.getInstance().getSculptItem()) {
-            if((player.hasPermission("cWorldMod") && player.hasPermission("cbrush")) || player.hasPermission("cIgnoreRestrictions")) {
-                PlayerSelection selection = SelectionManager.getInstance().getPlayerSelection(player.getName());
+        if (player.getItemInHand().getId() == Config.getInstance()
+                .getSculptItem()) {
+            if ((player.hasPermission("cWorldMod") && player
+                    .hasPermission("cbrush"))
+                    || player.hasPermission("cIgnoreRestrictions")) {
+                PlayerSelection selection = SelectionManager.getInstance()
+                        .getPlayerSelection(player.getName());
                 selection.setOrigin(point);
-                SphereGenerator gen = new SphereGenerator(selection, player.getWorld());
+                SphereGenerator gen = new SphereGenerator(selection,
+                        player.getWorld());
                 gen.setRadius(selection.getBrushRadius());
-                gen.setMaterial(new CBlock(selection.getBrushType(), selection.getBrushData()));
+                gen.setMaterial(new CBlock(selection.getBrushType(), selection
+                        .getBrushData()));
                 gen.setHollow(true);
                 try {
                     gen.execute(player, true);
                 } catch (BlockEditLimitExceededException e) {
-                    EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-                    MessageSystem.getInstance().customFailMessage(player, e.getMessage());
+                    EventLogger.getInstance().logMessage(e.getMessage(),
+                            "WARNING");
+                    MessageSystem.getInstance().customFailMessage(player,
+                            e.getMessage());
                     e.printStackTrace();
                 } catch (SelectionIncompleteException e) {
-                    MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+                    MessageSystem.getInstance().failMessage(player,
+                            "selectionIncomplete");
                 }
             }
         }

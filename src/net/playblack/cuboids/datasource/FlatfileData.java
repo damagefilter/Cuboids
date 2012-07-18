@@ -177,17 +177,21 @@ public class FlatfileData implements BaseData {
 
             // Creating Root nodes here
             for (int i = 0; i < nodelist.size(); i++) {
-                
-                if(visited.contains(nodelist.get(i))) {
+
+                if (visited.contains(nodelist.get(i))) {
                     continue;
                 }
                 if (nodelist.get(i).getCuboid().getParent() == null) {
-                    if (handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
+                    if (handler.cuboidExists(nodelist.get(i).getName(),
+                            nodelist.get(i).getWorld(), nodelist.get(i)
+                                    .getDimension())) {
                         visited.add(nodelist.get(i));
                         continue;
-                    } 
-                    else {
-                        if (nodelist.get(i) != null && !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
+                    } else {
+                        if (nodelist.get(i) != null
+                                && !handler.cuboidExists(nodelist.get(i)
+                                        .getName(), nodelist.get(i).getWorld(),
+                                        nodelist.get(i).getDimension())) {
                             handler.addRoot(nodelist.get(i));
                             visited.add(nodelist.get(i));
                             continue;
@@ -198,15 +202,22 @@ public class FlatfileData implements BaseData {
             visited.clear();
             // Sorting parents here:
             for (int i = 0; i < nodelist.size(); i++) {
-                if(visited.contains(nodelist.get(i))) {
+                if (visited.contains(nodelist.get(i))) {
                     continue;
                 }
                 if (nodelist.get(i).getCuboid().getParent() != null) {
-                    CuboidNode parent = handler.getCuboidNodeByName(nodelist.get(i).getParent(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension());
-                    if (parent != null && !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
+                    CuboidNode parent = handler.getCuboidNodeByName(nodelist
+                            .get(i).getParent(), nodelist.get(i).getWorld(),
+                            nodelist.get(i).getDimension());
+                    if (parent != null
+                            && !handler.cuboidExists(nodelist.get(i).getName(),
+                                    nodelist.get(i).getWorld(), nodelist.get(i)
+                                            .getDimension())) {
                         parent.addChild(nodelist.get(i));
                         visited.add(nodelist.get(i));
-                        i = -1; //Count from the beginning again as we might have missed a couple of nodes with a missing parent that now exists
+                        i = -1; // Count from the beginning again as we might
+                                // have missed a couple of nodes with a missing
+                                // parent that now exists
                         continue;
                     }
                 }

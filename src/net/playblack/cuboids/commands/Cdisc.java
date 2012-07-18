@@ -14,93 +14,92 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * Create discs or circles around a point
+ * 
  * @author Chris
- *
+ * 
  */
 public class Cdisc extends CBaseCommand {
 
     private boolean fill;
-    
+
     public Cdisc(String variant) {
-        super("Create disc/circle: "+ColorManager.Yellow+variant+" <radius> <block>:[data] [height]", 3, 4);
-        if(variant.equalsIgnoreCase("/ccircle")) {
+        super("Create disc/circle: " + ColorManager.Yellow + variant
+                + " <radius> <block>:[data] [height]", 3, 4);
+        if (variant.equalsIgnoreCase("/ccircle")) {
             fill = false;
-        }
-        else {
+        } else {
             fill = true;
         }
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if(!parseCommand(player, command)) {
+        if (!parseCommand(player, command)) {
             return;
         }
-        //Check for the proper permissions
+        // Check for the proper permissions
         MessageSystem ms = MessageSystem.getInstance();
-        if(!player.hasPermission("cIgnoreRestrictions")) {
-            if(!player.hasPermission("cWorldMod")) {
+        if (!player.hasPermission("cIgnoreRestrictions")) {
+            if (!player.hasPermission("cWorldMod")) {
                 ms.failMessage(player, "permissionDenied");
                 return;
             }
         }
-        
-        //create a new template block
+
+        // create a new template block
         CBlock material = CBlock.parseBlock(command[2]);
         int height;
         int radius;
-        if(material == null) {
+        if (material == null) {
             ms.failMessage(player, "invalidBlock");
             return;
         }
-        if(command.length == 4) {
+        if (command.length == 4) {
             height = ToolBox.parseInt(command[3]);
             radius = ToolBox.parseInt(command[1]);
-            if(height == -1) {
+            if (height == -1) {
                 ms.failMessage(player, "invalidHeight");
                 return;
             }
-            if(radius == -1) {
+            if (radius == -1) {
                 ms.failMessage(player, "invalidRadius");
                 return;
             }
-        }
-        else {
-            height=1;
+        } else {
+            height = 1;
             radius = ToolBox.parseInt(command[1]);
-            if(radius == -1) {
+            if (radius == -1) {
                 ms.failMessage(player, "invalidRadius");
                 return;
             }
         }
-        
-        //prepare the selection
-        CuboidSelection template = SelectionManager.getInstance().getPlayerSelection(player.getName());
-        if(template.getOrigin() == null) {
+
+        // prepare the selection
+        CuboidSelection template = SelectionManager.getInstance()
+                .getPlayerSelection(player.getName());
+        if (template.getOrigin() == null) {
             ms.failMessage(player, "originNotSet");
             return;
         }
-        if(!template.getBlockList().isEmpty()) {
+        if (!template.getBlockList().isEmpty()) {
             template.clearBlocks();
         }
-        
-        //Create the block generator
+
+        // Create the block generator
         DiscGenerator gen = new DiscGenerator(template, player.getWorld());
         gen.setMaterial(material);
         gen.setHeight(height);
         gen.setRadius(radius);
         gen.setHollow(fill);
-        
+
         try {
-            if(gen.execute(player, true)) {
-                if(fill) {
+            if (gen.execute(player, true)) {
+                if (fill) {
                     ms.successMessage(player, "discCreated");
-                }
-                else {
+                } else {
                     ms.successMessage(player, "circleCreated");
                 }
-            }
-            else {
+            } else {
                 ms.failMessage(player, "selectionIncomplete");
                 ms.failMessage(player, "discNotCreated");
             }
@@ -109,7 +108,8 @@ public class Cdisc extends CBaseCommand {
             ms.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+            MessageSystem.getInstance().failMessage(player,
+                    "selectionIncomplete");
         }
         return;
     }

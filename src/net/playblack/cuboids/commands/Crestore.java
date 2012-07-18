@@ -12,45 +12,47 @@ import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
-
 /**
  * Re an area
+ * 
  * @author Chris
- *
+ * 
  */
 public class Crestore extends CBaseCommand {
 
     public Crestore() {
-        super("Restore a cuboid area from backup:"+ColorManager.Yellow+" /crestore <area>", 2);
+        super("Restore a cuboid area from backup:" + ColorManager.Yellow
+                + " /crestore <area>", 2);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if(!parseCommand(player, command)) {
+        if (!parseCommand(player, command)) {
             return;
         }
         MessageSystem ms = MessageSystem.getInstance();
-        if(!player.hasPermission("cIgnoreRestrictions")) {
-            if(!player.hasPermission("cbackup")) {
+        if (!player.hasPermission("cIgnoreRestrictions")) {
+            if (!player.hasPermission("cbackup")) {
                 ms.failMessage(player, "permissionDenied");
                 return;
             }
         }
         String world = player.getWorld().getFilePrefix();
-        File f = new File("plugins/cuboids2/backups/blocks_"+world+"_"+command[1]);
-        if(f.exists()) {
+        File f = new File("plugins/cuboids2/backups/blocks_" + world + "_"
+                + command[1]);
+        if (f.exists()) {
             CuboidDeserializer des = new CuboidDeserializer(command[1], world);
             CuboidSelection restore = des.convert();
-            GenericGenerator gen = new GenericGenerator(restore, player.getWorld());
-            
+            GenericGenerator gen = new GenericGenerator(restore,
+                    player.getWorld());
+
             boolean success;
             try {
                 success = gen.execute(player, true);
-                if(success) {
-                ms.successMessage(player, "restoreSuccess");
-                return;
-                }
-                else {
+                if (success) {
+                    ms.successMessage(player, "restoreSuccess");
+                    return;
+                } else {
                     ms.failMessage(player, "restoreFail");
                     return;
                 }
@@ -59,11 +61,11 @@ public class Crestore extends CBaseCommand {
                 ms.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
             } catch (SelectionIncompleteException e) {
-                MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+                MessageSystem.getInstance().failMessage(player,
+                        "selectionIncomplete");
             }
-            
-        }
-        else {
+
+        } else {
             ms.failMessage(player, "restoreFail");
             ms.failMessage(player, "cuboidNotFoundOnCommand");
             return;

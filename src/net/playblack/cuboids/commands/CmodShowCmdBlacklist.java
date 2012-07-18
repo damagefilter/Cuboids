@@ -6,20 +6,22 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Show the list of blacklisted commands
+ * 
  * @author Chris
- *
+ * 
  */
 public class CmodShowCmdBlacklist extends CBaseCommand {
 
     public CmodShowCmdBlacklist() {
-        super("Show blacklisted commands:"+ColorManager.Yellow+" /cmod <area> cmdblacklist", 3);
+        super("Show blacklisted commands:" + ColorManager.Yellow
+                + " /cmod <area> cmdblacklist", 3);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if(!parseCommand(player, command)) {
+        if (!parseCommand(player, command)) {
             return;
         }
-       CuboidInterface.getInstance().showCommandBlacklist(player, command[1]);
+        CuboidInterface.getInstance().showCommandBlacklist(player, command[1]);
     }
 }

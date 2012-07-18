@@ -11,27 +11,29 @@ import net.playblack.mcutils.EventLogger;
 
 /**
  * Crossload cuboids from datasources
+ * 
  * @author Chris
- *
+ * 
  */
 public class CloadFrom extends CBaseCommand {
     public CloadFrom() {
-        super("Load cuboids: "+ColorManager.Yellow+"/cloadfrom <mysql/flatfile>", 2);
+        super("Load cuboids: " + ColorManager.Yellow
+                + "/cloadfrom <mysql/flatfile>", 2);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if(!parseCommand(player, command)) {
+        if (!parseCommand(player, command)) {
             return;
         }
-        if(!player.hasPermission("cIgnoreRestrictions")) {
+        if (!player.hasPermission("cIgnoreRestrictions")) {
             MessageSystem.getInstance().failMessage(player, "permissionDenied");
         }
-        if(command[1].equalsIgnoreCase("mysql")) {
-            MysqlData ds = new MysqlData(Config.getInstance().getSqlConfig(), EventLogger.getInstance());
+        if (command[1].equalsIgnoreCase("mysql")) {
+            MysqlData ds = new MysqlData(Config.getInstance().getSqlConfig(),
+                    EventLogger.getInstance());
             ds.loadAll(RegionManager.getInstance());
-        }
-        else {
+        } else {
             FlatfileData ds = new FlatfileData(EventLogger.getInstance());
             ds.loadAll(RegionManager.getInstance());
         }

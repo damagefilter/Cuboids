@@ -11,33 +11,35 @@ import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
-
 /**
  * Copy a selection into the clipboard
+ * 
  * @author Chris
- *
+ * 
  */
 public class Ccopy extends CBaseCommand {
 
     public Ccopy() {
-        super("Copy a selection into your clipboard: "+ColorManager.Yellow+" /ccopy", 1);
+        super("Copy a selection into your clipboard: " + ColorManager.Yellow
+                + " /ccopy", 1);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if(!parseCommand(player, command)) {
+        if (!parseCommand(player, command)) {
             return;
         }
         MessageSystem ms = MessageSystem.getInstance();
-        if(!player.hasPermission("cIgnoreRestrictions")) {
-            if(!player.hasPermission("cWorldMod")) {
+        if (!player.hasPermission("cIgnoreRestrictions")) {
+            if (!player.hasPermission("cWorldMod")) {
                 ms.failMessage(player, "permissionDenied");
                 return;
             }
         }
-        
+
         SelectionManager selectionManager = SelectionManager.getInstance();
-        CuboidSelection sel = selectionManager.getPlayerSelection(player.getName());
+        CuboidSelection sel = selectionManager.getPlayerSelection(player
+                .getName());
         GenericGenerator gen = new GenericGenerator(sel, player.getWorld());
         try {
             sel = gen.getWorldContent(sel);
@@ -46,10 +48,11 @@ public class Ccopy extends CBaseCommand {
             ms.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player, "selectionIncomplete");
+            MessageSystem.getInstance().failMessage(player,
+                    "selectionIncomplete");
         }
         sel.setOrigin(player.getPosition());
-        //gen.
+        // gen.
         SessionManager.getInstance().setClipboard(player.getName(), sel);
         ms.successMessage(player, "copiedToClipboard");
     }

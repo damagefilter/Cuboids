@@ -4,13 +4,14 @@ import net.playblack.cuboids.converters.CuboidShell;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Vector;
 
-
 public class CuboidFShell implements CuboidShell {
 
     private PropertiesFile file;
+
     public CuboidFShell(PropertiesFile prop) {
         this.file = prop;
     }
+
     @Override
     public boolean getProtection() {
         return file.getBoolean("protection");
@@ -94,7 +95,7 @@ public class CuboidFShell implements CuboidShell {
     @Override
     public String getFarewell() {
         String msg = file.getString("farewellMessage");
-        if(msg != null && msg.length() == 0) {
+        if (msg != null && msg.length() == 0) {
             return null;
         }
         return msg;
@@ -103,7 +104,7 @@ public class CuboidFShell implements CuboidShell {
     @Override
     public String getWelcome() {
         String msg = file.getString("welcomeMessage");
-        if(msg != null && msg.length() == 0) {
+        if (msg != null && msg.length() == 0) {
             return null;
         }
         return msg;
@@ -113,7 +114,7 @@ public class CuboidFShell implements CuboidShell {
     public ArrayList<String> tabuCommands() {
         String[] cmds = file.getString("disallowedCommands").split(",");
         ArrayList<String> ret = new ArrayList<String>(cmds.length);
-        for(String name : cmds) {
+        for (String name : cmds) {
             ret.add(name);
         }
         return ret;
@@ -121,10 +122,10 @@ public class CuboidFShell implements CuboidShell {
 
     @Override
     public ArrayList<String> getPlayerlist() {
-        ArrayList<String>players = new ArrayList<String>(2);
+        ArrayList<String> players = new ArrayList<String>(2);
         String[] a = file.getString("allowedPlayers").split(",");
-        for(String name : a) {
-            if(name.startsWith("g:")) {
+        for (String name : a) {
+            if (name.startsWith("g:")) {
                 continue;
             }
             players.add(name);
@@ -134,10 +135,10 @@ public class CuboidFShell implements CuboidShell {
 
     @Override
     public ArrayList<String> getGrouplist() {
-        ArrayList<String>groups = new ArrayList<String>(2);
+        ArrayList<String> groups = new ArrayList<String>(2);
         String[] a = file.getString("allowedPlayers").split(",");
-        for(String name : a) {
-            if(!name.startsWith("g:")) {
+        for (String name : a) {
+            if (!name.startsWith("g:")) {
                 continue;
             }
             groups.add(name);
@@ -147,12 +148,14 @@ public class CuboidFShell implements CuboidShell {
 
     @Override
     public Vector getOrigin() {
-        return new Vector(file.getInt("X1"), file.getInt("Y1"), file.getInt("Z1"));
+        return new Vector(file.getInt("X1"), file.getInt("Y1"),
+                file.getInt("Z1"));
     }
 
     @Override
     public Vector getOffset() {
-        return new Vector(file.getInt("X2"), file.getInt("Y2"), file.getInt("Z2"));
+        return new Vector(file.getInt("X2"), file.getInt("Y2"),
+                file.getInt("Z2"));
     }
 
     @Override
@@ -164,10 +167,12 @@ public class CuboidFShell implements CuboidShell {
     public boolean getHmob() {
         return false;
     }
+
     @Override
     public boolean getEnderControl() {
         return file.getBoolean("enderman");
     }
+
     @Override
     public boolean getPhysics() {
         return file.getBoolean("physics");

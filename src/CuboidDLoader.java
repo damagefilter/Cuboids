@@ -9,21 +9,20 @@ import net.playblack.cuboids.converters.CuboidShell;
 import net.playblack.cuboids.converters.Loader;
 import net.playblack.mcutils.EventLogger;
 
-
 public class CuboidDLoader implements Loader {
 
     @Override
     public ArrayList<CuboidShell> load() {
-        ArrayList<CuboidShell> shells = new ArrayList<CuboidShell>(20); 
+        ArrayList<CuboidShell> shells = new ArrayList<CuboidShell>(20);
         try {
             File cuboidDPath = new File("cuboids/areas/");
-            if(!cuboidDPath.exists()) {
-                //Does not exists, return empty shell list
+            if (!cuboidDPath.exists()) {
+                // Does not exists, return empty shell list
                 return shells;
             }
-            if(cuboidDPath.listFiles().length > 0) {
+            if (cuboidDPath.listFiles().length > 0) {
                 File test = new File("plugins/cuboids2/backups_cuboidD/");
-                if(!test.exists()) {
+                if (!test.exists()) {
                     test.mkdirs();
                 }
             }
@@ -31,23 +30,31 @@ public class CuboidDLoader implements Loader {
             for (File files : new File("cuboids/areas/").listFiles()) {
                 if (files.getName().toLowerCase().endsWith(".area")) {
                     File cuboid = new File("cuboids/areas/" + files.getName());
-                    ois = new ObjectInputStream(
-                            new BufferedInputStream(
-                            new FileInputStream(
-                            cuboid)));
+                    ois = new ObjectInputStream(new BufferedInputStream(
+                            new FileInputStream(cuboid)));
                     shells.add(new CuboidDShell((CuboidD) (ois.readObject())));
                     ois.close();
-                    //Move away the files to somewhere else so they won't get converted again.
-                    File b = new File("plugins/cuboids2/backups_cuboidD/"+cuboid.getName());
+                    // Move away the files to somewhere else so they won't get
+                    // converted again.
+                    File b = new File("plugins/cuboids2/backups_cuboidD/"
+                            + cuboid.getName());
                     cuboid.renameTo(b);
-                    
+
                 }
             }
         } catch (IOException e) {
-            //CuboidPlugin.log.severe("CuboidPlugin : severe error while loading cuboids");
-            EventLogger.getInstance().logMessage("IOException while loading CuboidD files! (File permissions?)", "WARNING");
-        } catch(ClassNotFoundException f) {
-            EventLogger.getInstance().logMessage("CuboidD class definition could not be found. Implementation failure! Report back to author!", "WARNING");
+            // CuboidPlugin.log.severe("CuboidPlugin : severe error while loading cuboids");
+            EventLogger
+                    .getInstance()
+                    .logMessage(
+                            "IOException while loading CuboidD files! (File permissions?)",
+                            "WARNING");
+        } catch (ClassNotFoundException f) {
+            EventLogger
+                    .getInstance()
+                    .logMessage(
+                            "CuboidD class definition could not be found. Implementation failure! Report back to author!",
+                            "WARNING");
         }
         return shells;
     }
