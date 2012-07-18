@@ -18,6 +18,14 @@ public class WorldLocation extends Vector {
         this.dimension = dimension;
         this.world = world;
     }
+    
+    public WorldLocation(Vector v) {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
+        world = "world"; //assume a common default
+        dimension = 0; //assume default dimension (Overworld)
+    }
 
     /**
      * @return the world
