@@ -126,9 +126,18 @@ public class BlockListener extends PluginListener {
     @SuppressWarnings("rawtypes")
     @Override
     public boolean onExplosion(Block b, BaseEntity e, List blocksaffected) {
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), e
-                .getWorld().getType().getId(), e.getWorld().getName());
-        return BlockActionHandler.handleExplosions(b.getStatus(), p);
+        WorldLocation p = null;
+        if(b.getWorld() != null) {
+            p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+            return BlockActionHandler.handleExplosions(b.getStatus(), p);
+        }
+        else if(e != null) {
+            p = new WorldLocation(b.getX(), b.getY(), b.getZ(), e.getWorld().getType().getId(), e.getWorld().getName());
+            return BlockActionHandler.handleExplosions(b.getStatus(), p);
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
