@@ -83,14 +83,14 @@ public class PlayerListener extends PluginListener {
         if (defender.isPlayer()) {
             if (attacker.isPlayer()) {
                 try {
-                    return MiscHandler.handlePvpDamage(
+                    return !MiscHandler.handlePvpDamage(
                             CServer.getServer().getPlayer(
                                     attacker.getPlayer().getName()),
                             CServer.getServer().getPlayer(
                                     defender.getPlayer().getName()));
                 } catch (InvalidPlayerException e) {
                     // Fallback
-                    return MiscHandler.handlePvpDamage(new CanaryPlayer(
+                    return !MiscHandler.handlePvpDamage(new CanaryPlayer(
                             attacker.getPlayer()),
                             new CanaryPlayer(defender.getPlayer()));
                 }
