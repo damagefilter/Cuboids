@@ -16,7 +16,7 @@ import net.playblack.mcutils.Location;
  * @author Chris Ksoll
  */
 @Deprecated
-public class CuboidE implements Region {
+public class CuboidE extends Region {
     /*
      * Some setting things
      */
@@ -29,7 +29,7 @@ public class CuboidE implements Region {
     /**
      * My parent cuboidE's name
      */
-    private String parent = null;
+    private String _parent = null;
 
     /**
      * My Priority in relation to my _parent
@@ -140,7 +140,7 @@ public class CuboidE implements Region {
      * @param _parent
      */
     public void setParent(String _parent) {
-        this.parent = _parent;
+        this._parent = _parent;
     }
 
     /**
@@ -279,8 +279,8 @@ public class CuboidE implements Region {
      * 
      * @return
      */
-    public String getParent() {
-        return parent;
+    public String getParentDeprecated() {
+        return _parent;
     }
 
     /**

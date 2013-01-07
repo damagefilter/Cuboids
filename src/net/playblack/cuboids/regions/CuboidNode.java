@@ -7,7 +7,7 @@ public class CuboidNode {
     /**
      * Base element. The node is a wrapper for this
      */
-    CuboidE element;
+    Cuboid element;
     ArrayList<CuboidNode> childs = new ArrayList<CuboidNode>(0);
 
     /**
@@ -15,7 +15,7 @@ public class CuboidNode {
      */
     public void updateChilds() {
         for (CuboidNode child : childs) {
-            child.getCuboid().setParent(element.getName());
+            child.getCuboid().setParent(element);
         }
     }
 
@@ -24,7 +24,7 @@ public class CuboidNode {
      * Do not use this if you can!
      */
     public CuboidNode() {
-        element = new CuboidE();
+        element = new Cuboid();
     }
 
     /**
@@ -32,7 +32,7 @@ public class CuboidNode {
      * 
      * @param cube
      */
-    public CuboidNode(CuboidE cube) {
+    public CuboidNode(Cuboid cube) {
         element = cube;
     }
 
@@ -41,7 +41,7 @@ public class CuboidNode {
      * 
      * @return
      */
-    public CuboidE getCuboid() {
+    public Cuboid getCuboid() {
         return element;
     }
 
@@ -51,7 +51,7 @@ public class CuboidNode {
      * 
      * @param cube
      */
-    public void setCuboid(CuboidE cube) {
+    public void setCuboid(Cuboid cube) {
         String oldName = element.getName();
         element = cube;
         if (!oldName.equalsIgnoreCase(cube.getName())) {
@@ -149,7 +149,7 @@ public class CuboidNode {
      * 
      * @return
      */
-    public String getParent() {
+    public Cuboid getParent() {
         return element.getParent();
     }
 
@@ -200,8 +200,8 @@ public class CuboidNode {
      * @param test
      * @return
      */
-    public boolean equalWorlds(CuboidE test) {
-        return element.equalWorlds(test);
+    public boolean equalWorlds(Cuboid test) {
+        return element.equalsWorld(test);
     }
 
     /**
@@ -213,6 +213,6 @@ public class CuboidNode {
      * @return
      */
     public boolean equalWorlds(String world, int dimension) {
-        return element.equalWorlds(world, dimension);
+        return element.equalsWorld(world, dimension);
     }
 }

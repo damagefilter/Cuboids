@@ -3,6 +3,7 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
+import net.playblack.cuboids.regions.Cuboid;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.selections.CuboidSelection;
@@ -39,20 +40,19 @@ public class CmodAdd extends CBaseCommand {
             ms.failMessage(player, "cuboidNotCreated");
             return;
         }
-        CuboidE defaultC = Config.getInstance().getDefaultCuboidSetting(player);
+        Cuboid defaultC = Config.getInstance().getDefaultCuboidSetting(player);
         CuboidSelection selection = SelectionManager.getInstance()
                 .getPlayerSelection(player.getName());
         if (!selection.isComplete()) {
             ms.failMessage(player, "selectionIncomplete");
             return;
         }
-        CuboidE cube = new CuboidE(selection.getOrigin(), selection.getOffset());
-        cube.overwriteProperties(defaultC);
-        cube.setName(command[1]);
-        cube.setWorld(player.getWorld().getName());
-        cube.setDimension(player.getWorld().getDimension());
-        cube.addPlayer("o:" + player.getName());
-        if (CuboidInterface.getInstance().addCuboid(cube)) {
+        defaultC.setBoundingBox(selection.getOrigin(), selection.getOffset());
+        defaultC.setName(command[1]);
+        defaultC.setWorld(player.getWorld().getName());
+        defaultC.setDimension(player.getWorld().getDimension());
+        defaultC.addPlayer("o:" + player.getName());
+        if (CuboidInterface.getInstance().addCuboid(defaultC)) {
             ms.successMessage(player, "cuboidCreated");
         } else {
             ms.failMessage(player, "cuboidExists");

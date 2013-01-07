@@ -3,7 +3,7 @@ package net.playblack.cuboids.regions;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.playblack.cuboids.gameinterface.CWorld;
+import net.playblack.mcutils.Location;
 import net.playblack.mcutils.Vector;
 
 /**
@@ -12,21 +12,37 @@ import net.playblack.mcutils.Vector;
  * @author Chris Ksoll
  *
  */
-public class Cuboid implements Region{
+public class Cuboid extends Region{
     
     public enum Status {
         ALLOW,
         DENY,
         INHERIT,
+        DEFAULT,
         INVALID_PROPERTY;
+        
+        public static Status fromString(String str) {
+            if(str.equalsIgnoreCase(ALLOW.name())) {
+                return ALLOW;
+            }
+            else if(str.equalsIgnoreCase(DENY.name())) {
+                return DENY;
+            }
+            else if(str.equalsIgnoreCase(INHERIT.name())) {
+                return INHERIT;
+            }
+            else if(str.equalsIgnoreCase(DEFAULT.name())) {
+                return DEFAULT;
+            }
+            else {
+                return INVALID_PROPERTY;
+            }
+        }
     }
     
     private HashMap<String, Status> properties;
-    /** Reference to this Cuboids parent*/ //This'll get ugly when reading from datasource
-    private Cuboid parent;
+    public boolean hasChanged = false;
     
-    /** The name of this cuboid*/
-    private String name;
     
     /** List of allowed players*/
     private ArrayList<String> players;
@@ -34,11 +50,8 @@ public class Cuboid implements Region{
     /** List of allowed groups*/
     private ArrayList<String> groups;
     
-    /** The name of the world this cuboid sits in*/
-    private String world;
-    
-    /** The ID of the dimension for this cuboid. This may always be 0 in some implementations */
-    private int dimension;
+    /** Players that are currently within this area*/
+    private ArrayList<String> playersWithin;
     
     private Vector origin;
     private Vector offset;
@@ -250,8 +263,138 @@ public class Cuboid implements Region{
         }
     }
     
-    public boolean equalsWorld(CWorld world) {
-        return (world.getDimension() == dimension) && (name.equals(world.getName()));
+    /**
+     * Check if this cuboid is inside another
+     * 
+     * @param v1
+     *            Other Cuboid Point 1
+     * @param v2
+     *            Other Cuboid Point 2
+     * @param complete
+     *            true: Cuboid must be completely inside, false: Cuboid can be
+     *            inside only partially
+     * @return true if cuboid is inside another, false otherwise
+     */
+    public boolean cuboidIsWithin(Vector v1, Vector v2, boolean complete) {
+        Vector min = Vector.getMinor(v1, v2);
+        Vector max = Vector.getMajor(v1, v2);
+        if (complete == true) {
+            if (origin.isWithin(min, max) && offset.isWithin(min, max)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (origin.isWithin(min, max) || offset.isWithin(min, max)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    
+    /**
+     * Check if this cuboid is inside the given one
+     * 
+     * @param cube
+     * @param complete
+     *            true to check if it is inside with both edges
+     * @return
+     */
+    public boolean cuboidIsWithin(Cuboid cube, boolean complete) {
+        if (this.equalsWorld(cube)) {
+            Vector min = Vector.getMinimum(cube.getOrigin(),
+                    cube.getOffset());
+            Vector max = Vector.getMaximum(cube.getOrigin(),
+                    cube.getOffset());
+
+            if (complete == true) {
+                if (origin.isWithin(min, max) && offset.isWithin(min, max)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                if (origin.isWithin(min, max) || offset.isWithin(min, max)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Checks if a given vector v is within this cuboid.
+     * 
+     * @param v
+     * @return True: Point is within this cuboid, false otherwise
+     */
+    public boolean isWithin(Location v) {
+        if (!v.getWorld().equals(this.world)
+                || !(v.getDimension() == this.dimension)) {
+            return false;
+        }
+        Vector min = Vector.getMinimum(origin, offset);
+        Vector max = Vector.getMaximum(origin, offset);
+        if (v.isWithin(min, max)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public int getSize() {
+        return (int) Vector.getDistance(origin.getBlockX(), offset.getBlockX())
+                * (int) Vector.getDistance(origin.getBlockY(), offset.getBlockY())
+                * (int) Vector.getDistance(origin.getBlockZ(), offset.getBlockZ());
+    }
+    
+    /**
+     * Adds a player that is in this area
+     * 
+     * @param playerName
+     */
+    public void addPlayerWithin(String playerName) {
+        if (!playerName.equalsIgnoreCase("no_players")) {
+            if (!playerName.substring(2).isEmpty()) {
+                playersWithin.add(playerName);
+            }
+        }
+    }
+
+    /**
+     * Remove player from within list
+     * 
+     * @param playerName
+     * @return
+     */
+    public boolean removePlayerWithin(String playerName) {
+        if (playersWithin.contains(playerName)) {
+            playersWithin.remove(playerName);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get all players that are within this cuboid as arrayList<string>
+     * 
+     * @return
+     */
+    public ArrayList<String> getPlayersWithin() {
+        return playersWithin;
+    }
+
+    public boolean playerIsWithin(String playerName) {
+        if (playersWithin.contains(playerName)) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     /* ************************************************
@@ -259,50 +402,6 @@ public class Cuboid implements Region{
      * GETTER / SETTER STUFF
      * 
      * ************************************************/
-
-    /**
-     * @return the world
-     */
-    public String getWorld() {
-        return world;
-    }
-
-    /**
-     * @param world the world to set
-     */
-    public void setWorld(String world) {
-        this.world = world;
-    }
-
-    /**
-     * @return the dimension
-     */
-    public int getDimension() {
-        return dimension;
-    }
-
-    /**
-     * @param dimension the dimension to set
-     */
-    public void setDimension(int dimension) {
-        this.dimension = dimension;
-    }
-    
-    public void setParent(Cuboid cube) {
-        parent = cube;
-    }
-    
-    public Cuboid getParent() {
-        return parent;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
 
     /**
      * @return the origin

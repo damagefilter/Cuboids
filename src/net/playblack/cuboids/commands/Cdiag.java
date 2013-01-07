@@ -35,7 +35,7 @@ public class Cdiag extends CBaseCommand {
                 player.sendMessage(ColorManager.Yellow + "Name: "
                         + ColorManager.LightGray + cube.getName());
                 player.sendMessage(ColorManager.Yellow + "Parent: "
-                        + ColorManager.LightGray + cube.getParent());
+                        + ColorManager.LightGray + cube.getParentDeprecated());
                 player.sendMessage(ColorManager.DarkPurple
                         + "------------------------------------------------");
             }

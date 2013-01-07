@@ -175,7 +175,7 @@ public class MysqlData implements BaseData {
      */
     public void mysqlUpdateNode(CuboidNode node) throws SQLException {
         CuboidE cube = node.getCuboid();
-        if (cube.getName().equals(cube.getParent())) {
+        if (cube.getName().equals(cube.getParentDeprecated())) {
             cube.setParent(ToolBox.stringToNull("null"));
         }
         PreparedStatement ps = getConnection().prepareStatement(
@@ -227,7 +227,7 @@ public class MysqlData implements BaseData {
         ps.setString(4, "" + cube.isCreeperSecure());
         ps.setString(3, "" + cube.isBlockFireSpread());
         ps.setString(2, "" + cube.isAllowedPvp());
-        ps.setString(1, cube.getParent());
+        ps.setString(1, cube.getParentDeprecated());
         ps.executeUpdate();
     }
 
@@ -285,7 +285,7 @@ public class MysqlData implements BaseData {
         ps.setString(4, "" + cube.isCreeperSecure());
         ps.setString(3, "" + cube.isBlockFireSpread());
         ps.setString(2, "" + cube.isAllowedPvp());
-        ps.setString(1, cube.getParent());
+        ps.setString(1, cube.getParentDeprecated());
         ps.executeUpdate();
     }
 
@@ -454,7 +454,7 @@ public class MysqlData implements BaseData {
             if (visited.contains(nodelist.get(i))) {
                 continue;
             }
-            if (nodelist.get(i).getCuboid().getParent() == null) {
+            if (nodelist.get(i).getCuboid().getParentDeprecated() == null) {
                 if (handler.cuboidExists(nodelist.get(i).getName(), nodelist
                         .get(i).getWorld(), nodelist.get(i).getDimension())) {
                     visited.add(nodelist.get(i));
@@ -477,7 +477,7 @@ public class MysqlData implements BaseData {
             if (visited.contains(nodelist.get(i))) {
                 continue;
             }
-            if (nodelist.get(i).getCuboid().getParent() != null) {
+            if (nodelist.get(i).getCuboid().getParentDeprecated() != null) {
                 CuboidNode parent = handler.getCuboidNodeByName(nodelist.get(i)
                         .getParent(), nodelist.get(i).getWorld(),
                         nodelist.get(i).getDimension());

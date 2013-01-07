@@ -1,7 +1,6 @@
 package net.playblack.cuboids;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -11,7 +10,7 @@ import net.playblack.cuboids.datasource.MysqlData;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Cuboid;
-import net.playblack.cuboids.regions.CuboidE;
+import net.playblack.cuboids.regions.Cuboid.Status;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.PropsFile;
 
@@ -48,7 +47,7 @@ public class Config {
     // --- UP TO HERE
     
     // global settings go into this
-    private CuboidE global = new CuboidE();
+    private Cuboid global = new Cuboid();
 
     // Plugin Settings
     private boolean useDoubleAction = false;
@@ -177,29 +176,46 @@ public class Config {
         //default-physics-control
         defaultSettings.put("physics", cuboidSetting.getStatus("default-physics", Cuboid.Status.ALLOW));
 
+        
+        
         // Global Settings
         global.setName("__GLOBAL__");
-        global.setAllowPvp(cuboidSetting
-                .getBoolean("disable-pvp-global", false));
-        global.setCreeperSecure(cuboidSetting.getBoolean(
-                "disable-creeper-secure-global", false));
-        global.setSanctuary(cuboidSetting.getBoolean("sanctuary-global", false));
-        global.setSanctuarySpawnAnimals(cuboidSetting.getBoolean(
-                "sanctuary-animal-spawn-global", true));
-        global.setTntSecure(cuboidSetting
-                .getBoolean("tnt-secure-global", false));
-        global.setBlockFireSpread(cuboidSetting.getBoolean(
-                "firespread-block-global", false));
-        global.setProtection(cuboidSetting.getBoolean("protection-global",
-                false));
-        global.setLavaControl(cuboidSetting.getBoolean("stop-lava-flow-global",
-                false));
-        global.setWaterControl(cuboidSetting.getBoolean(
-                "stop-water-flow-global", false));
-        global.setPhysics(cuboidSetting.getBoolean("physics-control-global",
-                false));
-        global.setEnderControl(cuboidSetting.getBoolean(
-                "enderman-control-global", false));
+        
+        //disable-pvp-global
+        global.setProperty("pvp-damage", cuboidSetting.getStatus("global-pvp-damage", Status.ALLOW));
+        
+        //disable-creeper-secure-global
+        global.setProperty("creeper-explosion", cuboidSetting.getStatus("global-creeper-explosion", Status.ALLOW));
+        
+        //sanctuary-global
+        global.setProperty("mob-damage", cuboidSetting.getStatus("global-mob-damage", Status.ALLOW));
+        
+        //sanctuary-global
+        global.setProperty("mob-spawn", cuboidSetting.getStatus("global-mob-spawn", Status.ALLOW));
+        
+        //sanctuary-animal-spawn-global
+        global.setProperty("animal-spawn", cuboidSetting.getStatus("global-animal-spawn", Status.ALLOW));
+        
+        //tnt-secure-global
+        global.setProperty("tnt-explosion", cuboidSetting.getStatus("global-tnt-explosion", Status.ALLOW));
+        
+        //firespread-block-global
+        global.setProperty("firespread", cuboidSetting.getStatus("global-firespread", Cuboid.Status.ALLOW));
+        
+        //protection-global
+        global.setProperty("protection", cuboidSetting.getStatus("global-protection", Cuboid.Status.DEFAULT));
+        
+        //stop-lava-flow-global
+        global.setProperty("lava-flow", cuboidSetting.getStatus("global-lava-flow", Cuboid.Status.DEFAULT));
+        
+        //stop-lava-flow-global
+        global.setProperty("water-flow", cuboidSetting.getStatus("global-water-flow", Cuboid.Status.DEFAULT));
+        
+        //default-physics-control
+        global.setProperty("physics", cuboidSetting.getStatus("global-physics", Cuboid.Status.ALLOW));
+        
+        //default-enderman-control
+        global.setProperty("enderman-pickup", cuboidSetting.getStatus("global-enderman-pickup", Cuboid.Status.DEFAULT));
 
         String[] itemsList = cuboidSetting.getString("restricted-items", "")
                 .split(",");
@@ -228,7 +244,7 @@ public class Config {
         return instance;
     }
 
-    public void updateGlobalSettings(CuboidE props) {
+    public void updateGlobalSettings(Cuboid props) {
         global = props;
     }
 
@@ -480,7 +496,7 @@ public class Config {
         return flags;
     }
 
-    public CuboidE getGlobalSettings() {
+    public Cuboid getGlobalSettings() {
         return global;
     }
 

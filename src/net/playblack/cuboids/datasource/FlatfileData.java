@@ -181,7 +181,7 @@ public class FlatfileData implements BaseData {
                 if (visited.contains(nodelist.get(i))) {
                     continue;
                 }
-                if (nodelist.get(i).getCuboid().getParent() == null) {
+                if (nodelist.get(i).getCuboid().getParentDeprecated() == null) {
                     if (handler.cuboidExists(nodelist.get(i).getName(),
                             nodelist.get(i).getWorld(), nodelist.get(i)
                                     .getDimension())) {
@@ -205,7 +205,7 @@ public class FlatfileData implements BaseData {
                 if (visited.contains(nodelist.get(i))) {
                     continue;
                 }
-                if (nodelist.get(i).getCuboid().getParent() != null) {
+                if (nodelist.get(i).getCuboid().getParentDeprecated() != null) {
                     CuboidNode parent = handler.getCuboidNodeByName(nodelist
                             .get(i).getParent(), nodelist.get(i).getWorld(),
                             nodelist.get(i).getDimension());
@@ -302,7 +302,7 @@ public class FlatfileData implements BaseData {
         StringBuilder csv = new StringBuilder();
         csv.append(node.getCuboid().getName());
         csv.append(",");
-        csv.append(node.getCuboid().getParent());
+        csv.append(node.getCuboid().getParentDeprecated());
         csv.append(",");
         csv.append(node.getCuboid().getPriority());
         csv.append(",");

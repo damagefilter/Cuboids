@@ -6,7 +6,6 @@ import net.playblack.cuboids.Config;
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.mcutils.EventLogger;
-import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Location;
 
 /**
@@ -27,7 +26,9 @@ public class RegionManager {
     private RegionManager(EventLogger log, BaseData dataSource) {
         this.log = log;
         this.dataSource = dataSource;
-        global = new CuboidNode(Config.getInstance().getGlobalSettings());
+        Cuboid insert = new Cuboid();
+        insert.putAll(Config.getInstance().getGlobalSettings().getAllProperties());
+        global = new CuboidNode(insert);
     }
 
     public static RegionManager getInstance() {
@@ -127,7 +128,7 @@ public class RegionManager {
      * @param cube
      * @return
      */
-    public boolean addCuboid(CuboidE cube) {
+    public boolean addCuboid(Cuboid cube) {
         if (cuboidExists(cube.getName(), cube.getWorld(), cube.getDimension())) {
             log.logMessage("Cuboids2: Cuboid already exists :O", "INFO");
             return false;
@@ -190,7 +191,7 @@ public class RegionManager {
      * 
      * @param root
      */
-    public void addRoot(CuboidE root) {
+    public void addRoot(Cuboid root) {
         rootNodes.add(new CuboidNode(root));
     }
 
@@ -210,7 +211,7 @@ public class RegionManager {
      * @param force
      * @return
      */
-    public String removeCuboid(CuboidE cube, boolean force) {
+    public String removeCuboid(Cuboid cube, boolean force) {
         CuboidNode node = null;
         for (CuboidNode tree : rootNodes) {
             for (CuboidNode n : tree.toList()) {
@@ -237,7 +238,7 @@ public class RegionManager {
             removeNodeFile(node);
             return "REMOVED";
         } else {
-            CuboidNode parent = getCuboidNodeByName(node.getParent(),
+            CuboidNode parent = getCuboidNodeByName(node.getParent().getName(),
                     node.getWorld(), node.getDimension());
             if (parent != null) {
                 if (!parent.getName().equals(node.getName())) {
@@ -279,12 +280,12 @@ public class RegionManager {
             }
         }
         for (CuboidNode tree : workerList) {
-            CuboidE cube = tree.getCuboid();
+            Cuboid cube = tree.getCuboid();
             CuboidNode parent = getPossibleParent(cube);
             // Parent must not be null and also must not have the same name as
             // cube (because then it would be cube)
             if (parent != null && !(parent.getName().equals(cube.getName()))) {
-                cube.setParent(parent.getName());
+                cube.setParent(parent.getCuboid());
                 if (parent.getCuboid().getPriority() < 0) {
                     // prevent negative priorities
                     // It doesn't actually have any implications if the priority
@@ -310,22 +311,20 @@ public class RegionManager {
         CuboidNode parent;
         for (CuboidNode tree : rootNodes) {
             for (CuboidNode node : tree.toList()) {
-                parent = getCuboidNodeByName(node.getParent(), node.getWorld(),
+                parent = getCuboidNodeByName(node.getParent().getName(), node.getWorld(),
                         node.getDimension());
                 if (parent != null) {
                     // Check if the child is truley completely inside its parent
                     if (!node.getCuboid().cuboidIsWithin(parent.getCuboid(),
                             true)) {
                         // If not, remove the parent and set to null
-                        node.getCuboid()
-                                .setParent(ToolBox.stringToNull("null"));
+                        node.getCuboid().setParent(null);
                         node.getCuboid().hasChanged = true;
                         updateCuboidNode(node.getCuboid());
 
                     }
                 } else {
-                    node.getCuboid().setParent(
-                            getPossibleParent(node.getCuboid()).getName());
+                    node.getCuboid().setParent(getPossibleParent(node.getCuboid()).getCuboid());
                     node.getCuboid().hasChanged = true;
                     updateCuboidNode(node.getCuboid());
                 }
@@ -339,7 +338,7 @@ public class RegionManager {
      * @param cube
      * @return
      */
-    public CuboidNode createNode(CuboidE cube) {
+    public CuboidNode createNode(Cuboid cube) {
         return new CuboidNode(cube);
     }
 
@@ -350,7 +349,7 @@ public class RegionManager {
      * @param cube
      * @return
      */
-    public boolean updateCuboidNode(CuboidE cube) {
+    public boolean updateCuboidNode(Cuboid cube) {
         for (CuboidNode tree : rootNodes) {
             if (tree.equalWorlds(cube)) {
                 for (CuboidNode node : tree.toList()) {
@@ -372,8 +371,7 @@ public class RegionManager {
                         // addNode(node);
                         // return true;
                         // }
-                        if (cuboidExists(cube.getParent(), cube.getWorld(),
-                                cube.getDimension())) {
+                        if (cuboidExists(cube.getParent().getName(), cube.getWorld(), cube.getDimension())) {
                             // log.logMessage("Parent Exists, setting data!",
                             // "INFO");
                             node.getCuboid().hasChanged = true;
@@ -395,15 +393,12 @@ public class RegionManager {
                             deleteTree(node.getName());
                         }
                         // log.logMessage("Parent Node has changed!!", "INFO");
-                        if (cuboidExists(cube.getParent(), cube.getWorld(),
-                                cube.getDimension())) {
+                        if (cuboidExists(cube.getParent().getName(), cube.getWorld(), cube.getDimension())) {
                             // log.logMessage("Parent Node has changed!!",
                             // "INFO");
                             removeCuboid(node.getCuboid(), true);
                             CuboidNode newNode = createNode(cube);
-                            CuboidNode parent = getCuboidNodeByName(
-                                    cube.getParent(), cube.getWorld(),
-                                    cube.getDimension());
+                            CuboidNode parent = getCuboidNodeByName(cube.getParent().getName(), cube.getWorld(), cube.getDimension());
                             parent.addChild(newNode);
                             newNode.getCuboid().hasChanged = true;
                             addNode(newNode);
@@ -527,7 +522,7 @@ public class RegionManager {
      * @return
      */
     public void reverseFindChildNodes(CuboidNode node) {
-        CuboidE c = node.getCuboid();
+        Cuboid c = node.getCuboid();
         ArrayList<CuboidNode> childs = new ArrayList<CuboidNode>();
         // System.out.println("Checking for possible childs in "+c.getName());
         for (CuboidNode tree : rootNodes) {
@@ -535,8 +530,8 @@ public class RegionManager {
                 for (CuboidNode n : tree.toList()) {
                     // if(n.getCuboid().isWithin(c.getFirstPoint()) &&
                     // n.getCuboid().isWithin(c.getSecondPoint())) {
-                    if (n.getCuboid().cuboidIsWithin(c.getMajorPoint(),
-                            c.getMinorPoint(), true)) {
+                    if (n.getCuboid().cuboidIsWithin(c.getOrigin(),
+                            c.getOffset(), true)) {
                         // System.out.println(n.getCuboid().getName()+" is within "+c.getName());
                         if (n.getParent() == null) {
                             // System.out.println("We have no parent yet!");
@@ -544,7 +539,7 @@ public class RegionManager {
                                 // System.out.println("Same name, stupid");
                                 continue;
                             }
-                            n.getCuboid().setParent(c.getName());
+                            n.getCuboid().setParent(c);
                             n.getCuboid().hasChanged = true;
                             childs.add(n);
                         }
@@ -566,9 +561,9 @@ public class RegionManager {
      * @param world
      * @return
      */
-    public ArrayList<CuboidE> getCuboidsContaining(Location v,
+    public ArrayList<Cuboid> getCuboidsContaining(Location v,
             String world, int dimension) {
-        ArrayList<CuboidE> list = new ArrayList<CuboidE>();
+        ArrayList<Cuboid> list = new ArrayList<Cuboid>();
         if (v == null) {
             return list;
         }
@@ -649,7 +644,7 @@ public class RegionManager {
      * @param dimension
      * @return
      */
-    public CuboidE getCuboidByName(String name, String world, int dimension) {
+    public Cuboid getCuboidByName(String name, String world, int dimension) {
         for (CuboidNode tree : rootNodes) {
             if (tree.equalWorlds(world, dimension)) {
                 for (CuboidNode node : tree.toList()) {
@@ -669,7 +664,7 @@ public class RegionManager {
      * @param cube
      * @return
      */
-    public CuboidNode getPossibleParent(CuboidE cube) {
+    public CuboidNode getPossibleParent(Cuboid cube) {
         // log.logMessage("Going to find a suitable parent for "+cube.getName(),
         // "INFO");
         ArrayList<CuboidNode> list = new ArrayList<CuboidNode>();

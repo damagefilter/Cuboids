@@ -200,7 +200,7 @@ public class FlatfileDataLegacy implements BaseData {
             // System.out.println("Cuboids2: Processing Node Files ...");
             for (int i = 0; i < nodelist.size(); i++) {
                 // System.out.println("Running: "+i);
-                if (nodelist.get(i).getCuboid().getParent() == null) {
+                if (nodelist.get(i).getCuboid().getParentDeprecated() == null) {
                     if (handler.cuboidExists(nodelist.get(i).getName(),
                             nodelist.get(i).getWorld(), nodelist.get(i)
                                     .getDimension())) {
@@ -224,7 +224,7 @@ public class FlatfileDataLegacy implements BaseData {
             // Sort parents
             // System.out.println("Cuboids2: Parenting Child Nodes");
             for (int i = 0; i < nodelist.size(); i++) {
-                if (nodelist.get(i).getCuboid().getParent() != null) {
+                if (nodelist.get(i).getCuboid().getParentDeprecated() != null) {
                     CuboidNode parent = handler.getCuboidNodeByName(nodelist
                             .get(i).getParent(), nodelist.get(i).getWorld(),
                             nodelist.get(i).getDimension());
@@ -339,7 +339,7 @@ public class FlatfileDataLegacy implements BaseData {
         StringBuilder csv = new StringBuilder();
         csv.append(node.getCuboid().getName());
         csv.append(",");
-        csv.append(node.getCuboid().getParent());
+        csv.append(node.getCuboid().getParentDeprecated());
         csv.append(",");
         csv.append(node.getCuboid().getPriority());
         csv.append(",");
