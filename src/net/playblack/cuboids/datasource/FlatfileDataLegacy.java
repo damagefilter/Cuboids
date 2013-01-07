@@ -401,7 +401,7 @@ public class FlatfileDataLegacy implements BaseData {
         // COMMANDS
         StringBuilder commands = new StringBuilder();
         String clist = "";
-        ArrayList<String> commandsList = node.getCuboid().getTabuCommands();
+        ArrayList<String> commandsList = node.getCuboid().getRestrictedCommands();
         if (commandsList.size() > 0) {
             for (int i = 0; i < commandsList.size(); i++) {
                 commands.append(commandsList.get(i) + ",");

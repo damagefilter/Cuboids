@@ -96,6 +96,7 @@ public class Config {
         allowUndo = pluginSetting.getBoolean("allow-undo", true);
 
         // Enable/Disable plugin features
+        //REMOVE FROM HERE ...
         allowProtection = pluginSetting.getBoolean("allow-protection", true);
         allowCreeperSecure = pluginSetting.getBoolean("allow-creeper-secure",
                 true);
@@ -121,6 +122,7 @@ public class Config {
         allowPhysics = pluginSetting.getBoolean("allow-physics-control", true);
         allowEnderControl = pluginSetting.getBoolean("allow-enderman-control",
                 true);
+        //TO HERE ...
         verbose = pluginSetting.getBoolean("verbose", true);
 
         // Default setting for new cuboids

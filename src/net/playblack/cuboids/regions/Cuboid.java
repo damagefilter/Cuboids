@@ -3,7 +3,10 @@ package net.playblack.cuboids.regions;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Location;
+import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
 /**
@@ -55,6 +58,13 @@ public class Cuboid extends Region{
     
     private Vector origin;
     private Vector offset;
+    
+    /** Welcome / Farewell messages to display*/
+    private String welcome, farewell;
+    /** List of commands that should be denied in this area */
+    private ArrayList<String> restrictedCommands = new ArrayList<String>();
+    /** List of restricted item IDs */
+    private ArrayList<Integer> restrictedItems = new ArrayList<Integer>();
     
     public Cuboid() {
         properties = new HashMap<String, Status>();
@@ -397,6 +407,215 @@ public class Cuboid extends Region{
         }
     }
     
+    /**
+     * Check if a given player is the owner of this cuboid. That is to say, if
+     * his name is inside the list of players as o:.
+     * 
+     * @param player
+     * @return True if player is allowed, false otherwise
+     */
+    public boolean playerIsOwner(String player) {
+        for (String listPlayer : players) {
+            if (listPlayer.equalsIgnoreCase("o:" + player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    /**
+     * Add a commands to the list of tabu commands.
+     * 
+     * @param command
+     *            String
+     */
+    public void addRestrictedCommand(String command) {
+        if (!command.equalsIgnoreCase("no_commands")) {
+            if (command.indexOf(",") >= 0) {
+                addRestrictedCommand(command.split(","));
+            } else {
+                restrictedCommands.add(command);
+            }
+        }
+    }
+
+    /**
+     * Add a couple of commands to the list of tabu commands.
+     * 
+     * @param commands
+     *            Array
+     */
+    public void addRestrictedCommand(String[] commands) {
+        for (int i = 0; i < commands.length; i++) {
+            if (!commands[i].equalsIgnoreCase("no_commands")) {
+                restrictedCommands.add(commands[i]);
+            }
+        }
+
+    }
+
+    /**
+     * Remove a commands to the list of tabu commands.
+     * 
+     * @param command
+     *            String
+     */
+    public void removeRestrictedCommand(String command) {
+        if (restrictedCommands.contains(command)) {
+            restrictedCommands.remove(command);
+        }
+    }
+
+    /**
+     * Return the arraylist containing restricted commands
+     * 
+     * @return
+     */
+    public ArrayList<String> getRestrictedCommands() {
+        return this.restrictedCommands;
+    }
+
+    public boolean commandIsRestricted(String command) {
+        if (restrictedCommands.contains(command)
+                || restrictedCommands.contains(command.substring(1))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Add items to regions restricted items list
+     * 
+     * @param id
+     */
+    public void addRestrictedItem(int id) {
+        if (id < 0) {
+            return;
+        }
+        restrictedItems.add(Integer.valueOf(id));
+    }
+
+    /**
+     * Add one or more comma seperated items from string to the restricted items
+     * list
+     * 
+     * @param items
+     */
+    public void addRestrictedItem(String items) {
+        if (items == null) {
+            return;
+        }
+        if (items.contains(",")) {
+            String[] itemList = items.split(",");
+            for (String item : itemList) {
+                addRestrictedItem(ToolBox.parseInt(item));
+            }
+        }
+        addRestrictedItem(ToolBox.parseInt(items));
+    }
+
+    /**
+     * Remove items to regions restricted items list
+     * 
+     * @param id
+     */
+    public void removeRestrictedItem(int id) {
+        restrictedItems.remove(Integer.valueOf(id));
+    }
+
+    /**
+     * Check if item is restricted
+     * 
+     * @param id
+     * @return true if item is restricted, false otherwise
+     */
+    public boolean isItemRestricted(int id) {
+        if (restrictedItems.contains(Integer.valueOf(id))) {
+            return true;
+        }
+        return false;
+    }
+
+    public ArrayList<Integer> getRestrictedItems() {
+        return restrictedItems;
+    }
+
+    /**
+     * Check if a given player is allowed in this cuboid. This also checks for
+     * the player group and the player name
+     * 
+     * @param player
+     * @return True if player is allowed, false otherwise
+     */
+    public boolean playerIsAllowed(String player, String[] group) {
+        for (String groupname : group) {
+            if (groups.contains(groupname)) {
+                return true;
+            }
+        }
+        for (int i = 0; i < group.length; i++) {
+            if (groups.contains(group[i].toLowerCase())) {
+                return true;
+            } else if (groups.contains("g:" + group[i].toLowerCase())) {
+                return true;
+            }
+        }
+        for (String listPlayer : players) {
+            if (listPlayer.equalsIgnoreCase(player)
+                    || listPlayer.equalsIgnoreCase("o:" + player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public String getPlayerList() {
+        StringBuilder players = new StringBuilder();
+        for (int i = 0; i < this.players.size(); i++) {
+            if (i > 0) {
+                players.append(",");
+            }
+            players.append(this.players.get(i));
+        }
+        String out = players.toString();
+        if (out.length() == 0) {
+            return "no_players";
+        } else {
+            return out;
+        }
+    }
+    
+    public String getGroupList() {
+        StringBuilder groups = new StringBuilder();
+        for (int i = 0; i < this.groups.size(); i++) {
+            if (i > 0) {
+                groups.append(",");
+            }
+            groups.append(this.groups.get(i));
+        }
+        String out = groups.toString();
+        if (out.length() == 0) {
+            return "no_groups";
+        } else {
+            return out;
+        }
+    }
+    
+    public String getItemListAsNames() {
+        StringBuilder items = new StringBuilder();
+        for (Integer i : restrictedItems) {
+            items.append(CServer.getServer().getItemName(i.intValue())).append(
+                    ",");
+        }
+        if (items.length() == 0) {
+            return "";
+        }
+        return items.toString();
+    }
+    
+    
     /* ************************************************
      * 
      * GETTER / SETTER STUFF
@@ -435,4 +654,49 @@ public class Cuboid extends Region{
         this.origin = origin;
         this.offset = offset;
     }
+
+    /**
+     * @return the welcome
+     */
+    public String getWelcome() {
+        return welcome;
+    }
+
+    /**
+     * @param welcome the welcome to set
+     */
+    public void setWelcome(String welcome) {
+        this.welcome = welcome;
+    }
+
+    /**
+     * @return the farewell
+     */
+    public String getFarewell() {
+        return farewell;
+    }
+
+    /**
+     * @param farewell the farewell to set
+     */
+    public void setFarewell(String farewell) {
+        this.farewell = farewell;
+    }
+
+    public String getFlagList() {
+        StringBuilder builder = new StringBuilder();
+        int count = 0;
+        for(String key : properties.keySet()) {
+            if(count <= 3) {
+                builder.append(ColorManager.Rose).append(key).append(": ").append(ColorManager.LightGreen).append(properties.get(key).name());
+            }
+            else {
+                count = 0;
+                builder.append(";");
+                
+            }
+        }
+        return builder.toString();
+    }
+
 }
