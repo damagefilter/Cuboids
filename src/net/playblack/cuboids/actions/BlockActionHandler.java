@@ -12,7 +12,7 @@ import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Vector;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 public class BlockActionHandler {
     private static HashMap<String, Boolean> setOffsetList = new HashMap<String, Boolean>();
@@ -25,7 +25,7 @@ public class BlockActionHandler {
      * @return True if player can, false otherwise
      */
     public static boolean handleOperableItems(CPlayer player,
-            WorldLocation position, int itemId) {
+            Location position, int itemId) {
         if (player.hasPermission("cIgnoreRestrictions")) {
             return true;
         }
@@ -49,7 +49,7 @@ public class BlockActionHandler {
      * @return
      */
     public static boolean handleBucketPlacement(CPlayer player,
-            WorldLocation position) {
+            Location position) {
         return CuboidInterface.getInstance().isLiquidControlled(player,
                 position);
     }
@@ -61,7 +61,7 @@ public class BlockActionHandler {
      * @param position
      * @return True if so, false otherwise
      */
-    public static boolean handleLighter(CPlayer player, WorldLocation position) {
+    public static boolean handleLighter(CPlayer player, Location position) {
         if (player.hasPermission("cIgnoreRestrictions")
                 || CuboidInterface.getInstance().canStartFire(player, position)) {
             return true;
@@ -76,7 +76,7 @@ public class BlockActionHandler {
      * @param world
      * @return
      */
-    public static boolean handleFirespread(WorldLocation position, CWorld world) {
+    public static boolean handleFirespread(Location position, CWorld world) {
         return CuboidInterface.getInstance().isFireProof(position);
     }
 
@@ -87,7 +87,7 @@ public class BlockActionHandler {
      * @param point
      */
     private static boolean setFixedPointSingleAction(CPlayer player,
-            WorldLocation point) {
+            Location point) {
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cselect")) {
                 // MessageSystem.getInstance().failMessage(player,
@@ -162,7 +162,7 @@ public class BlockActionHandler {
      *            has NO EFFECT if double action tool is disabled!
      * @return false if no points had to be set!
      */
-    public static boolean handleSetPoints(CPlayer player, WorldLocation point,
+    public static boolean handleSetPoints(CPlayer player, Location point,
             boolean setOffset, boolean remote) {
         if ((player.getItemInHand().getId() == Config.getInstance()
                 .getRegionItem()) && !remote) {
@@ -201,7 +201,7 @@ public class BlockActionHandler {
      * @param player
      * @param position
      */
-    public static void explainPosition(CPlayer player, WorldLocation position) {
+    public static void explainPosition(CPlayer player, Location position) {
         if (player.getItemInHand().getId() == Config.getInstance()
                 .getInspectorItem()) {
             CuboidInterface.getInstance().explainCuboid(player, position);
@@ -215,7 +215,7 @@ public class BlockActionHandler {
      * @param position
      * @return True if explosion must be stopped
      */
-    public static boolean handleExplosions(int status, WorldLocation position) {
+    public static boolean handleExplosions(int status, Location position) {
         // 1 = tnt, 2 = creeper
         CuboidInterface ci = CuboidInterface.getInstance();
         if ((status == 1) && ci.isTntSecure(position)) {
@@ -237,7 +237,7 @@ public class BlockActionHandler {
      *            this case
      * @return True if position can ignite, false otherwise
      */
-    public static boolean handleIgnition(CPlayer player, WorldLocation v,
+    public static boolean handleIgnition(CPlayer player, Location v,
             int blockStatus) {
         CuboidInterface ci = CuboidInterface.getInstance();
         if (blockStatus == 2) { // lighter shall be 2
@@ -254,7 +254,7 @@ public class BlockActionHandler {
      * @param world
      * @return false if block can flow
      */
-    public static boolean handleFlow(CBlock block, WorldLocation v) {
+    public static boolean handleFlow(CBlock block, Location v) {
         return !CuboidInterface.getInstance().hasFlowControl(block, v);
     }
 
@@ -267,7 +267,7 @@ public class BlockActionHandler {
      *            if this is not snd or gravel this method will return false
      * @return
      */
-    public static boolean handlePhysics(WorldLocation position, CWorld world,
+    public static boolean handlePhysics(Location position, CWorld world,
             int blockId) {
         if ((blockId == 12) || (blockId == 13)) {
             return CuboidInterface.getInstance().isPhysicsControlled(position,
@@ -284,7 +284,7 @@ public class BlockActionHandler {
      * @param blockId
      * @return
      */
-    public static boolean handleEndermanPickup(WorldLocation position) {
+    public static boolean handleEndermanPickup(Location position) {
         return CuboidInterface.getInstance().isEnderControlled(position);
     }
 
@@ -296,7 +296,7 @@ public class BlockActionHandler {
      * @param type
      * @return
      */
-    public static boolean handleFarmland(WorldLocation point, CWorld world,
+    public static boolean handleFarmland(Location point, CWorld world,
             int type, int newType) {
         if (type == 60) {
             if (newType != 60) {

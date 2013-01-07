@@ -7,7 +7,7 @@ import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 /**
  * This manages CuboidNodes and takes care of lookups etc
@@ -479,7 +479,7 @@ public class RegionManager {
      *            passed along
      * @return
      */
-    public CuboidNode getActiveCuboid(WorldLocation v, boolean ignoreGlobal) {
+    public CuboidNode getActiveCuboid(Location v, boolean ignoreGlobal) {
         nodeList.clear();
         if (v == null) {
             return global;
@@ -566,7 +566,7 @@ public class RegionManager {
      * @param world
      * @return
      */
-    public ArrayList<CuboidE> getCuboidsContaining(WorldLocation v,
+    public ArrayList<CuboidE> getCuboidsContaining(Location v,
             String world, int dimension) {
         ArrayList<CuboidE> list = new ArrayList<CuboidE>();
         if (v == null) {
@@ -588,6 +588,13 @@ public class RegionManager {
         }
         return list;
     }
+    
+//    public boolean canCreateCuboid(CuboidSelection selection, String playerName, CWorld world) {
+//        Vector v1 = selection.getOrigin();
+//        Vector v2 = selection.getOffset();
+//        CuboidNode activeOrigin = getActiveCuboid(new Location(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ(), world.getDimension(), world.getName()), true);
+//        return false;
+//    }
 
     /**
      * Get a list of all cuboids in the given world
@@ -728,7 +735,7 @@ public class RegionManager {
      * @param playerName
      * @param loc
      */
-    public void removeFromAllAreas(String player, WorldLocation loc) {
+    public void removeFromAllAreas(String player, Location loc) {
         for (CuboidNode tree : rootNodes) {
             if (!tree.getWorld().equals(loc.getWorld())
                     || tree.getDimension() != loc.getDimension()) {

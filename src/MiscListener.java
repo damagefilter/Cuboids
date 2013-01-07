@@ -4,7 +4,7 @@ import net.playblack.cuboids.actions.MiscHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidInterface;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 public class MiscListener extends PluginListener {
 
@@ -37,7 +37,7 @@ public class MiscListener extends PluginListener {
     @Override
     public boolean onEndermanPickup(Enderman entity, Block b) {
         World world = entity.getWorld();
-        return BlockActionHandler.handleEndermanPickup(new WorldLocation(b
+        return BlockActionHandler.handleEndermanPickup(new Location(b
                 .getX(), b.getY(), b.getZ(), world.getType().getId(), world
                 .getName()));
     }

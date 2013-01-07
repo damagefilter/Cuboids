@@ -1,7 +1,7 @@
 # Cuboids 2
 ### Area protection and World Editing Plugin for CanaryMod and soon Canary Creeper (CanaryMod recode project)
 
-Copyright (c) 2011, Christoph Ksoll/PlayBlack
+Copyright (c) 2013, PlayBlack
 
 All rights reserved.
 
@@ -19,11 +19,11 @@ modification, are permitted provided that the following conditions are met:
    must display the following acknowledgement:
    This product includes software developed by the PlayBlack.
    
-4. Neither the name of PlayBlack/Christoph Ksoll nor the
+4. Neither the name of PlayBlack nor the
    names of its contributors may be used to endorse or promote products
    derived from this software without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY CHRISTOPH KSOLL ''AS IS'' AND ANY
+THIS SOFTWARE IS PROVIDED BY PLAYBLACK ''AS IS'' AND ANY
 EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED. IN NO EVENT SHALL CHRISTOPH KSOLL BE LIABLE FOR ANY

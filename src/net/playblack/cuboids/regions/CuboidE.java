@@ -6,7 +6,7 @@ import java.util.HashMap;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 /**
  * CuboidE is a complete re-write of Cuboid Storage and is derived from the old
@@ -15,7 +15,8 @@ import net.playblack.mcutils.WorldLocation;
  * 
  * @author Chris Ksoll
  */
-public class CuboidE {
+@Deprecated
+public class CuboidE implements Region {
     /*
      * Some setting things
      */
@@ -105,7 +106,6 @@ public class CuboidE {
     }
 
     public CuboidE() {
-
     }
 
     /*
@@ -924,7 +924,7 @@ public class CuboidE {
      * @param v
      * @return True: Point is within this cuboid, false otherwise
      */
-    public boolean isWithin(WorldLocation v) {
+    public boolean isWithin(Location v) {
         if (!v.getWorld().equals(this.world)
                 || !(v.getDimension() == this.dimension)) {
             return false;

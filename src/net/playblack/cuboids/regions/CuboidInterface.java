@@ -20,7 +20,7 @@ import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 /**
  * This accesses RegionManager and handles actions that would and can happen
@@ -720,7 +720,7 @@ public class CuboidInterface {
      * @param player
      * @param location
      */
-    public void addPlayerWithin(CPlayer player, WorldLocation location) {
+    public void addPlayerWithin(CPlayer player, Location location) {
         ArrayList<CuboidE> nodes = regions.getCuboidsContaining(location,
                 player.getWorld().getName(), player.getWorld().getDimension());
         for (CuboidE cube : nodes) {
@@ -754,8 +754,8 @@ public class CuboidInterface {
      * @param vFrom
      * @param vTo
      */
-    public void removePlayerWithin(CPlayer player, WorldLocation vFrom,
-            WorldLocation vTo) {
+    public void removePlayerWithin(CPlayer player, Location vFrom,
+            Location vTo) {
         ArrayList<CuboidE> cubesFrom = regions.getCuboidsContaining(vFrom,
                 vFrom.getWorld(), vFrom.getDimension());
         ArrayList<CuboidE> cubesTo = regions.getCuboidsContaining(vTo,
@@ -809,7 +809,7 @@ public class CuboidInterface {
      * @param position
      * @return true if can modify, false otherwise
      */
-    public boolean canModifyBlock(CPlayer player, WorldLocation position) {
+    public boolean canModifyBlock(CPlayer player, Location position) {
         if (player.hasPermission("cIgnoreRestrictions")) {
             return true;
         }
@@ -836,7 +836,7 @@ public class CuboidInterface {
      * @param block
      * @return
      */
-    public boolean canEnter(CPlayer player, WorldLocation block) {
+    public boolean canEnter(CPlayer player, Location block) {
         if (player.hasPermission("cIgnoreRestrictions")) {
             return true;
         }
@@ -860,7 +860,7 @@ public class CuboidInterface {
      * @param world
      * @return True if there is flow control, false otherwise
      */
-    public boolean hasFlowControl(CBlock block, WorldLocation v) {
+    public boolean hasFlowControl(CBlock block, Location v) {
         CuboidE cube = regions.getActiveCuboid(v, false).getCuboid();
         // LAVA
         if (block.getType() == 10 || block.getType() == 11) {
@@ -928,7 +928,7 @@ public class CuboidInterface {
      * @param item
      * @return False if player can place bucket, false otherwise
      */
-    public boolean isLiquidControlled(CPlayer player, WorldLocation v) {
+    public boolean isLiquidControlled(CPlayer player, Location v) {
         if (player.hasPermission("cIgnoreRestrictions")) {
             return false;
         }
@@ -943,7 +943,7 @@ public class CuboidInterface {
      * @param v
      * @return
      */
-    public boolean canStartFire(CPlayer player, WorldLocation v) {
+    public boolean canStartFire(CPlayer player, Location v) {
         if (player.hasPermission("cIgnoreRestrictions")) {
             return true;
         }
@@ -970,17 +970,17 @@ public class CuboidInterface {
      * @param world
      * @return
      */
-    public boolean isFireProof(WorldLocation position) {
+    public boolean isFireProof(Location position) {
         CuboidE cube = regions.getActiveCuboid(position, false).getCuboid();
         return cube.isBlockFireSpread();
     }
 
-    public boolean isCreeperSecure(WorldLocation position) {
+    public boolean isCreeperSecure(Location position) {
         CuboidE cube = regions.getActiveCuboid(position, false).getCuboid();
         return cube.isCreeperSecure();
     }
 
-    public boolean isTntSecure(WorldLocation position) {
+    public boolean isTntSecure(Location position) {
         CuboidE cube = regions.getActiveCuboid(position, false).getCuboid();
         return cube.isTntSecure();
     }
@@ -990,37 +990,37 @@ public class CuboidInterface {
         return cube.getCuboid().sanctuarySpawnAnimals();
     }
 
-    public boolean isSanctuary(WorldLocation position) {
+    public boolean isSanctuary(Location position) {
         CuboidE cube = regions.getActiveCuboid(position, false).getCuboid();
         return cube.isSanctuary();
     }
 
-    public boolean isPvpEnabled(WorldLocation position) {
+    public boolean isPvpEnabled(Location position) {
         CuboidE cube = regions.getActiveCuboid(position, false).getCuboid();
         return cube.isAllowedPvp();
     }
 
-    public boolean isCreative(WorldLocation position) {
+    public boolean isCreative(Location position) {
         CuboidE cube = regions.getActiveCuboid(position, false).getCuboid();
         return cube.isFreeBuild();
     }
 
-    public boolean isPhysicsControlled(WorldLocation position, CWorld world) {
+    public boolean isPhysicsControlled(Location position, CWorld world) {
         CuboidE cube = regions.getActiveCuboid(position, false).getCuboid();
         return cube.isPhysicsDisabled();
     }
 
-    public boolean isEnderControlled(WorldLocation position) {
+    public boolean isEnderControlled(Location position) {
         CuboidE cube = regions.getActiveCuboid(position, false).getCuboid();
         return cube.hasEnderControl();
     }
 
-    public boolean isFarmland(WorldLocation position) {
+    public boolean isFarmland(Location position) {
         CuboidE cube = regions.getActiveCuboid(position, false).getCuboid();
         return cube.isFarmland();
     }
 
-    public boolean playerIsAllowed(CPlayer player, WorldLocation position) {
+    public boolean playerIsAllowed(CPlayer player, Location position) {
         CuboidNode node = regions.getActiveCuboid(position, true);
         if (node == null) {
             return true;
@@ -1036,7 +1036,7 @@ public class CuboidInterface {
      * @param itemId
      * @return true if restricted, false otherwise
      */
-    public boolean itemIsRestricted(WorldLocation position, int itemId) {
+    public boolean itemIsRestricted(Location position, int itemId) {
         CuboidNode cube = regions.getActiveCuboid(position, true);
         if (cube == null) {
             return false;
@@ -1479,7 +1479,7 @@ public class CuboidInterface {
      * @param player
      * @param position
      */
-    public void explainCuboid(CPlayer player, WorldLocation position) {
+    public void explainCuboid(CPlayer player, Location position) {
         CuboidNode node = regions.getActiveCuboid(position, true);
 
         if (node != null) {

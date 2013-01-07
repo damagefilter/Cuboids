@@ -1,13 +1,16 @@
 package net.playblack.cuboids;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.FlatfileData;
 import net.playblack.cuboids.datasource.MysqlData;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.cuboids.regions.Cuboid;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.PropsFile;
@@ -20,10 +23,10 @@ import net.playblack.mcutils.PropsFile;
  */
 public class Config {
     private String name = "Cuboids2";
-    private String version = "2.3.2";
+    private String version = "3.0.0";
     private boolean verbose = false;
 
-    // allow specific parts of the plugin:
+    // --- REMOVE THOSE
     private boolean allowProtection = true;
     private boolean allowCreeperSecure = true;
     private boolean allowSanctuary = true;
@@ -42,7 +45,9 @@ public class Config {
     private boolean allowFarewell = false;
     private boolean allowPhysics = false;
     private boolean allowEnderControl = false;
-    // global area settings go into this
+    // --- UP TO HERE
+    
+    // global settings go into this
     private CuboidE global = new CuboidE();
 
     // Plugin Settings
@@ -65,9 +70,9 @@ public class Config {
     private boolean allowUndo = false;
 
     // Cuboids Default Settings
-    CuboidE defaultSettings = new CuboidE();
+    HashMap<String, Cuboid.Status> defaultSettings = new HashMap<String, Cuboid.Status>();
 
-    ArrayList<Integer> restritedItems;
+    ArrayList<Integer> restrictedItems;
 
     private static Config instance = null;
 
@@ -120,38 +125,57 @@ public class Config {
         verbose = pluginSetting.getBoolean("verbose", true);
 
         // Default setting for new cuboids
-        defaultSettings.setCreeperSecure(cuboidSetting.getBoolean(
-                "default-creeper-secure", true));
-        defaultSettings.setSanctuary(cuboidSetting.getBoolean(
-                "default-sanctuary", false));
-        defaultSettings.setSanctuarySpawnAnimals(cuboidSetting.getBoolean(
-                "default-sanctuary-animal-spawn", true));
-        defaultSettings.setHealing(cuboidSetting.getBoolean("default-healing",
-                false));
-        defaultSettings.setAllowPvp(cuboidSetting.getBoolean(
-                "default-pvp-allowed", true));
-        defaultSettings.setProtection(cuboidSetting.getBoolean(
-                "default-protection", true));
-        defaultSettings.setFreeBuild(cuboidSetting.getBoolean(
-                "default-freebuild", false));
-        defaultSettings.setBlockFireSpread(cuboidSetting.getBoolean(
-                "default-firespread-block", true));
-        defaultSettings.setLavaControl(cuboidSetting.getBoolean(
-                "default-stop-lava-flow", false));
-        defaultSettings.setWaterControl(cuboidSetting.getBoolean(
-                "default-stop-water-flow", false));
-        defaultSettings.setFarmland(cuboidSetting.getBoolean(
-                "default-farmland", false));
-        defaultSettings.setTntSecure(cuboidSetting.getBoolean(
-                "default-tnt-secure", false));
-        defaultSettings.setRestriction(cuboidSetting.getBoolean(
-                "default-restriction", false));
-        defaultSettings
-                .sethMob(cuboidSetting.getBoolean("default-hmob", false));
-        defaultSettings.setEnderControl(cuboidSetting.getBoolean(
-                "default-enderman-control", false));
-        defaultSettings.setPhysics(cuboidSetting.getBoolean(
-                "default-physics-control", false));
+        
+        //default-creeper-secure
+        defaultSettings.put("creeper-explosion", cuboidSetting.getStatus("default-creeper-explosion", Cuboid.Status.DENY));
+        
+        //default-sanctuary
+        defaultSettings.put("mob-damage", cuboidSetting.getStatus("default-mob-damage", Cuboid.Status.ALLOW));
+        
+        //default sanctuary too
+        defaultSettings.put("mob-spawn", cuboidSetting.getStatus("default-mob-spawn", Cuboid.Status.ALLOW));
+        
+        //default-sanctuary-animal-spawn
+        defaultSettings.put("animal-spawn", cuboidSetting.getStatus("default-animal-spawn", Cuboid.Status.ALLOW));
+        
+        //default-healing
+        defaultSettings.put("healing", cuboidSetting.getStatus("default-healing", Cuboid.Status.DENY));
+        
+        //default-pvp-allowed
+        defaultSettings.put("pvp-damage", cuboidSetting.getStatus("default-pvp-damage", Cuboid.Status.ALLOW));
+        
+        //default-protection
+        defaultSettings.put("protection", cuboidSetting.getStatus("default-protection", Cuboid.Status.ALLOW));
+
+        //default-freebuild
+        defaultSettings.put("creative", cuboidSetting.getStatus("default-creative", Cuboid.Status.DENY));
+        
+        //default-firespread-block
+        defaultSettings.put("firespread", cuboidSetting.getStatus("default-firespread", Cuboid.Status.ALLOW));
+        
+        //default-stop-lava-flow
+        defaultSettings.put("lava-flow", cuboidSetting.getStatus("default-lava-flow", Cuboid.Status.ALLOW));
+        
+        //default-stop-water-flow
+        defaultSettings.put("water-flow", cuboidSetting.getStatus("default-water-flow", Cuboid.Status.ALLOW));
+        
+        //default-farmland
+        defaultSettings.put("crops-trampling", cuboidSetting.getStatus("default-crops-trampling", Cuboid.Status.DENY));
+        
+        //default-tnt-secure
+        defaultSettings.put("tnt-explosion", cuboidSetting.getStatus("default-tnt-explosion", Cuboid.Status.ALLOW));
+        
+        //default-restriction
+        defaultSettings.put("enter-cuboid", cuboidSetting.getStatus("default-enter-cuboid", Cuboid.Status.ALLOW));
+        
+        //default-hmob
+        defaultSettings.put("more-mobs", cuboidSetting.getStatus("default-more-mobs", Cuboid.Status.DENY));
+
+        //default-enderman-control
+        defaultSettings.put("enderman-pickup", cuboidSetting.getStatus("default-enderman-pickup", Cuboid.Status.DENY));
+        
+        //default-physics-control
+        defaultSettings.put("physics", cuboidSetting.getStatus("default-physics", Cuboid.Status.ALLOW));
 
         // Global Settings
         global.setName("__GLOBAL__");
@@ -179,11 +203,11 @@ public class Config {
 
         String[] itemsList = cuboidSetting.getString("restricted-items", "")
                 .split(",");
-        restritedItems = new ArrayList<Integer>(itemsList.length);
+        restrictedItems = new ArrayList<Integer>(itemsList.length);
         for (String i : itemsList) {
             int a = CServer.getServer().getItemId(i);
             if (a >= 0) {
-                restritedItems.add(a);
+                restrictedItems.add(a);
             }
         }
 
@@ -441,151 +465,18 @@ public class Config {
         return allowEnderControl;
     }
 
-    public CuboidE getDefaultCuboidSetting(CPlayer player) {
-        CuboidE flags = new CuboidE();
-        // PVP
-        if (allowPvp
-                && (player.hasPermission("cpvp") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setAllowPvp(defaultSettings.isAllowedPvp());
-        } else {
-            flags.setAllowPvp(true);
+    public Cuboid getDefaultCuboidSetting(CPlayer player) {
+        Cuboid flags = new Cuboid();
+        HashMap<String, Cuboid.Status> temp = new HashMap<String, Cuboid.Status>(defaultSettings);
+        Iterator<String> it = temp.keySet().iterator();
+        
+        while(it.hasNext()) {
+            String key = it.next();
+            if(!player.hasPermission(key)) {
+                it.remove();
+            }
         }
-
-        // CREEPER
-        if (allowCreeperSecure
-                && (player.hasPermission("ccreeper") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setCreeperSecure(defaultSettings.isCreeperSecure());
-        } else {
-            flags.setCreeperSecure(false);
-        }
-
-        // HEALING
-        if (allowHealing
-                && (player.hasPermission("cheal") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setHealing(defaultSettings.isHealingArea());
-        } else {
-            flags.setHealing(false);
-        }
-
-        // PROTECTION
-        if (allowProtection
-                && (player.hasPermission("cprotection") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setProtection(defaultSettings.isProtected());
-        } else {
-            flags.setProtection(false);
-        }
-
-        // SANCTUARY
-        if (allowSanctuary
-                && (player.hasPermission("csanctuary") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setSanctuary(defaultSettings.isSanctuary());
-        } else {
-            flags.setSanctuary(false);
-        }
-
-        // SANCTUARY ANIMAL THING
-        if (allowSanctuarySpawnAnimals
-                && (player.hasPermission("csanctuary") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setSanctuarySpawnAnimals(defaultSettings
-                    .sanctuarySpawnAnimals());
-        } else {
-            flags.setSanctuarySpawnAnimals(true);
-        }
-
-        // FREEBUILD
-        if (allowFreebuild
-                && (player.hasPermission("cfreebuild") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setFreeBuild(defaultSettings.isFreeBuild());
-        } else {
-            flags.setFreeBuild(false);
-        }
-
-        // FIRESPREAD
-        if (allowFireSpreadBlock
-                && (player.hasPermission("cfirespread") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setBlockFireSpread(defaultSettings.isBlockFireSpread());
-        } else {
-            flags.setBlockFireSpread(false);
-        }
-
-        // LAVA CONTROL
-        if (allowLavaControl
-                && (player.hasPermission("cliquids") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setLavaControl(defaultSettings.isLavaControl());
-        } else {
-            flags.setLavaControl(false);
-        }
-
-        // WATER CONTROL
-        if (allowWaterControl
-                && (player.hasPermission("cliquids") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setWaterControl(defaultSettings.isWaterControl());
-        } else {
-            flags.setWaterControl(false);
-        }
-
-        // TNT SECURE
-        if (allowTntSecure
-                && (player.hasPermission("ctnt") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setTntSecure(defaultSettings.isTntSecure());
-        } else {
-            flags.setTntSecure(false);
-        }
-
-        // FARMLAND
-        if (allowFarmland
-                && (player.hasPermission("cfarmland") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setFarmland(defaultSettings.isFarmland());
-        } else {
-            flags.setFarmland(false);
-        }
-
-        // RESTRICTION
-        if (allowRestriction
-                && (player.hasPermission("crestriction") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setRestriction(defaultSettings.isRestricted());
-        } else {
-            flags.setRestriction(false);
-        }
-
-        // HMOBS
-        if (allowHmobs
-                && (player.hasPermission("chmob") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.sethMob(defaultSettings.ishMob());
-        } else {
-            flags.sethMob(false);
-        }
-
-        // PHYSICS
-        if (allowPhysics
-                && (player.hasPermission("cphysics") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setPhysics(defaultSettings.isPhysicsDisabled());
-        } else {
-            flags.setPhysics(false);
-        }
-        // ENDERCONTROL
-        if (allowEnderControl
-                && (player.hasPermission("cendercontrol") || player
-                        .hasPermission("cIgnoreRestrictions"))) {
-            flags.setEnderControl(defaultSettings.hasEnderControl());
-        } else {
-            flags.setEnderControl(false);
-        }
+        flags.putAll(temp);
         return flags;
     }
 
@@ -608,7 +499,7 @@ public class Config {
      * @return
      */
     public boolean itemIsRestricted(int itemId) {
-        return restritedItems.contains(Integer.valueOf(itemId));
+        return restrictedItems.contains(Integer.valueOf(itemId));
     }
 
 }

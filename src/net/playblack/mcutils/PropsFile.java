@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+import net.playblack.cuboids.regions.Cuboid;
+
 /**
  * Custom properties file manager
  * 
@@ -112,6 +114,19 @@ public class PropsFile {
     public String getString(String key, String substitute) {
         if (propsRaw.containsKey(key)) {
             return propsRaw.get(key);
+        }
+        return substitute;
+    }
+    
+    public Cuboid.Status getStatus(String key, Cuboid.Status substitute) {
+        if(propsRaw.containsKey(key)) {
+            boolean value = getBoolean(key, false);
+            if(value == false) {
+                return Cuboid.Status.ALLOW;
+            }
+            else {
+                return Cuboid.Status.DENY;
+            }
         }
         return substitute;
     }

@@ -1,17 +1,17 @@
 package net.playblack.mcutils;
 
-public class WorldLocation extends Vector {
+public class Location extends Vector {
     private String world;
     private int dimension;
 
-    public WorldLocation(int x, int y, int z, String world) {
+    public Location(int x, int y, int z, String world) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.world = world;
     }
 
-    public WorldLocation(int x, int y, int z, int dimension, String world) {
+    public Location(int x, int y, int z, int dimension, String world) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -19,7 +19,7 @@ public class WorldLocation extends Vector {
         this.world = world;
     }
     
-    public WorldLocation(Vector v) {
+    public Location(Vector v) {
         this.x = v.x;
         this.y = v.y;
         this.z = v.z;

@@ -4,7 +4,7 @@ import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.CuboidNode;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 public class PlayerMovementHandler {
 
@@ -14,7 +14,7 @@ public class PlayerMovementHandler {
      * @param player
      */
     public static void handleAreaTrespassing(CPlayer player,
-            WorldLocation origin, WorldLocation target) {
+            Location origin, Location target) {
         if (!CuboidInterface.getInstance().canEnter(player, target)) {
             player.teleportTo(origin);
         }
@@ -28,8 +28,8 @@ public class PlayerMovementHandler {
      * @param isTeleport
      *            True if this was called from a teleport hook
      */
-    public static void handleCuboidAreas(CPlayer player, WorldLocation origin,
-            WorldLocation target, boolean isTeleport) {
+    public static void handleCuboidAreas(CPlayer player, Location origin,
+            Location target, boolean isTeleport) {
         CuboidInterface.getInstance().addPlayerWithin(player, target);
         CuboidInterface.getInstance()
                 .removePlayerWithin(player, origin, target);

@@ -5,7 +5,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.CuboidNode;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Vector;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 public class AreaChecksHook implements CuboidHook {
 
@@ -14,7 +14,7 @@ public class AreaChecksHook implements CuboidHook {
         String mode = (String)args[0];
         CPlayer player = (CPlayer) args[1];
         if(mode.equalsIgnoreCase("CAN_MODIFY")) {
-            WorldLocation loc = new WorldLocation((Vector)args[2]);
+            Location loc = new Location((Vector)args[2]);
             loc.setWorld(player.getWorld().getName());
             loc.setDimension(player.getWorld().getDimension());
             return canModify(player, loc);
@@ -23,7 +23,7 @@ public class AreaChecksHook implements CuboidHook {
             return getAreaName(player);
         }
         else if(mode.equalsIgnoreCase("AREA_GET_NAME_REMOTE")) {
-            WorldLocation loc = new WorldLocation((Vector)args[2]);
+            Location loc = new Location((Vector)args[2]);
             loc.setWorld(player.getWorld().getName());
             loc.setDimension(player.getWorld().getDimension());
             return getAreaName(player, loc);
@@ -31,7 +31,7 @@ public class AreaChecksHook implements CuboidHook {
         return null;
     }
 
-    private Object getAreaName(CPlayer player, WorldLocation position) {
+    private Object getAreaName(CPlayer player, Location position) {
         CuboidNode node = RegionManager.getInstance().getActiveCuboid(position, true);
         if(node == null) {
             return "NO_CUBOID";
@@ -47,7 +47,7 @@ public class AreaChecksHook implements CuboidHook {
         return node.getName();
     }
 
-    private Object canModify(CPlayer player, WorldLocation position) {
+    private Object canModify(CPlayer player, Location position) {
         return Boolean.valueOf(CuboidInterface.getInstance().canModifyBlock(player, position));
     }
 

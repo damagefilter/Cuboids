@@ -1,7 +1,7 @@
 package net.playblack.cuboids.gameinterface;
 
 import net.playblack.mcutils.Vector;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 public interface IBaseEntity {
 
@@ -45,7 +45,7 @@ public interface IBaseEntity {
      * 
      * @return
      */
-    public WorldLocation getLocation();
+    public Location getLocation();
 
     /**
      * Set the position of this entity

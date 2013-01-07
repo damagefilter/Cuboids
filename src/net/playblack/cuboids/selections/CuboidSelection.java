@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.CuboidE;
+import net.playblack.cuboids.regions.Cuboid;
 import net.playblack.mcutils.Vector;
 
 /**
@@ -210,15 +210,15 @@ public class CuboidSelection implements ISelection {
     }
 
     /**
-     * Turn this selection into a CuboidE. The result is a cuboidE object with
+     * Turn this selection into a CuboidE. The result is a cuboid object with
      * the default settings.
      * 
      * @return
      */
-    public CuboidE toCuboid(CPlayer player, String[] playerlist) {
-        CuboidE cube = new CuboidE();
+    public Cuboid toCuboid(CPlayer player, String[] playerlist) {
+        Cuboid cube = new Cuboid();
         String name = null;
-        cube.setPoints(this.origin, this.offset);
+        cube.setBoundingBox(this.origin, this.offset);
         // start at second element for the first would be /highprotect
         for (int i = 1; i < playerlist.length; i++) {
             if (i == (playerlist.length - 1)) { // last element is name!
@@ -235,8 +235,8 @@ public class CuboidSelection implements ISelection {
         }
         cube.setWorld(world);
         cube.setName(name);
-        cube.overwriteProperties(Config.getInstance().getDefaultCuboidSetting(
-                player));
+        cube.putAll(Config.getInstance().getDefaultCuboidSetting(
+                player).getAllProperties());
 
         return cube;
     }

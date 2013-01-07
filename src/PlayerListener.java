@@ -6,7 +6,6 @@ import net.playblack.cuboids.actions.ItemDropHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.WorldLocation;
 
 /**
  * Listens to player events
@@ -36,9 +35,9 @@ public class PlayerListener extends PluginListener {
 
     @Override
     public void onPlayerMove(Player player, Location from, Location to) {
-        WorldLocation vTo = new WorldLocation((int) to.x, (int) to.y,
+        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location((int) to.x, (int) to.y,
                 (int) to.z, to.dimension, to.world);
-        WorldLocation vFrom = new WorldLocation((int) from.x, (int) from.y,
+        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location((int) from.x, (int) from.y,
                 (int) from.z, from.dimension, from.world);
         CPlayer cplayer;
         try {
@@ -58,9 +57,9 @@ public class PlayerListener extends PluginListener {
                 .isChunkLoaded((int) to.x, (int) to.y, (int) to.z)) {
             player.getWorld().loadChunk((int) to.x, (int) to.y, (int) to.z);
         }
-        WorldLocation vTo = new WorldLocation((int) to.x, (int) to.y,
+        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location((int) to.x, (int) to.y,
                 (int) to.z, to.dimension, to.world);
-        WorldLocation vFrom = new WorldLocation((int) from.x, (int) from.y,
+        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location((int) from.x, (int) from.y,
                 (int) from.z, from.dimension, from.world);
         CPlayer cplayer;
         try {
@@ -96,9 +95,8 @@ public class PlayerListener extends PluginListener {
                 }
             } else if (attacker.isMob()) {
                 Player p = defender.getPlayer();
-                return !MiscHandler.handleMobDamage(new WorldLocation((int) p
-                        .getX(), (int) p.getY(), (int) p.getZ(), p.getWorld()
-                        .getType().getId(), p.getWorld().getName()));
+                return !MiscHandler.handleMobDamage(new net.playblack.mcutils.Location((int) p.getX(), (int) p.getY(), (int) p.getZ(), 
+                                                    p.getWorld().getType().getId(), p.getWorld().getName()));
             }
         }
         return false;
@@ -128,16 +126,14 @@ public class PlayerListener extends PluginListener {
             // Fallback
             cplayer = new CanaryPlayer(player);
         }
-        WorldLocation v = new WorldLocation(blockPlaced.getX(),
+        net.playblack.mcutils.Location v = new net.playblack.mcutils.Location(blockPlaced.getX(),
                 blockPlaced.getY(), blockPlaced.getZ(), blockPlaced.getWorld()
                         .getName());
 
         // 25d == flint&steel
         if (item.getItemId() == 259) {
             return !BlockActionHandler.handleLighter(cplayer,
-                    new WorldLocation(blockClicked.getX(), blockClicked.getY(),
-                            blockClicked.getZ(), blockClicked.getWorld()
-                                    .getName()));
+                    new net.playblack.mcutils.Location(blockClicked.getX(), blockClicked.getY(), blockClicked.getZ(), blockClicked.getWorld().getName()));
         }
         // buckets
         if (item.getItemId() == 326 || item.getItemId() == 327) {

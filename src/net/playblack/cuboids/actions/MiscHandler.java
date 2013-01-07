@@ -3,7 +3,7 @@ package net.playblack.cuboids.actions;
 import net.playblack.cuboids.gameinterface.CMob;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 public class MiscHandler {
 
@@ -14,7 +14,7 @@ public class MiscHandler {
      * @param defender
      * @return
      */
-    public static boolean handleMobDamage(WorldLocation position) {
+    public static boolean handleMobDamage(Location position) {
         return !CuboidInterface.getInstance().isSanctuary(position);
     }
 

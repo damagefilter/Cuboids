@@ -8,7 +8,7 @@ import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.regions.CuboidInterface;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 /**
  * Listens to block events events
@@ -22,7 +22,7 @@ public class BlockListener extends PluginListener {
 
     @Override
     public boolean onBlockRightClick(Player player, Block b, Item itemInHand) {
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(),
+        Location p = new Location(b.getX(), b.getY(), b.getZ(),
                 player.getWorld().getType().getId(), player.getWorld()
                         .getName());
         CPlayer cplayer;
@@ -61,7 +61,7 @@ public class BlockListener extends PluginListener {
         if (b == null) {
             return;
         }
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(),
+        Location p = new Location(b.getX(), b.getY(), b.getZ(),
                 player.getWorld().getType().getId(), player.getWorld()
                         .getName());
         BlockActionHandler.handleSetPoints(cplayer, p, false, true);
@@ -71,7 +71,7 @@ public class BlockListener extends PluginListener {
 
     @Override
     public boolean onBlockDestroy(Player player, Block b) {
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(),
+        Location p = new Location(b.getX(), b.getY(), b.getZ(),
                 player.getWorld().getType().getId(), player.getWorld()
                         .getName());
         CPlayer cplayer;
@@ -93,7 +93,7 @@ public class BlockListener extends PluginListener {
 
     @Override
     public boolean onBlockBreak(Player player, Block b) {
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(),
+        Location p = new Location(b.getX(), b.getY(), b.getZ(),
                 player.getWorld().getType().getId(), player.getWorld()
                         .getName());
         CPlayer cplayer;
@@ -110,7 +110,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockPlace(Player player, Block blockPlaced, Block b,
             Item itemInHand) {
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(),
+        Location p = new Location(b.getX(), b.getY(), b.getZ(),
                 player.getWorld().getType().getId(), player.getWorld()
                         .getName());
         CPlayer cplayer;
@@ -126,13 +126,13 @@ public class BlockListener extends PluginListener {
     @SuppressWarnings("rawtypes")
     @Override
     public boolean onExplosion(Block b, BaseEntity e, List blocksaffected) {
-        WorldLocation p = null;
+        Location p = null;
         if(b.getWorld() != null) {
-            p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+            p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
             return BlockActionHandler.handleExplosions(b.getStatus(), p);
         }
         else if(e != null) {
-            p = new WorldLocation(b.getX(), b.getY(), b.getZ(), e.getWorld().getType().getId(), e.getWorld().getName());
+            p = new Location(b.getX(), b.getY(), b.getZ(), e.getWorld().getType().getId(), e.getWorld().getName());
             return BlockActionHandler.handleExplosions(b.getStatus(), p);
         }
         else {
@@ -142,7 +142,7 @@ public class BlockListener extends PluginListener {
 
     @Override
     public boolean onIgnite(Block b, Player player) {
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), b
                 .getWorld().getType().getId(), b.getWorld().getName());
         CPlayer cplayer = null;
         if (player != null) {
@@ -158,7 +158,7 @@ public class BlockListener extends PluginListener {
 
     @Override
     public boolean onFlow(Block b, Block blockTo) {
-        WorldLocation p = new WorldLocation(b.getX(), b.getY(), b.getZ(), b
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), b
                 .getWorld().getType().getId(), b.getWorld().getName());
         CBlock block = new CBlock(b.getType(), b.getData());
         return !BlockActionHandler.handleFlow(block, p);
@@ -167,7 +167,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockPhysics(Block b, boolean placed) {
         return BlockActionHandler.handlePhysics(
-                new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld()
+                new Location(b.getX(), b.getY(), b.getZ(), b.getWorld()
                         .getType().getId(), b.getWorld().getName()),
                 CServer.getServer().getWorld(b.getWorld().getName(),
                         b.getWorld().getType().getId()), b.getType());
@@ -178,7 +178,7 @@ public class BlockListener extends PluginListener {
         CWorld world = CServer.getServer().getWorld(b.getWorld().getName(),
                 b.getWorld().getType().getId());
         return BlockActionHandler.handleFarmland(
-                new WorldLocation(b.getX(), b.getY(), b.getZ(), b.getWorld()
+                new Location(b.getX(), b.getY(), b.getZ(), b.getWorld()
                         .getType().getId(), b.getWorld().getName()), world,
                 b.getType(), newBlockId);
     }

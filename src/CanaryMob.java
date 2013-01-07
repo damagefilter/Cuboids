@@ -2,7 +2,7 @@ import net.playblack.cuboids.gameinterface.CMob;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.mcutils.Vector;
-import net.playblack.mcutils.WorldLocation;
+import net.playblack.mcutils.Location;
 
 /**
  * Implements a CanaryMod Mob
@@ -106,8 +106,8 @@ public class CanaryMob implements CMob {
     }
 
     @Override
-    public WorldLocation getLocation() {
-        return new WorldLocation((int) getX(), (int) getY(), (int) getZ(),
+    public Location getLocation() {
+        return new Location((int) getX(), (int) getY(), (int) getZ(),
                 world.getName());
     }
 

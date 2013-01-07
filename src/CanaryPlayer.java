@@ -2,7 +2,6 @@ import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.mcutils.Vector;
-import net.playblack.mcutils.WorldLocation;
 
 public class CanaryPlayer extends CPlayer {
     Player player;
@@ -169,8 +168,8 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public WorldLocation getLocation() {
-        return new WorldLocation((int) getX(), (int) getY(), (int) getZ(),
+    public net.playblack.mcutils.Location getLocation() {
+        return new net.playblack.mcutils.Location((int) getX(), (int) getY(), (int) getZ(),
                 getWorld().getName());
     }
 
