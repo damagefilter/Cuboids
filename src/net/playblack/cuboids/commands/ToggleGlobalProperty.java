@@ -173,6 +173,6 @@ public class ToggleGlobalProperty extends CBaseCommand {
             return; // prevent config updating - not needed here
         }
         Config.getInstance().updateGlobalSettings(setting);
-        RegionManager.getInstance().updateGlobalSettings();
+        RegionManager.get().updateGlobalSettings();
     }
 }

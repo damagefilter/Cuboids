@@ -44,7 +44,7 @@ public class CuboidInterface {
      * @param log
      */
     private CuboidInterface() {
-        regions = RegionManager.getInstance();
+        regions = RegionManager.get();
         ms = MessageSystem.getInstance();
         Config cfg = Config.getInstance();
         threadManager.scheduleAtFixedRate(new HMobTask(), 20, 20,
@@ -53,7 +53,7 @@ public class CuboidInterface {
                 cfg.getSaveDelay(), cfg.getSaveDelay(), TimeUnit.MINUTES);
     }
 
-    public static CuboidInterface getInstance() {
+    public static CuboidInterface get() {
         if (instance == null) {
             instance = new CuboidInterface();
         }
@@ -280,7 +280,7 @@ public class CuboidInterface {
      * @return true if restricted, false otherwise
      */
     public boolean itemIsRestricted(Location position, int itemId) {
-        CuboidNode cube = regions.getActiveCuboid(position, true);
+        CuboidNode cube = regions.getActiveCuboidNode(position, true);
         if (cube == null) {
             return false;
         }
@@ -301,7 +301,7 @@ public class CuboidInterface {
         // if(player.hasPermission("cIgnoreRestrictions")) {
         // return false;
         // }
-        CuboidNode cube = regions.getActiveCuboid(player.getLocation(), true);
+        CuboidNode cube = regions.getActiveCuboidNode(player.getLocation(), true);
         if (cube == null) {
             return false;
         }
@@ -638,6 +638,10 @@ public class CuboidInterface {
         }
     }
 
+    public boolean canModifyBlock(CPlayer player, Location position) {
+        return false;
+        
+    }
     /**
      * Set the priority of a cuboid
      * 
@@ -719,7 +723,7 @@ public class CuboidInterface {
      * @param position
      */
     public void explainCuboid(CPlayer player, Location position) {
-        CuboidNode node = regions.getActiveCuboid(position, true);
+        CuboidNode node = regions.getActiveCuboidNode(position, true);
 
         if (node != null) {
             Cuboid cube = node.getCuboid();

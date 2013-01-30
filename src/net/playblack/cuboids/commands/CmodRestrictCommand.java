@@ -22,7 +22,7 @@ public class CmodRestrictCommand extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.getInstance().restrictCommand(player, command,
+        CuboidInterface.get().restrictCommand(player, command,
                 command[1]);
     }
 }

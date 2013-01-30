@@ -14,7 +14,7 @@ public class CuboidSaveTask implements Runnable {
     @Override
     public synchronized void run() {
         EventLogger.getInstance().logMessage("Saving nodes", "INFO");
-        RegionManager.getInstance().save(false, false);
+        RegionManager.get().save(false, false);
         EventLogger.getInstance().logMessage(
                 "Next save in " + Config.getInstance().getSaveDelay()
                         + " minutes", "INFO");

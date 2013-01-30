@@ -177,6 +177,9 @@ public class Config {
         
         //default-physics-control
         defaultSettings.put("physics", cuboidSetting.getStatus("default-physics", Cuboid.Status.ALLOW));
+        
+        //switch on/off item restriction
+        defaultSettings.put("restrict-items", cuboidSetting.getStatus("default-restrict-items", Cuboid.Status.DEFAULT));
 
         
         
@@ -218,14 +221,16 @@ public class Config {
         
         //default-enderman-control
         global.setProperty("enderman-pickup", cuboidSetting.getStatus("global-enderman-pickup", Cuboid.Status.DEFAULT));
+        
+      //switch on/off item restriction
+        defaultSettings.put("restrict-items", cuboidSetting.getStatus("global-restrict-items", Cuboid.Status.DEFAULT));
 
-        String[] itemsList = cuboidSetting.getString("restricted-items", "")
-                .split(",");
+        String[] itemsList = cuboidSetting.getString("restricted-items", "").split(",");
         restrictedItems = new ArrayList<Integer>(itemsList.length);
         for (String i : itemsList) {
             int a = CServer.getServer().getItemId(i);
             if (a >= 0) {
-                restrictedItems.add(a);
+                global.addRestrictedItem(a);
             }
         }
 
@@ -233,8 +238,8 @@ public class Config {
         if (dataSource.equalsIgnoreCase("mysql")) {
             sqlConfig = new HashMap<String, String>(3);
             sqlConfig.put("url", dsSetting.getString("sql-url", "localhost"));
-            sqlConfig.put("user", dsSetting.getString("sql-user", "root"));
-            sqlConfig.put("passwd", dsSetting.getString("sql-passwd", "root"));
+            sqlConfig.put("user", dsSetting.getString("sql-user", "hans die"));
+            sqlConfig.put("passwd", dsSetting.getString("sql-passwd", "bratwurst"));
         }
 
     }

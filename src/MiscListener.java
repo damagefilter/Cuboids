@@ -26,7 +26,7 @@ public class MiscListener extends PluginListener {
         } catch (InvalidPlayerException e) {
             cplayer = new CanaryPlayer(player);
         }
-        if (CuboidInterface.getInstance()
+        if (CuboidInterface.get()
                 .commandIsRestricted(cplayer, split[0])) {
             return PluginLoader.HookResult.PREVENT_ACTION;
         } else {

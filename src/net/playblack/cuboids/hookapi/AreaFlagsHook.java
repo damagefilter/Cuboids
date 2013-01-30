@@ -3,7 +3,7 @@ package net.playblack.cuboids.hookapi;
 import java.util.HashMap;
 
 import net.playblack.cuboids.gameinterface.CWorld;
-import net.playblack.cuboids.regions.CuboidE;
+import net.playblack.cuboids.regions.Cuboid;
 import net.playblack.cuboids.regions.RegionManager;
 
 public class AreaFlagsHook implements CuboidHook {
@@ -22,31 +22,34 @@ public class AreaFlagsHook implements CuboidHook {
         return null;
     }
 
-    private Object setFlagValue(CWorld cWorld, String areaName, String flag,
-            Boolean newValue) {
-        CuboidE cube = RegionManager.getInstance().getCuboidByName(areaName,
-                cWorld.getName(), cWorld.getDimension());
-        if (cube == null) {
-            return Boolean.valueOf(false);
-        }
-        if (cube.getFlagListArray().containsKey(flag)) {
-            HashMap<String, Boolean> newList = cube.getFlagListArray();
-            newList.put(flag, newValue);
-            cube.overwriteProperties(newList);
-            cube.hasChanged = true;
-            RegionManager.getInstance().updateCuboidNode(cube);
-            return Boolean.valueOf(true);
-        }
-        return Boolean.valueOf(false);
+    private Object setFlagValue(CWorld cWorld, String areaName, String flag, Boolean newValue) {
+//        Cuboid cube = RegionManager.getInstance().getCuboidByName(areaName,
+//                cWorld.getName(), cWorld.getDimension());
+//        if (cube == null) {
+//            return Boolean.valueOf(false);
+//        }
+//        if (cube.getFlagListArray().containsKey(flag)) {
+//            HashMap<String, Boolean> newList = cube.getFlagListArray();
+//            newList.put(flag, newValue);
+//            cube.overwriteProperties(newList);
+//            cube.hasChanged = true;
+//            RegionManager.getInstance().updateCuboidNode(cube);
+//            return Boolean.valueOf(true);
+//        }
+//        return Boolean.valueOf(false);
+        //TODO: This needs to be redone for the new list stuff
+        return null;
     }
 
     private Object getFlagValue(CWorld cWorld, String areaName, String flag) {
-        CuboidE cube = RegionManager.getInstance().getCuboidByName(areaName,
-                cWorld.getName(), cWorld.getDimension());
-        if (cube == null) {
-            return Boolean.valueOf(false);
-        }
-        return cube.getFlagListArray().get(flag);
+//        Cuboid cube = RegionManager.getInstance().getCuboidByName(areaName,
+//                cWorld.getName(), cWorld.getDimension());
+//        if (cube == null) {
+//            return Boolean.valueOf(false);
+//        }
+//        return cube.getFlagListArray().get(flag);
+        //TODO: This needs to be redone for the new list stuff
+        return null;
     }
 
 }

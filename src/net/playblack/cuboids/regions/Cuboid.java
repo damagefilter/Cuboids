@@ -41,9 +41,40 @@ public class Cuboid extends Region{
                 return INVALID_PROPERTY;
             }
         }
+        
+        /**
+         * Returns allow or deny from a boolean value
+         * @param check
+         * @return
+         */
+        public static Status fromBoolean(boolean check) {
+            if(check) {
+                return ALLOW;
+            }
+            else {
+                return DENY;
+            }
+        }
+        
+        /**
+         * Returns allow or default from boolean value
+         * @param check
+         * @return
+         */
+        public static Status softFromBoolean(boolean check) {
+            if(check) {
+                return ALLOW;
+            }
+            else {
+                return DEFAULT;
+            }
+        }
     }
     
+    /** Map of all currently existing property */
     private HashMap<String, Status> properties;
+    
+    /** Flag as changed to make it available for the saving thread */
     public boolean hasChanged = false;
     
     
@@ -61,8 +92,10 @@ public class Cuboid extends Region{
     
     /** Welcome / Farewell messages to display*/
     private String welcome, farewell;
+    
     /** List of commands that should be denied in this area */
     private ArrayList<String> restrictedCommands = new ArrayList<String>();
+    
     /** List of restricted item IDs */
     private ArrayList<Integer> restrictedItems = new ArrayList<Integer>();
     
@@ -92,7 +125,7 @@ public class Cuboid extends Region{
         if(properties.containsKey(name)) {
             return properties.get(name);
         }
-        return Status.INVALID_PROPERTY;
+        return Status.DEFAULT;
     }
     
     /**
@@ -543,13 +576,17 @@ public class Cuboid extends Region{
     }
 
     /**
-     * Check if a given player is allowed in this cuboid. This also checks for
-     * the player group and the player name
+     * Check if a given player is allowed in this cuboid. This will take into account
+     * ownership of this cuboid as well as groups
      * 
      * @param player
      * @return True if player is allowed, false otherwise
      */
     public boolean playerIsAllowed(String player, String[] group) {
+        if(playerIsOwner(player)) {
+            return true;
+        }
+        
         for (String groupname : group) {
             if (groups.contains(groupname)) {
                 return true;
@@ -558,13 +595,13 @@ public class Cuboid extends Region{
         for (int i = 0; i < group.length; i++) {
             if (groups.contains(group[i].toLowerCase())) {
                 return true;
-            } else if (groups.contains("g:" + group[i].toLowerCase())) {
+            } 
+            else if (groups.contains("g:" + group[i].toLowerCase())) {
                 return true;
             }
         }
         for (String listPlayer : players) {
-            if (listPlayer.equalsIgnoreCase(player)
-                    || listPlayer.equalsIgnoreCase("o:" + player)) {
+            if (listPlayer.equalsIgnoreCase(player)) {
                 return true;
             }
         }
@@ -697,6 +734,10 @@ public class Cuboid extends Region{
             }
         }
         return builder.toString();
+    }
+    
+    public boolean isGlobal() {
+        return name.equals("__WORLD__");
     }
 
 }

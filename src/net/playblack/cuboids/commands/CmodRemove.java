@@ -22,6 +22,6 @@ public class CmodRemove extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.getInstance().removeCuboid(player, command[1]);
+        CuboidInterface.get().removeCuboid(player, command[1]);
     }
 }

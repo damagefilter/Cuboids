@@ -30,6 +30,6 @@ public class CmodList extends CBaseCommand {
                 page = 1;
             }
         }
-        CuboidInterface.getInstance().displayCuboidList(player, page);
+        CuboidInterface.get().displayCuboidList(player, page);
     }
 }

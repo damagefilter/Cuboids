@@ -25,7 +25,7 @@ public class Cdiag extends CBaseCommand {
             return;
         }
         if (player.hasPermission("cIgnoreRestrictions")) {
-            ArrayList<CuboidE> nodes = RegionManager.getInstance()
+            ArrayList<CuboidE> nodes = RegionManager.get()
                     .getCuboidsContaining(player.getLocation(),
                             player.getWorld().getName(),
                             player.getWorld().getDimension());

@@ -13,6 +13,6 @@ public class ItemDropHandler {
      * @return Returns true if a player <b>can't</b> drop an item.
      */
     public static boolean handleItemDrop(CPlayer player, Location v) {
-        return CuboidInterface.getInstance().isCreative(v);
+        return CuboidInterface.get().isCreative(v);
     }
 }

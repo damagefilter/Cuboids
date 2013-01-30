@@ -69,8 +69,8 @@ public class Bootstrapper {
 
         // ------------------------------------------------------
         log.cacheMessage("Native Cuboid Nodes...", true);
-        RegionManager.getInstance().load();
-        RegionManager.getInstance().save(true, true); // Save back
+        RegionManager.get().load();
+        RegionManager.get().save(true, true); // Save back
         log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
         FlatfileDataLegacy.cleanupFiles();

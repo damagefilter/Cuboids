@@ -27,9 +27,9 @@ public class Csave extends CBaseCommand {
             return;
         }
         if (saveAll) {
-            CuboidInterface.getInstance().saveAll(player);
+            CuboidInterface.get().saveAll(player);
         } else {
-            CuboidInterface.getInstance().saveCuboid(player, command[1]);
+            CuboidInterface.get().saveCuboid(player, command[1]);
         }
     }
 }

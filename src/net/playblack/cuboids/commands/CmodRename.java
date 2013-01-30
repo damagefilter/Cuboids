@@ -26,7 +26,7 @@ public class CmodRename extends CBaseCommand {
         }
         MessageSystem ms = MessageSystem.getInstance();
 
-        CuboidNode node = RegionManager.getInstance().getCuboidNodeByName(
+        CuboidNode node = RegionManager.get().getCuboidNodeByName(
                 command[1], player.getWorld().getName(),
                 player.getWorld().getDimension());
 
@@ -38,10 +38,10 @@ public class CmodRename extends CBaseCommand {
             }
         }
 
-        RegionManager.getInstance().removeCuboid(node.getCuboid(), true);
+        RegionManager.get().removeCuboid(node.getCuboid(), true);
         node.getCuboid().setName(command[3]);
         node.updateChilds();
-        RegionManager.getInstance().addNode(node);
+        RegionManager.get().addNode(node);
         ms.successMessage(player, "cuboidRenamed");
     }
 }

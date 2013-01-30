@@ -52,7 +52,7 @@ public class Protect extends CBaseCommand {
             ms.notification(player,
                     "FYI: The protection option is disabled. The Cuboid will still be created!");
         }
-        if (CuboidInterface.getInstance().addCuboid(cube)) {
+        if (CuboidInterface.get().addCuboid(cube)) {
             ms.successMessage(player, "cuboidCreated");
         } else {
 //            ms.failMessage(player, "selectionIncomplete");

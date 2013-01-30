@@ -22,6 +22,6 @@ public class CmodMove extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.getInstance().resize(player, command[1]);
+        CuboidInterface.get().resize(player, command[1]);
     }
 }

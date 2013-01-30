@@ -17,19 +17,19 @@ public class PlayerListener extends PluginListener {
 
     @Override
     public void onDisconnect(Player player) {
-        RegionManager.getInstance().removeFromAllAreas(player.getName());
+        RegionManager.get().removeFromAllAreas(player.getName());
         CServer.getServer().removePlayer(player.getName());
     }
 
     @Override
     public void onBan(Player mod, Player player, String reason) {
-        RegionManager.getInstance().removeFromAllAreas(player.getName());
+        RegionManager.get().removeFromAllAreas(player.getName());
         CServer.getServer().removePlayer(player.getName());
     }
 
     @Override
     public void onKick(Player mod, Player player, String reason) {
-        RegionManager.getInstance().removeFromAllAreas(player.getName());
+        RegionManager.get().removeFromAllAreas(player.getName());
         CServer.getServer().removePlayer(player.getName());
     }
 

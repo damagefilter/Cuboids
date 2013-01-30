@@ -15,7 +15,7 @@ public class MiscHandler {
      * @return
      */
     public static boolean handleMobDamage(Location position) {
-        return !CuboidInterface.getInstance().isSanctuary(position);
+        return !CuboidInterface.get().isSanctuary(position);
     }
 
     /**
@@ -26,7 +26,7 @@ public class MiscHandler {
      * @return
      */
     public static boolean handlePvpDamage(CPlayer attacker, CPlayer defender) {
-        if (CuboidInterface.getInstance().isPvpEnabled(defender.getLocation())) {
+        if (CuboidInterface.get().isPvpEnabled(defender.getLocation())) {
             return true;
         } else {
             if (attacker.hasPermission("cIgnoreRestrictions")) {
@@ -44,10 +44,10 @@ public class MiscHandler {
      */
     public static boolean canSpawn(CMob mob) {
         if (mob.isMob()) {
-            return !CuboidInterface.getInstance()
+            return !CuboidInterface.get()
                     .isSanctuary(mob.getLocation());
         } else if (mob.isAnimal()) {
-            return CuboidInterface.getInstance().sanctuarySpawnsAnimals(mob);
+            return CuboidInterface.get().sanctuarySpawnsAnimals(mob);
         } else {
             return true;
         }

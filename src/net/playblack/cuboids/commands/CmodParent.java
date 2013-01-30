@@ -22,6 +22,6 @@ public class CmodParent extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.getInstance().setParent(player, command[1], command[3]);
+        CuboidInterface.get().setParent(player, command[1], command[3]);
     }
 }

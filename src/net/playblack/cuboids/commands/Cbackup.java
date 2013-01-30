@@ -39,7 +39,7 @@ public class Cbackup extends CBaseCommand {
             }
         }
         CuboidE node = RegionManager
-                .getInstance()
+                .get()
                 .getCuboidNodeByName(command[1], player.getWorld().getName(),
                         player.getWorld().getDimension()).getCuboid();
         if (node.playerIsOwner(player.getName())

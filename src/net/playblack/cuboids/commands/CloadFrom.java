@@ -32,10 +32,10 @@ public class CloadFrom extends CBaseCommand {
         if (command[1].equalsIgnoreCase("mysql")) {
             MysqlData ds = new MysqlData(Config.getInstance().getSqlConfig(),
                     EventLogger.getInstance());
-            ds.loadAll(RegionManager.getInstance());
+            ds.loadAll(RegionManager.get());
         } else {
             FlatfileData ds = new FlatfileData(EventLogger.getInstance());
-            ds.loadAll(RegionManager.getInstance());
+            ds.loadAll(RegionManager.get());
         }
         MessageSystem.getInstance().successMessage(player, "cuboidLoadedAll");
     }

@@ -31,7 +31,7 @@ public class RegionManager {
         global = new CuboidNode(insert);
     }
 
-    public static RegionManager getInstance() {
+    public static RegionManager get() {
         if (instance == null) {
             instance = new RegionManager(EventLogger.getInstance(), Config
                     .getInstance().getDataSource());
@@ -474,7 +474,7 @@ public class RegionManager {
      *            passed along
      * @return
      */
-    public CuboidNode getActiveCuboid(Location v, boolean ignoreGlobal) {
+    public CuboidNode getActiveCuboidNode(Location v, boolean ignoreGlobal) {
         nodeList.clear();
         if (v == null) {
             return global;

@@ -3,7 +3,7 @@ package net.playblack.cuboids.hookapi;
 import java.util.ArrayList;
 
 import net.playblack.cuboids.gameinterface.CWorld;
-import net.playblack.cuboids.regions.CuboidE;
+import net.playblack.cuboids.regions.Cuboid;
 import net.playblack.cuboids.regions.RegionManager;
 
 public class AreaActionHook implements CuboidHook {
@@ -47,14 +47,14 @@ public class AreaActionHook implements CuboidHook {
 
     private Object removeGroupFromArea(CWorld cWorld, String areaName,
             String groupName) {
-        CuboidE cube = RegionManager.getInstance().getCuboidByName(areaName,
+        Cuboid cube = RegionManager.get().getCuboidByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return Boolean.valueOf(false);
         }
         cube.removeGroup(groupName);
         cube.hasChanged = true;
-        RegionManager.getInstance().updateCuboidNode(cube);
+        RegionManager.get().updateCuboidNode(cube);
         return Boolean.valueOf(true);
     }
 
@@ -67,14 +67,14 @@ public class AreaActionHook implements CuboidHook {
      */
     private Object removePlayerFromArea(CWorld cWorld, String areaName,
             String playerName) {
-        CuboidE cube = RegionManager.getInstance().getCuboidByName(areaName,
+        Cuboid cube = RegionManager.get().getCuboidByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return Boolean.valueOf(false);
         }
         cube.removePlayer(playerName);
         cube.hasChanged = true;
-        RegionManager.getInstance().updateCuboidNode(cube);
+        RegionManager.get().updateCuboidNode(cube);
         return Boolean.valueOf(true);
     }
 
@@ -87,14 +87,14 @@ public class AreaActionHook implements CuboidHook {
      */
     private Object addGroupToArea(CWorld cWorld, String areaName,
             String groupName) {
-        CuboidE cube = RegionManager.getInstance().getCuboidByName(areaName,
+        Cuboid cube = RegionManager.get().getCuboidByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return Boolean.valueOf(false);
         }
         cube.addGroup(groupName);
         cube.hasChanged = true;
-        RegionManager.getInstance().updateCuboidNode(cube);
+        RegionManager.get().updateCuboidNode(cube);
         return Boolean.valueOf(true);
     }
 
@@ -107,14 +107,14 @@ public class AreaActionHook implements CuboidHook {
      */
     private Object addPlayerToArea(CWorld cWorld, String areaName,
             String playerName) {
-        CuboidE cube = RegionManager.getInstance().getCuboidByName(areaName,
+        Cuboid cube = RegionManager.get().getCuboidByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return Boolean.valueOf(false);
         }
         cube.addPlayer(playerName);
         cube.hasChanged = true;
-        RegionManager.getInstance().updateCuboidNode(cube);
+        RegionManager.get().updateCuboidNode(cube);
         return Boolean.valueOf(true);
     }
 
@@ -125,12 +125,12 @@ public class AreaActionHook implements CuboidHook {
      * @return
      */
     private Object getAreaGroupList(CWorld cWorld, String areaName) {
-        CuboidE cube = RegionManager.getInstance().getCuboidByName(areaName,
+        Cuboid cube = RegionManager.get().getCuboidByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return null;
         }
-        return cube.getGroupListRaw();
+        return cube.getGroupList(); //TODO: send raw list!
     }
 
     /**
@@ -140,12 +140,12 @@ public class AreaActionHook implements CuboidHook {
      * @return
      */
     private Object getAreaPlayerList(CWorld cWorld, String areaName) {
-        CuboidE cube = RegionManager.getInstance().getCuboidByName(areaName,
+        Cuboid cube = RegionManager.get().getCuboidByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return null;
         }
-        return cube.getPlayerListRaw();
+        return cube.getPlayerList(); //TODO: send raw list!
     }
 
     /**
@@ -155,13 +155,13 @@ public class AreaActionHook implements CuboidHook {
      * @return
      */
     private Object getAreaOwners(CWorld cWorld, String areaName) {
-        CuboidE cube = RegionManager.getInstance().getCuboidByName(areaName,
+        Cuboid cube = RegionManager.get().getCuboidByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return null;
         }
         ArrayList<String> owners = new ArrayList<String>(3);
-        ArrayList<String> players = cube.getPlayerListRaw();
+        String[] players = cube.getPlayerList().split(",");
         for (String player : players) {
             if (player.startsWith("o:")) {
                 owners.add(player.substring(2));

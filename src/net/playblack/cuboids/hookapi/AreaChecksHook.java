@@ -32,7 +32,7 @@ public class AreaChecksHook implements CuboidHook {
     }
 
     private Object getAreaName(CPlayer player, Location position) {
-        CuboidNode node = RegionManager.getInstance().getActiveCuboid(position, true);
+        CuboidNode node = RegionManager.get().getActiveCuboidNode(position, true);
         if(node == null) {
             return "NO_CUBOID";
         }
@@ -40,7 +40,7 @@ public class AreaChecksHook implements CuboidHook {
     }
     
     private Object getAreaName(CPlayer player) {
-        CuboidNode node = RegionManager.getInstance().getActiveCuboid(player.getLocation(), true);
+        CuboidNode node = RegionManager.get().getActiveCuboidNode(player.getLocation(), true);
         if(node == null) {
             return "NO_CUBOID";
         }
@@ -48,7 +48,7 @@ public class AreaChecksHook implements CuboidHook {
     }
 
     private Object canModify(CPlayer player, Location position) {
-        return Boolean.valueOf(CuboidInterface.getInstance().canModifyBlock(player, position));
+        return Boolean.valueOf(CuboidInterface.get().canModifyBlock(player, position));
     }
 
 }

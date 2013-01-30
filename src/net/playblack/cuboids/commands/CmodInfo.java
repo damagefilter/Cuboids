@@ -22,6 +22,6 @@ public class CmodInfo extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.getInstance().explainCuboid(player, command[1]);
+        CuboidInterface.get().explainCuboid(player, command[1]);
     }
 }

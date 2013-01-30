@@ -22,6 +22,6 @@ public class CmodRestrictItem extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.getInstance().disallowItem(player, command);
+        CuboidInterface.get().disallowItem(player, command);
     }
 }

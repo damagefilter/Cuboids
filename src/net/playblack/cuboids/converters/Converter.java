@@ -2,11 +2,12 @@ package net.playblack.cuboids.converters;
 
 import java.util.ArrayList;
 
-import net.playblack.cuboids.regions.CuboidE;
+import net.playblack.cuboids.regions.Cuboid;
+import net.playblack.cuboids.regions.Cuboid.Status;
 import net.playblack.cuboids.regions.RegionManager;
 
 /**
- * Convert foreign Cuboid file formats to native CuboidE.
+ * Convert foreign Cuboid file formats to native Cuboid.
  * 
  * @author Chris
  * 
@@ -14,40 +15,41 @@ import net.playblack.cuboids.regions.RegionManager;
 public class Converter {
     protected ArrayList<CuboidShell> shells;
 
-    protected CuboidE toCuboidE(CuboidShell shell) {
-        CuboidE cube = new CuboidE();
-        cube.setAllowPvp(shell.getPvp());
-        cube.setBlockFireSpread(shell.getFireProof());
-        cube.setCreeperSecure(shell.getCreeper());
-        cube.setDimension(shell.getDimension());
-        cube.setFarewell(shell.getFarewell());
-        cube.setFarmland(shell.getFarmland());
-        cube.setFirstPoint(shell.getOrigin());
-        cube.setFreeBuild(shell.getCreative());
-        cube.setHealing(shell.getHealing());
-        cube.sethMob(false); // c2 property
-        cube.setLavaControl(shell.getLavaControl());
+    protected Cuboid toCuboid(CuboidShell shell) {
+        Cuboid cube = new Cuboid();
+
         cube.setName(shell.getName());
-        cube.setParent(null); // there is no parenting in CuboidPlugin ... lol
-        cube.setPriority(0); // There is no priority in CuboidPlugin ... lol
-        cube.setProtection(shell.getProtection());
-        cube.setRestriction(shell.getRestricted());
-        cube.setSanctuary(shell.getSanctuary());
-        cube.setSanctuarySpawnAnimals(shell.getAnimalSpawn());
-        cube.setSecondPoint(shell.getOffset());
-        cube.setTntSecure(shell.getTntSecure());
-        cube.setWaterControl(shell.getWaterControl());
-        cube.setWelcome(shell.getWelcome());
+        cube.setOrigin(shell.getOrigin());
+        cube.setOffset(shell.getOffset());
+        cube.setDimension(shell.getDimension());
         cube.setWorld(shell.getWorld());
-        cube.setPhysics(shell.getPhysics());
-        cube.setEnderControl(shell.getEnderControl());
+        cube.setFarewell(shell.getFarewell());
+        cube.setWelcome(shell.getWelcome());
+        cube.setPriority(0);
+        
+        cube.setProperty("pvp-damage", Status.fromBoolean(shell.getPvp()));
+        cube.setProperty("firespread", Status.softFromBoolean(!shell.getFireProof()));
+        cube.setProperty("creeper-explosion", Status.fromBoolean(!shell.getCreeper()));
+        cube.setProperty("crops-trampling", Status.fromBoolean(!shell.getFarmland()));
+        cube.setProperty("creative", Status.fromBoolean(shell.getCreative()));
+        cube.setProperty("healing", Status.fromBoolean(shell.getHealing()));
+        cube.setProperty("lava-flow", Status.softFromBoolean(!shell.getLavaControl()));
+        cube.setProperty("water-flow", Status.softFromBoolean(!shell.getWaterControl()));
+        cube.setProperty("protection", Status.softFromBoolean(!shell.getProtection()));
+        cube.setProperty("enter-cuboid", Status.softFromBoolean(!shell.getProtection()));
+        cube.setProperty("mob-damage", Status.softFromBoolean(!shell.getSanctuary()));
+        cube.setProperty("mob-spawn", Status.softFromBoolean(!shell.getSanctuary())); //new and by default same as mob damage
+        cube.setProperty("animal-spawn", Status.softFromBoolean(!shell.getAnimalSpawn()));
+        cube.setProperty("tnt-explosion", Status.softFromBoolean(!shell.getTntSecure()));
+        cube.setProperty("physics", Status.softFromBoolean(shell.getPhysics()));
+        cube.setProperty("enderman-pickup", Status.softFromBoolean(!shell.getEnderControl()));
         return cube;
     }
 
     private void convert() {
-        RegionManager regions = RegionManager.getInstance();
+        RegionManager regions = RegionManager.get();
         for (CuboidShell shell : shells) {
-            regions.addRoot(toCuboidE(shell));
+            regions.addRoot(toCuboid(shell));
         }
         // now that we have all the fancy and unsorted roots added, lets sort
         // them.

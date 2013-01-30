@@ -52,7 +52,7 @@ public class CmodAdd extends CBaseCommand {
         defaultC.setWorld(player.getWorld().getName());
         defaultC.setDimension(player.getWorld().getDimension());
         defaultC.addPlayer("o:" + player.getName());
-        if (CuboidInterface.getInstance().addCuboid(defaultC)) {
+        if (CuboidInterface.get().addCuboid(defaultC)) {
             ms.successMessage(player, "cuboidCreated");
         } else {
             ms.failMessage(player, "cuboidExists");

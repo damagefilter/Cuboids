@@ -14,7 +14,7 @@ public class ExplainCuboid {
      *            True to set offset instead of origin
      */
     public static void explain(CPlayer player) {
-        CuboidInterface.getInstance().explainCuboid(player,
+        CuboidInterface.get().explainCuboid(player,
                 player.getLocation());
     }
 }

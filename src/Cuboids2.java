@@ -13,8 +13,8 @@ public class Cuboids2 extends Plugin {
 
     @Override
     public void disable() {
-        CuboidInterface.getInstance().killTasks();
-        RegionManager.getInstance().save(false, true);
+        CuboidInterface.get().killTasks();
+        RegionManager.get().save(false, true);
     }
 
     @Override

@@ -22,6 +22,6 @@ public class CmodShowCmdBlacklist extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.getInstance().showCommandBlacklist(player, command[1]);
+        CuboidInterface.get().showCommandBlacklist(player, command[1]);
     }
 }

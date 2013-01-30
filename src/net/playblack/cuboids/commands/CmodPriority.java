@@ -30,6 +30,6 @@ public class CmodPriority extends CBaseCommand {
             MessageSystem.getInstance().failMessage(player, "invalidPriority");
             return;
         }
-        CuboidInterface.getInstance().setPriority(player, command[1], prio);
+        CuboidInterface.get().setPriority(player, command[1], prio);
     }
 }

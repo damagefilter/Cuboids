@@ -22,7 +22,7 @@ public class HMobTask implements Runnable {
     Random rnd;
 
     public HMobTask() {
-        this.nodes = RegionManager.getInstance().getRootNodeList();
+        this.nodes = RegionManager.get().getRootNodeList();
         rnd = new Random();
     }
 

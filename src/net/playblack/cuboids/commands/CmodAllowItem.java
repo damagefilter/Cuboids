@@ -22,6 +22,6 @@ public class CmodAllowItem extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.getInstance().allowItem(player, command);
+        CuboidInterface.get().allowItem(player, command);
     }
 }

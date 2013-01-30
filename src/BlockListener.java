@@ -104,7 +104,7 @@ public class BlockListener extends PluginListener {
             cplayer = new CanaryPlayer(player);
         }
 
-        return !CuboidInterface.getInstance().canModifyBlock(cplayer, p);
+        return !CuboidInterface.get().canModifyBlock(cplayer, p);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class BlockListener extends PluginListener {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
-        return !CuboidInterface.getInstance().canModifyBlock(cplayer, p);
+        return !CuboidInterface.get().canModifyBlock(cplayer, p);
     }
 
     @SuppressWarnings("rawtypes")

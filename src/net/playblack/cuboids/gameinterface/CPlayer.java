@@ -1,6 +1,10 @@
 package net.playblack.cuboids.gameinterface;
 
 import net.playblack.cuboids.blocks.CItem;
+import net.playblack.cuboids.regions.Cuboid;
+import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.cuboids.regions.Cuboid.Status;
+import net.playblack.mcutils.Location;
 import net.playblack.mcutils.Vector;
 
 public abstract class CPlayer implements IBaseEntity {
@@ -90,5 +94,51 @@ public abstract class CPlayer implements IBaseEntity {
      * @return
      */
     public abstract boolean isAdmin();
+    
+    /**
+     * Check if this player is allowed to modify a block at a given location
+     * @param location
+     * @return
+     */
+    public boolean canModifyBlock(Location location) {
+        Cuboid cube = RegionManager.get().getActiveCuboidNode(location, false).getCuboid();
+        if(hasPermission("cIgnoreRestrictions") || cube.playerIsAllowed(getName(), getGroups())) {
+            return true;
+        }
+        
+        if(cube.getProperty("protection") == Cuboid.Status.ALLOW) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Check if this player is allowed to use an item in his hand
+     * @param location
+     * @param item
+     * @return
+     */
+    public boolean canUseItem(Location location, CItem item) {
+        Cuboid cube = RegionManager.get().getActiveCuboidNode(location, false).getCuboid();
+        if(hasPermission("cIgnoreRestrictions")) {
+            return true;
+        }
+        
+        if(cube.getProperty("restrict-items") == Status.ALLOW) {
+            return cube.isItemRestricted(item.getId());
+        }
+        return true;
+    }
+    
+    public boolean canMoveTo(Location location) {
+        Cuboid cube = RegionManager.get().getActiveCuboidNode(location, false).getCuboid();
+        if(hasPermission("cIgnoreRestrictions") || cube.playerIsAllowed(getName(), getGroups())) {
+            return true;
+        }
+        if(cube.getProperty("enter-cuboid") == Status.DENY) {
+            return false;
+        }
+        return true;
+    }
 
 }

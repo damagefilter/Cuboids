@@ -26,97 +26,97 @@ public class ToggleAreaProperty extends CBaseCommand {
         }
         // now, mega über super if monster!!! :D
         if (command[3].equalsIgnoreCase("creeper")) {
-            CuboidInterface.getInstance().toggleCreeperSecure(player,
+            CuboidInterface.get().toggleCreeperSecure(player,
                     command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("farmland")
                 || command[3].equalsIgnoreCase("farm")) {
-            CuboidInterface.getInstance().toggleFarmland(player, command[1]);
+            CuboidInterface.get().toggleFarmland(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("fire")
                 || command[3].equalsIgnoreCase("firespread")) {
-            CuboidInterface.getInstance().toggleFireSpread(player, command[1]);
+            CuboidInterface.get().toggleFireSpread(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("water")
                 || command[3].equalsIgnoreCase("watercontrol")) {
-            CuboidInterface.getInstance().toggleFlowControl(player, command[1],
+            CuboidInterface.get().toggleFlowControl(player, command[1],
                     false);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("lava")
                 || command[3].equalsIgnoreCase("lavacontrol")) {
-            CuboidInterface.getInstance().toggleFlowControl(player, command[1],
+            CuboidInterface.get().toggleFlowControl(player, command[1],
                     true);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("freebuild")
                 || command[3].equalsIgnoreCase("creative")) {
-            CuboidInterface.getInstance().toggleFreebuild(player, command[1]);
+            CuboidInterface.get().toggleFreebuild(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("heal")
                 || command[3].equalsIgnoreCase("healing")) {
-            CuboidInterface.getInstance().toggleHealing(player, command[1]);
+            CuboidInterface.get().toggleHealing(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("hmob")
                 || command[3].equalsIgnoreCase("hmobs")) {
-            CuboidInterface.getInstance().toggleHmobs(player, command[1]);
+            CuboidInterface.get().toggleHmobs(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("protection")
                 || command[3].equalsIgnoreCase("protect")) {
-            CuboidInterface.getInstance().toggleProtection(player, command[1]);
+            CuboidInterface.get().toggleProtection(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("pvp")) {
-            CuboidInterface.getInstance().togglePvp(player, command[1]);
+            CuboidInterface.get().togglePvp(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("restriction")
                 || command[3].equalsIgnoreCase("restrict")) {
-            CuboidInterface.getInstance().toggleRestriction(player, command[1]);
+            CuboidInterface.get().toggleRestriction(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("sanctuary")) {
-            CuboidInterface.getInstance().toggleSanctuary(player, command[1]);
+            CuboidInterface.get().toggleSanctuary(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("sanctuary-animalspawn")
                 || command[3].equalsIgnoreCase("animalspawn")) {
-            CuboidInterface.getInstance().toggleSanctuaryAnimalSpawn(player,
+            CuboidInterface.get().toggleSanctuaryAnimalSpawn(player,
                     command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("tnt")) {
-            CuboidInterface.getInstance().toggleTntSecure(player, command[1]);
+            CuboidInterface.get().toggleTntSecure(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("physics")) {
-            CuboidInterface.getInstance().togglePhysics(player, command[1]);
+            CuboidInterface.get().togglePhysics(player, command[1]);
             return;
         }
 
         else if (command[3].equalsIgnoreCase("enderman")
                 || command[3].equalsIgnoreCase("endercontrol")) {
-            CuboidInterface.getInstance()
+            CuboidInterface.get()
                     .toggleEnderControl(player, command[1]);
             return;
         } else {

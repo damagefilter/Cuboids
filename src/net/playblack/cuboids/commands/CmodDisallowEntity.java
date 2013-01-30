@@ -22,6 +22,6 @@ public class CmodDisallowEntity extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.getInstance().disallowEntity(player, command);
+        CuboidInterface.get().disallowEntity(player, command);
     }
 }

@@ -29,10 +29,10 @@ public class BlockActionHandler {
         if (player.hasPermission("cIgnoreRestrictions")) {
             return true;
         }
-        if (CuboidInterface.getInstance().playerIsAllowed(player, position)) {
+        if (CuboidInterface.get().playerIsAllowed(player, position)) {
             return true;
         }
-        if (CuboidInterface.getInstance().itemIsRestricted(position, itemId)) {
+        if (CuboidInterface.get().itemIsRestricted(position, itemId)) {
             return false;
         }
         if (Config.getInstance().itemIsRestricted(itemId)) {
@@ -50,7 +50,7 @@ public class BlockActionHandler {
      */
     public static boolean handleBucketPlacement(CPlayer player,
             Location position) {
-        return CuboidInterface.getInstance().isLiquidControlled(player,
+        return CuboidInterface.get().isLiquidControlled(player,
                 position);
     }
 
@@ -63,7 +63,7 @@ public class BlockActionHandler {
      */
     public static boolean handleLighter(CPlayer player, Location position) {
         if (player.hasPermission("cIgnoreRestrictions")
-                || CuboidInterface.getInstance().canStartFire(player, position)) {
+                || CuboidInterface.get().canStartFire(player, position)) {
             return true;
         }
         return false;
@@ -77,7 +77,7 @@ public class BlockActionHandler {
      * @return
      */
     public static boolean handleFirespread(Location position, CWorld world) {
-        return CuboidInterface.getInstance().isFireProof(position);
+        return CuboidInterface.get().isFireProof(position);
     }
 
     /**
@@ -190,7 +190,7 @@ public class BlockActionHandler {
     public static void explainLocal(CPlayer player) {
         if (player.getItemInHand().getId() == Config.getInstance()
                 .getInspectorItem()) {
-            CuboidInterface.getInstance().explainCuboid(player,
+            CuboidInterface.get().explainCuboid(player,
                     player.getLocation());
         }
     }
@@ -204,7 +204,7 @@ public class BlockActionHandler {
     public static void explainPosition(CPlayer player, Location position) {
         if (player.getItemInHand().getId() == Config.getInstance()
                 .getInspectorItem()) {
-            CuboidInterface.getInstance().explainCuboid(player, position);
+            CuboidInterface.get().explainCuboid(player, position);
         }
     }
 
@@ -217,7 +217,7 @@ public class BlockActionHandler {
      */
     public static boolean handleExplosions(int status, Location position) {
         // 1 = tnt, 2 = creeper
-        CuboidInterface ci = CuboidInterface.getInstance();
+        CuboidInterface ci = CuboidInterface.get();
         if ((status == 1) && ci.isTntSecure(position)) {
             return true;
         } else if ((status == 2) && ci.isCreeperSecure(position)) {
@@ -239,7 +239,7 @@ public class BlockActionHandler {
      */
     public static boolean handleIgnition(CPlayer player, Location v,
             int blockStatus) {
-        CuboidInterface ci = CuboidInterface.getInstance();
+        CuboidInterface ci = CuboidInterface.get();
         if (blockStatus == 2) { // lighter shall be 2
             return ci.canModifyBlock(player, v);
         } else { // natural firespread
@@ -255,7 +255,7 @@ public class BlockActionHandler {
      * @return false if block can flow
      */
     public static boolean handleFlow(CBlock block, Location v) {
-        return !CuboidInterface.getInstance().hasFlowControl(block, v);
+        return !CuboidInterface.get().hasFlowControl(block, v);
     }
 
     /**
@@ -270,7 +270,7 @@ public class BlockActionHandler {
     public static boolean handlePhysics(Location position, CWorld world,
             int blockId) {
         if ((blockId == 12) || (blockId == 13)) {
-            return CuboidInterface.getInstance().isPhysicsControlled(position,
+            return CuboidInterface.get().isPhysicsControlled(position,
                     world);
         }
         return false;
@@ -285,7 +285,7 @@ public class BlockActionHandler {
      * @return
      */
     public static boolean handleEndermanPickup(Location position) {
-        return CuboidInterface.getInstance().isEnderControlled(position);
+        return CuboidInterface.get().isEnderControlled(position);
     }
 
     /**
@@ -300,7 +300,7 @@ public class BlockActionHandler {
             int type, int newType) {
         if (type == 60) {
             if (newType != 60) {
-                return CuboidInterface.getInstance().isFarmland(point);
+                return CuboidInterface.get().isFarmland(point);
             }
         }
         return false;

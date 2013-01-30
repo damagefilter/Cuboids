@@ -26,7 +26,7 @@ public class CmodLoad extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidE cube = RegionManager.getInstance().getCuboidByName(command[1],
+        CuboidE cube = RegionManager.get().getCuboidByName(command[1],
                 player.getWorld().getName(), player.getWorld().getDimension());
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cAreaMod")) {

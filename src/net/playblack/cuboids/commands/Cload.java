@@ -20,6 +20,6 @@ public class Cload extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.getInstance().loadCuboid(player, command[1]);
+        CuboidInterface.get().loadCuboid(player, command[1]);
     }
 }
