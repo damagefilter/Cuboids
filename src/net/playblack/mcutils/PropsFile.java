@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-import net.playblack.cuboids.regions.Cuboid;
+import net.playblack.cuboids.regions.Region;
 
 /**
  * Custom properties file manager
@@ -118,14 +118,14 @@ public class PropsFile {
         return substitute;
     }
     
-    public Cuboid.Status getStatus(String key, Cuboid.Status substitute) {
+    public Region.Status getStatus(String key, Region.Status substitute) {
         if(propsRaw.containsKey(key)) {
             boolean value = getBoolean(key, false);
             if(value == false) {
-                return Cuboid.Status.ALLOW;
+                return Region.Status.ALLOW;
             }
             else {
-                return Cuboid.Status.DENY;
+                return Region.Status.DENY;
             }
         }
         return substitute;

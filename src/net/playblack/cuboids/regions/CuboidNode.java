@@ -8,7 +8,7 @@ public class CuboidNode {
     /**
      * Base element. The node is a wrapper for this
      */
-    Cuboid element;
+    Region element;
     ArrayList<CuboidNode> childs = new ArrayList<CuboidNode>(0);
 
     /**
@@ -25,7 +25,7 @@ public class CuboidNode {
      * Do not use this if you can!
      */
     public CuboidNode() {
-        element = new Cuboid();
+        element = new Region();
     }
 
     /**
@@ -33,7 +33,7 @@ public class CuboidNode {
      * 
      * @param cube
      */
-    public CuboidNode(Cuboid cube) {
+    public CuboidNode(Region cube) {
         element = cube;
     }
 
@@ -42,7 +42,7 @@ public class CuboidNode {
      * 
      * @return
      */
-    public Cuboid getCuboid() {
+    public Region getCuboid() {
         return element;
     }
 
@@ -52,7 +52,7 @@ public class CuboidNode {
      * 
      * @param cube
      */
-    public void setCuboid(Cuboid cube) {
+    public void setCuboid(Region cube) {
         String oldName = element.getName();
         element = cube;
         if (!oldName.equalsIgnoreCase(cube.getName())) {
@@ -131,7 +131,7 @@ public class CuboidNode {
      * 
      * @return
      */
-    public Cuboid getParent() {
+    public Region getParent() {
 //        return element.getParent();
         return null;
     }

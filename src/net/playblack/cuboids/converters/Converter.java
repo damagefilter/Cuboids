@@ -2,8 +2,8 @@ package net.playblack.cuboids.converters;
 
 import java.util.ArrayList;
 
-import net.playblack.cuboids.regions.Cuboid;
-import net.playblack.cuboids.regions.Cuboid.Status;
+import net.playblack.cuboids.regions.Region;
+import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 
 /**
@@ -15,8 +15,8 @@ import net.playblack.cuboids.regions.RegionManager;
 public class Converter {
     protected ArrayList<CuboidShell> shells;
 
-    protected Cuboid toCuboid(CuboidShell shell) {
-        Cuboid cube = new Cuboid();
+    protected Region toCuboid(CuboidShell shell) {
+        Region cube = new Region();
 
         cube.setName(shell.getName());
         cube.setOrigin(shell.getOrigin());

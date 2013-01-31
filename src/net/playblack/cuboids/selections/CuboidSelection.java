@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.Cuboid;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.mcutils.Vector;
 
 /**
@@ -215,8 +215,8 @@ public class CuboidSelection implements ISelection {
      * 
      * @return
      */
-    public Cuboid toCuboid(CPlayer player, String[] playerlist) {
-        Cuboid cube = new Cuboid();
+    public Region toCuboid(CPlayer player, String[] playerlist) {
+        Region cube = new Region();
         String name = null;
         cube.setBoundingBox(this.origin, this.offset);
         // start at second element for the first would be /highprotect

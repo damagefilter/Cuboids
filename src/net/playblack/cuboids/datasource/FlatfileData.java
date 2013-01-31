@@ -112,7 +112,7 @@ public class FlatfileData implements BaseData {
                     if (cube != null) {
                         if (handler.cuboidExists(cube.getName(),
                                 cube.getWorld(), cube.getDimension())) {
-                            handler.updateCuboidNode(cube);
+                            handler.updateRegion(cube);
                         } else {
                             handler.addRegion(cube);
                         }

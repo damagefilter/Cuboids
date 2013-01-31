@@ -2,7 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.CuboidNode;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.ColorManager;
 
@@ -26,22 +26,21 @@ public class CmodRename extends CBaseCommand {
         }
         MessageSystem ms = MessageSystem.getInstance();
 
-        CuboidNode node = RegionManager.get().getCuboidByName(
+        Region node = RegionManager.get().getCuboidByName(
                 command[1], player.getWorld().getName(),
                 player.getWorld().getDimension());
 
         if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!(node.getCuboid().playerIsOwner(player.getName()) || player
+            if (!(node.playerIsOwner(player.getName()) || player
                     .hasPermission("cAreaMod"))) {
                 ms.failMessage(player, "permissionDenied");
                 return;
             }
         }
 
-        RegionManager.get().removeRegion(node.getCuboid(), true);
-        node.getCuboid().setName(command[3]);
-        node.updateChilds();
-        RegionManager.get().addNode(node);
+        RegionManager.get().removeRegion(node, true);
+        node.setName(command[3]);
+        RegionManager.get().addRegion(node);
         ms.successMessage(player, "cuboidRenamed");
     }
 }

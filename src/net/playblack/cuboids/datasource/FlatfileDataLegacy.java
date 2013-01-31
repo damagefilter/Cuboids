@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.cuboids.regions.Cuboid;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.cuboids.regions.Cuboid.Status;
+import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
@@ -83,7 +83,7 @@ public class FlatfileDataLegacy implements BaseData {
                                 + files.getName()));
                         props = reader.readLine();
                         // log.logMessage("Processing", "INFO");
-                        Cuboid c = new Cuboid();
+                        Region c = new Region();
                         int dimension = CServer.getServer().getDimensionId(c.getWorld());
                         String world = CServer.getServer().getDefaultWorld().getName();
                         c.setWorld(world);
@@ -194,7 +194,7 @@ public class FlatfileDataLegacy implements BaseData {
      * @param str
      * @return
      */
-    private Cuboid csvToCuboid(Cuboid cube, String str) {
+    private Region csvToCuboid(Region cube, String str) {
         String[] csv = str.split(",");
         
         log.logMessage("Cuboids split amount: " + csv.length + " for " + csv[0], "INFO");

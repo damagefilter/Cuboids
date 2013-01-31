@@ -1,9 +1,9 @@
 package net.playblack.cuboids.gameinterface;
 
 import net.playblack.cuboids.blocks.CItem;
-import net.playblack.cuboids.regions.Cuboid;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.cuboids.regions.Cuboid.Status;
+import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.mcutils.Location;
 import net.playblack.mcutils.Vector;
 
@@ -101,12 +101,12 @@ public abstract class CPlayer implements IBaseEntity {
      * @return
      */
     public boolean canModifyBlock(Location location) {
-        Cuboid cube = (Cuboid) RegionManager.get().getActiveCuboidNode(location, false);
+        Region cube = (Region) RegionManager.get().getActiveCuboidNode(location, false);
         if(hasPermission("cIgnoreRestrictions") || cube.playerIsAllowed(getName(), getGroups())) {
             return true;
         }
         
-        if(cube.getProperty("protection") == Cuboid.Status.ALLOW) {
+        if(cube.getProperty("protection") == Region.Status.ALLOW) {
             return false;
         }
         return true;
@@ -119,7 +119,7 @@ public abstract class CPlayer implements IBaseEntity {
      * @return
      */
     public boolean canUseItem(Location location, CItem item) {
-        Cuboid cube = (Cuboid) RegionManager.get().getActiveCuboidNode(location, false);
+        Region cube = (Region) RegionManager.get().getActiveCuboidNode(location, false);
         if(hasPermission("cIgnoreRestrictions")) {
             return true;
         }
@@ -131,7 +131,7 @@ public abstract class CPlayer implements IBaseEntity {
     }
     
     public boolean canMoveTo(Location location) {
-        Cuboid cube = (Cuboid) RegionManager.get().getActiveCuboidNode(location, false);
+        Region cube = (Region) RegionManager.get().getActiveCuboidNode(location, false);
         if(hasPermission("cIgnoreRestrictions") || cube.playerIsAllowed(getName(), getGroups())) {
             return true;
         }

@@ -9,8 +9,8 @@ import net.playblack.cuboids.datasource.FlatfileData;
 import net.playblack.cuboids.datasource.MysqlData;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.cuboids.regions.Cuboid;
-import net.playblack.cuboids.regions.Cuboid.Status;
+import net.playblack.cuboids.regions.Region;
+import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.PropsFile;
 
@@ -47,7 +47,7 @@ public class Config {
     // --- UP TO HERE
     
     // global settings go into this
-    private Cuboid global = new Cuboid();
+    private Region global = new Region();
 
     // Plugin Settings
     private boolean useDoubleAction = false;
@@ -69,7 +69,7 @@ public class Config {
     private boolean allowUndo = false;
 
     // Cuboids Default Settings
-    HashMap<String, Cuboid.Status> defaultSettings = new HashMap<String, Cuboid.Status>();
+    HashMap<String, Region.Status> defaultSettings = new HashMap<String, Region.Status>();
 
     ArrayList<Integer> restrictedItems;
 
@@ -100,58 +100,58 @@ public class Config {
         // Default setting for new cuboids
         
         //default-creeper-secure
-        defaultSettings.put("creeper-explosion", cuboidSetting.getStatus("default-creeper-explosion", Cuboid.Status.DENY));
+        defaultSettings.put("creeper-explosion", cuboidSetting.getStatus("default-creeper-explosion", Region.Status.DENY));
         
         //default-sanctuary
-        defaultSettings.put("mob-damage", cuboidSetting.getStatus("default-mob-damage", Cuboid.Status.ALLOW));
+        defaultSettings.put("mob-damage", cuboidSetting.getStatus("default-mob-damage", Region.Status.ALLOW));
         
         //default sanctuary too
-        defaultSettings.put("mob-spawn", cuboidSetting.getStatus("default-mob-spawn", Cuboid.Status.ALLOW));
+        defaultSettings.put("mob-spawn", cuboidSetting.getStatus("default-mob-spawn", Region.Status.ALLOW));
         
         //default-sanctuary-animal-spawn
-        defaultSettings.put("animal-spawn", cuboidSetting.getStatus("default-animal-spawn", Cuboid.Status.ALLOW));
+        defaultSettings.put("animal-spawn", cuboidSetting.getStatus("default-animal-spawn", Region.Status.ALLOW));
         
         //default-healing
-        defaultSettings.put("healing", cuboidSetting.getStatus("default-healing", Cuboid.Status.DENY));
+        defaultSettings.put("healing", cuboidSetting.getStatus("default-healing", Region.Status.DENY));
         
         //default-pvp-allowed
-        defaultSettings.put("pvp-damage", cuboidSetting.getStatus("default-pvp-damage", Cuboid.Status.ALLOW));
+        defaultSettings.put("pvp-damage", cuboidSetting.getStatus("default-pvp-damage", Region.Status.ALLOW));
         
         //default-protection
-        defaultSettings.put("protection", cuboidSetting.getStatus("default-protection", Cuboid.Status.ALLOW));
+        defaultSettings.put("protection", cuboidSetting.getStatus("default-protection", Region.Status.ALLOW));
 
         //default-freebuild
-        defaultSettings.put("creative", cuboidSetting.getStatus("default-creative", Cuboid.Status.DENY));
+        defaultSettings.put("creative", cuboidSetting.getStatus("default-creative", Region.Status.DENY));
         
         //default-firespread-block
-        defaultSettings.put("firespread", cuboidSetting.getStatus("default-firespread", Cuboid.Status.ALLOW));
+        defaultSettings.put("firespread", cuboidSetting.getStatus("default-firespread", Region.Status.ALLOW));
         
         //default-stop-lava-flow
-        defaultSettings.put("lava-flow", cuboidSetting.getStatus("default-lava-flow", Cuboid.Status.ALLOW));
+        defaultSettings.put("lava-flow", cuboidSetting.getStatus("default-lava-flow", Region.Status.ALLOW));
         
         //default-stop-water-flow
-        defaultSettings.put("water-flow", cuboidSetting.getStatus("default-water-flow", Cuboid.Status.ALLOW));
+        defaultSettings.put("water-flow", cuboidSetting.getStatus("default-water-flow", Region.Status.ALLOW));
         
         //default-farmland
-        defaultSettings.put("crops-trampling", cuboidSetting.getStatus("default-crops-trampling", Cuboid.Status.DENY));
+        defaultSettings.put("crops-trampling", cuboidSetting.getStatus("default-crops-trampling", Region.Status.DENY));
         
         //default-tnt-secure
-        defaultSettings.put("tnt-explosion", cuboidSetting.getStatus("default-tnt-explosion", Cuboid.Status.ALLOW));
+        defaultSettings.put("tnt-explosion", cuboidSetting.getStatus("default-tnt-explosion", Region.Status.ALLOW));
         
         //default-restriction
-        defaultSettings.put("enter-cuboid", cuboidSetting.getStatus("default-enter-cuboid", Cuboid.Status.ALLOW));
+        defaultSettings.put("enter-cuboid", cuboidSetting.getStatus("default-enter-cuboid", Region.Status.ALLOW));
         
         //default-hmob
-        defaultSettings.put("more-mobs", cuboidSetting.getStatus("default-more-mobs", Cuboid.Status.DENY));
+        defaultSettings.put("more-mobs", cuboidSetting.getStatus("default-more-mobs", Region.Status.DENY));
 
         //default-enderman-control
-        defaultSettings.put("enderman-pickup", cuboidSetting.getStatus("default-enderman-pickup", Cuboid.Status.DENY));
+        defaultSettings.put("enderman-pickup", cuboidSetting.getStatus("default-enderman-pickup", Region.Status.DENY));
         
         //default-physics-control
-        defaultSettings.put("physics", cuboidSetting.getStatus("default-physics", Cuboid.Status.ALLOW));
+        defaultSettings.put("physics", cuboidSetting.getStatus("default-physics", Region.Status.ALLOW));
         
         //switch on/off item restriction
-        defaultSettings.put("restrict-items", cuboidSetting.getStatus("default-restrict-items", Cuboid.Status.DEFAULT));
+        defaultSettings.put("restrict-items", cuboidSetting.getStatus("default-restrict-items", Region.Status.DEFAULT));
 
         
         
@@ -177,25 +177,25 @@ public class Config {
         global.setProperty("tnt-explosion", cuboidSetting.getStatus("global-tnt-explosion", Status.ALLOW));
         
         //firespread-block-global
-        global.setProperty("firespread", cuboidSetting.getStatus("global-firespread", Cuboid.Status.ALLOW));
+        global.setProperty("firespread", cuboidSetting.getStatus("global-firespread", Region.Status.ALLOW));
         
         //protection-global
-        global.setProperty("protection", cuboidSetting.getStatus("global-protection", Cuboid.Status.DEFAULT));
+        global.setProperty("protection", cuboidSetting.getStatus("global-protection", Region.Status.DEFAULT));
         
         //stop-lava-flow-global
-        global.setProperty("lava-flow", cuboidSetting.getStatus("global-lava-flow", Cuboid.Status.DEFAULT));
+        global.setProperty("lava-flow", cuboidSetting.getStatus("global-lava-flow", Region.Status.DEFAULT));
         
         //stop-lava-flow-global
-        global.setProperty("water-flow", cuboidSetting.getStatus("global-water-flow", Cuboid.Status.DEFAULT));
+        global.setProperty("water-flow", cuboidSetting.getStatus("global-water-flow", Region.Status.DEFAULT));
         
         //default-physics-control
-        global.setProperty("physics", cuboidSetting.getStatus("global-physics", Cuboid.Status.ALLOW));
+        global.setProperty("physics", cuboidSetting.getStatus("global-physics", Region.Status.ALLOW));
         
         //default-enderman-control
-        global.setProperty("enderman-pickup", cuboidSetting.getStatus("global-enderman-pickup", Cuboid.Status.DEFAULT));
+        global.setProperty("enderman-pickup", cuboidSetting.getStatus("global-enderman-pickup", Region.Status.DEFAULT));
         
       //switch on/off item restriction
-        defaultSettings.put("restrict-items", cuboidSetting.getStatus("global-restrict-items", Cuboid.Status.DEFAULT));
+        defaultSettings.put("restrict-items", cuboidSetting.getStatus("global-restrict-items", Region.Status.DEFAULT));
 
         String[] itemsList = cuboidSetting.getString("restricted-items", "").split(",");
         restrictedItems = new ArrayList<Integer>(itemsList.length);
@@ -223,7 +223,7 @@ public class Config {
         return instance;
     }
 
-    public void updateGlobalSettings(Cuboid props) {
+    public void updateGlobalSettings(Region props) {
         global = props;
     }
 
@@ -460,9 +460,9 @@ public class Config {
         return allowEnderControl;
     }
 
-    public Cuboid getDefaultCuboidSetting(CPlayer player) {
-        Cuboid flags = new Cuboid();
-        HashMap<String, Cuboid.Status> temp = new HashMap<String, Cuboid.Status>(defaultSettings);
+    public Region getDefaultCuboidSetting(CPlayer player) {
+        Region flags = new Region();
+        HashMap<String, Region.Status> temp = new HashMap<String, Region.Status>(defaultSettings);
         Iterator<String> it = temp.keySet().iterator();
         
         while(it.hasNext()) {
@@ -475,7 +475,7 @@ public class Config {
         return flags;
     }
 
-    public Cuboid getGlobalSettings() {
+    public Region getGlobalSettings() {
         return global;
     }
 

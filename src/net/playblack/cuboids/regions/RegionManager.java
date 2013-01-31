@@ -18,14 +18,14 @@ public class RegionManager {
     private ArrayList<Region> rootNodes = new ArrayList<Region>(15);
     public EventLogger log;
     private BaseData dataSource;
-    private Cuboid global;
+    private Region global;
 
     private static RegionManager instance = null;
 
     private RegionManager(EventLogger log, BaseData dataSource) {
         this.log = log;
         this.dataSource = dataSource;
-        Cuboid insert = new Cuboid();
+        Region insert = new Region();
         insert.putAll(Config.getInstance().getGlobalSettings().getAllProperties());
         global = insert;
     }
@@ -44,7 +44,7 @@ public class RegionManager {
      * @param props
      */
     public void updateGlobalSettings() {
-        global = new Cuboid(Config.getInstance().getGlobalSettings());
+        global = new Region(Config.getInstance().getGlobalSettings());
     }
 
     /*
@@ -164,7 +164,7 @@ public class RegionManager {
      * @param force
      * @return
      */
-    public String removeRegion(Region cube, boolean force) {
+    public void removeRegion(Region cube, boolean force) {
         
         if(rootNodes.contains(cube)) {
             rootNodes.remove(cube);
@@ -184,7 +184,6 @@ public class RegionManager {
         //so it will not be taken into consideration anymore
         cube.detach();
         removeNodeFile(cube);
-        return "REMOVED";
     }
 
     /**
@@ -491,6 +490,28 @@ public class RegionManager {
                 }
             }
         }
+    }
+
+    /**
+     * This will sort the given cuboid into the root nodes list,
+     * if it has no parent or removes it from the list if it is still there,
+     * but suddenly has a parent attached
+     * @param cube
+     */
+    public void updateRegion(Region cube) {
+        if(cube.getParent() == null) {
+            if(!rootNodes.contains(cube)) {
+                addRoot(cube);
+            }
+        }
+        else {
+            if(rootNodes.contains(cube)) {
+                //We have a prent but are filed unter rootNodes. must change ...
+                rootNodes.remove(cube);
+                //Parent is already set and updated, no need for more
+            }
+        }
+        
     }
 
 }

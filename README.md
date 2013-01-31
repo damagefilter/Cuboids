@@ -1,5 +1,5 @@
 # Cuboids 2
-### Area protection and World Editing Plugin for CanaryMod and soon Canary Creeper (CanaryMod recode project)
+### Area protection and World Editing Plugin for CanaryMod and soon Bukkit
 
 Copyright (c) 2013, PlayBlack
 

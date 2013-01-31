@@ -3,8 +3,8 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.Cuboid;
-import net.playblack.cuboids.regions.CuboidE;
+import net.playblack.cuboids.regions.Region;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
@@ -40,7 +40,7 @@ public class CmodAdd extends CBaseCommand {
             ms.failMessage(player, "cuboidNotCreated");
             return;
         }
-        Cuboid defaultC = Config.getInstance().getDefaultCuboidSetting(player);
+        Region defaultC = Config.getInstance().getDefaultCuboidSetting(player);
         CuboidSelection selection = SelectionManager.getInstance()
                 .getPlayerSelection(player.getName());
         if (!selection.isComplete()) {
