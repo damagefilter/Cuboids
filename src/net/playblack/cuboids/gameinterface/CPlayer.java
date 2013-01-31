@@ -101,7 +101,7 @@ public abstract class CPlayer implements IBaseEntity {
      * @return
      */
     public boolean canModifyBlock(Location location) {
-        Cuboid cube = RegionManager.get().getActiveCuboidNode(location, false).getCuboid();
+        Cuboid cube = (Cuboid) RegionManager.get().getActiveCuboidNode(location, false);
         if(hasPermission("cIgnoreRestrictions") || cube.playerIsAllowed(getName(), getGroups())) {
             return true;
         }
@@ -119,7 +119,7 @@ public abstract class CPlayer implements IBaseEntity {
      * @return
      */
     public boolean canUseItem(Location location, CItem item) {
-        Cuboid cube = RegionManager.get().getActiveCuboidNode(location, false).getCuboid();
+        Cuboid cube = (Cuboid) RegionManager.get().getActiveCuboidNode(location, false);
         if(hasPermission("cIgnoreRestrictions")) {
             return true;
         }
@@ -131,7 +131,7 @@ public abstract class CPlayer implements IBaseEntity {
     }
     
     public boolean canMoveTo(Location location) {
-        Cuboid cube = RegionManager.get().getActiveCuboidNode(location, false).getCuboid();
+        Cuboid cube = (Cuboid) RegionManager.get().getActiveCuboidNode(location, false);
         if(hasPermission("cIgnoreRestrictions") || cube.playerIsAllowed(getName(), getGroups())) {
             return true;
         }

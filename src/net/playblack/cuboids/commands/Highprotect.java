@@ -53,7 +53,7 @@ public class Highprotect extends CBaseCommand {
             ms.notification(player,
                     "FYI: The protection option is disabled. The Cuboid will still be created!");
         }
-        if (CuboidInterface.get().addCuboid(cube)) {
+        if (CuboidInterface.get().addRegion(cube)) {
             ms.successMessage(player, "cuboidCreated");
         } else {
             ms.failMessage(player, "cuboidNotCreated");

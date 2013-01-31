@@ -2,7 +2,7 @@ package net.playblack.cuboids.datasource;
 
 import java.util.ArrayList;
 
-import net.playblack.cuboids.regions.CuboidNode;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 
 /**
@@ -20,7 +20,7 @@ public interface BaseData {
      * 
      * @param node
      */
-    abstract public void saveCuboid(CuboidNode node);
+    abstract public void saveRegion(Region node);
 
     /**
      * Save the whole treelist to files
@@ -29,12 +29,12 @@ public interface BaseData {
      *            list of CuboidTrees
      * @param silent
      */
-    public void saveAll(ArrayList<CuboidNode> treeList, boolean silent,
+    public void saveAll(ArrayList<Region> treeList, boolean silent,
             boolean force);
 
     public void loadAll(RegionManager handler);
 
     public void loadCuboid(RegionManager handler, String name, String world);
 
-    public void removeNode(CuboidNode node);
+    public void removeNode(Region node);
 }

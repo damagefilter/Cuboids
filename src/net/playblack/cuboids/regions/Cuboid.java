@@ -71,6 +71,7 @@ public class Cuboid extends Region{
         }
     }
     
+    
     /** Map of all currently existing property */
     private HashMap<String, Status> properties;
     
@@ -83,9 +84,6 @@ public class Cuboid extends Region{
     
     /** List of allowed groups*/
     private ArrayList<String> groups;
-    
-    /** Players that are currently within this area*/
-    private ArrayList<String> playersWithin;
     
     private Vector origin;
     private Vector offset;
@@ -105,6 +103,13 @@ public class Cuboid extends Region{
         groups = new ArrayList<String>();
         
         
+    }
+    
+    public Cuboid(Cuboid parent) {
+        this.parent = parent;
+        if(parent != null) {
+            parent.childs.add(this);
+        }
     }
     
     /**
@@ -336,15 +341,10 @@ public class Cuboid extends Region{
         }
     }
     
-    /**
-     * Check if this cuboid is inside the given one
-     * 
-     * @param cube
-     * @param complete
-     *            true to check if it is inside with both edges
-     * @return
-     */
-    public boolean cuboidIsWithin(Cuboid cube, boolean complete) {
+    
+    @Override
+    public boolean cuboidIsWithin(Region r, boolean complete) {
+        Cuboid cube = (Cuboid)r;
         if (this.equalsWorld(cube)) {
             Vector min = Vector.getMinimum(cube.getOrigin(),
                     cube.getOffset());
@@ -369,12 +369,7 @@ public class Cuboid extends Region{
         }
     }
     
-    /**
-     * Checks if a given vector v is within this cuboid.
-     * 
-     * @param v
-     * @return True: Point is within this cuboid, false otherwise
-     */
+    @Override
     public boolean isWithin(Location v) {
         if (!v.getWorld().equals(this.world)
                 || !(v.getDimension() == this.dimension)) {
@@ -389,56 +384,13 @@ public class Cuboid extends Region{
         }
     }
     
+    @Override
     public int getSize() {
         return (int) Vector.getDistance(origin.getBlockX(), offset.getBlockX())
                 * (int) Vector.getDistance(origin.getBlockY(), offset.getBlockY())
                 * (int) Vector.getDistance(origin.getBlockZ(), offset.getBlockZ());
     }
     
-    /**
-     * Adds a player that is in this area
-     * 
-     * @param playerName
-     */
-    public void addPlayerWithin(String playerName) {
-        if (!playerName.equalsIgnoreCase("no_players")) {
-            if (!playerName.substring(2).isEmpty()) {
-                playersWithin.add(playerName);
-            }
-        }
-    }
-
-    /**
-     * Remove player from within list
-     * 
-     * @param playerName
-     * @return
-     */
-    public boolean removePlayerWithin(String playerName) {
-        if (playersWithin.contains(playerName)) {
-            playersWithin.remove(playerName);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Get all players that are within this cuboid as arrayList<string>
-     * 
-     * @return
-     */
-    public ArrayList<String> getPlayersWithin() {
-        return playersWithin;
-    }
-
-    public boolean playerIsWithin(String playerName) {
-        if (playersWithin.contains(playerName)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
     
     /**
      * Check if a given player is the owner of this cuboid. That is to say, if
@@ -735,9 +687,22 @@ public class Cuboid extends Region{
         }
         return builder.toString();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if(other == null) {
+            return false;
+        }
+        if(other instanceof Cuboid) {
+            Cuboid c = (Cuboid)other;
+            return (c.name.equals(name)) && (c.getSize() == getSize()) && (c.world.equals(world)) && (c.dimension == dimension);
+        }
+        return false;
+    }
     
-    public boolean isGlobal() {
-        return name.equals("__WORLD__");
+    @Override
+    public int hashCode() {
+        return getSize() + priority + dimension;
     }
 
 }

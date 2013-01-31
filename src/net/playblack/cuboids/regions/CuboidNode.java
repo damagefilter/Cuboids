@@ -2,6 +2,7 @@ package net.playblack.cuboids.regions;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class CuboidNode {
 
     /**
@@ -69,25 +70,6 @@ public class CuboidNode {
     }
 
     /**
-     * Get a child from this node at the given index
-     * 
-     * @param index
-     * @return CuboidNode
-     */
-    public CuboidNode getChildAt(int index) {
-        return childs.get(index);
-    }
-
-    /**
-     * Remove a child at the given index.
-     * 
-     * @param index
-     */
-    public void removeChildAt(int index) {
-        childs.remove(index);
-    }
-
-    /**
      * Get the entire child list
      * 
      * @return
@@ -150,7 +132,8 @@ public class CuboidNode {
      * @return
      */
     public Cuboid getParent() {
-        return element.getParent();
+//        return element.getParent();
+        return null;
     }
 
     /**
@@ -200,7 +183,7 @@ public class CuboidNode {
      * @param test
      * @return
      */
-    public boolean equalWorlds(Cuboid test) {
+    public boolean equalWorlds(Region test) {
         return element.equalsWorld(test);
     }
 

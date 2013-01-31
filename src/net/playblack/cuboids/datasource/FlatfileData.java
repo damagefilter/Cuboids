@@ -114,7 +114,7 @@ public class FlatfileData implements BaseData {
                                 cube.getWorld(), cube.getDimension())) {
                             handler.updateCuboidNode(cube);
                         } else {
-                            handler.addCuboid(cube);
+                            handler.addRegion(cube);
                         }
                         return;
                     }
@@ -206,7 +206,7 @@ public class FlatfileData implements BaseData {
                     continue;
                 }
                 if (nodelist.get(i).getCuboid().getParentDeprecated() != null) {
-                    CuboidNode parent = handler.getCuboidNodeByName(nodelist
+                    CuboidNode parent = handler.getCuboidByName(nodelist
                             .get(i).getParent(), nodelist.get(i).getWorld(),
                             nodelist.get(i).getDimension());
                     if (parent != null

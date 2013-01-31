@@ -116,8 +116,7 @@ public class CuboidDeserializer {
                 generateSignData(lineNumber, (SignBlock) block);
             }
         } else {
-            throw new DeserializeException(
-                    "Could not deserialize a Vector-Block pair!", line);
+            throw new DeserializeException("Could not deserialize a Vector-Block pair!", line);
         }
 
     }

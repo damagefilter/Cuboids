@@ -150,7 +150,7 @@ public class CuboidInterface {
     public void saveCuboid(CPlayer player, String cube) {
         // getCuboidByName(cube, player.getWorld().getName(),
         // player.getWorld().getDimension())
-        CuboidNode cubeNode = regions.getCuboidNodeByName(cube, player
+        CuboidNode cubeNode = regions.getCuboidByName(cube, player
                 .getWorld().getName(), player.getWorld().getDimension());
         if (cubeNode == null) {
             ms.failMessage(player, "cuboidNotFoundOnCommand");
@@ -333,10 +333,10 @@ public class CuboidInterface {
                 cube.setParent(parent.getCuboid());
                 cube.setPriority(parent.getCuboid().getPriority() + 1);
                 cube.putAll(parent.getCuboid().getAllProperties());
-                return regions.addCuboid(cube);
+                return regions.addRegion(cube);
             }
         }
-        return regions.addCuboid(cube);
+        return regions.addRegion(cube);
     }
 
     /**
@@ -358,7 +358,7 @@ public class CuboidInterface {
                 || player.hasPermission("cAreaMod")
                 || player.hasPermission("cIgnoreRestrictions")
                 || player.hasPermission("cdelete")) {
-            String response = regions.removeCuboid(cube, false);
+            String response = regions.removeRegion(cube, false);
 
             if (response.equalsIgnoreCase("NOT_REMOVED_HAS_CHILDS")) {
                 ms.failMessage(player, "cuboidNotRemovedHasChilds");
@@ -622,9 +622,9 @@ public class CuboidInterface {
                 cube.setBoundingBox(selection.getOrigin(), selection.getOffset());
                 cube.hasChanged = true;
                 regions.updateCuboidNode(cube);
-                regions.autoSortCuboidAreas();
+                regions.autoSortRegions();
 
-                regions.saveSingle(regions.getCuboidNodeByName(cube.getName(),
+                regions.saveSingle(regions.getCuboidByName(cube.getName(),
                         cube.getWorld(), cube.getDimension()));
                 ms.successMessage(player, "cuboidMoved");
                 return true;
@@ -653,9 +653,7 @@ public class CuboidInterface {
         Cuboid cube = regions.getCuboidByName(cubeName, player.getWorld()
                 .getName(), player.getWorld().getDimension());
         if (cube != null) {
-            if (cube.playerIsOwner(player.getName())
-                    || player.hasPermission("cAreaMod")
-                    || player.hasPermission("cIgnoreRestrictions")) {
+            if (cube.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod") || player.hasPermission("cIgnoreRestrictions")) {
                 cube.setPriority(prio);
                 regions.updateCuboidNode(cube);
                 ms.successMessage(player, "prioritySet");

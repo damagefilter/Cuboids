@@ -478,7 +478,7 @@ public class MysqlData implements BaseData {
                 continue;
             }
             if (nodelist.get(i).getCuboid().getParentDeprecated() != null) {
-                CuboidNode parent = handler.getCuboidNodeByName(nodelist.get(i)
+                CuboidNode parent = handler.getCuboidByName(nodelist.get(i)
                         .getParent(), nodelist.get(i).getWorld(),
                         nodelist.get(i).getDimension());
                 if (parent != null
@@ -519,7 +519,7 @@ public class MysqlData implements BaseData {
                             cube.getDimension())) {
                         handler.updateCuboidNode(cube);
                     } else {
-                        handler.addCuboid(cube);
+                        handler.addRegion(cube);
                     }
                     return;
                 }

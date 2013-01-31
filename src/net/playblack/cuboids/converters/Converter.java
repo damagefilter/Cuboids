@@ -53,7 +53,7 @@ public class Converter {
         }
         // now that we have all the fancy and unsorted roots added, lets sort
         // them.
-        regions.autoSortCuboidAreas();
+        regions.autoSortRegions();
     }
 
     /**

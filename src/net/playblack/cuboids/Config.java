@@ -95,34 +95,6 @@ public class Config {
         undoSteps = pluginSetting.getInt("undo-steps", 5);
         allowUndo = pluginSetting.getBoolean("allow-undo", true);
 
-        // Enable/Disable plugin features
-        //REMOVE FROM HERE ...
-        allowProtection = pluginSetting.getBoolean("allow-protection", true);
-        allowCreeperSecure = pluginSetting.getBoolean("allow-creeper-secure",
-                true);
-        allowSanctuary = pluginSetting.getBoolean("allow-sanctuary", true);
-        allowSanctuarySpawnAnimals = pluginSetting.getBoolean(
-                "allow-sanctuary-animal-spawn", true);
-        allowHealing = pluginSetting.getBoolean("allow-healing", true);
-        allowPvp = pluginSetting.getBoolean("allow-pvp", true);
-        allowFreebuild = pluginSetting.getBoolean("allow-freebuild", true);
-        allowFireSpreadBlock = pluginSetting.getBoolean(
-                "allow-firespread-block", true);
-        allowTntSecure = pluginSetting.getBoolean("allow-tnt-secure", true);
-        allowLavaControl = pluginSetting.getBoolean("allow-stop-lava-flow",
-                true);
-        allowWaterControl = pluginSetting.getBoolean("allow-stop-water-flow",
-                true);
-        allowFarmland = pluginSetting.getBoolean("allow-farmland", true);
-        allowRestriction = pluginSetting.getBoolean("allow-restriction", true);
-        allowHmobs = pluginSetting.getBoolean("allow-hmobs", false);
-        allowWelcome = pluginSetting.getBoolean("allow-welcome-message", true);
-        allowFarewell = pluginSetting
-                .getBoolean("allow-farewell-message", true);
-        allowPhysics = pluginSetting.getBoolean("allow-physics-control", true);
-        allowEnderControl = pluginSetting.getBoolean("allow-enderman-control",
-                true);
-        //TO HERE ...
         verbose = pluginSetting.getBoolean("verbose", true);
 
         // Default setting for new cuboids
