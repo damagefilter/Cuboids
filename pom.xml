@@ -63,10 +63,18 @@
    <!-- CanaryMod isn't a Maven project so System Scope the dependancies -->
    <dependency>
     <groupId>net.canarymod</groupId>
-    <artifactId>crow</artifactId>
+    <artifactId>CanaryMod</artifactId>
     <version>5.7.11</version>
     <scope>system</scope>
     <systemPath>${basedir}/lib/CanaryMod.jar</systemPath>
+   </dependency>
+   
+   <dependency>
+    <groupId>net.canarymod</groupId>
+    <artifactId>servero</artifactId>
+    <version>5.7.11</version>
+    <scope>system</scope>
+    <systemPath>${basedir}/lib/minecraft_servero.jar</systemPath>
    </dependency>
    <!-- End: CanaryMod -->
   </dependencies>
