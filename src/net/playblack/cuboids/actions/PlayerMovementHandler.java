@@ -47,7 +47,7 @@ public class PlayerMovementHandler {
                                                                            // has
                                                                            // administrative
                                                                            // level
-                    player.setCreative(0);
+                    player.setGameMode(0);
                     player.setInventory(CuboidInterface.get().playerInventories
                             .get(player.getName()));
                 }

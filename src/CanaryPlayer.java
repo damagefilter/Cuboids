@@ -100,7 +100,7 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public void setCreative(int creative) {
+    public void setGameMode(int creative) {
         player.setCreativeMode(creative);
     }
 
@@ -115,7 +115,7 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public CItem[] getInventory() {
+    public CItem[] getInventory(int mode) {
         Item[] canaryItems = player.getInventory().getContents();
         CItem[] items = new CItem[canaryItems.length];
         for (int i = 0; i < canaryItems.length; i++) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.mcutils.ColorManager;
@@ -31,8 +32,6 @@ public class Region {
     /** Cuboids priority. Cuboids with higher priority will be considered when areas clash*/
     protected int priority;
     
-    /** Players that are currently within this area*/
-    private ArrayList<String> playersWithin;
     
     public enum Status {
         ALLOW,
@@ -136,10 +135,55 @@ public class Region {
      * 
      * @param playerName
      */
+    @Deprecated
     public void addPlayerWithin(String playerName) {
         if (!playerName.equalsIgnoreCase("no_players")) {
+            //Add into this cuboid
             if (!playerName.substring(2).isEmpty()) {
-                playersWithin.add(playerName);
+//                playersWithin.add(playerName);
+            }
+        }
+    }
+    
+    /**
+     * Recursively add player to this Region and its childs.
+     * This will set the currentRegion in the player
+     * Recursively goes down
+     * @param playerName
+     * @param loc
+     */
+    public void addPlayerWithin(CPlayer player, Location loc) {
+        if (!player.getName().equalsIgnoreCase("no_players")) {
+            //Add into this cuboid
+            if (!player.getName().substring(2).isEmpty()) {
+                if(isWithin(loc)) {
+                    player.setRegion(this);
+                }
+            }
+            for(Region child : childs) {
+                if(child.isWithin(loc)) {
+                    child.addPlayerWithin(player, loc);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Recursively remove player from this Region and its childs
+     * @param player
+     * @param toCheck
+     */
+    public void removePlayerWithin(CPlayer player, Location toCheck) {
+        if(!isWithin(toCheck)) {
+            if(parent != null && parent.isWithin(toCheck)) {
+                player.setRegion(parent);
+            }
+            //Assume we're not in any region anymore.
+            //If we are we 
+            player.setRegion(null);
+            for(Region child : childs) {
+                child.removePlayerWithin(player, toCheck);
+                
             }
         }
     }
@@ -150,13 +194,15 @@ public class Region {
      * @param playerName
      * @return
      */
+    @Deprecated
     public boolean removePlayerWithin(String playerName) {
-        if (playersWithin.contains(playerName)) {
-            playersWithin.remove(playerName);
-            return true;
-        } else {
-            return false;
-        }
+//        if (playersWithin.contains(playerName)) {
+//            playersWithin.remove(playerName);
+//            return true;
+//        } else {
+//            return false;
+//        }
+        return false;
     }
 
     /**
@@ -164,8 +210,9 @@ public class Region {
      * 
      * @return
      */
+    @Deprecated
     public ArrayList<String> getPlayersWithin() {
-        return playersWithin;
+        return null;
     }
 
     /**
@@ -173,12 +220,14 @@ public class Region {
      * @param playerName
      * @return
      */
+    @Deprecated
     public boolean playerIsWithin(String playerName) {
-        if (playersWithin.contains(playerName)) {
-            return true;
-        } else {
-            return false;
-        }
+//        if (playersWithin.contains(playerName)) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+        return false;
     }
     
     /**

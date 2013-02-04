@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.CuboidSaveTask;
 import net.playblack.cuboids.HMobTask;
-import net.playblack.cuboids.HealThread;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.blocks.CItem;
@@ -22,8 +21,7 @@ import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Location;
 
 /**
- * This accesses RegionManager and handles actions that would and can happen
- * when moving around in cuboids etc.
+ * Interfaces RegionManager and applies permissions.
  * 
  * @author Chris
  * 
@@ -39,9 +37,6 @@ public class CuboidInterface {
 
     /**
      * Construct a new CuboidInterface
-     * 
-     * @param r
-     * @param log
      */
     private CuboidInterface() {
         regions = RegionManager.get();
@@ -58,6 +53,10 @@ public class CuboidInterface {
             instance = new CuboidInterface();
         }
         return instance;
+    }
+    
+    public ScheduledExecutorService getThreadManager() {
+        return threadManager;
     }
     
     public boolean setProperty(CPlayer player, String cubeName, String property, String value) {
@@ -123,10 +122,8 @@ public class CuboidInterface {
      * @param cube
      */
     public void loadCuboid(CPlayer player, String cube) {
-        if ((player.hasPermission("cIgnoreRestrictions"))
-                || (player.hasPermission("cAreaMod"))) {
-            if (!regions.cuboidExists(cube, player.getWorld().getName(), player
-                    .getWorld().getDimension())) {
+        if ((player.hasPermission("cIgnoreRestrictions")) || (player.hasPermission("cAreaMod"))) {
+            if (!regions.cuboidExists(cube, player.getWorld().getName(), player.getWorld().getDimension())) {
                 ms.failMessage(player, "cuboidNotFoundOnCommand");
                 return;
             }
@@ -152,11 +149,9 @@ public class CuboidInterface {
             ms.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
-        if ((cubeNode.playerIsOwner(player.getName()))
-                || ((player.hasPermission("cIgnoreRestrictions")) || (player
+        if ((cubeNode.playerIsOwner(player.getName())) || ((player.hasPermission("cIgnoreRestrictions")) || (player
                         .hasPermission("cAreaMod")))) {
-            if (regions.saveSingle(cube, player.getWorld().getName(), player
-                    .getWorld().getDimension())) {
+            if (regions.saveSingle(cube, player.getWorld().getName(), player.getWorld().getDimension())) {
                 ms.successMessage(player, "cuboidSaved");
             } else {
                 ms.failMessage(player, "cuboidNotSaved");
@@ -185,31 +180,28 @@ public class CuboidInterface {
      * 
      * @param player
      * @param location
+     * @deprecated Use handleRegionsForPlayer()
      */
+    @Deprecated
     public void addPlayerWithin(CPlayer player, Location location) {
-        ArrayList<Region> nodes = regions.getCuboidsContaining(location, player.getWorld().getName(), player.getWorld().getDimension());
-        for (Region r : nodes) {
-            Region cube = (Region)r;
-            if (!cube.playerIsWithin(player.getName())) {
-                cube.addPlayerWithin(player.getName());
-
-                if (cube.getWelcome() != null) {
-                    ms.notification(player, cube.getWelcome());
-                }
-                if (cube.getProperty("healing") == Status.ALLOW) {
-                    threadManager.schedule(new HealThread(player, cube,
-                            threadManager, Config.getInstance().getHealPower(),
-                            Config.getInstance().getHealDelay()), 0,
-                            TimeUnit.SECONDS);
-                }
-
-                if (cube.getProperty("creative") == Status.ALLOW && (!player.isInCreativeMode())) {
-                    playerInventories.put(player.getName(),
-                            player.getInventory());
-                    player.clearInventory();
-                    player.setCreative(1);
-                }
-            }
+        throw new UnsupportedOperationException("addPlayerWithin is deprecated! use handleRegionsForPlayer intead!");
+    }
+    
+    /**
+     * Handle the leaving and entering of regions for a specified player.
+     * This will update the currentRegion reference in a player, aswell
+     * as send welcome/farewell messages and toggle game modes according to
+     * the specifications of a region
+     * @param player
+     * @param from
+     * @param to
+     */
+    public void handleRegionsForPlayer(CPlayer player, Location from, Location to) {
+        if(from != null) {
+            regions.removePlayerFromRegion(player, from);
+        }
+        if(to != null) {
+            regions.addPlayerToRegions(player, to);
         }
     }
 
@@ -219,39 +211,11 @@ public class CuboidInterface {
      * @param player
      * @param vFrom
      * @param vTo
+     * @deprecated Use handleRegionsForPlayer()
      */
+    @Deprecated
     public void removePlayerWithin(CPlayer player, Location vFrom, Location vTo) {
-        ArrayList<Region> cubesFrom = regions.getCuboidsContaining(vFrom, vFrom.getWorld(), vFrom.getDimension());
-        ArrayList<Region> cubesTo = regions.getCuboidsContaining(vTo, vTo.getWorld(), vTo.getDimension());
-        for (Region from : cubesFrom) {
-            if (!cubesTo.isEmpty()) {
-                for (Region to : cubesTo) {
-                    if ((to.getProperty("creative") != Status.ALLOW) && (from.getProperty("creative") == Status.ALLOW)) {
-                        if (player.isInCreativeMode()) {
-                            player.setCreative(0);
-                            player.setInventory(playerInventories.get(player
-                                    .getName()));
-                            playerInventories.remove(player.getName());
-                        }
-                    }
-                }
-            }
-            if (!from.isWithin(vTo)) {
-                // We have only left "from" if vTo is not within from
-                if (from.getFarewell() != null) {
-                    ms.notification(player, from.getFarewell());
-                }
-                if (from.getProperty("creative") == Status.ALLOW) {
-                    if (player.isInCreativeMode()) {
-                        player.setCreative(0);
-                        player.setInventory(playerInventories.get(player
-                                .getName()));
-                        playerInventories.remove(player.getName());
-                    }
-                }
-                from.removePlayerWithin(player.getName());
-            }
-        }
+        throw new UnsupportedOperationException("removePlayerWithin is deprecated! use handleRegionsForPlayer intead!");
     }
 
     /*
@@ -307,7 +271,9 @@ public class CuboidInterface {
      * @param name
      * @param world
      * @return
+     * @deprecated use Regionmanager.cuboidExists instead!
      */
+    @Deprecated
     public boolean cuboidExist(String name, String world, int dimension) {
         return regions.cuboidExists(name, world, dimension);
     }
@@ -874,9 +840,5 @@ public class CuboidInterface {
     public void killTasks() {
         threadManager.shutdown();
 
-    }
-
-    public ScheduledExecutorService getThreadmanager() {
-        return threadManager;
     }
 }

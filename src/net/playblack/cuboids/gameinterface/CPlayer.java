@@ -1,6 +1,12 @@
 package net.playblack.cuboids.gameinterface;
 
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+
+import net.playblack.cuboids.Config;
+import net.playblack.cuboids.HealThread;
 import net.playblack.cuboids.blocks.CItem;
+import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
@@ -9,6 +15,9 @@ import net.playblack.mcutils.Vector;
 
 public abstract class CPlayer implements IBaseEntity {
 
+    protected HashMap<Integer, CItem[]> inventories = new HashMap<Integer, CItem[]>();
+    
+    Region currentRegion;
     /**
      * Send a message to the player
      * 
@@ -48,11 +57,15 @@ public abstract class CPlayer implements IBaseEntity {
     public abstract String[] getGroups();
 
     /**
-     * Set the player in creative/normal mode
-     * 
+     * Switch the players game mode.<br>
+     * <ul>
+     * <li>0 = survival</li> <li>1 = creative</li> <li>2 = adventure</li>
+     * </ul>
+     * @implementation Make sure to save and swap inventory accordingly and check if a mode was already set
+     * by non-cuboid circumstances and do not change mode if so!
      * @param creative
      */
-    public abstract void setCreative(int creative);
+    public abstract void setGameMode(int mode);
 
     /**
      * Check if a player is in creative mode
@@ -67,12 +80,19 @@ public abstract class CPlayer implements IBaseEntity {
     public abstract void clearInventory();
 
     /**
-     * Get the full player inventory as item array
+     * Get the full player inventory as item array,
+     * depending on what game mode,
+     * @see CPlayer.setGameMode()
+     * @param mode the inventory for what mode? 
      * 
-     * @return
+     * @return CItem[] representing the inventory
      */
-    public abstract CItem[] getInventory();
+    public abstract CItem[] getInventory(int mode);
 
+    /**
+     * Returns the inventory for this player right as it currently is
+     */
+    public abstract CItem[] getCurrentInventory();
     /**
      * Set player inventory
      * 
@@ -130,6 +150,11 @@ public abstract class CPlayer implements IBaseEntity {
         return true;
     }
     
+    /**
+     * Check if this player can go wherever it's about to go
+     * @param location
+     * @return
+     */
     public boolean canMoveTo(Location location) {
         Region cube = (Region) RegionManager.get().getActiveCuboidNode(location, false);
         if(hasPermission("cIgnoreRestrictions") || cube.playerIsAllowed(getName(), getGroups())) {
@@ -140,5 +165,66 @@ public abstract class CPlayer implements IBaseEntity {
         }
         return true;
     }
-
+    
+    public boolean isInRegion() {
+        return currentRegion != null;
+    }
+    
+    public boolean isInRegion(Region r) {
+        return currentRegion == null || currentRegion == r;
+    }
+    
+    /**
+     * Put this player into a new region.
+     * This will send farewell and welcome messages if applicable.
+     * If you pass null, the player will be filed as "not in a region"
+     * @param r
+     */
+    public void setRegion(Region r) {
+        sendFarewell();
+        if(r == null) {
+            currentRegion = null;
+            return;
+        }
+        if(currentRegion != r) {
+            if(r.getProperty("creative") != Status.ALLOW) {
+                setGameMode(0);
+                
+            }
+            else {
+                setGameMode(1);
+            }
+            if(r.getProperty("healing") == Status.ALLOW) {
+                CuboidInterface.get().getThreadManager().schedule(new HealThread(
+                      this, r, 
+                      CuboidInterface.get().getThreadManager(), Config.getInstance().getHealPower(),
+                      Config.getInstance().getHealDelay()), 
+                  0,
+                  TimeUnit.SECONDS);
+            }
+            currentRegion = r;
+        }
+        sendWelcome();
+    }
+    
+    /**
+     * Return the Region that has last been set to this player
+     * This may return null if the player is not inside any region
+     * @return
+     */
+    public Region getCurrentRegion() {
+        return currentRegion;
+    }
+    
+    private void sendFarewell() {
+        if(currentRegion != null && currentRegion.getFarewell() != null) {
+            sendMessage(currentRegion.getFarewell());
+        }
+    }
+    
+    private void sendWelcome() {
+        if(currentRegion != null && currentRegion.getWelcome() != null) {
+            sendMessage(currentRegion.getWelcome());
+        }
+    }
 }

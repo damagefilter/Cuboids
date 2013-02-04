@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.FlatfileDataLegacy;
+import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.Location;
 
@@ -292,43 +293,25 @@ public class RegionManager {
     }
 
     /**
-     * Scan for nodes inside a node and parent them if they don't have a parent
-     * yet
-     * 
-     * @param node
-     * @return
+     * Add a player to this region and all child regions it is within
+     * @param player
      */
-//    public void reverseFindChildNodes(Region node) {
-//        ArrayList<CuboidNode> childs = new ArrayList<CuboidNode>();
-//        // System.out.println("Checking for possible childs in "+c.getName());
-//        for (Region tree : rootNodes) {
-//            if (tree.equalsWorld(node)) {
-//                
-//                for (CuboidNode n : tree.toList()) {
-//                    // if(n.getCuboid().isWithin(c.getFirstPoint()) &&
-//                    // n.getCuboid().isWithin(c.getSecondPoint())) {
-//                    if (n.getCuboid().cuboidIsWithin(c.getOrigin(),
-//                            c.getOffset(), true)) {
-//                        // System.out.println(n.getCuboid().getName()+" is within "+c.getName());
-//                        if (n.getParent() == null) {
-//                            // System.out.println("We have no parent yet!");
-//                            if (n.getName().equals(c.getName())) {
-//                                // System.out.println("Same name, stupid");
-//                                continue;
-//                            }
-//                            n.getCuboid().setParent(c);
-//                            n.getCuboid().hasChanged = true;
-//                            childs.add(n);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        for (CuboidNode n : childs) {
-//            updateCuboidNode(n.getCuboid());
-//        }
-//        save(false, true);
-//    }
+    public void addPlayerToRegions(CPlayer player, Location loc) {
+        for(Region tree : rootNodes) {
+            if(tree.isWithin(loc)) {
+                tree.addPlayerWithin(player, loc);
+            }
+        }
+    }
+    
+    public void removePlayerFromRegion(CPlayer player, Location loc) {
+        Region r = player.getCurrentRegion();
+        if(r != null) {
+            if(!r.isWithin(loc)) {
+                player.setRegion(null);
+            }
+        }
+    }
 
     /**
      * Create a list of Regions that contain the given Vector in the given
@@ -360,13 +343,6 @@ public class RegionManager {
         }
         return list;
     }
-    
-//    public boolean canCreateCuboid(CuboidSelection selection, String playerName, CWorld world) {
-//        Vector v1 = selection.getOrigin();
-//        Vector v2 = selection.getOffset();
-//        CuboidNode activeOrigin = getActiveCuboid(new Location(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ(), world.getDimension(), world.getName()), true);
-//        return false;
-//    }
 
     /**
      * Get a list of all cuboids in the given world
@@ -465,6 +441,7 @@ public class RegionManager {
      * 
      * @param name
      */
+    @SuppressWarnings("deprecation")
     public void removeFromAllAreas(String name) {
         for (Region tree : rootNodes) {
             for(Region child : tree.getChildsDeep()) {
@@ -481,6 +458,7 @@ public class RegionManager {
      * @param playerName
      * @param loc
      */
+    @SuppressWarnings("deprecation")
     public void removeFromAllAreas(String player, Location loc) {
         for (Region tree : rootNodes) {
             
