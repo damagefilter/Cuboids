@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import net.playblack.cuboids.datasource.BaseData;
-import net.playblack.cuboids.datasource.FlatfileData;
+import net.playblack.cuboids.datasource.XmlData;
 import net.playblack.cuboids.datasource.MysqlData;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -481,7 +481,7 @@ public class Config {
 
     public BaseData getDataSource() {
         if (sqlConfig == null) {
-            return new FlatfileData(EventLogger.getInstance());
+            return new XmlData(EventLogger.getInstance());
         } else {
             return new MysqlData(sqlConfig, EventLogger.getInstance());
         }

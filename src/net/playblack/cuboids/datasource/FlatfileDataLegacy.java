@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.mcutils.EventLogger;
@@ -23,9 +22,7 @@ import net.playblack.mcutils.Vector;
  * @author Chris
  * 
  */
-//Surpress warnign about CuboidE being deprecated as this is a legacy loader
-//And needs to deal with this sort of stuff
-//@SuppressWarnings("deprecation")
+
 public class FlatfileDataLegacy implements BaseData {
 
     private Object lock = new Object();

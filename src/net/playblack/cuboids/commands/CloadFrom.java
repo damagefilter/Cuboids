@@ -2,7 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.datasource.FlatfileData;
+import net.playblack.cuboids.datasource.XmlData;
 import net.playblack.cuboids.datasource.MysqlData;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.RegionManager;
@@ -34,7 +34,7 @@ public class CloadFrom extends CBaseCommand {
                     EventLogger.getInstance());
             ds.loadAll(RegionManager.get());
         } else {
-            FlatfileData ds = new FlatfileData(EventLogger.getInstance());
+            XmlData ds = new XmlData(EventLogger.getInstance());
             ds.loadAll(RegionManager.get());
         }
         MessageSystem.getInstance().successMessage(player, "cuboidLoadedAll");

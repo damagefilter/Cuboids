@@ -2,7 +2,7 @@ package net.playblack.cuboids.hookapi;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
-import net.playblack.cuboids.regions.CuboidNode;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Vector;
 import net.playblack.mcutils.Location;
@@ -32,7 +32,7 @@ public class AreaChecksHook implements CuboidHook {
     }
 
     private Object getAreaName(CPlayer player, Location position) {
-        CuboidNode node = RegionManager.get().getActiveCuboidNode(position, true);
+        Region node = RegionManager.get().getActiveCuboidNode(position, true);
         if(node == null) {
             return "NO_CUBOID";
         }
@@ -40,7 +40,7 @@ public class AreaChecksHook implements CuboidHook {
     }
     
     private Object getAreaName(CPlayer player) {
-        CuboidNode node = RegionManager.get().getActiveCuboidNode(player.getLocation(), true);
+        Region node = RegionManager.get().getActiveCuboidNode(player.getLocation(), true);
         if(node == null) {
             return "NO_CUBOID";
         }
