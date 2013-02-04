@@ -37,7 +37,7 @@ public class Credo extends CBaseCommand {
                 return;
             }
         }
-        if (!Config.getInstance().isAllowUndo()) {
+        if (!Config.get().isAllowUndo()) {
             ms.failMessage(player, "undoDisabled");
             return; // from a morality standpoint, this should never be disabled
                     // but there you go.

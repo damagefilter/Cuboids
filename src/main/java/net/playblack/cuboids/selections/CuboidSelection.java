@@ -235,7 +235,7 @@ public class CuboidSelection implements ISelection {
         }
         cube.setWorld(world);
         cube.setName(name);
-        cube.putAll(Config.getInstance().getDefaultCuboidSetting(
+        cube.putAll(Config.get().getDefaultCuboidSetting(
                 player).getAllProperties());
 
         return cube;

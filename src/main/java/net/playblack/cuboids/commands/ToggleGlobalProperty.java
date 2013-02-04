@@ -31,7 +31,7 @@ public class ToggleGlobalProperty extends CBaseCommand {
             return;
         }
 
-        CuboidE setting = Config.getInstance().getGlobalSettings();
+        CuboidE setting = Config.get().getGlobalSettings();
         if (command[2].equalsIgnoreCase("pvp")) {
             if (setting.isAllowedPvp()) {
                 setting.setAllowPvp(false);
@@ -172,7 +172,7 @@ public class ToggleGlobalProperty extends CBaseCommand {
                     "invalidGlobalProperty");
             return; // prevent config updating - not needed here
         }
-        Config.getInstance().updateGlobalSettings(setting);
+        Config.get().updateGlobalSettings(setting);
         RegionManager.get().updateGlobalSettings();
     }
 }

@@ -197,8 +197,8 @@ public abstract class CPlayer implements IBaseEntity {
             if(r.getProperty("healing") == Status.ALLOW) {
                 CuboidInterface.get().getThreadManager().schedule(new HealThread(
                       this, r, 
-                      CuboidInterface.get().getThreadManager(), Config.getInstance().getHealPower(),
-                      Config.getInstance().getHealDelay()), 
+                      CuboidInterface.get().getThreadManager(), Config.get().getHealPower(),
+                      Config.get().getHealDelay()), 
                   0,
                   TimeUnit.SECONDS);
             }

@@ -37,8 +37,8 @@ public class Bootstrapper {
         log.logCachedMessage("INFO");
 
         // ------------------------------------------------------
-        Config.getInstance(); // init this thing for a first time
-        log.cacheMessage("Version ... " + Config.getInstance().getVersion(),
+        Config.get(); // init this thing for a first time
+        log.cacheMessage("Version ... " + Config.get().getVersion(),
                 true);
         log.logCachedMessage("INFO");
 

@@ -3,7 +3,6 @@ package net.playblack.cuboids.datasource;
 import java.util.ArrayList;
 
 import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.RegionManager;
 
 /**
  * This is an abstract data layer which can be extended so we can have multiple
@@ -23,18 +22,32 @@ public interface BaseData {
     abstract public void saveRegion(Region node);
 
     /**
-     * Save the whole treelist to files
+     * Save the whole treelist to datasource
      * 
-     * @param treeList
-     *            list of CuboidTrees
+     * @param treeList list of CuboidTrees
      * @param silent
      */
     public void saveAll(ArrayList<Region> treeList, boolean silent,
             boolean force);
 
-    public void loadAll(RegionManager handler);
+    /**
+     * Load all regions from datasource into memory.
+     */
+    public void loadAll();
 
-    public void loadCuboid(RegionManager handler, String name, String world);
+    /**
+     * Load a single region from datasource and put into the RegionManager,
+     * removing the old reference, if there was any
+     * @param name
+     * @param world
+     * @deprecated throws UnsupportedOperationExceptions as this cannot work like that anymore. Need to fix later on!
+     */
+    @Deprecated
+    public void loadRegion(String name, String world);
 
-    public void removeNode(Region node);
+    /**
+     * Deletes a region from the datasource
+     * @param node
+     */
+    public void deleteRegion(Region node);
 }

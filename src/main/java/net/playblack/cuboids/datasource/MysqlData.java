@@ -11,7 +11,6 @@ import java.util.HashMap;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.CuboidNode;
-import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 
@@ -422,7 +421,7 @@ public class MysqlData implements BaseData {
     }
 
     @Override
-    public void loadAll(RegionManager handler) {
+    public void loadAll() {
         if (getConnection() == null) {
             log.logMessage(
                     "Cuboids2: Failed to establish Database Connection, cannot LOAD Cuboid Nodes!",
@@ -500,7 +499,7 @@ public class MysqlData implements BaseData {
     }
 
     @Override
-    public void loadCuboid(RegionManager handler, String name, String world) {
+    public void loadRegion(String name, String world) {
         if (getConnection() == null) {
             log.logMessage(
                     "Cuboids2: Failed to establish Database Connection, cannot LOAD Cuboid Nodes!",

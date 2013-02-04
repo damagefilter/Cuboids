@@ -13,7 +13,7 @@ import net.playblack.cuboids.selections.CuboidSelection;
  * 
  */
 public class HistoryTimeline {
-    private int maxListSize = Config.getInstance().getUndoSteps();
+    private int maxListSize = Config.get().getUndoSteps();
     private int pointer = 0;
     private LinkedList<HistoryObject> history;
 
@@ -58,7 +58,7 @@ public class HistoryTimeline {
      */
     public void remember(HistoryObject rem) {
         if ((rem.getModifiedBlocks().size() == 0)
-                || (!Config.getInstance().isAllowUndo())) {
+                || (!Config.get().isAllowUndo())) {
             return;
         }
         purgeHistory();

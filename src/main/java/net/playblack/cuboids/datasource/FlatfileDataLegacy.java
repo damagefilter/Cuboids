@@ -50,15 +50,16 @@ public class FlatfileDataLegacy implements BaseData {
     }
 
     @Override
-    public void loadCuboid(RegionManager handler, String name, String world) {
+    public void loadRegion(String name, String world) {
        throw new IllegalStateException("Loading single CuboidE files is not supported anymore!");
     }
 
 
     
     @Override
-    public void loadAll(RegionManager handler) {
+    public void loadAll() {
         log.logMessage("**** ATTEMPTING TO LOAD CUBOID-E FROM FILE **** ", "INFO");
+        RegionManager handler = RegionManager.get();
         synchronized (lock) {
             
             try {
@@ -247,7 +248,7 @@ public class FlatfileDataLegacy implements BaseData {
     }
 
     @Override
-    public void removeNode(Region node) {
+    public void deleteRegion(Region node) {
         throw new IllegalStateException("Cannot operate on a deprecated Cuboid format (CuboidE)");
     }
 }

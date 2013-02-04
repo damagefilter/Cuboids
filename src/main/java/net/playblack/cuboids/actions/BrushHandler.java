@@ -20,7 +20,7 @@ public class BrushHandler {
      * @param point
      */
     public static void handleBrush(CPlayer player, Vector point) {
-        if (player.getItemInHand().getId() == Config.getInstance()
+        if (player.getItemInHand().getId() == Config.get()
                 .getSculptItem()) {
             if ((player.hasPermission("cWorldMod") && player
                     .hasPermission("cbrush"))

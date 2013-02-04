@@ -27,14 +27,14 @@ public class RegionManager {
         this.log = log;
         this.dataSource = dataSource;
         Region insert = new Region();
-        insert.putAll(Config.getInstance().getGlobalSettings().getAllProperties());
+        insert.putAll(Config.get().getGlobalSettings().getAllProperties());
         global = insert;
     }
 
     public static RegionManager get() {
         if (instance == null) {
             instance = new RegionManager(EventLogger.getInstance(), Config
-                    .getInstance().getDataSource());
+                    .get().getDataSource());
         }
         return instance;
     }
@@ -45,7 +45,7 @@ public class RegionManager {
      * @param props
      */
     public void updateGlobalSettings() {
-        global = new Region(Config.getInstance().getGlobalSettings());
+        global = new Region(Config.get().getGlobalSettings());
     }
 
     /*
@@ -60,8 +60,8 @@ public class RegionManager {
      */
     public void load() {
         // load for old files
-        new FlatfileDataLegacy(log).loadAll(this);
-        dataSource.loadAll(this);
+        new FlatfileDataLegacy(log).loadAll();
+        dataSource.loadAll();
     }
 
     /**
@@ -71,7 +71,7 @@ public class RegionManager {
      * @param world
      */
     public void loadSingle(String name, String world, int dimension) {
-        dataSource.loadCuboid(this, name, world);
+        dataSource.loadRegion(name, world);
     }
 
     /**
@@ -112,7 +112,7 @@ public class RegionManager {
         if (node == null) {
             return;
         }
-        dataSource.removeNode(node);
+        dataSource.deleteRegion(node);
     }
 
     /*
@@ -123,7 +123,7 @@ public class RegionManager {
      */
 
     /**
-     * Add a new managed cuboid and sort it in.
+     * Add a new managed region and sort it in.
      * 
      * @param cube
      * @return

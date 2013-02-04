@@ -41,7 +41,7 @@ public class CuboidInterface {
     private CuboidInterface() {
         regions = RegionManager.get();
         ms = MessageSystem.getInstance();
-        Config cfg = Config.getInstance();
+        Config cfg = Config.get();
         threadManager.scheduleAtFixedRate(new HMobTask(), 20, 20,
                 TimeUnit.SECONDS);
         threadManager.scheduleAtFixedRate(new CuboidSaveTask(),
@@ -285,7 +285,7 @@ public class CuboidInterface {
      * @return
      */
     public boolean addCuboid(Region cube) {
-        if (Config.getInstance().isAutoParent()) {
+        if (Config.get().isAutoParent()) {
             // Override default with parent settings and make parent stuff
             Region parent = regions.getPossibleParent(cube);
             if (parent != null) {

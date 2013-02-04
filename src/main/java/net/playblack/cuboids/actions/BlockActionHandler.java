@@ -35,7 +35,7 @@ public class BlockActionHandler {
         if (CuboidInterface.get().itemIsRestricted(position, itemId)) {
             return false;
         }
-        if (Config.getInstance().itemIsRestricted(itemId)) {
+        if (Config.get().itemIsRestricted(itemId)) {
             return false;
         }
         return true;
@@ -164,15 +164,15 @@ public class BlockActionHandler {
      */
     public static boolean handleSetPoints(CPlayer player, Location point,
             boolean setOffset, boolean remote) {
-        if ((player.getItemInHand().getId() == Config.getInstance()
+        if ((player.getItemInHand().getId() == Config.get()
                 .getRegionItem()) && !remote) {
-            if (Config.getInstance().isUseDoubleAction()) {
+            if (Config.get().isUseDoubleAction()) {
                 return setFixedPointDoubleAction(player, point, setOffset);
             } else {
                 return setFixedPointSingleAction(player, point);
             }
         }
-        if ((player.getItemInHand().getId() == Config.getInstance()
+        if ((player.getItemInHand().getId() == Config.get()
                 .getRemoteRegionItem()) && remote) {
             return setFixedPointSingleAction(player, point);
         }
@@ -188,7 +188,7 @@ public class BlockActionHandler {
      *            True to set offset instead of origin
      */
     public static void explainLocal(CPlayer player) {
-        if (player.getItemInHand().getId() == Config.getInstance()
+        if (player.getItemInHand().getId() == Config.get()
                 .getInspectorItem()) {
             CuboidInterface.get().explainCuboid(player,
                     player.getLocation());
@@ -202,7 +202,7 @@ public class BlockActionHandler {
      * @param position
      */
     public static void explainPosition(CPlayer player, Location position) {
-        if (player.getItemInHand().getId() == Config.getInstance()
+        if (player.getItemInHand().getId() == Config.get()
                 .getInspectorItem()) {
             CuboidInterface.get().explainCuboid(player, position);
         }

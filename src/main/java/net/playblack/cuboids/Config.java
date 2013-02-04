@@ -23,6 +23,7 @@ import net.playblack.mcutils.PropsFile;
 public class Config {
     private String name = "Cuboids2";
     private String version = "3.0.0";
+    private String basePath = "plugins/cuboids2/";
     private boolean verbose = false;
 
     // --- REMOVE THOSE
@@ -216,7 +217,7 @@ public class Config {
 
     }
 
-    public static Config getInstance() {
+    public static Config get() {
         if (instance == null) {
             instance = new Config();
         }
@@ -227,6 +228,14 @@ public class Config {
         global = props;
     }
 
+    /**
+     * Returns the current base path, usually plugins/cuboids2/.
+     * Note that there's a trailing /
+     * @return
+     */
+    public String getBasePath() {
+        return basePath;
+    }
     /**
      * @return the allowProtection
      */

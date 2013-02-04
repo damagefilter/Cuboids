@@ -5,7 +5,6 @@ import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.datasource.XmlData;
 import net.playblack.cuboids.datasource.MysqlData;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
 
@@ -30,12 +29,12 @@ public class CloadFrom extends CBaseCommand {
             MessageSystem.getInstance().failMessage(player, "permissionDenied");
         }
         if (command[1].equalsIgnoreCase("mysql")) {
-            MysqlData ds = new MysqlData(Config.getInstance().getSqlConfig(),
+            MysqlData ds = new MysqlData(Config.get().getSqlConfig(),
                     EventLogger.getInstance());
-            ds.loadAll(RegionManager.get());
+            ds.loadAll();
         } else {
             XmlData ds = new XmlData(EventLogger.getInstance());
-            ds.loadAll(RegionManager.get());
+            ds.loadAll();
         }
         MessageSystem.getInstance().successMessage(player, "cuboidLoadedAll");
     }

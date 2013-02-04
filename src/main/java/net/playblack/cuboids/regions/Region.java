@@ -231,7 +231,8 @@ public class Region {
     }
     
     /**
-     * Set the parent region for the this region
+     * Set the parent region for the this region.
+     * This will also update the parents child list and adjust priority levels
      * @param cube
      */
     public void setParent(Region cube) {
