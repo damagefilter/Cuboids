@@ -210,7 +210,7 @@ public class FlatfileDataLegacy implements BaseData {
             cube.setBoundingBox(v1, v2);
             cube.setProperty("creeper-explosion", Status.fromBoolean(!ToolBox.stringToBoolean(csv[10])));
             cube.setProperty("healing", Status.fromBoolean(ToolBox.stringToBoolean(csv[11])));
-            cube.setProperty("protection", Status.softFromBoolean(!ToolBox.stringToBoolean(csv[12])));
+            cube.setProperty("protection", Status.softFromBoolean(ToolBox.stringToBoolean(csv[12])));
             cube.setProperty("mob-damage", Status.softFromBoolean(!ToolBox.stringToBoolean(csv[13])));
             cube.setProperty("mob-spawn", Status.softFromBoolean(!ToolBox.stringToBoolean(csv[13]))); //new and by default same as mob damage
             cube.setProperty("animal-spawn", Status.softFromBoolean(!ToolBox.stringToBoolean(csv[14])));

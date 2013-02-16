@@ -3,7 +3,7 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.datasource.XmlData;
-import net.playblack.cuboids.datasource.MysqlData;
+import net.playblack.cuboids.datasource.MysqlDataLegacy;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.EventLogger;
@@ -29,7 +29,7 @@ public class CloadFrom extends CBaseCommand {
             MessageSystem.getInstance().failMessage(player, "permissionDenied");
         }
         if (command[1].equalsIgnoreCase("mysql")) {
-            MysqlData ds = new MysqlData(Config.get().getSqlConfig(),
+            MysqlDataLegacy ds = new MysqlDataLegacy(Config.get().getSqlConfig(),
                     EventLogger.getInstance());
             ds.loadAll();
         } else {

@@ -35,7 +35,7 @@ public class Converter {
         cube.setProperty("healing", Status.fromBoolean(shell.getHealing()));
         cube.setProperty("lava-flow", Status.softFromBoolean(!shell.getLavaControl()));
         cube.setProperty("water-flow", Status.softFromBoolean(!shell.getWaterControl()));
-        cube.setProperty("protection", Status.softFromBoolean(!shell.getProtection()));
+        cube.setProperty("protection", Status.softFromBoolean(shell.getProtection()));
         cube.setProperty("enter-cuboid", Status.softFromBoolean(!shell.getProtection()));
         cube.setProperty("mob-damage", Status.softFromBoolean(!shell.getSanctuary()));
         cube.setProperty("mob-spawn", Status.softFromBoolean(!shell.getSanctuary())); //new and by default same as mob damage

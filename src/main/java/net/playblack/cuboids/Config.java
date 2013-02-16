@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.XmlData;
-import net.playblack.cuboids.datasource.MysqlData;
+import net.playblack.cuboids.datasource.MysqlDataLegacy;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
@@ -492,7 +492,7 @@ public class Config {
         if (sqlConfig == null) {
             return new XmlData(EventLogger.getInstance());
         } else {
-            return new MysqlData(sqlConfig, EventLogger.getInstance());
+            return new MysqlDataLegacy(sqlConfig, EventLogger.getInstance());
         }
     }
 
