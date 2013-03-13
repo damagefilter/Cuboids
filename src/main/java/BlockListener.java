@@ -1,8 +1,8 @@
 import java.util.List;
 
 import net.playblack.cuboids.InvalidPlayerException;
-import net.playblack.cuboids.actions.BlockActionHandler;
-import net.playblack.cuboids.actions.BrushHandler;
+import net.playblack.cuboids.actions.deprecated.BlockActionHandler;
+import net.playblack.cuboids.actions.deprecated.BrushHandler;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;

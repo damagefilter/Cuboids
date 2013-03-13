@@ -7,7 +7,7 @@ import net.playblack.cuboids.datasource.FlatFileSerializer;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.CuboidE;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.ColorManager;
@@ -38,17 +38,12 @@ public class Cbackup extends CBaseCommand {
                 return;
             }
         }
-        CuboidE node = RegionManager
-                .get()
-                .getCuboidByName(command[1], player.getWorld().getName(),
-                        player.getWorld().getDimension()).getCuboid();
-        if (node.playerIsOwner(player.getName())
-                || player.hasPermission("cAreaMod")) {
-            GenericGenerator gen = new GenericGenerator(new CuboidSelection(
-                    node.getFirstPoint(), node.getSecondPoint()),
-                    player.getWorld());
-            CuboidSelection tmp = new CuboidSelection(node.getFirstPoint(),
-                    node.getSecondPoint());
+        Region node = RegionManager.get().getCuboidByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
+        if (node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod")) {
+            GenericGenerator gen = new GenericGenerator(new CuboidSelection(node.getOrigin(), node.getOffset()), player.getWorld());
+            
+            CuboidSelection tmp = new CuboidSelection(node.getOrigin(), node.getOffset());
+            
             try {
                 tmp = gen.getWorldContent(tmp);
             } catch (BlockEditLimitExceededException e) {

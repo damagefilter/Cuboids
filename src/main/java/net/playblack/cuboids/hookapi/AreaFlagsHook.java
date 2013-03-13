@@ -1,10 +1,7 @@
 package net.playblack.cuboids.hookapi;
 
-import java.util.HashMap;
-
 import net.playblack.cuboids.gameinterface.CWorld;
-import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.RegionManager;
+
 
 public class AreaFlagsHook implements CuboidHook {
 

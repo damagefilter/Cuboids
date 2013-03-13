@@ -6,7 +6,8 @@ import java.util.Random;
 import net.playblack.cuboids.gameinterface.CMob;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
-import net.playblack.cuboids.regions.CuboidNode;
+import net.playblack.cuboids.regions.Region;
+import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Vector;
 
@@ -18,7 +19,7 @@ import net.playblack.mcutils.Vector;
  * 
  */
 public class HMobTask implements Runnable {
-    ArrayList<CuboidNode> nodes;
+    ArrayList<Region> nodes;
     Random rnd;
 
     public HMobTask() {
@@ -47,14 +48,14 @@ public class HMobTask implements Runnable {
     }
 
     public synchronized void run() {
-        for (CuboidNode tree : nodes) {
-            for (CuboidNode node : tree.toList()) {
-                if (node.getCuboid().isSanctuary()) {
-                    // Sanctuary wins over hmobs
+        for (Region tree : nodes) {
+            for (Region node : tree.getChildsDeep()) {
+                if (node.getProperty("mob-spawn") == Status.DENY) {
+                    // if mobs are not allowed to spawn, more-mobs flag is ignored
                     continue;
                 }
-                if ((node.getCuboid().ishMob())
-                        && (node.getCuboid().getPlayersWithin().size() > 0)) {
+                if ((node.getProperty("more-mobs") == Status.ALLOW)
+                        && (node.getPlayersWithin().size() > 0)) {
                     CWorld w = CServer.getServer().getWorld(node.getWorld(),
                             node.getDimension());
                     if (w.getTime() < 13000) {
@@ -64,9 +65,7 @@ public class HMobTask implements Runnable {
 
                     int maxMobs = rnd.nextInt(10);
                     int mobIndex = rnd.nextInt(6);
-                    Vector random = Vector
-                            .randomVector(node.getCuboid().getFirstPoint(),
-                                    node.getCuboid().getSecondPoint());
+                    Vector random = Vector.randomVector(node.getOrigin(), node.getOffset());
                     for (int i = 0; i < maxMobs; i++) {
                         CMob mob = getRandomhMob(w, mobIndex);
                         mob.setX(random.getX());

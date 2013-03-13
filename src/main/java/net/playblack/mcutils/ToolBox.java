@@ -1,5 +1,8 @@
 package net.playblack.mcutils;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Vector;
 
@@ -110,4 +113,39 @@ public class ToolBox {
         }
         return i;
     }
+    
+    /**
+     * Merge 2 arrays into one. This will NOT omit duplicate entries
+     * @param first
+     * @param second
+     * @return resultung array
+     */
+    public static <T> T[] mergeArrays(T[] first, T[] second) {
+        T[] result = Arrays.copyOf(first, first.length + second.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+        return result;
+    }
+    
+    /**
+     * Merge 2 arrays into one, eliminating all duplicates.
+     * TODO: Sure needs some performance improvements. HashSets ain't the best of all things for this task.
+     * Too lazy right now though.
+     * @param first
+     * @param second
+     * @return
+     */
+    @SuppressWarnings("unchecked") //Meh!
+    public static <T> T[] safeMergeArrays(T[] first, T[] second) {
+        HashSet<T> res = new HashSet<T>();
+        for(T tFirst : first) {
+            res.add(tFirst);
+        }
+        for(T tSecond : second) {
+            res.add(tSecond);
+        }
+        
+        return (T[])res.toArray();
+    }
+    
+    
 }

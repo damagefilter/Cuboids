@@ -3,7 +3,7 @@ package net.playblack.cuboids.commands;
 import java.util.ArrayList;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.CuboidE;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.ColorManager;
 
@@ -25,19 +25,13 @@ public class Cdiag extends CBaseCommand {
             return;
         }
         if (player.hasPermission("cIgnoreRestrictions")) {
-            ArrayList<CuboidE> nodes = RegionManager.get()
-                    .getCuboidsContaining(player.getLocation(),
-                            player.getWorld().getName(),
-                            player.getWorld().getDimension());
-            player.sendMessage(ColorManager.LightGreen
-                    + "Cuboids containnig your current location:");
-            for (CuboidE cube : nodes) {
-                player.sendMessage(ColorManager.Yellow + "Name: "
-                        + ColorManager.LightGray + cube.getName());
-                player.sendMessage(ColorManager.Yellow + "Parent: "
-                        + ColorManager.LightGray + cube.getParentDeprecated());
-                player.sendMessage(ColorManager.DarkPurple
-                        + "------------------------------------------------");
+            ArrayList<Region> nodes = RegionManager.get().getCuboidsContaining(player.getLocation(), player.getWorld().getName(), player.getWorld().getDimension());
+            player.sendMessage(ColorManager.LightGreen + "Cuboids containnig your current location:");
+            for (Region cube : nodes) {
+                player.sendMessage(ColorManager.Yellow + "Name: " + ColorManager.LightGray + cube.getName());
+                
+                player.sendMessage(ColorManager.Yellow + "Parent: " + ColorManager.LightGray + cube.getParent().getName());
+                player.sendMessage(ColorManager.DarkPurple + "------------------------------------------------");
             }
         }
     }

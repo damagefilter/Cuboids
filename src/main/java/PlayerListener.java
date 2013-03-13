@@ -1,8 +1,8 @@
 import net.playblack.cuboids.InvalidPlayerException;
-import net.playblack.cuboids.actions.BlockActionHandler;
-import net.playblack.cuboids.actions.PlayerMovementHandler;
-import net.playblack.cuboids.actions.MiscHandler;
-import net.playblack.cuboids.actions.ItemDropHandler;
+import net.playblack.cuboids.actions.deprecated.BlockActionHandler;
+import net.playblack.cuboids.actions.deprecated.ItemDropHandler;
+import net.playblack.cuboids.actions.deprecated.MiscHandler;
+import net.playblack.cuboids.actions.deprecated.PlayerMovementHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.RegionManager;

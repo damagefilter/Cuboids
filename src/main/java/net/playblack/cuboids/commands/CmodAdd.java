@@ -4,7 +4,6 @@ import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;

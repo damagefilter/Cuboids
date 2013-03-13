@@ -2,7 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.CuboidE;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Vector;
@@ -26,7 +26,7 @@ public class CmodTpTo extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidE targetCube = RegionManager.get().getCuboidByName(
+        Region targetCube = RegionManager.get().getCuboidByName(
                 command[1], player.getWorld().getName(),
                 player.getWorld().getDimension());
         if (targetCube == null) {
@@ -34,8 +34,8 @@ public class CmodTpTo extends CBaseCommand {
                     "cuboidNotFoundOnCommand");
             return;
         }
-        Vector target = Vector.getCenterPoint(targetCube.getFirstPoint(),
-                targetCube.getSecondPoint());
+        Vector target = Vector.getCenterPoint(targetCube.getOrigin(),
+                targetCube.getOffset());
 
         if (player.hasPermission("cIgnoreRestrictions")
                 || (player.hasPermission("cteleport") && targetCube

@@ -1,4 +1,4 @@
-package net.playblack.cuboids.actions;
+package net.playblack.cuboids.actions.deprecated;
 
 import java.util.HashMap;
 

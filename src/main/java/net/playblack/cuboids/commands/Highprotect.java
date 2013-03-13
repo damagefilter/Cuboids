@@ -1,10 +1,10 @@
 package net.playblack.cuboids.commands;
 
-import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.CuboidE;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.cuboids.regions.Region;
+import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
@@ -44,16 +44,11 @@ public class Highprotect extends CBaseCommand {
         }
         selection.expandVert();
         selection.setWorld(player.getWorld().getName());
-        CuboidE cube = selection.toCuboid(player, command);
+        Region cube = selection.toCuboid(player, command);
         cube.setDimension(player.getWorld().getDimension());
-        if (Config.get().isAllowProtection()) {
-            cube.setProtection(true); // force protection if is allowed
-                                      // regardless of other default settings
-        } else {
-            ms.notification(player,
-                    "FYI: The protection option is disabled. The Cuboid will still be created!");
-        }
-        if (CuboidInterface.get().addRegion(cube)) {
+        cube.setProperty("protection", Status.ALLOW); // force protection if is allowed
+        
+        if (CuboidInterface.get().addCuboid(cube)) {
             ms.successMessage(player, "cuboidCreated");
         } else {
             ms.failMessage(player, "cuboidNotCreated");

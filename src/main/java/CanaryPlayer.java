@@ -178,4 +178,10 @@ public class CanaryPlayer extends CPlayer {
         return player.isAdmin();
     }
 
+    @Override
+    public CItem[] getCurrentInventory() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
