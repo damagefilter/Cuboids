@@ -215,7 +215,7 @@ public class CuboidSelection implements ISelection {
      * 
      * @return
      */
-    public Region toCuboid(CPlayer player, String[] playerlist) {
+    public Region toRegion(CPlayer player, String[] playerlist) {
         Region cube = new Region();
         String name = null;
         cube.setBoundingBox(this.origin, this.offset);
@@ -239,6 +239,31 @@ public class CuboidSelection implements ISelection {
                 player).getAllProperties());
 
         return cube;
+    }
+    
+    /**
+     * Resets selection points and emptys block list
+     */
+    public void reset() {
+        origin = null;
+        offset = null;
+        clearBlocks();
+    }
+    
+    /**
+     * Returns true if the origin point is set
+     * @return
+     */
+    public boolean hasOrigin() {
+        return origin != null;
+    }
+    
+    /**
+     * Returns true if the offset point is set
+     * @return
+     */
+    public boolean hasOffset() {
+        return offset != null;
     }
 
 }

@@ -64,7 +64,7 @@ public class Cundo extends CBaseCommand {
             CuboidSelection sel = SessionManager.getInstance()
                     .getPlayerHistory(subject).undo();
             if (sel == null) {
-                ms.notification(player, "Nothing left to undo!");
+                MessageSystem.yellowNote(player, "allUndone");
                 return;
             }
             GenericGenerator gen = new GenericGenerator(sel, player.getWorld());

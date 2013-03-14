@@ -15,169 +15,6 @@ import net.playblack.mcutils.Vector;
 import net.playblack.mcutils.Location;
 
 public class BlockActionHandler {
-    private static HashMap<String, Boolean> setOffsetList = new HashMap<String, Boolean>();
-
-    /**
-     * Check if player can operate restricted items
-     * 
-     * @param player
-     * @param itemId
-     * @return True if player can, false otherwise
-     */
-    public static boolean handleOperableItems(CPlayer player,
-            Location position, int itemId) {
-        if (player.hasPermission("cIgnoreRestrictions")) {
-            return true;
-        }
-        if (CuboidInterface.get().playerIsAllowed(player, position)) {
-            return true;
-        }
-        if (CuboidInterface.get().itemIsRestricted(position, itemId)) {
-            return false;
-        }
-        if (Config.get().itemIsRestricted(itemId)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Returns false if a player can place a bucket, false otherwise
-     * 
-     * @param player
-     * @param position
-     * @return
-     */
-    public static boolean handleBucketPlacement(CPlayer player,
-            Location position) {
-        return CuboidInterface.get().isLiquidControlled(player,
-                position);
-    }
-
-    /**
-     * Check if a player can use a lighter
-     * 
-     * @param player
-     * @param position
-     * @return True if so, false otherwise
-     */
-    public static boolean handleLighter(CPlayer player, Location position) {
-        if (player.hasPermission("cIgnoreRestrictions")
-                || CuboidInterface.get().canStartFire(player, position)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Check if fire can spread!
-     * 
-     * @param position
-     * @param world
-     * @return
-     */
-    public static boolean handleFirespread(Location position, CWorld world) {
-        return CuboidInterface.get().isFireProof(position);
-    }
-
-    /**
-     * Set points for a player selection
-     * 
-     * @param player
-     * @param point
-     */
-    private static boolean setFixedPointSingleAction(CPlayer player,
-            Location point) {
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("cselect")) {
-                // MessageSystem.getInstance().failMessage(player,
-                // "permissionDenied");
-                return false;
-            }
-        }
-        CuboidSelection selection = SelectionManager.getInstance()
-                .getPlayerSelection(player.getName());
-        if (!setOffsetList.containsKey(player.getName())) {
-            setOffsetList.put(player.getName(), Boolean.valueOf(false));
-        }
-        if (setOffsetList.get(player.getName())) {
-            selection.setOffset(point);
-            MessageSystem.getInstance().yellowNote(player, "secondPointSet");
-            MessageSystem.customMessage(player, ColorManager.LightGray,
-                    point.explain());
-            setOffsetList.put(player.getName(), Boolean.valueOf(false));
-            return true;
-        } else {
-            selection.setOrigin(point);
-            MessageSystem.getInstance().yellowNote(player, "firstPointSet");
-            MessageSystem.customMessage(player, ColorManager.LightGray,
-                    point.explain());
-            setOffsetList.put(player.getName(), Boolean.valueOf(true));
-            return true;
-        }
-    }
-
-    /**
-     * Set a specified point
-     * 
-     * @param player
-     * @param point
-     * @param setOffset
-     */
-    private static boolean setFixedPointDoubleAction(CPlayer player,
-            Vector point, boolean setOffset) {
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("cselect")) {
-                // MessageSystem.getInstance().failMessage(player,
-                // "permissionDenied");
-                return false;
-            }
-        }
-        CuboidSelection selection = SelectionManager.getInstance()
-                .getPlayerSelection(player.getName());
-        if (setOffset) {
-            selection.setOffset(point);
-            MessageSystem.getInstance().yellowNote(player, "secondPointSet");
-            MessageSystem.customMessage(player, ColorManager.LightGray,
-                    point.explain());
-            setOffsetList.put(player.getName(), Boolean.valueOf(false));
-            return true;
-        } else {
-            selection.setOrigin(point);
-            MessageSystem.getInstance().yellowNote(player, "firstPointSet");
-            MessageSystem.customMessage(player, ColorManager.LightGray,
-                    point.explain());
-            setOffsetList.put(player.getName(), Boolean.valueOf(true));
-            return true;
-        }
-    }
-
-    /**
-     * This handles setting of points.
-     * 
-     * @param player
-     * @param point
-     * @param setOffset
-     *            This must be true on rightclick!!! false otherwise! NOTE: This
-     *            has NO EFFECT if double action tool is disabled!
-     * @return false if no points had to be set!
-     */
-    public static boolean handleSetPoints(CPlayer player, Location point,
-            boolean setOffset, boolean remote) {
-        if ((player.getItemInHand().getId() == Config.get()
-                .getRegionItem()) && !remote) {
-            if (Config.get().isUseDoubleAction()) {
-                return setFixedPointDoubleAction(player, point, setOffset);
-            } else {
-                return setFixedPointSingleAction(player, point);
-            }
-        }
-        if ((player.getItemInHand().getId() == Config.get()
-                .getRemoteRegionItem()) && remote) {
-            return setFixedPointSingleAction(player, point);
-        }
-        return false;
-    }
 
     /**
      * Explain cuboid in this region
@@ -190,7 +27,7 @@ public class BlockActionHandler {
     public static void explainLocal(CPlayer player) {
         if (player.getItemInHand().getId() == Config.get()
                 .getInspectorItem()) {
-            CuboidInterface.get().explainCuboid(player,
+            CuboidInterface.get().explainRegion(player,
                     player.getLocation());
         }
     }
@@ -204,7 +41,7 @@ public class BlockActionHandler {
     public static void explainPosition(CPlayer player, Location position) {
         if (player.getItemInHand().getId() == Config.get()
                 .getInspectorItem()) {
-            CuboidInterface.get().explainCuboid(player, position);
+            CuboidInterface.get().explainRegion(player, position);
         }
     }
 

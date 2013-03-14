@@ -37,7 +37,7 @@ public class CmodLoad extends CBaseCommand {
                 }
             }
         }
-        CuboidSelection selection = SelectionManager.getInstance()
+        CuboidSelection selection = SelectionManager.get()
                 .getPlayerSelection(player.getName());
         selection.setOrigin(cube.getOrigin());
         selection.setOffset(cube.getOffset());

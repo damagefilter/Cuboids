@@ -37,7 +37,7 @@ public class Ccopy extends CBaseCommand {
             }
         }
 
-        SelectionManager selectionManager = SelectionManager.getInstance();
+        SelectionManager selectionManager = SelectionManager.get();
         CuboidSelection sel = selectionManager.getPlayerSelection(player
                 .getName());
         GenericGenerator gen = new GenericGenerator(sel, player.getWorld());

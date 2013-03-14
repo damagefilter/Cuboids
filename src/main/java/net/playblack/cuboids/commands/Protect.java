@@ -36,14 +36,14 @@ public class Protect extends CBaseCommand {
                 return;
             }
         }
-        CuboidSelection selection = SelectionManager.getInstance()
+        CuboidSelection selection = SelectionManager.get()
                 .getPlayerSelection(player.getName());
         if (!selection.isComplete()) {
             ms.failMessage(player, "selectionIncomplete");
             return;
         }
         selection.setWorld(player.getWorld().getName());
-        Region cube = selection.toCuboid(player, command);
+        Region cube = selection.toRegion(player, command);
         cube.setDimension(player.getWorld().getDimension());
         cube.setProperty("protection", Status.ALLOW); // force protection if is allowed
         if (CuboidInterface.get().addCuboid(cube)) {

@@ -1,8 +1,11 @@
 import java.util.List;
 
 import net.playblack.cuboids.InvalidPlayerException;
+import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.deprecated.BlockActionHandler;
 import net.playblack.cuboids.actions.deprecated.BrushHandler;
+import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -11,7 +14,7 @@ import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.mcutils.Location;
 
 /**
- * Listens to block events events
+ * Listens to block events
  * 
  * @author Chris
  * 
@@ -22,9 +25,7 @@ public class BlockListener extends PluginListener {
 
     @Override
     public boolean onBlockRightClick(Player player, Block b, Item itemInHand) {
-        Location p = new Location(b.getX(), b.getY(), b.getZ(),
-                player.getWorld().getType().getId(), player.getWorld()
-                        .getName());
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -32,15 +33,12 @@ public class BlockListener extends PluginListener {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
-        BlockActionHandler.explainPosition(cplayer, p);
-        boolean pointResult = BlockActionHandler.handleSetPoints(cplayer, p,
-                true, false);
-        if (!pointResult) {
-            return !BlockActionHandler.handleOperableItems(cplayer, p,
-                    b.getType());
-        } else {
-            return true;
+        BlockRightClickEvent event = new BlockRightClickEvent(cplayer, new CBlock(b.getType(), b.getData()), p);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            return false;
         }
+        return true;
     }
 
     @Override
@@ -56,16 +54,9 @@ public class BlockListener extends PluginListener {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
-        HitBlox hb = new HitBlox(player);
-        Block b = hb.getFaceBlock();
-        if (b == null) {
-            return;
-        }
-        Location p = new Location(b.getX(), b.getY(), b.getZ(),
-                player.getWorld().getType().getId(), player.getWorld()
-                        .getName());
-        BlockActionHandler.handleSetPoints(cplayer, p, false, true);
-        BrushHandler.handleBrush(cplayer, p);
+        ActionManager.fireEvent(new ArmSwingEvent(cplayer));
+        //TODO: Handle brush
+//        BrushHandler.handleBrush(cplayer, p);
         theTime = System.currentTimeMillis(); // Set time counter
     }
 

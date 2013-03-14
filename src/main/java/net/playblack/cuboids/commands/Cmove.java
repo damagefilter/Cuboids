@@ -36,7 +36,7 @@ public class Cmove extends CBaseCommand {
                 return;
             }
         }
-        CuboidSelection origin = SelectionManager.getInstance()
+        CuboidSelection origin = SelectionManager.get()
                 .getPlayerSelection(player.getName());
         OffsetGenerator gen = new OffsetGenerator(origin, player.getWorld());
         if (!gen.setDirection(command[2])) {

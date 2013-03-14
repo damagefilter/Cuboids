@@ -25,27 +25,6 @@ public class Config {
     private String version = "3.0.0";
     private String basePath = "plugins/cuboids2/";
     private boolean verbose = false;
-
-    // --- REMOVE THOSE
-    private boolean allowProtection = true;
-    private boolean allowCreeperSecure = true;
-    private boolean allowSanctuary = true;
-    private boolean allowSanctuarySpawnAnimals = true;
-    private boolean allowHealing = true;
-    private boolean allowPvp = true;
-    private boolean allowFreebuild = false;
-    private boolean allowFireSpreadBlock = false;
-    private boolean allowTntSecure = false;
-    private boolean allowLavaControl = false;
-    private boolean allowWaterControl = false;
-    private boolean allowFarmland = false;
-    private boolean allowRestriction = false;
-    private boolean allowHmobs = false;
-    private boolean allowWelcome = false;
-    private boolean allowFarewell = false;
-    private boolean allowPhysics = false;
-    private boolean allowEnderControl = false;
-    // --- UP TO HERE
     
     // global settings go into this
     private Region global = new Region();
@@ -153,6 +132,10 @@ public class Config {
         
         //switch on/off item restriction
         defaultSettings.put("restrict-items", cuboidSetting.getStatus("default-restrict-items", Region.Status.DEFAULT));
+        
+        defaultSettings.put("water-bucket", cuboidSetting.getStatus("default-water-bucket", Region.Status.DEFAULT));
+        
+        defaultSettings.put("lava-bucket", cuboidSetting.getStatus("default-lava-bucket", Region.Status.DENY));
 
         
         
@@ -195,8 +178,12 @@ public class Config {
         //default-enderman-control
         global.setProperty("enderman-pickup", cuboidSetting.getStatus("global-enderman-pickup", Region.Status.DEFAULT));
         
-      //switch on/off item restriction
-        defaultSettings.put("restrict-items", cuboidSetting.getStatus("global-restrict-items", Region.Status.DEFAULT));
+        //switch on/off item restriction
+        global.setProperty("restrict-items", cuboidSetting.getStatus("global-restrict-items", Region.Status.DEFAULT));
+        
+        global.setProperty("water-bucket", cuboidSetting.getStatus("global-water-bucket", Region.Status.DEFAULT));
+        
+        global.setProperty("lava-bucket", cuboidSetting.getStatus("global-lava-bucket", Region.Status.DEFAULT));
 
         String[] itemsList = cuboidSetting.getString("restricted-items", "").split(",");
         restrictedItems = new ArrayList<Integer>(itemsList.length);
@@ -235,117 +222,6 @@ public class Config {
      */
     public String getBasePath() {
         return basePath;
-    }
-    /**
-     * @return the allowProtection
-     */
-    public boolean isAllowProtection() {
-        return allowProtection;
-    }
-
-    /**
-     * @return the allowCreeperSecure
-     */
-    public boolean isAllowCreeperSecure() {
-        return allowCreeperSecure;
-    }
-
-    /**
-     * @return the allowSanctuary
-     */
-    public boolean isAllowSanctuary() {
-        return allowSanctuary;
-    }
-
-    /**
-     * @return the allowSanctuarySpawnAnimals
-     */
-    public boolean isAllowSanctuarySpawnAnimals() {
-        return allowSanctuarySpawnAnimals;
-    }
-
-    /**
-     * @return the allowHealing
-     */
-    public boolean isAllowHealing() {
-        return allowHealing;
-    }
-
-    /**
-     * @return the allowPvp
-     */
-    public boolean isAllowPvp() {
-        return allowPvp;
-    }
-
-    /**
-     * @return the allowFreebuild
-     */
-    public boolean isAllowFreebuild() {
-        return allowFreebuild;
-    }
-
-    /**
-     * @return the allowFireSpreadBlock
-     */
-    public boolean isAllowFireSpreadBlock() {
-        return allowFireSpreadBlock;
-    }
-
-    /**
-     * @return the allowTntSecure
-     */
-    public boolean isAllowTntSecure() {
-        return allowTntSecure;
-    }
-
-    /**
-     * @return the allowLavaControl
-     */
-    public boolean isAllowLavaControl() {
-        return allowLavaControl;
-    }
-
-    /**
-     * @return the allowWaterControl
-     */
-    public boolean isAllowWaterControl() {
-        return allowWaterControl;
-    }
-
-    /**
-     * @return the allowFarmland
-     */
-    public boolean isAllowFarmland() {
-        return allowFarmland;
-    }
-
-    /**
-     * @return the allowRestriction
-     */
-    public boolean isAllowRestriction() {
-        return allowRestriction;
-    }
-
-    /**
-     * @return the allowHmobs
-     */
-    public boolean isAllowHmobs() {
-        return allowHmobs;
-    }
-
-    /**
-     * @return the allowWelcome
-     */
-    public boolean isAllowWelcome() {
-        return allowWelcome;
-    }
-
-    /**
-     * @return the allowFarewell
-     */
-    public boolean isAllowFarewell() {
-        return allowFarewell;
     }
 
     /**
@@ -412,8 +288,7 @@ public class Config {
     }
 
     /**
-     * @param verbose
-     *            the verbose to set
+     * @param verbose the verbose to set
      */
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
@@ -461,14 +336,6 @@ public class Config {
         return allowUndo;
     }
 
-    public boolean isAllowPhysics() {
-        return allowPhysics;
-    }
-
-    public boolean isAllowEnderControl() {
-        return allowEnderControl;
-    }
-
     public Region getDefaultCuboidSetting(CPlayer player) {
         Region flags = new Region();
         HashMap<String, Region.Status> temp = new HashMap<String, Region.Status>(defaultSettings);
@@ -487,7 +354,8 @@ public class Config {
     public Region getGlobalSettings() {
         return global;
     }
-
+    
+    //TODO: More datasource stuff
     public BaseData getDataSource() {
         if (sqlConfig == null) {
             return new XmlData(EventLogger.getInstance());
@@ -504,6 +372,11 @@ public class Config {
      */
     public boolean itemIsRestricted(int itemId) {
         return restrictedItems.contains(Integer.valueOf(itemId));
+    }
+
+    public String getLang() {
+        //TODO: From config
+        return "en_EN";
     }
 
 }

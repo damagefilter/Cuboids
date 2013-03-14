@@ -47,7 +47,7 @@ public class Creplace extends CBaseCommand {
         }
 
         // prepare the selection
-        CuboidSelection template = SelectionManager.getInstance()
+        CuboidSelection template = SelectionManager.get()
                 .getPlayerSelection(player.getName());
         if (!template.getBlockList().isEmpty()) {
             template.clearBlocks();

@@ -41,7 +41,7 @@ public class Cdel extends CBaseCommand {
         // create a new template block
         CBlock b = new CBlock(0, 0);
         // prepare the selection
-        CuboidSelection template = SelectionManager.getInstance()
+        CuboidSelection template = SelectionManager.get()
                 .getPlayerSelection(player.getName());
         if (!template.getBlockList().isEmpty()) {
             template.clearBlocks();

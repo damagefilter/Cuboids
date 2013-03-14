@@ -40,7 +40,7 @@ public class CmodAdd extends CBaseCommand {
             return;
         }
         Region defaultC = Config.get().getDefaultCuboidSetting(player);
-        CuboidSelection selection = SelectionManager.getInstance()
+        CuboidSelection selection = SelectionManager.get()
                 .getPlayerSelection(player.getName());
         if (!selection.isComplete()) {
             ms.failMessage(player, "selectionIncomplete");

@@ -433,8 +433,7 @@ public class Vector {
     }
 
     public String explain() {
-        return "x: " + getBlockX() + ", y: " + getBlockY() + ", z: "
-                + getBlockZ();
+        return "(x: " + getBlockX() + ", y: " + getBlockY() + ", z: " + getBlockZ() + ")";
     }
 
     /**

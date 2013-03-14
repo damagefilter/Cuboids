@@ -17,13 +17,19 @@ public class SelectionManager {
         selections = new HashMap<String, ISelection>();
     }
 
-    public static SelectionManager getInstance() {
+    public static SelectionManager get() {
         if (instance == null) {
             instance = new SelectionManager();
         }
         return instance;
     }
 
+    /**
+     * Returns the current player selection data.
+     * This will never return null
+     * @param player
+     * @return
+     */
     public PlayerSelection getPlayerSelection(String player) {
         if (selections.get(player) == null) {
             setPlayerSelection(player);

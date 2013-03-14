@@ -111,4 +111,13 @@ public class CanaryMob implements CMob {
                 world.getName());
     }
 
+    @Override
+    public double getPitch() {
+        return mob.getPitch();
+    }
+
+    @Override
+    public double getRotation() {
+        return mob.getRotation();
+    }
 }

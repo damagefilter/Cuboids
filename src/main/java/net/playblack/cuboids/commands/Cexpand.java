@@ -31,7 +31,7 @@ public class Cexpand extends CBaseCommand {
             }
         }
 
-        SelectionManager.getInstance().getPlayerSelection(player.getName())
+        SelectionManager.get().getPlayerSelection(player.getName())
                 .expandVert();
         ms.successMessage(player, "selectionExpanded");
     }

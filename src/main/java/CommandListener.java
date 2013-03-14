@@ -9,7 +9,7 @@ public class CommandListener extends PluginListener {
     @Override
     public boolean onCommand(Player player, String[] split) {
         EventLogger.getInstance().logMessage("Processing command...", "DEBUG");
-        SelectionManager.getInstance().getPlayerSelection(player.getName());
+        SelectionManager.get().getPlayerSelection(player.getName());
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());

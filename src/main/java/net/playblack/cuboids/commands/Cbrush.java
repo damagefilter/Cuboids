@@ -35,7 +35,7 @@ public class Cbrush extends CBaseCommand {
             }
         }
 
-        SelectionManager selectionManager = SelectionManager.getInstance();
+        SelectionManager selectionManager = SelectionManager.get();
         // command, radius, type
         int radius = ToolBox.parseInt(command[1]);
         if (radius < 0) {

@@ -1,3 +1,4 @@
+
 import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
@@ -6,7 +7,8 @@ import net.playblack.mcutils.Vector;
 public class CanaryPlayer extends CPlayer {
     Player player;
     CanaryWorld world;
-
+//TODO: Create inventory interface to get rid of this CItem array bullshit!
+//    private HashMap<Integer, CItem[]> inventories;
     public CanaryPlayer(Player p) {
         this.player = p;
         world = new CanaryWorld(p.getWorld());
@@ -182,6 +184,16 @@ public class CanaryPlayer extends CPlayer {
     public CItem[] getCurrentInventory() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public double getPitch() {
+        return player.getPitch();
+    }
+
+    @Override
+    public double getRotation() {
+        return player.getRotation();
     }
 
 }

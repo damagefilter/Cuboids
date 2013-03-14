@@ -138,14 +138,13 @@ public abstract class CPlayer implements IBaseEntity {
      * @param item
      * @return
      */
-    public boolean canUseItem(Location location, CItem item) {
-        Region cube = (Region) RegionManager.get().getActiveCuboidNode(location, false);
-        if(hasPermission("cIgnoreRestrictions")) {
+    public boolean canUseItem(CItem item) {
+        if(hasPermission("cIgnoreRestrictions") || currentRegion == null) {
             return true;
         }
         
-        if(cube.getProperty("restrict-items") == Status.ALLOW) {
-            return cube.isItemRestricted(item.getId());
+        if(currentRegion.getProperty("restrict-items") == Status.ALLOW) {
+            return currentRegion.isItemRestricted(item.getId());
         }
         return true;
     }
@@ -170,8 +169,25 @@ public abstract class CPlayer implements IBaseEntity {
         return currentRegion != null;
     }
     
+    /**
+     * Check if the player currently is inside any region
+     * @param r
+     * @return
+     */
     public boolean isInRegion(Region r) {
         return currentRegion == null || currentRegion == r;
+    }
+    
+    /**
+     * Check if this player is allowed in the region he is in.
+     * Returns true if player is in no region.
+     * @return
+     */
+    public boolean isInRegionWhitelist() {
+        if(currentRegion == null) {
+            return true;
+        }
+        return currentRegion.playerIsAllowed(getName(), getGroups());
     }
     
     /**

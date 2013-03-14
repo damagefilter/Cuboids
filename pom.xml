@@ -94,7 +94,36 @@
           <target>1.6</target>
         </configuration>
       </plugin>
-
+      
+      <!-- Dependency plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <id>copy</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>net.visualillusionsent</groupId>
+                  <artifactId>viutils</artifactId>
+                  <overWrite>false</overWrite>
+                  <destFileName>viutils.jar</destFileName>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
       <!-- JAR creation plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -107,18 +136,31 @@
               <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
             </manifest>
+            <manifestEntries>
+              <!-- <Main-Class>net.playblack.cuboids.Main</Main-Class>  // no main class in a plugin :D-->
+              <Class-Path>../lib/viutils.jar</Class-Path>
+            </manifestEntries>
           </archive>
         </configuration>
       </plugin>
 
+      <!-- Assembly -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-2</version>
+        <configuration>
+          <descriptor>${basedir}/src/main/assembly/default.xml</descriptor>
+        </configuration>
+      </plugin>
+      
       <!-- Release -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.2.2</version>
         <configuration>
-          <preparationGoals>jar:jar</preparationGoals>
-          <goals>jar:jar</goals>
+          <preparationGoals>assembly:assembly</preparationGoals>
+          <goals>assembly:assembly</goals>
           <tagNameFormat>@{project.version}</tagNameFormat>
         </configuration>
       </plugin>

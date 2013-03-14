@@ -28,7 +28,6 @@ import net.playblack.mcutils.Location;
  */
 public class CuboidInterface {
     private RegionManager regions;
-    private MessageSystem ms;
     private ScheduledExecutorService threadManager = Executors
             .newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
     public HashMap<String, CItem[]> playerInventories = new HashMap<String, CItem[]>();
@@ -40,7 +39,6 @@ public class CuboidInterface {
      */
     private CuboidInterface() {
         regions = RegionManager.get();
-        ms = MessageSystem.getInstance();
         Config cfg = Config.get();
         threadManager.scheduleAtFixedRate(new HMobTask(), 20, 20,
                 TimeUnit.SECONDS);
@@ -62,13 +60,13 @@ public class CuboidInterface {
     public boolean setProperty(CPlayer player, String cubeName, String property, String value) {
         Region.Status state = Region.Status.fromString(value);
         if(state == Status.INVALID_PROPERTY) {
-            ms.failMessage(player, "invalidPropertyState");
+            MessageSystem.failMessage(player, "invalidPropertyState");
             return false;
         }
         
         Region rg = (Region)regions.getCuboidByName(cubeName, player.getWorld().getName(), player.getWorld().getDimension());
         if(rg == null) {
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
         
@@ -124,14 +122,14 @@ public class CuboidInterface {
     public void loadCuboid(CPlayer player, String cube) {
         if ((player.hasPermission("cIgnoreRestrictions")) || (player.hasPermission("cAreaMod"))) {
             if (!regions.cuboidExists(cube, player.getWorld().getName(), player.getWorld().getDimension())) {
-                ms.failMessage(player, "cuboidNotFoundOnCommand");
+                MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
                 return;
             }
             regions.loadSingle(cube, player.getWorld().getName(), player
                     .getWorld().getDimension());
-            ms.successMessage(player, "cuboidLoaded");
+            MessageSystem.successMessage(player, "cuboidLoaded");
         } else {
-            ms.failMessage(player, "playerNotOwner");
+            MessageSystem.failMessage(player, "playerNotOwner");
         }
     }
 
@@ -146,18 +144,18 @@ public class CuboidInterface {
         // player.getWorld().getDimension())
         Region cubeNode = (Region)regions.getCuboidByName(cube, player.getWorld().getName(), player.getWorld().getDimension());
         if (cubeNode == null) {
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
         if ((cubeNode.playerIsOwner(player.getName())) || ((player.hasPermission("cIgnoreRestrictions")) || (player
                         .hasPermission("cAreaMod")))) {
             if (regions.saveSingle(cube, player.getWorld().getName(), player.getWorld().getDimension())) {
-                ms.successMessage(player, "cuboidSaved");
+                MessageSystem.successMessage(player, "cuboidSaved");
             } else {
-                ms.failMessage(player, "cuboidNotSaved");
+                MessageSystem.failMessage(player, "cuboidNotSaved");
             }
         } else {
-            ms.failMessage(player, "playerNotOwner");
+            MessageSystem.failMessage(player, "playerNotOwner");
         }
     }
 
@@ -169,9 +167,9 @@ public class CuboidInterface {
     public void saveAll(CPlayer player) {
         if (player.hasPermission("cIgnoreRestrictions")) {
             regions.save(false, true);
-            ms.successMessage(player, "cuboidSavedAll");
+            MessageSystem.successMessage(player, "cuboidSavedAll");
         } else {
-            ms.failMessage(player, "permissionDenied");
+            MessageSystem.failMessage(player, "permissionDenied");
         }
     }
 
@@ -308,7 +306,7 @@ public class CuboidInterface {
         Region cube = regions.getCuboidByName(cubeName, player.getWorld()
                 .getName(), player.getWorld().getDimension());
         if (cube == null) {
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
 
@@ -317,11 +315,11 @@ public class CuboidInterface {
                 || player.hasPermission("cIgnoreRestrictions")
                 || player.hasPermission("cdelete")) {
             regions.removeRegion(cube, false);
-            ms.successMessage(player, "cuboidRemoved");
+            MessageSystem.successMessage(player, "cuboidRemoved");
             return true;
 
         } else {
-            ms.failMessage(player, "permissionDenied");
+            MessageSystem.failMessage(player, "permissionDenied");
             return false;
         }
     }
@@ -337,7 +335,7 @@ public class CuboidInterface {
         Region cube = regions.getCuboidByName(command[1], player.getWorld()
                 .getName(), player.getWorld().getDimension());
         if (cube == null) {
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
         if (cube.playerIsOwner(player.getName())
@@ -345,7 +343,7 @@ public class CuboidInterface {
                 || player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("callow")) {
                 if (!player.hasPermission("cIgnoreRestrictions")) {
-                    ms.failMessage(player, "permissionDenied");
+                    MessageSystem.failMessage(player, "permissionDenied");
                     return false;
                 }
             }
@@ -358,11 +356,11 @@ public class CuboidInterface {
             }
 
             regions.updateRegion(cube);
-            ms.successMessage(player, "cuboidUpdated");
+            MessageSystem.successMessage(player, "cuboidUpdated");
             return true;
 
         } else {
-            ms.failMessage(player, "cuboidNotUpdated");
+            MessageSystem.failMessage(player, "cuboidNotUpdated");
             return false;
         }
     }
@@ -384,7 +382,7 @@ public class CuboidInterface {
 
                 if (!player.hasPermission("callow")) {
                     if (!player.hasPermission("cIgnoreRestrictions")) {
-                        ms.failMessage(player, "permissionDenied");
+                        MessageSystem.failMessage(player, "permissionDenied");
                         return false;
                     }
                 }
@@ -397,14 +395,14 @@ public class CuboidInterface {
                     }
                 }
                 regions.updateRegion(cube);
-                ms.successMessage(player, "cuboidUpdated");
+                MessageSystem.successMessage(player, "cuboidUpdated");
                 return true;
             } else {
-                ms.failMessage(player, "playerNotOwner");
+                MessageSystem.failMessage(player, "playerNotOwner");
                 return false;
             }
         } else {
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
     }
@@ -429,14 +427,14 @@ public class CuboidInterface {
                             command[i]));
                 }
                 regions.updateRegion(cube);
-                ms.successMessage(player, "cuboidUpdated");
+                MessageSystem.successMessage(player, "cuboidUpdated");
                 return true;
             } else {
-                ms.failMessage(player, "playerNotOwner");
+                MessageSystem.failMessage(player, "playerNotOwner");
                 return false;
             }
         } else {
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
     }
@@ -454,14 +452,14 @@ public class CuboidInterface {
                             command[i]));
                 }
                 regions.updateRegion(cube);
-                ms.successMessage(player, "cuboidUpdated");
+                MessageSystem.successMessage(player, "cuboidUpdated");
                 return true;
             } else {
-                ms.failMessage(player, "playerNotOwner");
+                MessageSystem.failMessage(player, "playerNotOwner");
                 return false;
             }
         } else {
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
     }
@@ -483,14 +481,14 @@ public class CuboidInterface {
                     || player.hasPermission("cAreaMod")
                     || player.hasPermission("cIgnoreRestrictions")) {
                 if (!player.hasPermission("ccommand")) {
-                    ms.failMessage(player, "permissionDenied");
+                    MessageSystem.failMessage(player, "permissionDenied");
                     return false;
                 }
                 for (int i = 3; i < command.length; i++) {
                     cube.addRestrictedCommand(command[i]);
                 }
                 regions.updateRegion(cube);
-                ms.successMessage(player, "cuboidUpdated");
+                MessageSystem.successMessage(player, "cuboidUpdated");
                 return true;
             }
         }
@@ -514,14 +512,14 @@ public class CuboidInterface {
                     || player.hasPermission("cAreaMod")
                     || player.hasPermission("cIgnoreRestrictions")) {
                 if (!player.hasPermission("ccommand")) {
-                    ms.failMessage(player, "permissionDenied");
+                    MessageSystem.failMessage(player, "permissionDenied");
                     return false;
                 }
                 for (int i = 3; i < command.length; i++) {
                     cube.removeRestrictedCommand(command[i]);
                 }
                 regions.updateRegion(cube);
-                ms.successMessage(player, "cuboidUpdated");
+                MessageSystem.successMessage(player, "cuboidUpdated");
                 return true;
             }
         }
@@ -545,15 +543,15 @@ public class CuboidInterface {
                 if (!player.hasPermission("cIgnoreRestrictions")) {
                     if (!player.hasPermission("cmove")) {
                         if (!player.hasPermission("cAreaMod")) {
-                            ms.failMessage(player, "permissionDenied");
+                            MessageSystem.failMessage(player, "permissionDenied");
                             return false;
                         }
                     }
                 }
-                CuboidSelection selection = SelectionManager.getInstance()
+                CuboidSelection selection = SelectionManager.get()
                         .getPlayerSelection(player.getName());
                 if (!selection.isComplete()) {
-                    ms.failMessage(player, "selectionIncomplete");
+                    MessageSystem.failMessage(player, "selectionIncomplete");
                     return false;
                 }
                 cube.setBoundingBox(selection.getOrigin(), selection.getOffset());
@@ -563,14 +561,14 @@ public class CuboidInterface {
 
                 regions.saveSingle(regions.getCuboidByName(cube.getName(),
                         cube.getWorld(), cube.getDimension()));
-                ms.successMessage(player, "cuboidMoved");
+                MessageSystem.successMessage(player, "cuboidMoved");
                 return true;
             } else {
-                ms.failMessage(player, "playerNotOwner");
+                MessageSystem.failMessage(player, "playerNotOwner");
                 return false;
             }
         } else {
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
     }
@@ -593,15 +591,15 @@ public class CuboidInterface {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod") || player.hasPermission("cIgnoreRestrictions")) {
                 cube.setPriority(prio);
                 regions.updateRegion(cube);
-                ms.successMessage(player, "prioritySet");
+                MessageSystem.successMessage(player, "prioritySet");
                 return;
             } else {
-                ms.failMessage(player, "priorityNotSet");
-                ms.failMessage(player, "playerNotOwner");
+                MessageSystem.failMessage(player, "priorityNotSet");
+                MessageSystem.failMessage(player, "playerNotOwner");
                 return;
             }
         }
-        ms.failMessage(player, "cuboidNotFoundOnCommand");
+        MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
         return;
     }
 
@@ -616,8 +614,8 @@ public class CuboidInterface {
                         .getCuboidByName(parent, player.getWorld().getName(),
                                 player.getWorld().getDimension());
                 if (parentCube == null) {
-                    ms.failMessage(player, "parentNotSet");
-                    ms.failMessage(player, "cuboidNotFoundOnCommand");
+                    MessageSystem.failMessage(player, "parentNotSet");
+                    MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
                     return;
                 }
 
@@ -629,19 +627,19 @@ public class CuboidInterface {
                         cube.setPriority(parentCube.getPriority() + 1);
                     }
                     regions.updateRegion(cube);
-                    ms.successMessage(player, "parentSet");
+                    MessageSystem.successMessage(player, "parentSet");
                     return;
                 } else {
-                    ms.failMessage(player, "notWithinSpecifiedParent");
-                    ms.failMessage(player, "parentNotSet");
+                    MessageSystem.failMessage(player, "notWithinSpecifiedParent");
+                    MessageSystem.failMessage(player, "parentNotSet");
                     return;
                 }
             } else {
-                ms.failMessage(player, "playerNotOwner");
+                MessageSystem.failMessage(player, "playerNotOwner");
                 return;
             }
         }
-        ms.failMessage(player, "cuboidNotFoundOnCommand");
+        MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
         return;
     }
 
@@ -657,62 +655,59 @@ public class CuboidInterface {
      * @param player
      * @param position
      */
-    public void explainCuboid(CPlayer player, Location position) {
+    public void explainRegion(CPlayer player, Location position) {
         Region node = regions.getActiveCuboidNode(position, true);
 
         if (node != null) {
             Region cube = node;
-            player.sendMessage(ColorManager.LightGray + "---- "
-                    + cube.getName() + " ----");
+            player.sendMessage(ColorManager.LightGray + "---- " + cube.getName() + " ----");
             if (cube.playerIsAllowed(player.getName(), player.getGroups())) {
                 if (cube.playerIsOwner(player.getName())) {
-                    player.sendMessage(ColorManager.LightGreen
-                            + "You own this area (You can build!)");
-                } else {
-                    player.sendMessage(ColorManager.LightGray
-                            + "You can build in this area");
+                    MessageSystem.translateMessage(player, ColorManager.LightGreen, "youOwnThisArea");
+                } 
+                else {
+                    MessageSystem.translateMessage(player, ColorManager.LightGray, "youCanBuildHere");
                 }
-            } else if (player.hasPermission("cAreaMod")
-                    || player.hasPermission("cIgnoreRestrictions")) {
-                player.sendMessage(ColorManager.LightGreen
-                        + "You can build in this area");
-            } else {
-                player.sendMessage(ColorManager.Rose
-                        + "You can't build in this area");
+            } 
+            else if (player.hasPermission("cAreaMod") || player.hasPermission("cIgnoreRestrictions")) {
+                MessageSystem.translateMessage(player, ColorManager.LightGreen, "youCanBuildHere");
+            } 
+            else {
+                MessageSystem.translateMessage(player, ColorManager.Rose, "youCanNotBuildHere");
             }
             String[] flags = cube.getFlagList().split(";");
-            player.sendMessage(ColorManager.LightGray + "Flags: ");
-                    
+            MessageSystem.translateMessage(player, ColorManager.LightGray, "flags");
+            
             for(String line : flags) {
                 player.sendMessage(line);
             }
-            player.sendMessage(ColorManager.LightGray + "Players: "
-                    + ColorManager.Yellow + cube.getPlayerList());
-            player.sendMessage(ColorManager.LightGray + "Groups: "
-                    + ColorManager.Yellow + cube.getGroupList());
+            MessageSystem.translateMessage(player, ColorManager.LightGray, "players");
+            player.sendMessage(ColorManager.Yellow + cube.getPlayerList());
+            
+            MessageSystem.translateMessage(player, ColorManager.LightGray, "groups");
+            player.sendMessage(ColorManager.Yellow + cube.getGroupList());
 
             String commands = cube.getRestrictedCommands().toString();
             String items = cube.getItemListAsNames();
             if (!commands.isEmpty()) {
-                player.sendMessage(ColorManager.LightGray
-                        + "Disallowed Commands:");
+                MessageSystem.translateMessage(player, ColorManager.LightGray, "disallowedCommands");
                 player.sendMessage(ColorManager.Yellow + commands);
             }
 
             if (!items.isEmpty()) {
-                player.sendMessage(ColorManager.LightGray + "Disallowed Items:");
+                MessageSystem.translateMessage(player, ColorManager.LightGray, "disallowedItems");
                 player.sendMessage(ColorManager.Yellow + items);
             }
 
             if (cube.getParent() == null) {
-                player.sendMessage(ColorManager.LightGray + "Parent: "
-                        + ColorManager.Yellow + "none");
+                //TODO: Translate parent? hmmm
+                player.sendMessage(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + "none");
             } else {
-                player.sendMessage(ColorManager.LightGray + "Parent: "
-                        + ColorManager.Yellow + cube.getParent());
+                player.sendMessage(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + cube.getParent());
             }
-        } else {
-            ms.notification(player, "No cuboid there!");
+        } 
+        else {
+            MessageSystem.yellowNote(player, "noCuboidFound");
         }
         CBlock current = player.getWorld().getBlockAt(position);
         MessageSystem.customMessage(player, ColorManager.Blue, "Block: "
@@ -767,7 +762,7 @@ public class CuboidInterface {
                         + ColorManager.Yellow + cube.getParent());
             }
         } else {
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
         }
     }
 
@@ -821,13 +816,13 @@ public class CuboidInterface {
         Region cube = regions.getCuboidByName(cubeName, player.getWorld()
                 .getName(), player.getWorld().getDimension());
         if (cube == null) {
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!(cube.playerIsOwner(player.getName()) || player
                     .hasPermission("cAreaMod"))) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }

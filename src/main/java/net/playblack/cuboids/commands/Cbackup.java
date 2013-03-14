@@ -31,10 +31,9 @@ public class Cbackup extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cbackup")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -48,19 +47,19 @@ public class Cbackup extends CBaseCommand {
                 tmp = gen.getWorldContent(tmp);
             } catch (BlockEditLimitExceededException e) {
                 EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-                ms.customFailMessage(player, e.getMessage());
+                MessageSystem.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
                 return;
             } catch (SelectionIncompleteException e) {
-                MessageSystem.getInstance().failMessage(player,
+                MessageSystem.failMessage(player,
                         "selectionIncomplete");
                 return;
             }
             CuboidSerializer ser = new FlatFileSerializer(tmp);
             ser.save(command[1], player.getWorld().getFilePrefix());
-            ms.successMessage(player, "backupSuccess");
+            MessageSystem.successMessage(player, "backupSuccess");
         } else {
-            ms.failMessage(player, "playerNotOwner");
+            MessageSystem.failMessage(player, "playerNotOwner");
         }
     }
 }

@@ -62,7 +62,7 @@ public class Credo extends CBaseCommand {
             CuboidSelection sel = SessionManager.getInstance()
                     .getPlayerHistory(subject).redo();
             if (sel == null) {
-                ms.notification(player, "Nothing lef to redo!");
+                MessageSystem.yellowNote(player, "allRedone");
                 // ms.successMessage(player, "redoDone");
                 return;
             }

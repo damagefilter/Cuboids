@@ -74,4 +74,16 @@ public interface IBaseEntity {
      * @return
      */
     public double getZ();
+    
+    /**
+     * Get rotation around X-Axis (Up/Down looking)
+     * @return
+     */
+    public double getPitch();
+    
+    /**
+     * Get rotation around the Y-Axis (look rotation)
+     * @return
+     */
+    public double getRotation();
 }

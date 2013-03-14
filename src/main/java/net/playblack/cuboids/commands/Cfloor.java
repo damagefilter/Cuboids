@@ -39,7 +39,7 @@ public class Cfloor extends CBaseCommand {
         if (height == -1) {
             ms.failMessage(player, "negativeNumber");
         }
-        CuboidSelection sel = SelectionManager.getInstance()
+        CuboidSelection sel = SelectionManager.get()
                 .getPlayerSelection(player.getName());
         sel.sortEdges(false);
         Vector origin = sel.getOffset();

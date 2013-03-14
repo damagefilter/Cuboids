@@ -25,7 +25,7 @@ public class BrushHandler {
             if ((player.hasPermission("cWorldMod") && player
                     .hasPermission("cbrush"))
                     || player.hasPermission("cIgnoreRestrictions")) {
-                PlayerSelection selection = SelectionManager.getInstance()
+                PlayerSelection selection = SelectionManager.get()
                         .getPlayerSelection(player.getName());
                 selection.setOrigin(point);
                 SphereGenerator gen = new SphereGenerator(selection,

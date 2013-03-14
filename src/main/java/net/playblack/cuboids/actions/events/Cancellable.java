@@ -7,5 +7,15 @@ package net.playblack.cuboids.actions.events;
  *
  */
 public interface Cancellable {
+    /**
+     * Check if this event is already cancelled
+     * @return
+     */
     public boolean isCancelled();
+    
+    /**
+     * Cancel this event
+     */
+    public void cancel();
+    
 }
