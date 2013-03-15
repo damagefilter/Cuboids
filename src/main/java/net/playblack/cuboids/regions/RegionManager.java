@@ -274,7 +274,7 @@ public class RegionManager {
      *            passed along
      * @return
      */
-    public Region getActiveCuboidNode(Location v, boolean ignoreGlobal) {
+    public Region getActiveRegion(Location v, boolean ignoreGlobal) {
         if (v == null) {
             return global;
         }

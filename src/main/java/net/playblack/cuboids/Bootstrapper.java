@@ -14,7 +14,7 @@ import net.playblack.mcutils.EventLogger;
 
 /**
  * The Bootstrapper takes care of loading all the required components to run the
- * cuboidlib and also receives the server implementation.
+ * Plugin and also receives the server implementation.
  * 
  * @author Chris
  * 
@@ -75,6 +75,7 @@ public class Bootstrapper {
         log.logCachedMessage("INFO");
         FlatfileDataLegacy.cleanupFiles();
 
+        //BIIIIIIIIG TODO: Move those into static {} defs at the command objects themselfes! 
         log.cacheMessage("Init Help System", false);
         CommandHelper.get().addHelp(
                 new Cbackup().getToolTip(),

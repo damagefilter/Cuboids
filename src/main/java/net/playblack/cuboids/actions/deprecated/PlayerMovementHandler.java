@@ -37,7 +37,7 @@ public class PlayerMovementHandler {
             RegionManager.get().removeFromAllAreas(player.getName(),
                     player.getLocation());
             CuboidNode targetNode = RegionManager.get()
-                    .getActiveCuboidNode(target, true);
+                    .getActiveRegion(target, true);
             if (targetNode == null || !targetNode.getCuboid().isFreeBuild()) {
                 if (player.isInCreativeMode()
                         && !player.hasPermission("cIgnoreRestrictions")) { // Ignore

@@ -4,9 +4,9 @@ import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.ActionHandler.Priority;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
@@ -112,7 +112,7 @@ public class SelectionOperator implements ActionListener {
     // Listener creation stuff
     // *******************************
     
-    @ActionHandler(priority=Priority.MEDIUM)
+    @ActionHandler
     public void onBlockRightClick(BlockRightClickEvent event) {
         //Set seletion?
         if(setSelectionPoint(event.getPlayer(), event.getLocation(), true)) {
@@ -124,10 +124,17 @@ public class SelectionOperator implements ActionListener {
         }
     }
     
-    @ActionHandler(priority = Priority.MEDIUM)
+    @ActionHandler
     public void onArmSwing(ArmSwingEvent event) {
         Location loc = new Location(new LineBlockTracer(event.getPlayer()).getTargetVector());
         setSelectionPoint(event.getPlayer(), loc, false);
+    }
+    
+    @ActionHandler
+    public void onBlockLeftClick(BlockLeftClickEvent event) {
+        if(!setSelectionPoint(event.getPlayer(), event.getLocation(), false)) {
+            event.cancel();
+        }
     }
     
     //Register that thing

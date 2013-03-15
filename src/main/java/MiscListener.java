@@ -1,5 +1,4 @@
 import net.playblack.cuboids.InvalidPlayerException;
-import net.playblack.cuboids.actions.deprecated.BlockActionHandler;
 import net.playblack.cuboids.actions.deprecated.MiscHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -34,11 +33,13 @@ public class MiscListener extends PluginListener {
         }
     }
 
+    //TODO: Move this to BlockListener and BlockModificationsOperator
     @Override
     public boolean onEndermanPickup(Enderman entity, Block b) {
-        World world = entity.getWorld();
-        return BlockActionHandler.handleEndermanPickup(new Location(b
-                .getX(), b.getY(), b.getZ(), world.getType().getId(), world
-                .getName()));
+//        World world = entity.getWorld();
+//        return BlockActionHandler.handleEndermanPickup(new Location(b
+//                .getX(), b.getY(), b.getZ(), world.getType().getId(), world
+//                .getName()));
+        return false;
     }
 }

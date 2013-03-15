@@ -1,0 +1,152 @@
+package net.playblack.cuboids.actions.operators;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+
+import net.playblack.cuboids.actions.ActionHandler;
+import net.playblack.cuboids.actions.ActionListener;
+import net.playblack.cuboids.actions.ActionManager;
+import net.playblack.cuboids.actions.events.forwardings.BlockBreakEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
+import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
+import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
+import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
+import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
+import net.playblack.cuboids.blocks.CBlock;
+import net.playblack.cuboids.gameinterface.CPlayer;
+import net.playblack.cuboids.regions.Region;
+import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.cuboids.regions.Region.Status;
+import net.playblack.mcutils.Location;
+
+public class BlockModificationsOperator implements ActionListener {
+    
+    /**
+     * Create a list of blocks that should not be affected by the explosion
+     * @param positions
+     * @return
+     */
+    public List<Location> checkCreeperExplosionBlocks(Set<Location> positions) {
+        RegionManager r = RegionManager.get();
+        ArrayList<Location> toRemove = new ArrayList<Location>();
+        for(Location l : positions) {
+            Region reg = r.getActiveRegion(l, false);
+            if(reg.getProperty("creeper-explosion") == Status.DENY) {
+                toRemove.add(l);
+            }
+        }
+        return toRemove;
+    }
+    
+    public boolean shouldCancelExplosion(Location loc) {
+        return RegionManager.get().getActiveRegion(loc, false).getProperty("creeper-explosion") == Status.DENY;
+    }
+    
+    /**
+     * Check if a player can use a lighter, eg. start a fire.
+     * @param player
+     * @param point
+     * @return
+     */
+    public boolean canUseLighter(CPlayer player, Location point) {
+        if(player.hasPermission("cIgnoreRestrictions")) {
+            return true;
+        }
+        Region r = RegionManager.get().getActiveRegion(point, false);
+        if(r.playerIsAllowed(player.getName(), player.getGroups())) {
+            return true;
+        }
+        if(r.getProperty("firespread") == Status.DENY) {
+            return false;
+        }
+        return true;
+    }
+    
+    // *******************************
+    // Listener creation stuff
+    // *******************************
+    @ActionHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        if(!event.getPlayer().canModifyBlock(event.getLocation())) {
+            event.cancel();
+        }
+    }
+    
+    @ActionHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if(!event.getPlayer().canModifyBlock(event.getLocation())) {
+            event.cancel();
+        }
+    }
+    
+    @ActionHandler
+    public void onEntityExplode(ExplosionEvent event) {
+        if(shouldCancelExplosion(event.getLocation())) {
+            event.cancel();
+            return;
+        }
+        
+        //Remove blocks from protected regions but do the rest of the explosion
+        HashMap<Location, CBlock> markedBlocks = event.getAffectedBlocks();
+        List<Location> unmarkedBlocks = checkCreeperExplosionBlocks(markedBlocks.keySet());
+        
+        for(Location l : unmarkedBlocks) {
+            markedBlocks.remove(l);
+        }
+        event.setAffectedBlocks(markedBlocks);
+    }
+    
+    @ActionHandler
+    public void onIgnite(IgniteEvent event) {
+        
+        if(event.getSource() == FireSource.LIGHTER) {
+            if(!canUseLighter(event.getPlayer(), event.getLocation())) {
+                event.cancel();
+            }
+        }
+        else {
+            Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
+            if(r.getProperty("firespread") == Status.DENY) {
+                event.cancel();
+            }
+        }
+    }
+    
+    @ActionHandler
+    public void onLiquidFlow(LiquidFlowEvent event) {
+        Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
+        if(event.isWaterFlow() && r.getProperty("water-flow") == Status.DENY) {
+            event.cancel();
+        }
+        if(event.isLavaFlow() && r.getProperty("lava-flow") == Status.DENY) {
+            event.cancel();
+        }
+    }
+    
+    @ActionHandler
+    public void onBlockPhysics(BlockPhysicsEvent event) {
+        Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
+        if(r.getProperty("physics") == Status.DENY) {
+            event.cancel();
+        }
+    }
+    
+    @ActionHandler
+    public void onBlockUpdate(BlockUpdateEvent event) {
+        if(event.getBlock().getType() == 60 && event.getTargetBlock().getType() != 60) {
+            Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
+            if(r.getProperty("crops-trampling") == Status.DENY) {
+                event.cancel();
+            }
+        }
+    }
+    
+    static {
+        ActionManager.registerActionListener("Cuboids2", new BlockModificationsOperator());
+    }
+}

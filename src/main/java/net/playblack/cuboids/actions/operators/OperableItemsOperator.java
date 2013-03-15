@@ -3,7 +3,7 @@ package net.playblack.cuboids.actions.operators;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.ActionHandler.Priority;
+import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
@@ -34,7 +34,7 @@ public class OperableItemsOperator implements ActionListener {
         if(player.hasPermission("cIgnoreRestrictions")) {
             return true;
         }
-        Region r = RegionManager.get().getActiveCuboidNode(point, false);
+        Region r = RegionManager.get().getActiveRegion(point, false);
         if(r.playerIsAllowed(player.getName(), player.getGroups())) {
             return true;
         }
@@ -45,7 +45,7 @@ public class OperableItemsOperator implements ActionListener {
         if(player.hasPermission("cIgnoreRestrictions")) {
             return true;
         }
-        Region r = RegionManager.get().getActiveCuboidNode(point, false);
+        Region r = RegionManager.get().getActiveRegion(point, false);
         if(r.playerIsAllowed(player.getName(), player.getGroups())) {
             return true;
         }
@@ -61,37 +61,25 @@ public class OperableItemsOperator implements ActionListener {
         return true;
     }
     
-    /**
-     * Check if a player can use a lighter, eg. start a lighter
-     * @param player
-     * @param point
-     * @return
-     */
-    public boolean canUseLighter(CPlayer player, Location point) {
-        if(player.hasPermission("cIgnoreRestrictions")) {
-            return true;
-        }
-        Region r = RegionManager.get().getActiveCuboidNode(point, false);
-        if(r.playerIsAllowed(player.getName(), player.getGroups())) {
-            return true;
-        }
-        if(r.getProperty("firespread") == Status.DENY) {
-            return false;
-        }
-        return true;
-    }
     
     // *******************************
     // Listener creation stuff
     // *******************************
-    @ActionHandler(priority = Priority.MEDIUM)
+    @ActionHandler
     public void onBlockRightClick(BlockRightClickEvent event) {
         if(!canUseBlock(event.getPlayer(), event.getBlock(), event.getLocation())) {
             event.cancel();
         }
     }
     
+    @ActionHandler
+    public void onBlockLeftClick(BlockLeftClickEvent event) {
+        if(!canUseBlock(event.getPlayer(), event.getBlock(), event.getLocation())) {
+            event.cancel();
+        }
+    }
+    
     static {
-        ActionManager.registerActionListener("Cubodis2", new OperableItemsOperator());
+        ActionManager.registerActionListener("Cuboids2", new OperableItemsOperator());
     }
 }

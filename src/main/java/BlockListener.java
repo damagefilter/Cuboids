@@ -1,15 +1,22 @@
+import java.util.HashMap;
 import java.util.List;
 
 import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.deprecated.BlockActionHandler;
-import net.playblack.cuboids.actions.deprecated.BrushHandler;
 import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockBreakEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
+import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
+import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
+import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
+import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
+import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.mcutils.Location;
 
@@ -36,9 +43,9 @@ public class BlockListener extends PluginListener {
         BlockRightClickEvent event = new BlockRightClickEvent(cplayer, new CBlock(b.getType(), b.getData()), p);
         ActionManager.fireEvent(event);
         if(event.isCancelled()) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -62,9 +69,7 @@ public class BlockListener extends PluginListener {
 
     @Override
     public boolean onBlockDestroy(Player player, Block b) {
-        Location p = new Location(b.getX(), b.getY(), b.getZ(),
-                player.getWorld().getType().getId(), player.getWorld()
-                        .getName());
+        Location p = new Location(b.getX(), b.getY(), b.getZ(),player.getWorld().getType().getId(), player.getWorld().getName());
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -72,21 +77,17 @@ public class BlockListener extends PluginListener {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
-        boolean pointResult = BlockActionHandler.handleSetPoints(cplayer, p,
-                false, false);
-        if (!pointResult) {
-            return !BlockActionHandler.handleOperableItems(cplayer, p,
-                    b.getType());
-        } else {
+        BlockLeftClickEvent event = new BlockLeftClickEvent(cplayer, new CBlock(b.getType(), b.getData()), p);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
             return true;
         }
+        return false;
     }
 
     @Override
     public boolean onBlockBreak(Player player, Block b) {
-        Location p = new Location(b.getX(), b.getY(), b.getZ(),
-                player.getWorld().getType().getId(), player.getWorld()
-                        .getName());
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -94,8 +95,12 @@ public class BlockListener extends PluginListener {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
-
-        return !CuboidInterface.get().canModifyBlock(cplayer, p);
+        BlockBreakEvent event = new BlockBreakEvent(cplayer, new CBlock(b.getType(),  b.getData()), p);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -114,27 +119,40 @@ public class BlockListener extends PluginListener {
         return !CuboidInterface.get().canModifyBlock(cplayer, p);
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public boolean onExplosion(Block b, BaseEntity e, List blocksaffected) {
-        Location p = null;
-        if(b.getWorld() != null) {
-            p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
-            return BlockActionHandler.handleExplosions(b.getStatus(), p);
+        //Assemble the list of blocks ...
+        HashMap<Location, CBlock> blocks = new HashMap<Location, CBlock>();
+        for(Block x : (List<Block>)blocksaffected) {
+            Location l = new Location(x.getX(), x.getY(), x.getZ(), x.getWorld().getType().getId(), x.getWorld().getName());
+            blocks.put(l, new CBlock(x.getType(), x.getData()));
         }
-        else if(e != null) {
-            p = new Location(b.getX(), b.getY(), b.getZ(), e.getWorld().getType().getId(), e.getWorld().getName());
-            return BlockActionHandler.handleExplosions(b.getStatus(), p);
+        Location l = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        
+        ExplosionEvent event = new ExplosionEvent(new CanaryBaseEntity(e), l, ExplosionType.fromId(b.getStatus()), blocks);
+        if(event.isCancelled()) {
+            return true;
         }
-        else {
-            return false;
+        //Not cancelled, process the list of blocks and remove those that should stay
+        blocks = event.getAffectedBlocks();
+        for(Location m : blocks.keySet()) {
+            for(int i = 0; i < blocksaffected.size(); ) {
+                Block x = (Block) blocksaffected.get(i);
+                if(m.samePosition(x.getX(), x.getY(), x.getZ())) {
+                    blocksaffected.remove(i);
+                }
+                else {
+                    i++;
+                }
+            }
         }
+        return false;
     }
 
     @Override
     public boolean onIgnite(Block b, Player player) {
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), b
-                .getWorld().getType().getId(), b.getWorld().getName());
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         CPlayer cplayer = null;
         if (player != null) {
             try {
@@ -144,33 +162,45 @@ public class BlockListener extends PluginListener {
                 cplayer = new CanaryPlayer(player);
             }
         }
-        return !BlockActionHandler.handleIgnition(cplayer, p, b.getStatus());
+        IgniteEvent event = new IgniteEvent(FireSource.fromInt(b.getStatus()), p, new CBlock(b.getType(), b.getData()), cplayer);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public boolean onFlow(Block b, Block blockTo) {
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), b
-                .getWorld().getType().getId(), b.getWorld().getName());
-        CBlock block = new CBlock(b.getType(), b.getData());
-        return !BlockActionHandler.handleFlow(block, p);
+    public boolean onFlow(Block b, Block to) {
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        
+        LiquidFlowEvent event = new LiquidFlowEvent(new CBlock(b.getType(), b.getData()), new CBlock(to.getType(), to.getData()), p);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean onBlockPhysics(Block b, boolean placed) {
-        return BlockActionHandler.handlePhysics(
-                new Location(b.getX(), b.getY(), b.getZ(), b.getWorld()
-                        .getType().getId(), b.getWorld().getName()),
-                CServer.getServer().getWorld(b.getWorld().getName(),
-                        b.getWorld().getType().getId()), b.getType());
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        BlockPhysicsEvent event = new BlockPhysicsEvent(new CBlock(b.getType(), b.getData()), p);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean onBlockUpdate(Block b, int newBlockId) {
-        CWorld world = CServer.getServer().getWorld(b.getWorld().getName(),
-                b.getWorld().getType().getId());
-        return BlockActionHandler.handleFarmland(
-                new Location(b.getX(), b.getY(), b.getZ(), b.getWorld()
-                        .getType().getId(), b.getWorld().getName()), world,
-                b.getType(), newBlockId);
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        BlockUpdateEvent event = new BlockUpdateEvent(new CBlock(b.getType(), b.getData()), new CBlock(newBlockId), p);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            return true;
+        }
+        return false;
     }
 }

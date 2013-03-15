@@ -235,7 +235,7 @@ public class CuboidInterface {
      * @return true if restricted, false otherwise
      */
     public boolean itemIsRestricted(Location position, int itemId) {
-        Region cube = regions.getActiveCuboidNode(position, true);
+        Region cube = regions.getActiveRegion(position, true);
         if (cube == null) {
             return false;
         }
@@ -256,7 +256,7 @@ public class CuboidInterface {
         // if(player.hasPermission("cIgnoreRestrictions")) {
         // return false;
         // }
-        Region cube = regions.getActiveCuboidNode(player.getLocation(), true);
+        Region cube = regions.getActiveRegion(player.getLocation(), true);
         if (cube == null) {
             return false;
         }
@@ -656,7 +656,7 @@ public class CuboidInterface {
      * @param position
      */
     public void explainRegion(CPlayer player, Location position) {
-        Region node = regions.getActiveCuboidNode(position, true);
+        Region node = regions.getActiveRegion(position, true);
 
         if (node != null) {
             Region cube = node;

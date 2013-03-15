@@ -11,10 +11,18 @@ public class Location extends Vector {
         this.world = world;
     }
 
-    public Location(int x, int y, int z, int dimension, String world) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Location(double d, double e, double f, int dimension, String world) {
+        this.x = d;
+        this.y = e;
+        this.z = f;
+        this.dimension = dimension;
+        this.world = world;
+    }
+    
+    public Location(int d, int e, int f, int dimension, String world) {
+        this.x = d;
+        this.y = e;
+        this.z = f;
         this.dimension = dimension;
         this.world = world;
     }

@@ -133,7 +133,13 @@ public class Vector {
      * Math Operations for your convenience!
      * ******************************************************
      */
-
+    public boolean samePosition(double x, double y, double z) {
+        return x == this.x && y == this.y && z == this.z;
+    }
+    
+    public boolean samePosition(int x, int y, int z) {
+        return x == (int)this.x && y == (int)this.y && z == (int)this.z;
+    }
     /*
      * ******************************************************
      * VECTOR LENGHT, DISTANCE CALCS, NORMALIZATION
