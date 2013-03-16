@@ -1,5 +1,6 @@
 import net.playblack.cuboids.InvalidPlayerException;
-import net.playblack.cuboids.actions.deprecated.MiscHandler;
+import net.playblack.cuboids.actions.ActionManager;
+import net.playblack.cuboids.actions.events.forwardings.EntitySpawnEvent;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidInterface;
@@ -8,7 +9,12 @@ public class MiscListener extends PluginListener {
 
     @Override
     public boolean onMobSpawn(Mob mob) {
-        return !MiscHandler.canSpawn(new CanaryMob(mob));
+        EntitySpawnEvent event = new EntitySpawnEvent(new CanaryBaseEntity((BaseEntity)mob));
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            return true;
+        }
+        return false;
     }
 
     @Override

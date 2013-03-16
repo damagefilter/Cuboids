@@ -24,7 +24,7 @@
   <scm>
     <connection>scm:git:git@github.com:damagefilter/Cuboids2.git</connection>
     <developerConnection>scm:git:ssh://git@github.com:damagefilter/Cuboids2.git</developerConnection>
-    <url>https://github.com/damagefilter/Cubodis2</url>
+    <url>https://github.com/damagefilter/Cuboids2</url>
   </scm>
   <issueManagement>
     <url>https://github.com/damagefilter/Cubodis2/issues</url>
@@ -37,6 +37,13 @@
       <name>Bukkit Public Repository</name>
       <url>http://repo.bukkit.org/content/groups/public</url>
     </repository>
+    
+    <repository>
+     <id>vi-repo</id>
+     <name>Visual Illusions Repository</name>
+     <url>http://repo.visualillusionsent.net</url>
+    </repository>
+    
   </repositories>
   
   <dependencies>
@@ -49,9 +56,7 @@
    <dependency>
     <groupId>net.visualillusionsent</groupId>
     <artifactId>viutils</artifactId>
-    <version>1.0.0</version>
-    <scope>system</scope>
-    <systemPath>${basedir}/lib/viutils-1.0.0.jar</systemPath>
+    <version>1.0.1</version>
    </dependency>
    
    <dependency>
@@ -115,6 +120,12 @@
                   <overWrite>false</overWrite>
                   <destFileName>viutils.jar</destFileName>
                 </artifactItem>
+                <artifactItem>
+                  <groupId>org.jdom</groupId>
+                  <artifactId>jdom2</artifactId>
+                  <overWrite>false</overWrite>
+                  <destFileName>jdom2.jar</destFileName>
+                </artifactItem>
               </artifactItems>
               <outputDirectory>${project.build.directory}/lib</outputDirectory>
               <overWriteReleases>false</overWriteReleases>
@@ -138,7 +149,7 @@
             </manifest>
             <manifestEntries>
               <!-- <Main-Class>net.playblack.cuboids.Main</Main-Class>  // no main class in a plugin :D-->
-              <Class-Path>../lib/viutils.jar</Class-Path>
+              <Class-Path>../lib/viutils.jar ../lib/jdom2.jar</Class-Path>
             </manifestEntries>
           </archive>
         </configuration>
@@ -164,6 +175,32 @@
           <tagNameFormat>@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
+      <!-- Packaging -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <phase>install</phase>
+            <configuration>
+              <tasks>
+                <property name="compile_classpath" 
+                          refid="maven.compile.classpath"/>
+                <property name="outputDir"
+                          value="${project.build.outputDirectory}"/>
+                <property name="sourceDir"
+                          value="${project.build.sourceDirectory}"/>
+                <ant antfile="${basedir}/src/main/assembly/makerelease.xml"
+                     target="dist"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
     </plugins>
   </build>
 </project>

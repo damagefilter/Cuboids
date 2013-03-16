@@ -11,9 +11,9 @@
   </formats>
   <files>
     <file>
-      <source>${project.build.directory}/plugins/${artifactId}-${project.version}.jar</source>
-      <destName>Cuboids2.jar</destName>
-      <outputDirectory>/</outputDirectory>
+      <source>${project.build.directory}${artifactId}-${project.version}.jar</source>
+      <destName>Cuboids2-${project.version}.jar</destName>
+      <outputDirectory>/plugins</outputDirectory>
       <filtered>false</filtered>
     </file>
   </files>
