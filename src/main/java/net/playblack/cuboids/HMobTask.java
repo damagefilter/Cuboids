@@ -54,10 +54,8 @@ public class HMobTask implements Runnable {
                     // if mobs are not allowed to spawn, more-mobs flag is ignored
                     continue;
                 }
-                if ((node.getProperty("more-mobs") == Status.ALLOW)
-                        && (node.getPlayersWithin().size() > 0)) {
-                    CWorld w = CServer.getServer().getWorld(node.getWorld(),
-                            node.getDimension());
+                if ((node.getProperty("more-mobs") == Status.ALLOW) && (CServer.getServer().isPlayerInRegion(node))) {
+                    CWorld w = CServer.getServer().getWorld(node.getWorld(), node.getDimension());
                     if (w.getTime() < 13000) {
                         // It's not night, don't bother spawning things
                         continue;

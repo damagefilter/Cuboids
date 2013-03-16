@@ -33,7 +33,7 @@ public class HealThread implements Runnable {
 
     @Override
     public void run() {
-        if (this.cube.playerIsWithin(player.getName())) {
+        if (player.isInRegion(cube)) {
 
             if (player.getHealth() > 0) {
                 player.setHealth(player.getHealth() + this.healPower);

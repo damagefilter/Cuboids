@@ -3,6 +3,7 @@ package net.playblack.cuboids.gameinterface;
 import java.util.ArrayList;
 
 import net.playblack.cuboids.InvalidPlayerException;
+import net.playblack.cuboids.regions.Region;
 
 public abstract class CServer {
 
@@ -33,25 +34,21 @@ public abstract class CServer {
      * @return
      */
     public abstract int getDimensionId(String name);
-
+    
     /**
-     * Get a list of all players in a world
-     * 
-     * @param world
+     * get all players online on this server
      * @return
      */
-    public abstract ArrayList<CPlayer> getPlayers(CWorld world);
+    public abstract ArrayList<CPlayer> getPlayers();
 
     /**
      * Get a player by name
      * 
      * @param name
      * @return
-     * @throws InvalidPlayerException
-     *             when given player does not exist (is not online)
+     * @throws InvalidPlayerException when given player does not exist (is not online)
      */
-    public abstract CPlayer getPlayer(String name)
-            throws InvalidPlayerException;
+    public abstract CPlayer getPlayer(String name) throws InvalidPlayerException;
 
     /**
      * Force to update the player reference in the player cache and return the
@@ -59,11 +56,9 @@ public abstract class CServer {
      * 
      * @param name
      * @return
-     * @throws InvalidPlayerException
-     *             when given player does not exist (is not online)
+     * @throws InvalidPlayerException when given player does not exist (is not online)
      */
-    public abstract CPlayer refreshPlayer(String name)
-            throws InvalidPlayerException;
+    public abstract CPlayer refreshPlayer(String name) throws InvalidPlayerException;
 
     /**
      * Remove player from the server list
@@ -144,4 +139,18 @@ public abstract class CServer {
      * @return
      */
     public abstract int getMaxPlayers();
+    
+    /**
+     * Check if this region contains a player
+     * @param r
+     * @return true if r contains any players, false otherwise
+     */
+    public boolean isPlayerInRegion(Region r) {
+        for(CPlayer p : getPlayers()) {
+            if(p.isInRegion(r)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
