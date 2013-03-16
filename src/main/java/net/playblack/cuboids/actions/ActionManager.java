@@ -2,13 +2,11 @@ package net.playblack.cuboids.actions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 import net.playblack.cuboids.actions.events.CuboidEvent;
@@ -22,7 +20,7 @@ import net.playblack.mcutils.ToolBox;
  *
  */
 public class ActionManager {
-    HashMap<Class<? extends CuboidEvent>, Set<RegisteredAction>> actions;
+    HashMap<Class<? extends CuboidEvent>, List<RegisteredAction>> actions;
     
     private static ActionManager instance;
     
@@ -31,7 +29,7 @@ public class ActionManager {
     }
     
     public static void fireEvent(CuboidEvent event) {
-        Set<RegisteredAction> receivers = ActionManager.instance.actions.get(event.getClass().asSubclass(CuboidEvent.class));
+        List<RegisteredAction> receivers = ActionManager.instance.actions.get(event.getClass().asSubclass(CuboidEvent.class));
         for(RegisteredAction action : receivers) {
             action.execute(event);
         }
@@ -101,12 +99,7 @@ public class ActionManager {
     
     private void addRegisteredAction(Class<? extends CuboidEvent> eventClass, RegisteredAction action) {
         actions.get(eventClass).add(action);
-        //Make sortable list
-        List<RegisteredAction> registrants = Arrays.asList((RegisteredAction[])actions.get(eventClass).toArray());
-        //sort the list according to what the comparator induces.
-        Collections.sort(registrants, new RegisteredActionsComparator());
-        
-        actions.put(eventClass, new HashSet<RegisteredAction>(registrants));
+        Collections.sort(actions.get(eventClass), new RegisteredActionsComparator());
     }
     
     /**
@@ -115,11 +108,11 @@ public class ActionManager {
      */
     private void registerEventType(Class<? extends CuboidEvent> cls) {
         if(!actions.containsKey(cls)) {
-            actions.put(cls, new HashSet<RegisteredAction>());
+            actions.put(cls, new ArrayList<RegisteredAction>());
         }
     }
     
-    public class RegisteredActionsComparator implements Comparator<RegisteredAction> {
+    private class RegisteredActionsComparator implements Comparator<RegisteredAction> {
 
         @Override
         public int compare(RegisteredAction o1, RegisteredAction o2) {
