@@ -18,8 +18,7 @@ import net.playblack.mcutils.ColorManager;
 public class Protect extends CBaseCommand {
 
     public Protect() {
-        super("Protect an area:" + ColorManager.Yellow
-                + " /protect <player/group..><area name>", 3);
+        super("Protect an area:" + ColorManager.Yellow + " /protect <player/group..><area name>", 3);
     }
 
     @Override
@@ -28,18 +27,16 @@ public class Protect extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!(player.hasPermission("ccreate"))
-                    && player.hasPermission("cprotection")) {
-                ms.failMessage(player, "permissionDenied");
+            if (!(player.hasPermission("ccreate")) && player.hasPermission("cprotection")) {
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
         CuboidSelection selection = SelectionManager.get()
                 .getPlayerSelection(player.getName());
         if (!selection.isComplete()) {
-            ms.failMessage(player, "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
             return;
         }
         selection.setWorld(player.getWorld().getName());
@@ -47,10 +44,9 @@ public class Protect extends CBaseCommand {
         cube.setDimension(player.getWorld().getDimension());
         cube.setProperty("protection", Status.ALLOW); // force protection if is allowed
         if (CuboidInterface.get().addCuboid(cube)) {
-            ms.successMessage(player, "cuboidCreated");
+            MessageSystem.successMessage(player, "cuboidCreated");
         } else {
-//            ms.failMessage(player, "selectionIncomplete");
-            ms.failMessage(player, "cuboidNotCreated");
+            MessageSystem.failMessage(player, "cuboidNotCreated");
         }
     }
 }

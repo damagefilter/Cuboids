@@ -30,15 +30,14 @@ public class Cundo extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
         if (!Config.get().isAllowUndo()) {
-            ms.failMessage(player, "undoDisabled");
+            MessageSystem.failMessage(player, "undoDisabled");
             return; // from a morality standpoint, this should never be disabled
                     // but there you go.
         }
@@ -72,13 +71,12 @@ public class Cundo extends CBaseCommand {
                 gen.execute(player, false);
             } catch (BlockEditLimitExceededException e) {
                 EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-                ms.customFailMessage(player, e.getMessage());
+                MessageSystem.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
             } catch (SelectionIncompleteException e) {
-                MessageSystem.getInstance().failMessage(player,
-                        "selectionIncomplete");
+                MessageSystem.failMessage(player, "selectionIncomplete");
             }
         }
-        ms.successMessage(player, "undoDone");
+        MessageSystem.successMessage(player, "undoDone");
     }
 }

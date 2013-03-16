@@ -42,13 +42,11 @@ public class CmodMessages extends CBaseCommand {
         }
 
         if (setFarewell) {
-            CuboidInterface.get().setFarewell(player, command[1],
-                    message);
-            MessageSystem.getInstance().successMessage(player, "farewellSet");
+            CuboidInterface.get().setFarewell(player, command[1], message);
+            MessageSystem.successMessage(player, "farewellSet");
         } else {
-            CuboidInterface.get().setWelcome(player, command[1],
-                    message);
-            MessageSystem.getInstance().successMessage(player, "welcomeSet");
+            CuboidInterface.get().setWelcome(player, command[1], message);
+            MessageSystem.successMessage(player, "welcomeSet");
         }
     }
 }

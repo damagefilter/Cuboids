@@ -30,10 +30,9 @@ public class Cfill extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -41,7 +40,7 @@ public class Cfill extends CBaseCommand {
         // create a new template block
         CBlock b = CBlock.parseBlock(command[1]);
         if (b == null) {
-            ms.failMessage(player, "invalidBlock");
+            MessageSystem.failMessage(player, "invalidBlock");
             return;
         }
         // prepare the selection
@@ -56,18 +55,17 @@ public class Cfill extends CBaseCommand {
         gen.setBlock(b);
         try {
             if (gen.execute(player, true)) {
-                ms.successMessage(player, "selectionFilled");
+                MessageSystem.successMessage(player, "selectionFilled");
             } else {
-                ms.failMessage(player, "selectionIncomplete");
-                ms.failMessage(player, "selectionNotFilled");
+                MessageSystem.failMessage(player, "selectionIncomplete");
+                MessageSystem.failMessage(player, "selectionNotFilled");
             }
         } catch (BlockEditLimitExceededException e) {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-            ms.customFailMessage(player, e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player,
-                    "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;
     }

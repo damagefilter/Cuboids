@@ -29,23 +29,21 @@ public class Cmove extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
-        CuboidSelection origin = SelectionManager.get()
-                .getPlayerSelection(player.getName());
+        CuboidSelection origin = SelectionManager.get().getPlayerSelection(player.getName());
         OffsetGenerator gen = new OffsetGenerator(origin, player.getWorld());
         if (!gen.setDirection(command[2])) {
-            ms.failMessage(player, "invalidCardinalDirection");
+            MessageSystem.failMessage(player, "invalidCardinalDirection");
             return;
         }
         int distance = ToolBox.parseInt(command[1]);
         if (distance < 0) {
-            ms.failMessage(player, "invalidDistance");
+            MessageSystem.failMessage(player, "invalidDistance");
             return;
         }
         gen.setDistance(distance);
@@ -53,18 +51,17 @@ public class Cmove extends CBaseCommand {
         try {
             result = gen.execute(player, true);
             if (result) {
-                ms.successMessage(player, "selectionMoved");
+                MessageSystem.successMessage(player, "selectionMoved");
             } else {
-                ms.failMessage(player, "selectionIncomplete");
-                ms.failMessage(player, "selectionNotMoved");
+                MessageSystem.failMessage(player, "selectionIncomplete");
+                MessageSystem.failMessage(player, "selectionNotMoved");
             }
         } catch (BlockEditLimitExceededException e) {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-            ms.customFailMessage(player, e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player,
-                    "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
         }
 
     }

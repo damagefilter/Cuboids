@@ -26,18 +26,17 @@ public class Cfloor extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!(player.hasPermission("cselect") && player
                     .hasPermission("ccreate"))) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
 
         int height = ToolBox.parseInt(command[1]);
         if (height == -1) {
-            ms.failMessage(player, "negativeNumber");
+            MessageSystem.failMessage(player, "negativeNumber");
         }
         CuboidSelection sel = SelectionManager.get()
                 .getPlayerSelection(player.getName());
@@ -49,6 +48,6 @@ public class Cfloor extends CBaseCommand {
             origin.setY(height);
         }
         sel.setOffset(origin);
-        ms.successMessage(player, "floorSet");
+        MessageSystem.successMessage(player, "floorSet");
     }
 }

@@ -31,7 +31,7 @@ public class CmodLoad extends CBaseCommand {
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cAreaMod")) {
                 if (!player.hasPermission("cselect")) {
-                    MessageSystem.getInstance().failMessage(player,
+                    MessageSystem.failMessage(player,
                             "permissionDenied");
                     return;
                 }
@@ -41,6 +41,6 @@ public class CmodLoad extends CBaseCommand {
                 .getPlayerSelection(player.getName());
         selection.setOrigin(cube.getOrigin());
         selection.setOffset(cube.getOffset());
-        MessageSystem.getInstance().successMessage(player, "pointsLoaded");
+        MessageSystem.successMessage(player, "pointsLoaded");
     }
 }

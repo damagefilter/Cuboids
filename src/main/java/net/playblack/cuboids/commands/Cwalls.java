@@ -22,8 +22,7 @@ public class Cwalls extends CBaseCommand {
     private boolean onlyWalls;
 
     public Cwalls(String variant) {
-        super("Create walls/faces: " + ColorManager.Yellow + variant
-                + " <wall>:[data] [floor]:[data] [ceiling]:[data]", 2, 4);
+        super("Create walls/faces: " + ColorManager.Yellow + variant + " <wall>:[data] [floor]:[data] [ceiling]:[data]", 2, 4);
         if (variant.equalsIgnoreCase("/cwalls")) {
             onlyWalls = true;
         } else {
@@ -37,10 +36,9 @@ public class Cwalls extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -50,7 +48,7 @@ public class Cwalls extends CBaseCommand {
         CBlock floor = null;
         CBlock ceiling = null;
         if (walls == null) {
-            ms.failMessage(player, "invalidBlock");
+            MessageSystem.failMessage(player, "invalidBlock");
             return;
         }
         if (command.length == 3) {
@@ -80,21 +78,20 @@ public class Cwalls extends CBaseCommand {
         try {
             if (gen.execute(player, true)) {
                 if (onlyWalls) {
-                    ms.successMessage(player, "wallsCreated");
+                    MessageSystem.successMessage(player, "wallsCreated");
                 } else {
-                    ms.successMessage(player, "facesCreated");
+                    MessageSystem.successMessage(player, "facesCreated");
                 }
             } else {
-                ms.failMessage(player, "selectionIncomplete");
-                ms.failMessage(player, "wallsNotCreated");
+                MessageSystem.failMessage(player, "selectionIncomplete");
+                MessageSystem.failMessage(player, "wallsNotCreated");
             }
         } catch (BlockEditLimitExceededException e) {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-            ms.customFailMessage(player, e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player,
-                    "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;
     }

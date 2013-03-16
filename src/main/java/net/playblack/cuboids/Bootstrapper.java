@@ -219,14 +219,5 @@ public class Bootstrapper {
                         new Protect().getToolTip(),
                         new String[] { "protect", "highprotect", "selection",
                                 "cuboid" });
-        CommandHelper.get()
-                .addHelp(
-                        new ToggleAreaProperty().getToolTip(),
-                        new String[] { "cmod", "toggle", "property", "flag",
-                                "cuboid" });
-        CommandHelper.get().addHelp(
-                new ToggleGlobalProperty().getToolTip(),
-                new String[] { "cmod", "toggle", "property", "flag", "cuboid",
-                        "global" });
     }
 }

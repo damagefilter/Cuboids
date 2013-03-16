@@ -30,16 +30,14 @@ public class Crestore extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cbackup")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
         String world = player.getWorld().getFilePrefix();
-        File f = new File("plugins/cuboids2/backups/blocks_" + world + "_"
-                + command[1]);
+        File f = new File("plugins/cuboids2/backups/blocks_" + world + "_" + command[1]);
         if (f.exists()) {
             CuboidDeserializer des = new CuboidDeserializer(command[1], world);
             CuboidSelection restore = des.convert();
@@ -50,24 +48,24 @@ public class Crestore extends CBaseCommand {
             try {
                 success = gen.execute(player, true);
                 if (success) {
-                    ms.successMessage(player, "restoreSuccess");
+                    MessageSystem.successMessage(player, "restoreSuccess");
                     return;
                 } else {
-                    ms.failMessage(player, "restoreFail");
+                    MessageSystem.failMessage(player, "restoreFail");
                     return;
                 }
             } catch (BlockEditLimitExceededException e) {
                 EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-                ms.customFailMessage(player, e.getMessage());
+                MessageSystem.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
             } catch (SelectionIncompleteException e) {
-                MessageSystem.getInstance().failMessage(player,
+                MessageSystem.failMessage(player,
                         "selectionIncomplete");
             }
 
         } else {
-            ms.failMessage(player, "restoreFail");
-            ms.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "restoreFail");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
     }

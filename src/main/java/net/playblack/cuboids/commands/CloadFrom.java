@@ -10,7 +10,7 @@ import net.playblack.mcutils.EventLogger;
 
 /**
  * Crossload cuboids from datasources
- * 
+ * TODO: Put legacy loading into here!
  * @author Chris
  * 
  */
@@ -26,7 +26,7 @@ public class CloadFrom extends CBaseCommand {
             return;
         }
         if (!player.hasPermission("cIgnoreRestrictions")) {
-            MessageSystem.getInstance().failMessage(player, "permissionDenied");
+            MessageSystem.failMessage(player, "permissionDenied");
         }
         if (command[1].equalsIgnoreCase("mysql")) {
             MysqlDataLegacy ds = new MysqlDataLegacy(Config.get().getSqlConfig(),
@@ -36,6 +36,6 @@ public class CloadFrom extends CBaseCommand {
             XmlData ds = new XmlData(EventLogger.getInstance());
             ds.loadAll();
         }
-        MessageSystem.getInstance().successMessage(player, "cuboidLoadedAll");
+        MessageSystem.successMessage(player, "cuboidLoadedAll");
     }
 }

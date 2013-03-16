@@ -30,8 +30,7 @@ public class CmodTpTo extends CBaseCommand {
                 command[1], player.getWorld().getName(),
                 player.getWorld().getDimension());
         if (targetCube == null) {
-            MessageSystem.getInstance().failMessage(player,
-                    "cuboidNotFoundOnCommand");
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
         Vector target = Vector.getCenterPoint(targetCube.getOrigin(),
@@ -47,10 +46,9 @@ public class CmodTpTo extends CBaseCommand {
                     target.getBlockZ());
             target.setY(y);
             player.teleportTo(target);
-            MessageSystem.getInstance().successMessage(player,
-                    "playerTeleported");
+            MessageSystem.successMessage(player, "playerTeleported");
         } else {
-            MessageSystem.getInstance().failMessage(player, "permissionDenied");
+            MessageSystem.failMessage(player, "permissionDenied");
             return;
         }
     }

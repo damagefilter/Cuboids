@@ -21,8 +21,7 @@ import net.playblack.mcutils.ToolBox;
 public class Csphere extends CBaseCommand {
 
     public Csphere() {
-        super("Create a sphere: " + ColorManager.Yellow
-                + "/csphere <radius> <block>:[data] <hollow>", 3, 4);
+        super("Create a sphere: " + ColorManager.Yellow + "/csphere <radius> <block>:[data] <hollow>", 3, 4);
     }
 
     @Override
@@ -31,10 +30,9 @@ public class Csphere extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -46,12 +44,12 @@ public class Csphere extends CBaseCommand {
         // create a new template block
         CBlock material = CBlock.parseBlock(command[2]);
         if (material == null) {
-            ms.failMessage(player, "invalidBlock");
+            MessageSystem.failMessage(player, "invalidBlock");
             return;
         }
         int radius = ToolBox.parseInt(command[1]);
         if (radius == -1) {
-            ms.failMessage(player, "invalidRadius");
+            MessageSystem.failMessage(player, "invalidRadius");
             return;
         }
         // prepare the selection
@@ -61,7 +59,7 @@ public class Csphere extends CBaseCommand {
             template.clearBlocks();
         }
         if (template.getOrigin() == null) {
-            ms.failMessage(player, "originNotSet");
+            MessageSystem.failMessage(player, "originNotSet");
             return;
         }
 
@@ -73,18 +71,17 @@ public class Csphere extends CBaseCommand {
 
         try {
             if (gen.execute(player, true)) {
-                ms.successMessage(player, "sphereCreated");
+                MessageSystem.successMessage(player, "sphereCreated");
             } else {
-                ms.failMessage(player, "sphereNotCreated");
-                ms.failMessage(player, "selectionIncomplete");
+                MessageSystem.failMessage(player, "sphereNotCreated");
+                MessageSystem.failMessage(player, "selectionIncomplete");
             }
         } catch (BlockEditLimitExceededException e) {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-            ms.customFailMessage(player, e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player,
-                    "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;
     }

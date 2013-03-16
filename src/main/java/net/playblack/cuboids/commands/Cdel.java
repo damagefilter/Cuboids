@@ -30,10 +30,9 @@ public class Cdel extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -52,18 +51,17 @@ public class Cdel extends CBaseCommand {
         gen.setBlock(b);
         try {
             if (gen.execute(player, false)) {
-                ms.successMessage(player, "selectionDeleted");
+                MessageSystem.successMessage(player, "selectionDeleted");
             } else {
-                ms.failMessage(player, "selectionIncomplete");
-                ms.failMessage(player, "selectionNotDeleted");
+                MessageSystem.failMessage(player, "selectionIncomplete");
+                MessageSystem.failMessage(player, "selectionNotDeleted");
             }
         } catch (BlockEditLimitExceededException e) {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-            ms.customFailMessage(player, e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player,
-                    "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;
     }

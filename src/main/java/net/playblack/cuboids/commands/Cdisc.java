@@ -38,10 +38,9 @@ public class Cdisc extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -51,34 +50,33 @@ public class Cdisc extends CBaseCommand {
         int height;
         int radius;
         if (material == null) {
-            ms.failMessage(player, "invalidBlock");
+            MessageSystem.failMessage(player, "invalidBlock");
             return;
         }
         if (command.length == 4) {
             height = ToolBox.parseInt(command[3]);
             radius = ToolBox.parseInt(command[1]);
             if (height == -1) {
-                ms.failMessage(player, "invalidHeight");
+                MessageSystem.failMessage(player, "invalidHeight");
                 return;
             }
             if (radius == -1) {
-                ms.failMessage(player, "invalidRadius");
+                MessageSystem.failMessage(player, "invalidRadius");
                 return;
             }
         } else {
             height = 1;
             radius = ToolBox.parseInt(command[1]);
             if (radius == -1) {
-                ms.failMessage(player, "invalidRadius");
+                MessageSystem.failMessage(player, "invalidRadius");
                 return;
             }
         }
 
         // prepare the selection
-        CuboidSelection template = SelectionManager.get()
-                .getPlayerSelection(player.getName());
+        CuboidSelection template = SelectionManager.get().getPlayerSelection(player.getName());
         if (template.getOrigin() == null) {
-            ms.failMessage(player, "originNotSet");
+            MessageSystem.failMessage(player, "originNotSet");
             return;
         }
         if (!template.getBlockList().isEmpty()) {
@@ -95,21 +93,20 @@ public class Cdisc extends CBaseCommand {
         try {
             if (gen.execute(player, true)) {
                 if (fill) {
-                    ms.successMessage(player, "discCreated");
+                    MessageSystem.successMessage(player, "discCreated");
                 } else {
-                    ms.successMessage(player, "circleCreated");
+                    MessageSystem.successMessage(player, "circleCreated");
                 }
             } else {
-                ms.failMessage(player, "selectionIncomplete");
-                ms.failMessage(player, "discNotCreated");
+                MessageSystem.failMessage(player, "selectionIncomplete");
+                MessageSystem.failMessage(player, "discNotCreated");
             }
         } catch (BlockEditLimitExceededException e) {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-            ms.customFailMessage(player, e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player,
-                    "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;
     }

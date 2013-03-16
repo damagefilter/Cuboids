@@ -176,19 +176,6 @@ public class CommandListener extends PluginListener {
                 command.execute(cplayer, split);
                 return true;
             }
-            if (split[0].equalsIgnoreCase("/cmod")
-                    && split[1].equalsIgnoreCase("toggle")) {
-                command = new ToggleGlobalProperty();
-                command.execute(cplayer, split);
-                return true;
-            }
-
-            if (split[0].equalsIgnoreCase("/cmod")
-                    && split[2].equalsIgnoreCase("toggle")) {
-                command = new ToggleAreaProperty();
-                command.execute(cplayer, split);
-                return true;
-            }
 
             if (split[0].equalsIgnoreCase("/cmod")
                     && (split[2].equalsIgnoreCase("add") || split[2]

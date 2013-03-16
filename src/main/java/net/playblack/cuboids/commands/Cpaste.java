@@ -28,10 +28,9 @@ public class Cpaste extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -39,7 +38,7 @@ public class Cpaste extends CBaseCommand {
         CuboidSelection sel = SessionManager.getInstance().getClipboard(
                 player.getName());
         if (sel == null || !sel.isComplete()) {
-            ms.failMessage(player, "clipboardEmpty");
+            MessageSystem.failMessage(player, "clipboardEmpty");
             return;
         }
         VectorOffsetGenerator gen = new VectorOffsetGenerator(sel,
@@ -48,17 +47,16 @@ public class Cpaste extends CBaseCommand {
         try {
             try {
                 if (gen.execute(player, true)) {
-                    ms.successMessage(player, "selectionPasted");
+                    MessageSystem.successMessage(player, "selectionPasted");
                 } else {
-                    ms.failMessage(player, "selectionNotPasted");
+                    MessageSystem.failMessage(player, "selectionNotPasted");
                 }
             } catch (SelectionIncompleteException e) {
-                MessageSystem.getInstance().failMessage(player,
-                        "selectionIncomplete");
+                MessageSystem.failMessage(player, "selectionIncomplete");
             }
         } catch (BlockEditLimitExceededException e) {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-            ms.customFailMessage(player, e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         }
     }

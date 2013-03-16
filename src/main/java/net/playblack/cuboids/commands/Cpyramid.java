@@ -31,10 +31,9 @@ public class Cpyramid extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -46,12 +45,12 @@ public class Cpyramid extends CBaseCommand {
         // create a new template block
         CBlock material = CBlock.parseBlock(command[2]);
         if (material == null) {
-            ms.failMessage(player, "invalidBlock");
+            MessageSystem.failMessage(player, "invalidBlock");
             return;
         }
         int radius = ToolBox.parseInt(command[1]);
         if (radius == -1) {
-            ms.failMessage(player, "invalidRadius");
+            MessageSystem.failMessage(player, "invalidRadius");
             return;
         }
         // prepare the selection
@@ -61,7 +60,7 @@ public class Cpyramid extends CBaseCommand {
             template.clearBlocks();
         }
         if (template.getOrigin() == null) {
-            ms.failMessage(player, "originNotSet");
+            MessageSystem.failMessage(player, "originNotSet");
             return;
         }
 
@@ -73,18 +72,17 @@ public class Cpyramid extends CBaseCommand {
 
         try {
             if (gen.execute(player, true)) {
-                ms.successMessage(player, "pyramidCreated");
+                MessageSystem.successMessage(player, "pyramidCreated");
             } else {
-                ms.failMessage(player, "pyramidNotCreated");
-                ms.failMessage(player, "selectionIncomplete");
+                MessageSystem.failMessage(player, "pyramidNotCreated");
+                MessageSystem.failMessage(player, "selectionIncomplete");
             }
         } catch (BlockEditLimitExceededException e) {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-            ms.customFailMessage(player, e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player,
-                    "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;
     }

@@ -23,16 +23,15 @@ public class Cexpand extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cselect")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
 
         SelectionManager.get().getPlayerSelection(player.getName())
                 .expandVert();
-        ms.successMessage(player, "selectionExpanded");
+        MessageSystem.successMessage(player, "selectionExpanded");
     }
 }

@@ -27,23 +27,22 @@ public class CmodAdd extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("ccreate")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
         if (command[1].matches("[,:]")) {
-            ms.failMessage(player, "invalidCharacters");
-            ms.failMessage(player, "cuboidNotCreated");
+            MessageSystem.failMessage(player, "invalidCharacters");
+            MessageSystem.failMessage(player, "cuboidNotCreated");
             return;
         }
         Region defaultC = Config.get().getDefaultCuboidSetting(player);
         CuboidSelection selection = SelectionManager.get()
                 .getPlayerSelection(player.getName());
         if (!selection.isComplete()) {
-            ms.failMessage(player, "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
             return;
         }
         defaultC.setBoundingBox(selection.getOrigin(), selection.getOffset());
@@ -52,10 +51,10 @@ public class CmodAdd extends CBaseCommand {
         defaultC.setDimension(player.getWorld().getDimension());
         defaultC.addPlayer("o:" + player.getName());
         if (CuboidInterface.get().addCuboid(defaultC)) {
-            ms.successMessage(player, "cuboidCreated");
+            MessageSystem.successMessage(player, "cuboidCreated");
         } else {
-            ms.failMessage(player, "cuboidExists");
-            ms.failMessage(player, "cuboidNotCreated");
+            MessageSystem.failMessage(player, "cuboidExists");
+            MessageSystem.failMessage(player, "cuboidNotCreated");
         }
     }
 }

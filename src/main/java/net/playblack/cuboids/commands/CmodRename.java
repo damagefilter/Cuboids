@@ -24,16 +24,14 @@ public class CmodRename extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
 
         Region node = RegionManager.get().getCuboidByName(
                 command[1], player.getWorld().getName(),
                 player.getWorld().getDimension());
 
         if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!(node.playerIsOwner(player.getName()) || player
-                    .hasPermission("cAreaMod"))) {
-                ms.failMessage(player, "permissionDenied");
+            if (!(node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod"))) {
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -41,6 +39,6 @@ public class CmodRename extends CBaseCommand {
         RegionManager.get().removeRegion(node, true);
         node.setName(command[3]);
         RegionManager.get().addRegion(node);
-        ms.successMessage(player, "cuboidRenamed");
+        MessageSystem.successMessage(player, "cuboidRenamed");
     }
 }

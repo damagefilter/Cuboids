@@ -29,10 +29,9 @@ public class Ccopy extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -45,15 +44,14 @@ public class Ccopy extends CBaseCommand {
             sel = gen.getWorldContent(sel);
         } catch (BlockEditLimitExceededException e) {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-            ms.customFailMessage(player, e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player,
-                    "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
         }
         sel.setOrigin(player.getPosition());
         // gen.
         SessionManager.getInstance().setClipboard(player.getName(), sel);
-        ms.successMessage(player, "copiedToClipboard");
+        MessageSystem.successMessage(player, "copiedToClipboard");
     }
 }

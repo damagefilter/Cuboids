@@ -18,8 +18,7 @@ import net.playblack.mcutils.ColorManager;
 public class Highprotect extends CBaseCommand {
 
     public Highprotect() {
-        super("High-Protect an area:" + ColorManager.Yellow
-                + " /highprotect <player/group..><area name>", 3);
+        super("High-Protect an area:" + ColorManager.Yellow + " /highprotect <player/group..><area name>", 3);
     }
 
     @Override
@@ -28,18 +27,17 @@ public class Highprotect extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!(player.hasPermission("ccreate"))
                     && player.hasPermission("cprotection")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
         CuboidSelection selection = SelectionManager.get()
                 .getPlayerSelection(player.getName());
         if (!selection.isComplete()) {
-            ms.failMessage(player, "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
             return;
         }
         selection.expandVert();
@@ -49,9 +47,9 @@ public class Highprotect extends CBaseCommand {
         cube.setProperty("protection", Status.ALLOW); // force protection if is allowed
         
         if (CuboidInterface.get().addCuboid(cube)) {
-            ms.successMessage(player, "cuboidCreated");
+            MessageSystem.successMessage(player, "cuboidCreated");
         } else {
-            ms.failMessage(player, "cuboidNotCreated");
+            MessageSystem.failMessage(player, "cuboidNotCreated");
         }
     }
 }

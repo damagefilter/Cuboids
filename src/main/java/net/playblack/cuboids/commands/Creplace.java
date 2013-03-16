@@ -30,10 +30,9 @@ public class Creplace extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cWorldMod")) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -42,7 +41,7 @@ public class Creplace extends CBaseCommand {
         CBlock b = CBlock.parseBlock(command[1]);
         CBlock sub = CBlock.parseBlock(command[2]);
         if ((b == null) || (sub == null)) {
-            ms.failMessage(player, "invalidBlock");
+            MessageSystem.failMessage(player, "invalidBlock");
             return;
         }
 
@@ -60,18 +59,17 @@ public class Creplace extends CBaseCommand {
         gen.setBlockToReplace(b);
         try {
             if (gen.execute(player, true)) {
-                ms.successMessage(player, "selectionReplaced");
+                MessageSystem.successMessage(player, "selectionReplaced");
             } else {
-                ms.failMessage(player, "selectionIncomplete");
-                ms.failMessage(player, "selectionNotReplaced");
+                MessageSystem.failMessage(player, "selectionIncomplete");
+                MessageSystem.failMessage(player, "selectionNotReplaced");
             }
         } catch (BlockEditLimitExceededException e) {
             EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
-            ms.customFailMessage(player, e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {
-            MessageSystem.getInstance().failMessage(player,
-                    "selectionIncomplete");
+            MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;
     }

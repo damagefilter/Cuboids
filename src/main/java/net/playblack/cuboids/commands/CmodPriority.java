@@ -27,7 +27,7 @@ public class CmodPriority extends CBaseCommand {
         // player cube prio
         int prio = ToolBox.parseInt(command[3]);
         if (prio < 0) {
-            MessageSystem.getInstance().failMessage(player, "invalidPriority");
+            MessageSystem.failMessage(player, "invalidPriority");
             return;
         }
         CuboidInterface.get().setPriority(player, command[1], prio);

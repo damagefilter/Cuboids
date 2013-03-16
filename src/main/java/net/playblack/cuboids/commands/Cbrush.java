@@ -26,11 +26,10 @@ public class Cbrush extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        MessageSystem ms = MessageSystem.getInstance();
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!(player.hasPermission("cWorldMod") && player
                     .hasPermission("cbrush"))) {
-                ms.failMessage(player, "permissionDenied");
+                MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
@@ -39,7 +38,7 @@ public class Cbrush extends CBaseCommand {
         // command, radius, type
         int radius = ToolBox.parseInt(command[1]);
         if (radius < 0) {
-            ms.failMessage(player, "invalidRadius");
+            MessageSystem.failMessage(player, "invalidRadius");
             return;
         }
         CBlock block = CBlock.parseBlock(command[2]);
@@ -48,6 +47,6 @@ public class Cbrush extends CBaseCommand {
         selection.setBrushData(block.getData());
         selection.setBrushRadius(radius);
         selection.setBrushType(block.getType());
-        ms.successMessage(player, "brushSet");
+        MessageSystem.successMessage(player, "brushSet");
     }
 }
