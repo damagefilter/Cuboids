@@ -63,8 +63,6 @@ public class BlockListener extends PluginListener {
             cplayer = new CanaryPlayer(player);
         }
         ActionManager.fireEvent(new ArmSwingEvent(cplayer));
-        //TODO: Handle brush
-//        BrushHandler.handleBrush(cplayer, p);
         theTime = System.currentTimeMillis(); // Set time counter
     }
 
