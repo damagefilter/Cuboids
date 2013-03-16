@@ -134,8 +134,7 @@ public class ToolBox {
      * @param second
      * @return
      */
-    @SuppressWarnings("unchecked") //Meh!
-    public static <T> T[] safeMergeArrays(T[] first, T[] second) {
+    public static <T> T[] safeMergeArrays(T[] first, T[] second, T[] result) {
         HashSet<T> res = new HashSet<T>();
         for(T tFirst : first) {
             res.add(tFirst);
@@ -143,8 +142,7 @@ public class ToolBox {
         for(T tSecond : second) {
             res.add(tSecond);
         }
-        
-        return (T[])res.toArray();
+        return res.toArray(result);
     }
     
     

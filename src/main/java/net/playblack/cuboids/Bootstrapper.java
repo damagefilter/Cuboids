@@ -2,6 +2,12 @@ package net.playblack.cuboids;
 
 //import java.util.concurrent.TimeUnit;
 
+import net.playblack.cuboids.actions.operators.BlockModificationsOperator;
+import net.playblack.cuboids.actions.operators.DamageOperator;
+import net.playblack.cuboids.actions.operators.MiscOperator;
+import net.playblack.cuboids.actions.operators.OperableItemsOperator;
+import net.playblack.cuboids.actions.operators.PlayerMovementOperator;
+import net.playblack.cuboids.actions.operators.SelectionOperator;
 import net.playblack.cuboids.commands.*;
 import net.playblack.cuboids.converters.Converter;
 import net.playblack.cuboids.converters.Loader;
@@ -74,9 +80,17 @@ public class Bootstrapper {
         log.cacheMessage("done!", false);
         log.logCachedMessage("INFO");
         FlatfileDataLegacy.cleanupFiles();
-
+        
+        log.logMessage("Setting up Event Operators", "INFO");
+        new BlockModificationsOperator();
+        new DamageOperator();
+        new MiscOperator();
+        new OperableItemsOperator();
+        new PlayerMovementOperator();
+        new SelectionOperator();
+        
         //BIIIIIIIIG TODO: Move those into static {} defs at the command objects themselfes! 
-        log.cacheMessage("Init Help System", false);
+        log.logMessage("Init help System", "INFO");
         CommandHelper.get().addHelp(
                 new Cbackup().getToolTip(),
                 new String[] { "backup", "restore", "cbackup", "edit",

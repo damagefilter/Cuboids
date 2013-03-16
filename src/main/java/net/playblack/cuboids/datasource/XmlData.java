@@ -74,10 +74,13 @@ public class XmlData implements BaseData {
         
         RegionManager regionMan = RegionManager.get();
         loadedRegions.put("root", new ArrayList<Region>());
-        
+        File regionFolder = new File(Config.get().getBasePath() + "regions/");
+        if(!regionFolder.exists()) {
+            regionFolder.mkdirs();
+        }
         //Load all files sorted by parents.
         //Parentless regions get sorted into "root"
-        for(File file : new File(Config.get().getBasePath() + "regions/").listFiles()) {
+        for(File file : regionFolder.listFiles()) {
             if (file.getName().toLowerCase().endsWith("xml")) {
                 try {
                     Document rdoc = regionBuilder.build(file);

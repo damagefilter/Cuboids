@@ -11,6 +11,7 @@ import java.util.List;
 
 import net.playblack.cuboids.actions.events.CuboidEvent;
 import net.playblack.cuboids.exceptions.InvalidActionHandlerException;
+import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.ToolBox;
 
 /**
@@ -25,7 +26,7 @@ public class ActionManager {
     private static ActionManager instance;
     
     private ActionManager() {
-        
+        actions = new HashMap<Class<? extends CuboidEvent>, List<RegisteredAction>>();
     }
     
     public static void fireEvent(CuboidEvent event) {
@@ -43,15 +44,16 @@ public class ActionManager {
      */
     public static void registerActionListener(String owner, ActionListener listener) throws InvalidActionHandlerException {
         //Make a new instance if there is none
-        if(instance == null) {
-            instance = new ActionManager();
+        if(ActionManager.instance == null) {
+            ActionManager.instance = new ActionManager();
         }
         //Here comes fancy-pancy reflection magic
         //Note: All the final stuff right here is to make sure we can use the data
         //in the inline declaration for ActionExecutor.
         //Props and thx and Kudos to the Bukkit folks for I took some pages out of their book (JavaPluginLoader)
         
-        Method[] allMethods = ToolBox.safeMergeArrays(listener.getClass().getMethods(), listener.getClass().getDeclaredMethods());
+        Method[] allMethods = ToolBox.safeMergeArrays(listener.getClass().getMethods(), listener.getClass().getDeclaredMethods(), new Method[1]);
+        EventLogger.getInstance().logMessage("methods in " + listener.getClass().getName() + ": " + allMethods.length, "INFO");
         //First check the public methods for Actionhandler annotations
         for(final Method m : allMethods) {
             final ActionHandler handler = m.getAnnotation(ActionHandler.class);

@@ -5,6 +5,7 @@ import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.events.forwardings.PlayerWalkEvent;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.mcutils.EventLogger;
 
 public class PlayerMovementOperator implements ActionListener {
     
@@ -12,6 +13,7 @@ public class PlayerMovementOperator implements ActionListener {
     public void onPlayerMove(PlayerWalkEvent event) {
         
         if(!event.getPlayer().canMoveTo(event.getTo())) {
+            EventLogger.getInstance().logMessage(event.getPlayer().getName() + " will not move and be tp'd back!", "INFO");
             event.getPlayer().teleportTo(event.getFrom());
         }
         
