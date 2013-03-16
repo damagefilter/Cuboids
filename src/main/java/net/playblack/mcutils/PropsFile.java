@@ -30,7 +30,11 @@ public class PropsFile {
         this.path = path;
         File f = new File(path);
         if (!f.exists()) {
-            f.mkdirs();
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         FileInputStream fstream = null;
         try {
