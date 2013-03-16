@@ -1,8 +1,11 @@
+
 import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.deprecated.ItemDropHandler;
-import net.playblack.cuboids.actions.deprecated.MiscHandler;
+import net.playblack.cuboids.actions.events.forwardings.EntityDamageEvent;
+import net.playblack.cuboids.actions.events.forwardings.ItemDropEvent;
+import net.playblack.cuboids.actions.events.forwardings.EntityDamageEvent.DamageSource;
 import net.playblack.cuboids.actions.events.forwardings.PlayerWalkEvent;
+import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 
@@ -77,23 +80,14 @@ public class PlayerListener extends PluginListener {
         if (attacker == null) {
             return false;
         }
-        if (defender.isPlayer()) {
-            if (attacker.isPlayer()) {
-                try {
-                    return !MiscHandler.handlePvpDamage(CServer.getServer().getPlayer(
-                            attacker.getPlayer().getName()),
-                            CServer.getServer().getPlayer(defender.getPlayer().getName()));
-                } catch (InvalidPlayerException e) {
-                    // Fallback
-                    return !MiscHandler.handlePvpDamage(new CanaryPlayer(
-                            attacker.getPlayer()),
-                            new CanaryPlayer(defender.getPlayer()));
-                }
-            } else if (attacker.isMob()) {
-                Player p = defender.getPlayer();
-                return !MiscHandler.handleMobDamage(new net.playblack.mcutils.Location((int) p.getX(), (int) p.getY(), (int) p.getZ(), 
-                                                    p.getWorld().getType().getId(), p.getWorld().getName()));
-            }
+        
+        CanaryBaseEntity a = new CanaryBaseEntity(attacker);
+        CanaryBaseEntity d = new CanaryBaseEntity(defender);
+        DamageSource ds = damageSourceFromCanary(type);
+        EntityDamageEvent event = new EntityDamageEvent(a, d, ds, amount);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            return true;
         }
         return false;
     }
@@ -150,24 +144,54 @@ public class PlayerListener extends PluginListener {
                 // Fallback
                 cplayer = new CanaryPlayer(player);
             }
-            return ItemDropHandler.handleItemDrop(cplayer,
-                    cplayer.getLocation());
+            ItemDropEvent event = new ItemDropEvent(new CItem(item.getId(), item.getItem().getDamage(), item.getItem().getAmount(), item.getItem().getSlot()), cplayer);
+            ActionManager.fireEvent(event);
+            if(event.isCancelled()) {
+                return true;
+            }
+            return false;
         }
         return false;
     }
-
-    //DEBUG THING
-    @Override
-    public void onPlayerRespawn(Player player, Location vTo) {
-        Location vFrom = player.getLocation();
-        if (player.getName().equals("damagefilter")) {
-            player.sendMessage(Colors.Rose + "PLAYER RESPAWN: ");
-            player.sendMessage(Colors.Yellow + "From: " + Colors.LightGray
-                    + vFrom.x + ", " + vFrom.y + ", " + vFrom.z + ", "
-                    + vFrom.world + ", " + vFrom.dimension);
-            player.sendMessage(Colors.Yellow + "To:   " + Colors.LightGray
-                    + vTo.x + ", " + vTo.y + ", " + vTo.z + ", " + vTo.world
-                    + ", " + vTo.dimension);
+    
+    private EntityDamageEvent.DamageSource damageSourceFromCanary(PluginLoader.DamageType type) {
+        switch(type) {
+            case ANVIL:
+                return DamageSource.FALLING_ANVIL;
+            case CACTUS:
+                return DamageSource.CACTUS;
+            case CREEPER_EXPLOSION:
+                return DamageSource.CREEPER_EXPLOSION;
+            case ENDERPEARL:
+                return DamageSource.ENDERPEARL;
+            case ENTITY:
+                return DamageSource.ENTITY;
+            case EXPLOSION:
+                return DamageSource.EXPLOSION;
+            case FALL:
+                return DamageSource.FALL;
+            case FALLING_BLOCK:
+                return DamageSource.FALLING_BLOCK;
+            case FIRE:
+                return DamageSource.FIRE;
+            case FIRE_TICK:
+                return DamageSource.FIRE_TICK;
+            case LAVA:
+                return DamageSource.LAVA;
+            case LIGHTNING:
+                return DamageSource.LIGHTING;
+            case POTION:
+                return DamageSource.POTION;
+            case STARVATION:
+                return DamageSource.STARVATION;
+            case SUFFOCATION:
+                return DamageSource.SUFFOCATION;
+            case WATER:
+                return DamageSource.WATER;
+            case WITHER:
+                return DamageSource.WITHER_SKULL;
+            default:
+                return DamageSource.GENERIC;
         }
     }
 }
