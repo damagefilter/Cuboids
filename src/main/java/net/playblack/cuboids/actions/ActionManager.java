@@ -2,9 +2,14 @@ package net.playblack.cuboids.actions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
 
 import net.playblack.cuboids.actions.events.CuboidEvent;
 import net.playblack.cuboids.exceptions.InvalidActionHandlerException;
@@ -89,8 +94,19 @@ public class ActionManager {
                     }
                 }
             };
-            instance.actions.get(eventClass.asSubclass(CuboidEvent.class)).add(new RegisteredAction(listener, handler.priority(), executor, owner));
+            instance.addRegisteredAction(eventClass.asSubclass(CuboidEvent.class), new RegisteredAction(listener, handler.priority(), executor, owner));
+//            instance.actions.get(eventClass.asSubclass(CuboidEvent.class)).add();
         }
+    }
+    
+    private void addRegisteredAction(Class<? extends CuboidEvent> eventClass, RegisteredAction action) {
+        actions.get(eventClass).add(action);
+        //Make sortable list
+        List<RegisteredAction> registrants = Arrays.asList((RegisteredAction[])actions.get(eventClass).toArray());
+        //sort the list according to what the comparator induces.
+        Collections.sort(registrants, new RegisteredActionsComparator());
+        
+        actions.put(eventClass, new HashSet<RegisteredAction>(registrants));
     }
     
     /**
@@ -101,5 +117,14 @@ public class ActionManager {
         if(!actions.containsKey(cls)) {
             actions.put(cls, new HashSet<RegisteredAction>());
         }
+    }
+    
+    public class RegisteredActionsComparator implements Comparator<RegisteredAction> {
+
+        @Override
+        public int compare(RegisteredAction o1, RegisteredAction o2) {
+            return Integer.valueOf(o1.getPriority().ordinal()).compareTo(o2.getPriority().ordinal());
+        }
+        
     }
 }

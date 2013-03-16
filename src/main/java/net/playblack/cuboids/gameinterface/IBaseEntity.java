@@ -86,4 +86,10 @@ public interface IBaseEntity {
      * @return
      */
     public double getRotation();
+    
+    public boolean isPlayer();
+    
+    public boolean isMob();
+    
+    public boolean isAnimal();
 }

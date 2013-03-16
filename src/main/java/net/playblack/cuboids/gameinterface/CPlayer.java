@@ -165,6 +165,10 @@ public abstract class CPlayer implements IBaseEntity {
         return true;
     }
     
+    /**
+     * Check if this player is inside any region
+     * @return
+     */
     public boolean isInRegion() {
         return currentRegion != null;
     }

@@ -437,40 +437,6 @@ public class RegionManager {
     }
 
     /**
-     * Effectively remove player from within all areas
-     * 
-     * @param name
-     */
-    @SuppressWarnings("deprecation")
-    public void removeFromAllAreas(String name) {
-        for (Region tree : rootNodes) {
-            for(Region child : tree.getChildsDeep()) {
-                child.removePlayerWithin(name);
-            }
-        }
-
-    }
-
-    /**
-     * Remove the player given from all areas that DO NOT match world and
-     * dimension specified in the given location
-     * 
-     * @param playerName
-     * @param loc
-     */
-    @SuppressWarnings("deprecation")
-    public void removeFromAllAreas(String player, Location loc) {
-        for (Region tree : rootNodes) {
-            
-            if (!tree.equalsWorld(loc.getWorld(), loc.getDimension())) {
-                for (Region node : tree.getChildsDeep()) {
-                    node.removePlayerWithin(player);
-                }
-            }
-        }
-    }
-
-    /**
      * This will sort the given cuboid into the root nodes list,
      * if it has no parent or removes it from the list if it is still there,
      * but suddenly has a parent attached

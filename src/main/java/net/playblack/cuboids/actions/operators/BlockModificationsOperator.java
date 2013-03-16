@@ -13,6 +13,7 @@ import net.playblack.cuboids.actions.events.forwardings.BlockBreakEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
+import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
 import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
@@ -62,6 +63,14 @@ public class BlockModificationsOperator implements ActionListener {
             return true;
         }
         if(r.getProperty("firespread") == Status.DENY) {
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean canEndermanUseBlock(Location location) {
+        Region r = RegionManager.get().getActiveRegion(location, false);
+        if(r.getProperty("enderman-pickup") == Status.DENY) {
             return false;
         }
         return true;
@@ -143,6 +152,13 @@ public class BlockModificationsOperator implements ActionListener {
             if(r.getProperty("crops-trampling") == Status.DENY) {
                 event.cancel();
             }
+        }
+    }
+    
+    @ActionHandler
+    public void onEndermanPickup(EndermanPickupEvent event) {
+        if(canEndermanUseBlock(event.getLocation())) {
+            event.cancel();
         }
     }
     

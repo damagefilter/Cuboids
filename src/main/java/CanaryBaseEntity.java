@@ -73,5 +73,17 @@ public class CanaryBaseEntity implements IBaseEntity {
     public double getRotation() {
         return ent.getRotation();
     }
+    @Override
+    public boolean isPlayer() {
+        return ent.isPlayer();
+    }
+    @Override
+    public boolean isMob() {
+        return ent.isMob();
+    }
+    @Override
+    public boolean isAnimal() {
+        return ent.isAnimal();
+    }
 
 }

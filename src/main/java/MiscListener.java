@@ -3,7 +3,6 @@ import net.playblack.cuboids.actions.deprecated.MiscHandler;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidInterface;
-import net.playblack.mcutils.Location;
 
 public class MiscListener extends PluginListener {
 
@@ -25,21 +24,10 @@ public class MiscListener extends PluginListener {
         } catch (InvalidPlayerException e) {
             cplayer = new CanaryPlayer(player);
         }
-        if (CuboidInterface.get()
-                .commandIsRestricted(cplayer, split[0])) {
+        if (CuboidInterface.get().commandIsRestricted(cplayer, split[0])) {
             return PluginLoader.HookResult.PREVENT_ACTION;
         } else {
             return PluginLoader.HookResult.DEFAULT_ACTION;
         }
-    }
-
-    //TODO: Move this to BlockListener and BlockModificationsOperator
-    @Override
-    public boolean onEndermanPickup(Enderman entity, Block b) {
-//        World world = entity.getWorld();
-//        return BlockActionHandler.handleEndermanPickup(new Location(b
-//                .getX(), b.getY(), b.getZ(), world.getType().getId(), world
-//                .getName()));
-        return false;
     }
 }

@@ -9,6 +9,7 @@ import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
+import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
 import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
@@ -197,6 +198,17 @@ public class BlockListener extends PluginListener {
     public boolean onBlockUpdate(Block b, int newBlockId) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         BlockUpdateEvent event = new BlockUpdateEvent(new CBlock(b.getType(), b.getData()), new CBlock(newBlockId), p);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean onEndermanPickup(Enderman entity, Block b) {
+        Location l = new Location(b.getX(), b.getY(), b.getZ(), entity.getWorld().getType().getId(), entity.getWorld().getName());
+        EndermanPickupEvent event = new EndermanPickupEvent(l, new CBlock(b.getType(), b.getData()));
         ActionManager.fireEvent(event);
         if(event.isCancelled()) {
             return true;

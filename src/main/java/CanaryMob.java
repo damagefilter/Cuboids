@@ -104,6 +104,11 @@ public class CanaryMob implements CMob {
     public boolean isAnimal() {
         return mob.isAnimal();
     }
+    
+    @Override
+    public boolean isPlayer() {
+        return mob.isPlayer();
+    }
 
     @Override
     public Location getLocation() {

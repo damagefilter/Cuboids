@@ -134,6 +134,7 @@ public class Region {
      * Adds a player that is in this area
      * 
      * @param playerName
+     * @deprecated Regions do not contain information about players anymore. This information is generated on-the-fly now
      */
     @Deprecated
     public void addPlayerWithin(String playerName) {
@@ -149,7 +150,7 @@ public class Region {
      * Recursively add player to this Region and its childs.
      * This will set the currentRegion in the player
      * Recursively goes down
-     * @param playerName
+     * @param player
      * @param loc
      */
     public void addPlayerWithin(CPlayer player, Location loc) {

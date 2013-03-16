@@ -195,5 +195,20 @@ public class CanaryPlayer extends CPlayer {
     public double getRotation() {
         return player.getRotation();
     }
+    
+    @Override
+    public boolean isMob() {
+        return player.isMob();
+    }
+
+    @Override
+    public boolean isAnimal() {
+        return player.isAnimal();
+    }
+    
+    @Override
+    public boolean isPlayer() {
+        return player.isPlayer();
+    }
 
 }
