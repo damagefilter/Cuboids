@@ -16,18 +16,21 @@ public class Vector {
         this.x = x;
         this.y = y;
         this.z = z;
+//        ToolBox.adjustWorldPosition(this);
     }
 
     public Vector(int x, int y, int z) {
         this.x = (double) x;
         this.y = (double) y;
         this.z = (double) z;
+//        ToolBox.adjustWorldPosition(this);
     }
 
     public Vector(float x, float y, float z) {
         this.x = (double) x;
         this.y = (double) y;
         this.z = (double) z;
+//        ToolBox.adjustWorldPosition(this);
     }
 
     public Vector() {

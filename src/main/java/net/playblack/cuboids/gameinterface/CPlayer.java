@@ -18,6 +18,7 @@ public abstract class CPlayer implements IBaseEntity {
     protected HashMap<Integer, CItem[]> inventories = new HashMap<Integer, CItem[]>();
     
     Region currentRegion;
+    private boolean adminCreative; //this is if creative wasn't set by cuboids
     /**
      * Send a message to the player
      * 
@@ -66,7 +67,7 @@ public abstract class CPlayer implements IBaseEntity {
      * @param creative
      */
     public abstract void setGameMode(int mode);
-
+    
     /**
      * Check if a player is in creative mode
      * 
@@ -201,20 +202,35 @@ public abstract class CPlayer implements IBaseEntity {
      * @param r
      */
     public void setRegion(Region r) {
-        if(r == currentRegion) {
-            return;
-        }
-        sendFarewell();
         if(r == null) {
+            System.out.println("nulling region");
+            sendFarewell();
+            
+            if(isInCreativeMode() && !adminCreative) {
+                setGameMode(0);
+            }
             currentRegion = null;
             return;
         }
-        if(currentRegion != r) {
+
+        if(!r.equals(currentRegion)) {
+            System.out.println("new region name: " + r.getName());
+            if(currentRegion != null) {
+                System.out.println("old region name: " + currentRegion.getName());
+            }
+            System.out.println("old region was null");
+            sendFarewell();
             if(r.getProperty("creative") != Status.ALLOW) {
-                setGameMode(0);
+                if(isInCreativeMode()) {
+                    adminCreative = true;
+                }
+                else {
+                    setGameMode(0);
+                }
                 
             }
             else {
+                adminCreative = false;
                 setGameMode(1);
             }
             if(r.getProperty("healing") == Status.ALLOW) {
@@ -222,12 +238,13 @@ public abstract class CPlayer implements IBaseEntity {
                       this, r, 
                       CuboidInterface.get().getThreadManager(), Config.get().getHealPower(),
                       Config.get().getHealDelay()), 
-                  0,
-                  TimeUnit.SECONDS);
+                      0,
+                      TimeUnit.SECONDS);
             }
             currentRegion = r;
+            sendWelcome();
         }
-        sendWelcome();
+        
     }
     
     /**

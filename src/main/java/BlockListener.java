@@ -7,6 +7,7 @@ import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockBreakEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
 import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
@@ -18,7 +19,6 @@ import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.mcutils.Location;
 
 /**
@@ -115,7 +115,12 @@ public class BlockListener extends PluginListener {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
-        return !CuboidInterface.get().canModifyBlock(cplayer, p);
+        BlockPlaceEvent event = new BlockPlaceEvent(cplayer, new CBlock(b.getType(),  b.getData()), p);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            return true;
+        }
+        return false;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

@@ -24,20 +24,31 @@ public class ToolBox {
      * @param pos
      * @return
      */
-    public static Vector adjustWorldPosition(Vector pos) {
-        // if(pos.getX() < 0.0D) {
-        // pos.setX(pos.getX()-1.0);
-        // }
-        // if(pos.getZ() < 0.0D) {
-        // pos.setZ(pos.getZ()-1.0);
-        // }
-        // return new Vector(pos.getX(), pos.getY(), pos.getZ());
-        // NOTE: This is a dirty quick fix to work around the fact that all of
-        // the sudden,
-        // there is no issue with negative coordinates anymore
-        // In case it somehow, magically, comes back again, I'm leaving this
-        // here to uncomment again
-        return pos;
+    public static void adjustWorldPosition(Vector pos) {
+         if(pos.getX() < 0D) {
+             pos.setX(pos.getX()-1D);
+         }
+         if(pos.getZ() < 0D) {
+             pos.setZ(pos.getZ()-1D);
+         }
+//         return new Vector(pos.getX(), pos.getY(), pos.getZ());
+//         NOTE: This is a dirty quick fix to work around the fact that all of
+//         the sudden,
+//         there is no issue with negative coordinates anymore
+//         In case it somehow, magically, comes back again, I'm leaving this
+//         here to uncomment again
+//        return pos;
+       // EDIT 2013: It came back again, lol
+    }
+    
+    public static void adjustWorldPosition(Location loc) {
+        if(loc.getX() < 0D) {
+            loc.setX(loc.getX() - 1D);
+        }
+        
+        if(loc.getZ() < 0D) {
+            loc.setZ(loc.getZ() - 1D);
+        }
     }
 
     /**

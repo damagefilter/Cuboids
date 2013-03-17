@@ -238,11 +238,12 @@ public class Region {
      */
     public void setParent(Region cube) {
         parent = cube;
+        
         if(parent != null) {
             parent.childs.add(this);
-        }
-        if(parent.priority > priority) {
-            this.priority = parent.priority + 1;
+            if(parent.priority > priority) {
+                this.priority = parent.priority + 1;
+            }
         }
     }
     
@@ -801,15 +802,15 @@ public class Region {
      * @return
      */
     public boolean isWithin(Location v) {
-        if (!v.getWorld().equals(this.world)
-                || !(v.getDimension() == this.dimension)) {
+        if(!equalsWorld(v.getWorld(), v.getDimension())) {
             return false;
         }
         Vector min = Vector.getMinimum(origin, offset);
         Vector max = Vector.getMaximum(origin, offset);
         if (v.isWithin(min, max)) {
             return true;
-        } else {
+        } 
+        else {
             return false;
         }
     }
