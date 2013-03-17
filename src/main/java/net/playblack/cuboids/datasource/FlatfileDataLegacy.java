@@ -140,7 +140,7 @@ public class FlatfileDataLegacy implements BaseData {
             // System.out.println("Cuboids2: Parenting Child Nodes");
             for (int i = 0; i < nodelist.size(); i++) {
                 if (nodelist.get(i).getParent() != null) {
-                    Region parent = handler.getCuboidByName(nodelist.get(i).getParent().getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension());
+                    Region parent = handler.getRegionByName(nodelist.get(i).getParent().getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension());
                     if (parent != null && !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
                         // System.out.println("Cuboids2: Add child: "+nodelist.get(i).getCuboid().getName());
                         // System.out.println("to parent: "+parent.getCuboid().getName());

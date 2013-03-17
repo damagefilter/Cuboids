@@ -26,7 +26,7 @@ public class CmodTpTo extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        Region targetCube = RegionManager.get().getCuboidByName(
+        Region targetCube = RegionManager.get().getRegionByName(
                 command[1], player.getWorld().getName(),
                 player.getWorld().getDimension());
         if (targetCube == null) {

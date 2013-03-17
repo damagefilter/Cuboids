@@ -47,7 +47,7 @@ public class AreaActionHook implements CuboidHook {
 
     private Object removeGroupFromArea(CWorld cWorld, String areaName,
             String groupName) {
-        Region cube = RegionManager.get().getCuboidByName(areaName,
+        Region cube = RegionManager.get().getRegionByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return Boolean.valueOf(false);
@@ -67,7 +67,7 @@ public class AreaActionHook implements CuboidHook {
      */
     private Object removePlayerFromArea(CWorld cWorld, String areaName,
             String playerName) {
-        Region cube = RegionManager.get().getCuboidByName(areaName,
+        Region cube = RegionManager.get().getRegionByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return Boolean.valueOf(false);
@@ -87,7 +87,7 @@ public class AreaActionHook implements CuboidHook {
      */
     private Object addGroupToArea(CWorld cWorld, String areaName,
             String groupName) {
-        Region cube = RegionManager.get().getCuboidByName(areaName,
+        Region cube = RegionManager.get().getRegionByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return Boolean.valueOf(false);
@@ -107,7 +107,7 @@ public class AreaActionHook implements CuboidHook {
      */
     private Object addPlayerToArea(CWorld cWorld, String areaName,
             String playerName) {
-        Region cube = RegionManager.get().getCuboidByName(areaName,
+        Region cube = RegionManager.get().getRegionByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return Boolean.valueOf(false);
@@ -125,7 +125,7 @@ public class AreaActionHook implements CuboidHook {
      * @return
      */
     private Object getAreaGroupList(CWorld cWorld, String areaName) {
-        Region cube = RegionManager.get().getCuboidByName(areaName,
+        Region cube = RegionManager.get().getRegionByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return null;
@@ -140,7 +140,7 @@ public class AreaActionHook implements CuboidHook {
      * @return
      */
     private Object getAreaPlayerList(CWorld cWorld, String areaName) {
-        Region cube = RegionManager.get().getCuboidByName(areaName,
+        Region cube = RegionManager.get().getRegionByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return null;
@@ -155,7 +155,7 @@ public class AreaActionHook implements CuboidHook {
      * @return
      */
     private Object getAreaOwners(CWorld cWorld, String areaName) {
-        Region cube = RegionManager.get().getCuboidByName(areaName,
+        Region cube = RegionManager.get().getRegionByName(areaName,
                 cWorld.getName(), cWorld.getDimension());
         if (cube == null) {
             return null;

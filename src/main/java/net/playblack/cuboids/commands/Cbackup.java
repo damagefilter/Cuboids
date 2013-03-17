@@ -37,7 +37,7 @@ public class Cbackup extends CBaseCommand {
                 return;
             }
         }
-        Region node = RegionManager.get().getCuboidByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
+        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
         if (node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod")) {
             GenericGenerator gen = new GenericGenerator(new CuboidSelection(node.getOrigin(), node.getOffset()), player.getWorld());
             

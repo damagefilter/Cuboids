@@ -71,7 +71,7 @@ public class RegionManager {
      * @param world
      */
     public void loadSingle(String name, String world, int dimension) {
-        dataSource.loadRegion(name, world);
+        dataSource.loadRegion(name, world, dimension);
     }
 
     /**
@@ -92,7 +92,7 @@ public class RegionManager {
      * @return
      */
     public boolean saveSingle(String name, String world, int dimension) {
-        dataSource.saveRegion(getCuboidByName(name, world, dimension));
+        dataSource.saveRegion(getRegionByName(name, world, dimension));
         return true;
     }
 
@@ -162,10 +162,9 @@ public class RegionManager {
      * Remove a cuboid from the tree list
      * TODO: Make this a void and remove the force thing
      * @param cube
-     * @param force
      * @return
      */
-    public void removeRegion(Region cube, boolean force) {
+    public void removeRegion(Region cube) {
         
         if(rootNodes.contains(cube)) {
             rootNodes.remove(cube);
@@ -368,7 +367,7 @@ public class RegionManager {
      * @param world
      * @return CuboidNode or null
      */
-    public Region getCuboidByName(String name, String world, int dimension) {
+    public Region getRegionByName(String name, String world, int dimension) {
         for (Region tree : rootNodes) {
             if (tree.equalsWorld(world, dimension)) {
                 Region tmp = tree.queryChilds(name);

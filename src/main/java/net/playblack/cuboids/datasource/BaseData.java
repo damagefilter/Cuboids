@@ -40,10 +40,8 @@ public interface BaseData {
      * removing the old reference, if there was any
      * @param name
      * @param world
-     * @deprecated throws UnsupportedOperationExceptions as this cannot work like that anymore. Need to fix later on!
      */
-    @Deprecated
-    public void loadRegion(String name, String world);
+    public void loadRegion(String name, String world, int dimension);
 
     /**
      * Deletes a region from the datasource

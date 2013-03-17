@@ -129,23 +129,6 @@ public class Region {
         }
     }
     
-    
-    /**
-     * Adds a player that is in this area
-     * 
-     * @param playerName
-     * @deprecated Regions do not contain information about players anymore. This information is generated on-the-fly now
-     */
-    @Deprecated
-    public void addPlayerWithin(String playerName) {
-        if (!playerName.equalsIgnoreCase("no_players")) {
-            //Add into this cuboid
-            if (!playerName.substring(2).isEmpty()) {
-//                playersWithin.add(playerName);
-            }
-        }
-    }
-    
     /**
      * Recursively add player to this Region and its childs.
      * This will set the currentRegion in the player
@@ -188,48 +171,6 @@ public class Region {
             }
         }
     }
-
-    /**
-     * Remove player from within list
-     * 
-     * @param playerName
-     * @return
-     */
-    @Deprecated
-    public boolean removePlayerWithin(String playerName) {
-//        if (playersWithin.contains(playerName)) {
-//            playersWithin.remove(playerName);
-//            return true;
-//        } else {
-//            return false;
-//        }
-        return false;
-    }
-
-    /**
-     * Get all players that are within this cuboid as arrayList<string>
-     * 
-     * @return
-     */
-    @Deprecated
-    public ArrayList<String> getPlayersWithin() {
-        return null;
-    }
-
-    /**
-     * Check if a player is within this region
-     * @param playerName
-     * @return
-     */
-    @Deprecated
-    public boolean playerIsWithin(String playerName) {
-//        if (playersWithin.contains(playerName)) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-        return false;
-    }
     
     /**
      * Set the parent region for the this region.
@@ -241,7 +182,7 @@ public class Region {
         
         if(parent != null) {
             parent.childs.add(this);
-            if(parent.priority > priority) {
+            if(parent.priority >= priority) {
                 this.priority = parent.priority + 1;
             }
         }
@@ -442,10 +383,7 @@ public class Region {
      * @return
      */
     public Region queryChilds(Region cube) {
-        Region current = null;
-        if(parent != null && cube.cuboidIsWithin(parent, true)) {
-            current = parent;
-        }
+        Region current = this;
         for(Region c : childs) {
             if(cube.cuboidIsWithin(c, true)) {
                 if(current == null) {

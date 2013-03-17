@@ -203,22 +203,20 @@ public abstract class CPlayer implements IBaseEntity {
      */
     public void setRegion(Region r) {
         if(r == null) {
-            System.out.println("nulling region");
             sendFarewell();
+            if(currentRegion == null && isInCreativeMode()) {
+                adminCreative = true;
+            }
             
             if(isInCreativeMode() && !adminCreative) {
                 setGameMode(0);
             }
+            
             currentRegion = null;
             return;
         }
 
         if(!r.equals(currentRegion)) {
-            System.out.println("new region name: " + r.getName());
-            if(currentRegion != null) {
-                System.out.println("old region name: " + currentRegion.getName());
-            }
-            System.out.println("old region was null");
             sendFarewell();
             if(r.getProperty("creative") != Status.ALLOW) {
                 if(isInCreativeMode()) {

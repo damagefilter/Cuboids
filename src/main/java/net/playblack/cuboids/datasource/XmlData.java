@@ -88,7 +88,7 @@ public class XmlData implements BaseData {
                     Document rdoc = regionBuilder.build(file);
                     Element meta = rdoc.getRootElement().getChild("meta");
                     String parentName = meta.getChildText("parent");
-                    Region r = domToRegion(rdoc);
+                    Region r = domToRegion(rdoc, false);
                     if(r != null) {
                         if(parentName == null || parentName.isEmpty()) {
                             loadedRegions.get("root").add(r);
@@ -151,19 +151,34 @@ public class XmlData implements BaseData {
     }
 
     @Override
-    public void loadRegion(String name, String world) {
-        throw new UnsupportedOperationException("Cannot load a region from here as the Dimension information is missing!");
+    public void loadRegion(String name, String world, int dimension) {
+        String path = Config.get().getBasePath() + "regions/" + world + "_" + name + "_" + dimension + ".xml";
+        File f = new File(path);
+        try {
+            Document rdoc = regionBuilder.build(f);
+            Region r = domToRegion(rdoc, true);
+            Region old = RegionManager.get().getRegionByName(name, world, dimension);
+            if(old != null) {
+                RegionManager.get().removeRegion(old);
+            }
+            RegionManager.get().addRegion(r);
+        } catch (JDOMException e) {
+            log.logMessage(e.getMessage(), "SEVERE");
+        } catch (IOException e) {
+            log.logMessage(e.getMessage(), "SEVERE");
+        }
     }
 
     @Override
     public void deleteRegion(Region node) {
-        File file = new File(new StringBuilder(Config.get().getBasePath()).append(node.getWorld()).append("_").append(node.getDimension()).append("_").append(node.getName()).append(".xml").toString());
+        String path = Config.get().getBasePath() + "regions/" + node.getWorld() + "_" + node.getName() + "_" + node.getDimension() + ".xml";
+        File file = new File(path);
         file.delete();
     }
     
     private void writeFile(Document xmlDoc) throws IOException {
         Element meta = xmlDoc.getRootElement().getChild("meta");
-        FileWriter writer = new FileWriter("plugins/cuboids2/regions/" + meta.getChildText("world") + "_" + meta.getChildText("name") + "_" + meta.getChildText("dimension") + ".xml");
+        FileWriter writer = new FileWriter(Config.get().getBasePath() + "regions/" + meta.getChildText("world") + "_" + meta.getChildText("name") + "_" + meta.getChildText("dimension") + ".xml");
         xmlSerializer.output(xmlDoc, writer);
     }
     
@@ -193,7 +208,7 @@ public class XmlData implements BaseData {
         return data;
     }
     
-    private Region domToRegion(Document doc) {
+    private Region domToRegion(Document doc, boolean lookupParent) {
         Region newRegion = new Region();
         Element root = doc.getRootElement();
         Element meta = root.getChild("meta");
@@ -214,6 +229,11 @@ public class XmlData implements BaseData {
         }
         for(Element prop : properties.getChildren()) {
             newRegion.setProperty(prop.getName(), Status.fromString(prop.getText()));
+        }
+        if(lookupParent) {
+            if(meta.getChildText("parent") != null) {
+                newRegion.setParent(RegionManager.get().getPossibleParent(newRegion));
+            }
         }
         return newRegion;
     }

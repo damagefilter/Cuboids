@@ -35,7 +35,7 @@ public class SelectionOperator implements ActionListener {
             return false;
         }
         
-        CuboidInterface.get().explainRegion(player, p);
+        CuboidInterface.get().explainRegion(player, p, true);
         return true;
     }
     
