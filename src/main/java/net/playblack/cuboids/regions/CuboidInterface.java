@@ -172,18 +172,6 @@ public class CuboidInterface {
             MessageSystem.failMessage(player, "permissionDenied");
         }
     }
-
-    /**
-     * Add a player to a region if he's not inside already
-     * 
-     * @param player
-     * @param location
-     * @deprecated Use handleRegionsForPlayer()
-     */
-    @Deprecated
-    public void addPlayerWithin(CPlayer player, Location location) {
-        throw new UnsupportedOperationException("addPlayerWithin is deprecated! use handleRegionsForPlayer intead!");
-    }
     
     /**
      * Handle the leaving and entering of regions for a specified player.
@@ -203,19 +191,6 @@ public class CuboidInterface {
         if(to != null) {
             player.setRegion(RegionManager.get().getActiveRegion(to, true));
         }
-    }
-
-    /**
-     * Remove a player from this region.
-     * 
-     * @param player
-     * @param vFrom
-     * @param vTo
-     * @deprecated Use handleRegionsForPlayer()
-     */
-    @Deprecated
-    public void removePlayerWithin(CPlayer player, Location vFrom, Location vTo) {
-        throw new UnsupportedOperationException("removePlayerWithin is deprecated! use handleRegionsForPlayer intead!");
     }
 
     /*
@@ -263,19 +238,6 @@ public class CuboidInterface {
             return false;
         }
         return cube.commandIsRestricted(command);
-    }
-
-    /**
-     * Check if a cuboid exists
-     * 
-     * @param name
-     * @param world
-     * @return
-     * @deprecated use Regionmanager.cuboidExists instead!
-     */
-    @Deprecated
-    public boolean cuboidExist(String name, String world, int dimension) {
-        return regions.cuboidExists(name, world, dimension);
     }
 
     /**

@@ -413,22 +413,14 @@ public class Region {
         if(!isWithin(loc)) {
             return null;
         }
-        Region current = null;
-        if(parent != null && parent.isWithin(loc)) {
-            current = parent;
-        }
+        Region current = this;
         for(Region c : childs) {
             if(c.isWithin(loc)) {
-                if(current == null) {
+                if(current.getPriority() < c.getPriority()) {
                     current = c;
                 }
-                else {
-                    if(current.getPriority() < c.getPriority()) {
-                        current = c;
-                    }
-                    else if (current.getPriority() == c.getPriority()) {
-                        current = current.getSize() > c.getSize() ? c : current;
-                    }
+                else if (current.getPriority() == c.getPriority()) {
+                    current = current.getSize() > c.getSize() ? c : current;
                 }
                 
                 Region check = c.queryChilds(loc, current.getPriority());
@@ -1057,6 +1049,7 @@ public class Region {
      */
     public void setOrigin(Vector origin) {
         this.origin = origin;
+//        ToolBox.adjustWorldPosition(origin);
     }
 
     /**
@@ -1071,11 +1064,14 @@ public class Region {
      */
     public void setOffset(Vector offset) {
         this.offset = offset;
+//        ToolBox.adjustWorldPosition(offset);
     }
     
     public void setBoundingBox(Vector origin, Vector offset) {
         this.origin = origin;
         this.offset = offset;
+//        ToolBox.adjustWorldPosition(origin);
+//        ToolBox.adjustWorldPosition(offset);
     }
 
     /**

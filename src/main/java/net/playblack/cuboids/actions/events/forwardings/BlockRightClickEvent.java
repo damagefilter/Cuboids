@@ -5,6 +5,7 @@ import net.playblack.cuboids.actions.events.CuboidEvent;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.mcutils.Location;
+import net.playblack.mcutils.ToolBox;
 
 /**
  * Fired when Cuboids catched a rightclick-on-block event
@@ -28,6 +29,7 @@ public class BlockRightClickEvent extends CuboidEvent implements Cancellable {
         this.player = player;
         this.clickedBlock = block;
         this.clickedLocation = location;
+        ToolBox.adjustWorldPosition(clickedLocation);
     }
     @Override
     public boolean isCancelled() {

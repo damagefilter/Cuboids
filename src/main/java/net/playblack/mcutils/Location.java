@@ -9,7 +9,7 @@ public class Location extends Vector {
         this.y = y;
         this.z = z;
         this.world = world;
-        ToolBox.adjustWorldPosition(this);
+//        ToolBox.adjustWorldPosition(this);
     }
 
     public Location(double x, double y, double z, int dimension, String world) {
@@ -18,7 +18,7 @@ public class Location extends Vector {
         this.z = z;
         this.dimension = dimension;
         this.world = world;
-        ToolBox.adjustWorldPosition(this);
+//        ToolBox.adjustWorldPosition(this);
     }
     
     public Location(int x, int y, int z, int dimension, String world) {
@@ -27,7 +27,7 @@ public class Location extends Vector {
         this.z = z;
         this.dimension = dimension;
         this.world = world;
-        ToolBox.adjustWorldPosition(this);
+//        ToolBox.adjustWorldPosition(this);
     }
     
     public Location(Vector v) {
@@ -36,7 +36,7 @@ public class Location extends Vector {
         this.z = v.z;
         world = "world"; //assume a common default
         dimension = 0; //assume default dimension (Overworld)
-        ToolBox.adjustWorldPosition(this);
+//        ToolBox.adjustWorldPosition(this);
     }
 
     /**

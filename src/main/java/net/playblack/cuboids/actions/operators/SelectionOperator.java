@@ -51,7 +51,7 @@ public class SelectionOperator implements ActionListener {
             if(player.getItemInHand().getId() != Config.get().getRemoteRegionItem()) {
                 return false;
             }
-            System.out.println("Remote selection");
+//            System.out.println("Remote selection");
         }
         else {
             if(player.getItemInHand().getId() != Config.get().getRegionItem()) {
@@ -65,7 +65,7 @@ public class SelectionOperator implements ActionListener {
             }
         }
         if(Config.get().isUseDoubleAction()) {
-            System.out.println("selection in normal mode");
+//            System.out.println("selection in normal mode");
             setPointNormalStyle(player, location, rightclick);
         }
         else {
@@ -127,9 +127,11 @@ public class SelectionOperator implements ActionListener {
     @ActionHandler
     public void onBlockRightClick(BlockRightClickEvent event) {
         //Set seletion?
-        System.out.println("Rightclick selection");
+//        System.out.println("Rightclick selection");
         if(event.getPlayer().getItemInHand().getId() == Config.get().getRegionItem()) {
-            setSelectionPoint(event.getPlayer(), event.getLocation(), true, false);
+            if(setSelectionPoint(event.getPlayer(), event.getLocation(), true, false)) {
+                event.cancel();
+            }
         }
         explainRegion(event.getPlayer(), event.getLocation());
     }
@@ -141,14 +143,16 @@ public class SelectionOperator implements ActionListener {
             return;
         }
         Location loc = new Location(v);
-        System.out.println("armswing selection");
+//        System.out.println("armswing selection");
         setSelectionPoint(event.getPlayer(), loc, false, true);
     }
     
     @ActionHandler
     public void onBlockLeftClick(BlockLeftClickEvent event) {
-        System.out.println("onBlockLOeftClick selection");
-        setSelectionPoint(event.getPlayer(), event.getLocation(), false, false);
+//        System.out.println("onBlockLOeftClick selection");
+        if(setSelectionPoint(event.getPlayer(), event.getLocation(), false, false)) {
+            event.cancel();
+        }
     }
     
     //Register that thing

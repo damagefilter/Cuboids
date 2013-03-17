@@ -29,8 +29,11 @@ public class Cdiag extends CBaseCommand {
             player.sendMessage(ColorManager.LightGreen + "Cuboids containnig your current location:");
             for (Region cube : nodes) {
                 player.sendMessage(ColorManager.Yellow + "Name: " + ColorManager.LightGray + cube.getName());
-                
-                player.sendMessage(ColorManager.Yellow + "Parent: " + ColorManager.LightGray + cube.getParent().getName());
+                String parent = "none";
+                if(cube.hasParent()) {
+                    parent = cube.getParent().getName();
+                }
+                player.sendMessage(ColorManager.Yellow + "Parent: " + ColorManager.LightGray + parent);
                 player.sendMessage(ColorManager.DarkPurple + "------------------------------------------------");
             }
         }

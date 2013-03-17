@@ -13,7 +13,7 @@ public class PlayerWalkEvent extends CuboidEvent implements Cancellable {
     private CPlayer player;
     
     public PlayerWalkEvent(CPlayer player, Location from, Location to) {
-        this.from = from; 
+        this.from = from;
         this.to = to;
         this.player = player;
     }

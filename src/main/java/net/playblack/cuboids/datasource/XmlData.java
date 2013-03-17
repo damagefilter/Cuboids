@@ -19,6 +19,7 @@ import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 import net.visualillusionsent.utils.SystemUtils;
 
@@ -171,6 +172,8 @@ public class XmlData implements BaseData {
         Element regionElement = data.getRootElement();
         Element meta = new Element("meta");
         
+        meta.addContent(new Element("welcome").setText(r.getWelcome()));
+        meta.addContent(new Element("farewell").setText(r.getFarewell()));
         meta.addContent(new Element("name").setText(r.getName()));
         if(r.hasParent()) {
             meta.addContent(new Element("parent").setText(r.getParent().getName()));
@@ -200,6 +203,8 @@ public class XmlData implements BaseData {
         newRegion.setPriority(Integer.parseInt(meta.getChildText("priority")));
         newRegion.setDimension(Integer.parseInt(meta.getChildText("dimension")));
         newRegion.setWorld(meta.getChildText("world"));
+        newRegion.setWelcome(ToolBox.stringToNull(meta.getChildText("welcome")));
+        newRegion.setFarewell(ToolBox.stringToNull(meta.getChildText("farewell")));
         try {
             newRegion.setOrigin(Vector.deserialize(meta.getChildText("origin")));
             newRegion.setOffset(Vector.deserialize(meta.getChildText("offset")));

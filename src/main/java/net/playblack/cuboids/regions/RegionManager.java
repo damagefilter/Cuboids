@@ -263,19 +263,13 @@ public class RegionManager {
      */
 
     /**
-     * This will return the cuboid with the highest priority at the Vector given
-     * or the global settings if there was no cuboid at the given vector
-     * 
-     * @param v pass null to get the global settings
-     * @param world
-     * @param dimension
-     * @param ignoreGlobal
-     *            set true if you don't want to have the global settings to be
-     *            passed along
+     * Get the active region at the given location
+     * @param v the location - pass null to return the global settings (must also set ignoreGlobal)
+     * @param ignoreGlobal pass true to ignore the global settings
      * @return
      */
     public Region getActiveRegion(Location v, boolean ignoreGlobal) {
-        if (v == null) {
+        if (v == null && !ignoreGlobal) {
             return global;
         }
         for (Region tree : rootNodes) {
