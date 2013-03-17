@@ -50,7 +50,7 @@ public class FlatfileDataLegacy implements BaseData {
     }
 
     @Override
-    public void loadRegion(String name, String world) {
+    public void loadRegion(String name, String world, int dimension) {
        throw new IllegalStateException("Loading single CuboidE files is not supported anymore!");
     }
 

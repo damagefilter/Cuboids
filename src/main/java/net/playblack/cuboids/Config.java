@@ -24,58 +24,32 @@ public class Config {
     private String name = "Cuboids2";
     private String version = "3.0.0";
     private String basePath = "plugins/cuboids2/";
-    private boolean verbose = false;
     
     // global settings go into this
     private Region global = new Region();
 
-    // Plugin Settings
-    private boolean useDoubleAction = true;
-    private int regionItem;
-    private int remoteRegionItem;
-    private int inspectorItem;
-    private int sculptItem;
-    private HashMap<String, String> sqlConfig = null;// = new HashMap<String,
-                                                     // String>(0); //<- do not
-                                                     // init before we know if
-                                                     // we need it at all!
-    private int healPower;
-    private int healDelay;
-    private int saveDelay;
+    
+    private HashMap<String, String> sqlConfig = null;
     private boolean autoParent = true;
-
-    // Undo config
-    private int undoSteps = 5;
-    private boolean allowUndo = false;
 
     // Cuboids Default Settings
     HashMap<String, Region.Status> defaultSettings = new HashMap<String, Region.Status>();
 
     ArrayList<Integer> restrictedItems;
+    
+    //The config files
+    PropsFile pluginSetting;
+    PropsFile cuboidSetting;
+    PropsFile dsSetting;
 
     private static Config instance = null;
 
     private Config() {
-        PropsFile pluginSetting = new PropsFile("plugins/cuboids2/settings.properties");
-        PropsFile cuboidSetting = new PropsFile("plugins/cuboids2/cuboid.properties");
-        PropsFile dsSetting = new PropsFile("plugins/cuboids2/data.properties");
-
-        // Read plugin settings!
-        useDoubleAction = pluginSetting.getBoolean("use-double-action-tool", true);
-        regionItem = pluginSetting.getInt("selection-item", 294);
-        remoteRegionItem = pluginSetting.getInt("remote-selection-item", 268);
-        inspectorItem = pluginSetting.getInt("inspector-item", 283);
-        sculptItem = pluginSetting.getInt("sculpt-tool-item", 352);
-        healPower = pluginSetting.getInt("heal-power", 1);
-        healDelay = pluginSetting.getInt("heal-delay", 3);
-        saveDelay = pluginSetting.getInt("autosave-intervall", 30);
-        undoSteps = pluginSetting.getInt("undo-steps", 5);
-        allowUndo = pluginSetting.getBoolean("allow-undo", true);
-
-        verbose = pluginSetting.getBoolean("verbose", true);
-
-        // Default setting for new cuboids
+        pluginSetting =  new PropsFile("plugins/cuboids2/settings.properties");
+        cuboidSetting =  new PropsFile("plugins/cuboids2/cuboid.properties");
+        dsSetting =      new PropsFile("plugins/cuboids2/data.properties");
         
+        // Default setting for new cuboids
         //default-creeper-secure
         defaultSettings.put("creeper-explosion", cuboidSetting.getStatus("default-creeper-explosion", Region.Status.DENY));
         
@@ -198,7 +172,6 @@ public class Config {
             sqlConfig.put("user", dsSetting.getString("sql-user", "hans die"));
             sqlConfig.put("passwd", dsSetting.getString("sql-passwd", "bratwurst"));
         }
-
     }
 
     public static Config get() {
@@ -225,70 +198,64 @@ public class Config {
      * @return the useDoubleAction
      */
     public boolean isUseDoubleAction() {
-        return useDoubleAction;
+        // useDoubleAction = pluginSetting.getBoolean("use-double-action-tool", true);
+        return pluginSetting.getBoolean("use-double-action-tool", true);
     }
 
     /**
      * @return the regionItem
      */
     public int getRegionItem() {
-        return regionItem;
+        return pluginSetting.getInt("selection-item", 294);
     }
 
     /**
      * @return the remoteRegionItem
      */
     public int getRemoteRegionItem() {
-        return remoteRegionItem;
+        return pluginSetting.getInt("remote-selection-item", 268);
     }
 
     /**
      * @return the inspectorItem
      */
     public int getInspectorItem() {
-        return inspectorItem;
+        return pluginSetting.getInt("inspector-item", 283);
     }
 
     /**
      * @return the sculptItem
      */
     public int getSculptItem() {
-        return sculptItem;
+        return pluginSetting.getInt("sculpt-tool-item", 352);
     }
 
     /**
      * @return the healPower
      */
     public int getHealPower() {
-        return healPower;
+        return pluginSetting.getInt("heal-power", 1);
     }
 
     /**
      * @return the healDelay
      */
     public int getHealDelay() {
-        return healDelay;
+        return pluginSetting.getInt("heal-delay", 3);
     }
 
     /**
      * @return the saveDelay
      */
     public int getSaveDelay() {
-        return saveDelay;
+        return pluginSetting.getInt("autosave-intervall", 30);
     }
 
     /**
      * @return the verbose
      */
     public boolean isVerbose() {
-        return verbose;
-    }
-
-    /**
-     * @param verbose the verbose to set
-     */
-    public void setVerbose(boolean verbose) {
-        this.verbose = verbose;
+        return pluginSetting.getBoolean("verbose", true);
     }
 
     /**
@@ -323,14 +290,14 @@ public class Config {
      * @return the undoSteps
      */
     public int getUndoSteps() {
-        return undoSteps;
+        return pluginSetting.getInt("undo-steps", 5);
     }
 
     /**
      * @return the allowUndo
      */
     public boolean isAllowUndo() {
-        return allowUndo;
+        return pluginSetting.getBoolean("allow-undo", true);
     }
 
     public Region getDefaultCuboidSetting(CPlayer player) {
@@ -374,6 +341,15 @@ public class Config {
     public String getLang() {
         //TODO: From config
         return "en_EN";
+    }
+    
+    /**
+     * Save all configuration files
+     */
+    public void saveConfigs() {
+        pluginSetting.save();
+        cuboidSetting.save();
+        dsSetting.save();
     }
 
 }

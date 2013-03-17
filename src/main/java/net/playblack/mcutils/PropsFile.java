@@ -1,15 +1,11 @@
 package net.playblack.mcutils;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-
 import net.playblack.cuboids.regions.Region;
+import net.playblack.cuboids.regions.Region.Status;
+import net.visualillusionsent.utils.PropertiesFile;
+import net.visualillusionsent.utils.UtilityException;
+
+
 
 /**
  * Custom properties file manager
@@ -18,8 +14,9 @@ import net.playblack.cuboids.regions.Region;
  * 
  */
 public class PropsFile {
+    PropertiesFile propsFile;
     String path;
-    private HashMap<String, String> propsRaw;
+    public int startingHashCode;
 
     /**
      * Load the properties file
@@ -27,43 +24,9 @@ public class PropsFile {
      * @param path
      */
     public PropsFile(String path) {
+        propsFile = new PropertiesFile(path);
+        startingHashCode = propsFile.hashCode();
         this.path = path;
-        File f = new File(path);
-        if (!f.exists()) {
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        FileInputStream fstream = null;
-        try {
-            fstream = new FileInputStream(path);
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
-        DataInputStream inStream = new DataInputStream(fstream);
-        BufferedReader prop = new BufferedReader(
-                new InputStreamReader(inStream));
-        propsRaw = new HashMap<String, String>();
-        try {
-            String line = null;
-            while ((line = prop.readLine()) != null) {
-                if (line.startsWith("#") || line.isEmpty()) {
-                    continue;
-                }
-                String[] split = line.split("=");
-                propsRaw.put((split[0]), split[1]);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                prop.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     /**
@@ -74,10 +37,14 @@ public class PropsFile {
      * @return
      */
     public boolean getBoolean(String key, boolean substitute) {
-        if (propsRaw.containsKey(key)) {
-            return Boolean.parseBoolean(propsRaw.get(key));
+        boolean b = substitute;
+        try {
+            b = propsFile.getBoolean(key);
         }
-        return substitute;
+        catch(UtilityException e) {
+            propsFile.setBoolean(key, substitute);
+        }
+        return b;
     }
 
     /**
@@ -88,10 +55,14 @@ public class PropsFile {
      * @return
      */
     public int getInt(String key, int substitute) {
-        if (propsRaw.containsKey(key)) {
-            return Integer.parseInt(propsRaw.get(key));
+        int i = substitute;
+        try {
+            i = propsFile.getInt(key);
         }
-        return substitute;
+        catch(UtilityException e) {
+            propsFile.setInt(key, substitute);
+        }
+        return i;
     }
 
     /**
@@ -102,10 +73,14 @@ public class PropsFile {
      * @return
      */
     public long getLong(String key, long substitute) {
-        if (propsRaw.containsKey(key)) {
-            return Long.parseLong(propsRaw.get(key));
+        long i = substitute;
+        try {
+            i = propsFile.getInt(key);
         }
-        return substitute;
+        catch(UtilityException e) {
+            propsFile.setLong(key, substitute);
+        }
+        return i;
     }
 
     /**
@@ -116,23 +91,34 @@ public class PropsFile {
      * @return
      */
     public String getString(String key, String substitute) {
-        if (propsRaw.containsKey(key)) {
-            return propsRaw.get(key);
+        String i = substitute;
+        try {
+            i = propsFile.getString(key);
         }
-        return substitute;
+        catch(UtilityException e) {
+            propsFile.setString(key, substitute);
+        }
+        return i;
     }
     
     public Region.Status getStatus(String key, Region.Status substitute) {
-        if(propsRaw.containsKey(key)) {
-            boolean value = getBoolean(key, false);
-            if(value == false) {
-                return Region.Status.ALLOW;
-            }
-            else {
-                return Region.Status.DENY;
-            }
+        String i = substitute.name();
+        
+        try {
+            i = propsFile.getString(i);
         }
-        return substitute;
+        catch(UtilityException e) {
+            propsFile.setString(key, substitute.name());
+        }
+        return Status.fromString(i);
+    }
+    
+    public void save() {
+        propsFile.save();
+    }
+    
+    public boolean hasChangedSinceLoad() {
+        return startingHashCode != propsFile.hashCode();
     }
 
 }

@@ -281,7 +281,7 @@ public class MysqlDataLegacy implements BaseData {
     }
 
     @Override
-    public void loadRegion(String name, String world) {
+    public void loadRegion(String name, String world, int dimension) {
         throw new UnsupportedOperationException("Loading single Regions in legacy mode is not supported!");
     }
 

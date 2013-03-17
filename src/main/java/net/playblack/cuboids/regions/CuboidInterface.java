@@ -28,8 +28,7 @@ import net.playblack.mcutils.Location;
  */
 public class CuboidInterface {
     private RegionManager regions;
-    private ScheduledExecutorService threadManager = Executors
-            .newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
+    private ScheduledExecutorService threadManager = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
     public HashMap<String, CItem[]> playerInventories = new HashMap<String, CItem[]>();
 
     private static CuboidInterface instance = null;

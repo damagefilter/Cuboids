@@ -1,4 +1,5 @@
 import net.playblack.cuboids.Bootstrapper;
+import net.playblack.cuboids.Config;
 import net.playblack.cuboids.converters.Loader;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.RegionManager;
@@ -15,6 +16,7 @@ public class Cuboids2 extends Plugin {
     public void disable() {
         CuboidInterface.get().killTasks();
         RegionManager.get().save(false, true);
+        Config.get().saveConfigs();
     }
 
     @Override
