@@ -201,6 +201,9 @@ public abstract class CPlayer implements IBaseEntity {
      * @param r
      */
     public void setRegion(Region r) {
+        if(r == currentRegion) {
+            return;
+        }
         sendFarewell();
         if(r == null) {
             currentRegion = null;

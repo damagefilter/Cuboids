@@ -778,14 +778,11 @@ public class CuboidInterface {
         String dimName = player.getWorld().dimensionFromId(dimension);
 
         int perPage = 10, maxPages = 0, amount = 0;
-        ArrayList<Region> cuboids = regions.getAllInDimension(world,
-                dimension);
+        ArrayList<Region> cuboids = regions.getAllInDimension(world, dimension);
         // Following is all taken from CuboidPlugin
         // Because I suck at making paging
         if (cuboids == null || cuboids.isEmpty()) {
-            MessageSystem.customMessage(player, ColorManager.LightGray,
-                    "No cuboids for world " + world + " in Dimension "
-                            + dimName);
+            MessageSystem.customMessage(player, ColorManager.LightGray, "No cuboids for world " + world + " in Dimension " + dimName);
             return;
         }
         maxPages = (int) Math.ceil(cuboids.size() / perPage);
@@ -806,9 +803,7 @@ public class CuboidInterface {
             Region cuboid = cuboids.get(i);
             MessageSystem.customMessage(
                     player,
-                    ColorManager.LightGray,
-                    cuboid.getName() + " : " + ColorManager.LightGreen
-                            + cuboid.getFlagList());
+                    ColorManager.LightGray, cuboid.getName() + " : " + cuboid.getFlagList());
         }
     }
 

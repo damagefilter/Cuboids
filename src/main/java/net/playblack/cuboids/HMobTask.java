@@ -49,7 +49,7 @@ public class HMobTask implements Runnable {
 
     public synchronized void run() {
         for (Region tree : nodes) {
-            for (Region node : tree.getChildsDeep()) {
+            for (Region node : tree.getChildsDeep(new ArrayList<Region>())) {
                 if (node.getProperty("mob-spawn") == Status.DENY) {
                     // if mobs are not allowed to spawn, more-mobs flag is ignored
                     continue;

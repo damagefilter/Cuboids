@@ -195,7 +195,7 @@ public class RegionManager {
         ArrayList<Region> workerList = new ArrayList<Region>();
         ArrayList<Region> rootList = new ArrayList<Region>();
         for (Region tree : rootNodes) {
-            workerList.addAll(tree.getChildsDeep());
+            tree.getChildsDeep(workerList);
         }
         for (Region tree : workerList) {
             Region parent = getPossibleParent(tree);
@@ -330,7 +330,7 @@ public class RegionManager {
         for (Region tree : rootNodes) {
             if (tree.equalsWorld(world, dimension)) {
                 if (tree.isWithin(v)) {
-                    for (Region node : tree.getChildsDeep()) {
+                    for (Region node : tree.getChildsDeep(new ArrayList<Region>())) {
                         if (node.isWithin(v)) {
                             list.add(node);
                         }
@@ -355,9 +355,7 @@ public class RegionManager {
         ArrayList<Region> list = new ArrayList<Region>();
         for (Region tree : rootNodes) {
             if (tree.equalsWorld(world, dimension)) {
-                for (Region node : tree.getChildsDeep()) {
-                    list.add(node);
-                }
+                tree.getChildsDeep(list);
             }
         }
 
@@ -378,7 +376,6 @@ public class RegionManager {
      */
     public Region getCuboidByName(String name, String world, int dimension) {
         for (Region tree : rootNodes) {
-            
             if (tree.equalsWorld(world, dimension)) {
                 Region tmp = tree.queryChilds(name);
                 if(tmp != null) {

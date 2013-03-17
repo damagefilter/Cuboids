@@ -1,8 +1,8 @@
 package net.playblack.cuboids.regions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -382,6 +382,9 @@ public class Region {
      */
     public Region queryChilds(String name) {
         Region candidate = null;
+        if(this.name.equals(name)) {
+            return this;
+        }
         if(parent != null &&  parent.name.equals(name)) {
             return parent;
         }
@@ -517,13 +520,15 @@ public class Region {
      * and returns an unmodifiable view of this list
      * @return
      */
-    public ArrayList<Region> getChildsDeep() {
-        ArrayList<Region> collection = new ArrayList<Region>();
-        collection.addAll(childs);
+    public List<Region> getChildsDeep(List<Region> collection) {
         for(Region r : childs) {
-            collection.addAll(r.getChildsDeep());
+            
+            collection.addAll(r.getChildsDeep(collection));
         }
-        return (ArrayList<Region>) Collections.unmodifiableList(collection);
+        if(!collection.contains(this)) {
+            collection.add(this);
+        }
+        return collection;
     }
     
     
@@ -1105,7 +1110,10 @@ public class Region {
         int count = 0;
         for(String key : properties.keySet()) {
             if(count <= 3) {
-                builder.append(ColorManager.Rose).append(key).append(": ").append(ColorManager.LightGreen).append(properties.get(key).name());
+                builder.append(ColorManager.Rose).append(key).append(": ")
+                .append(ColorManager.LightGreen)
+                .append(properties.get(key).name())
+                .append(", ");
             }
             else {
                 count = 0;

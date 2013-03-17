@@ -25,6 +25,7 @@ public class BlockBreakEvent extends CuboidEvent implements Cancellable {
 
     @Override
     public void cancel() {
+        System.out.println("Cancelling " + getClass().getSimpleName());
         isCancelled = true;
     }
 

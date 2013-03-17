@@ -15,6 +15,7 @@ import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.LineBlockTracer;
 import net.playblack.mcutils.Location;
+import net.playblack.mcutils.Vector;
 
 /**
  * Handles native selection operations
@@ -45,19 +46,30 @@ public class SelectionOperator implements ActionListener {
      * @param rightclick this must be set=true on rightclick events for doubleAction mode.
      * Has no effect on classic selection mode
      */
-    private boolean setSelectionPoint(CPlayer player, Location location, boolean rightclick) {
-        if(player.getItemInHand().getId() != Config.get().getRegionItem()) {
-            return false;
+    private boolean setSelectionPoint(CPlayer player, Location location, boolean rightclick, boolean remote) {
+        if(remote) {
+            if(player.getItemInHand().getId() != Config.get().getRemoteRegionItem()) {
+                return false;
+            }
+            System.out.println("Remote selection");
         }
+        else {
+            if(player.getItemInHand().getId() != Config.get().getRegionItem()) {
+                return false;
+            }
+        }
+        
         if(!player.hasPermission("cIgnoreRestrictions")) {
             if(!player.hasPermission("cselect")) {
                 return false;
             }
         }
         if(Config.get().isUseDoubleAction()) {
+            System.out.println("selection in normal mode");
             setPointNormalStyle(player, location, rightclick);
         }
         else {
+            System.out.println("selection in classic mode");
             setPointClassicStyle(player, location);
         }
         return true;
@@ -115,26 +127,28 @@ public class SelectionOperator implements ActionListener {
     @ActionHandler
     public void onBlockRightClick(BlockRightClickEvent event) {
         //Set seletion?
-        if(setSelectionPoint(event.getPlayer(), event.getLocation(), true)) {
-            event.cancel();
+        System.out.println("Rightclick selection");
+        if(event.getPlayer().getItemInHand().getId() == Config.get().getRegionItem()) {
+            setSelectionPoint(event.getPlayer(), event.getLocation(), true, false);
         }
-        //Explain the region?
-        if(explainRegion(event.getPlayer(), event.getLocation())) {
-            event.cancel();
-        }
+        explainRegion(event.getPlayer(), event.getLocation());
     }
     
     @ActionHandler
     public void onArmSwing(ArmSwingEvent event) {
-        Location loc = new Location(new LineBlockTracer(event.getPlayer()).getTargetVector());
-        setSelectionPoint(event.getPlayer(), loc, false);
+        Vector v = new LineBlockTracer(event.getPlayer()).getTargetVector();
+        if(v == null) {
+            return;
+        }
+        Location loc = new Location(v);
+        System.out.println("armswing selection");
+        setSelectionPoint(event.getPlayer(), loc, false, true);
     }
     
     @ActionHandler
     public void onBlockLeftClick(BlockLeftClickEvent event) {
-        if(!setSelectionPoint(event.getPlayer(), event.getLocation(), false)) {
-            event.cancel();
-        }
+        System.out.println("onBlockLOeftClick selection");
+        setSelectionPoint(event.getPlayer(), event.getLocation(), false, false);
     }
     
     //Register that thing

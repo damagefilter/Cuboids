@@ -57,7 +57,7 @@ public class XmlData implements BaseData {
             try {
                 for(Region r : treeList) {
                     regionFiles.add(regionToDom(r));
-                    for(Region reg : r.getChildsDeep()) {
+                    for(Region reg : r.getChildsDeep(new ArrayList<Region>())) {
                         writeFile(regionToDom(reg));
                     }
                 }
@@ -78,6 +78,7 @@ public class XmlData implements BaseData {
         if(!regionFolder.exists()) {
             regionFolder.mkdirs();
         }
+        int counter = 0;
         //Load all files sorted by parents.
         //Parentless regions get sorted into "root"
         for(File file : regionFolder.listFiles()) {
@@ -88,7 +89,7 @@ public class XmlData implements BaseData {
                     String parentName = meta.getChildText("parent");
                     Region r = domToRegion(rdoc);
                     if(r != null) {
-                        if(parentName.isEmpty()) {
+                        if(parentName == null || parentName.isEmpty()) {
                             loadedRegions.get("root").add(r);
                         }
                         else {
@@ -106,6 +107,7 @@ public class XmlData implements BaseData {
                     log.logMessage(e.getMessage(), "SEVERE");
                 }
             }
+            counter++;
         }
         
         //Sort out parents and stuff.
@@ -128,6 +130,7 @@ public class XmlData implements BaseData {
         for(Region root : loadedRegions.get("root")) {
             regionMan.addRoot(root);
         }
+        EventLogger.getInstance().logMessage("Loaded " + counter + " regions", "INFO");
     }
     
     /**
@@ -158,7 +161,8 @@ public class XmlData implements BaseData {
     }
     
     private void writeFile(Document xmlDoc) throws IOException {
-        FileWriter writer = new FileWriter("plugins/cuboids2/regions/" + xmlDoc.getRootElement().getChild("meta").getChildText("name") + ".xml");
+        Element meta = xmlDoc.getRootElement().getChild("meta");
+        FileWriter writer = new FileWriter("plugins/cuboids2/regions/" + meta.getChildText("world") + "_" + meta.getChildText("name") + "_" + meta.getChildText("dimension") + ".xml");
         xmlSerializer.output(xmlDoc, writer);
     }
     
@@ -168,13 +172,15 @@ public class XmlData implements BaseData {
         Element meta = new Element("meta");
         
         meta.addContent(new Element("name").setText(r.getName()));
-        meta.addContent(new Element("parent").setText(r.getParent().getName()));
+        if(r.hasParent()) {
+            meta.addContent(new Element("parent").setText(r.getParent().getName()));
+        }
         meta.addContent(new Element("priority").setText(""+r.getPriority()));
         meta.addContent(new Element("world").setText(r.getWorld()));
         meta.addContent(new Element("dimension").setText(""+r.getDimension()));
         meta.addContent(new Element("origin").setText(r.getOrigin().serialize().toString()));
         meta.addContent(new Element("offset").setText(r.getOffset().serialize().toString())); 
-        
+        regionElement.addContent(meta);
         Element properties = new Element("properties");
         regionElement.addContent(properties);
         HashMap<String, Status> props = r.getAllProperties();

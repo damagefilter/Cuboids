@@ -30,7 +30,7 @@ public class Config {
     private Region global = new Region();
 
     // Plugin Settings
-    private boolean useDoubleAction = false;
+    private boolean useDoubleAction = true;
     private int regionItem;
     private int remoteRegionItem;
     private int inspectorItem;
@@ -61,8 +61,7 @@ public class Config {
         PropsFile dsSetting = new PropsFile("plugins/cuboids2/data.properties");
 
         // Read plugin settings!
-        useDoubleAction = pluginSetting.getBoolean("use-double-action-tool",
-                false);
+        useDoubleAction = pluginSetting.getBoolean("use-double-action-tool", true);
         regionItem = pluginSetting.getInt("selection-item", 294);
         remoteRegionItem = pluginSetting.getInt("remote-selection-item", 268);
         inspectorItem = pluginSetting.getInt("inspector-item", 283);
