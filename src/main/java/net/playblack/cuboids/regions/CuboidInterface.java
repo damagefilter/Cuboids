@@ -195,16 +195,13 @@ public class CuboidInterface {
      * @param to
      */
     public void handleRegionsForPlayer(CPlayer player, Location from, Location to) {
-//        if(from != null) {
-//            regions.removePlayerFromRegion(player, from);
-//        }
         if(player.getCurrentRegion() != null) {
             if(!player.getCurrentRegion().isWithin(player.getLocation())) {
                 player.setRegion(null);
             }
         }
         if(to != null) {
-            regions.addPlayerToRegions(player, to);
+            player.setRegion(RegionManager.get().getActiveRegion(to, true));
         }
     }
 
