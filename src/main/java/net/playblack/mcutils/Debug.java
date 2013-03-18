@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  * 
  */
 public class Debug {
-    private static Logger log;
+    private static Logger log = Logger.getLogger("Minecraft");
     private static StringBuilder cacheMessage = new StringBuilder();
     private static boolean cacheRunning = false;
 
@@ -23,7 +23,7 @@ public class Debug {
             cacheMessage(message, true);
             return;
         }
-        log.log(Level.INFO, message);
+        log.log(Level.INFO, "[Cuboids2] " + message);
     }
     
     /**
@@ -35,7 +35,7 @@ public class Debug {
             cacheMessage(msg, true);
             return;
         }
-        log.log(Level.WARNING, msg);
+        log.log(Level.WARNING, "[Cuboids2] " + msg);
     }
     
     /**
@@ -47,7 +47,7 @@ public class Debug {
             cacheMessage(msg, true);
             return;
         }
-        log.log(Level.SEVERE, msg);
+        log.log(Level.SEVERE, "[Cuboids2] " + msg);
     }
     
     /**
@@ -55,7 +55,7 @@ public class Debug {
      * @param t
      */
     public static void logStack(Throwable t) {
-        log.log(Level.WARNING, t.getMessage(), t);
+        log.log(Level.WARNING, "[Cuboids2] " + t.getMessage(), t);
     }
     
     public static void println(String msg) {
@@ -84,10 +84,8 @@ public class Debug {
 
     /**
      * Log cached messages as one and clear the cache for new stuff
-     * 
-     * @param level
      */
-    public static void logCachedMessage(String level) {
+    public static void logCachedMessage() {
         cacheRunning = false;
         log(cacheMessage.toString());
         cacheMessage = new StringBuilder();

@@ -39,18 +39,18 @@ public class Bootstrapper {
 
         // ------------------------------------------------------
         CServer.setServer(server);
-        Debug.logCachedMessage("INFO");
+        Debug.logCachedMessage();
 
         // ------------------------------------------------------
         Config.get(); // init this thing for a first time
         Debug.cacheMessage("Version ... " + Config.get().getVersion(),
                 true);
-        Debug.logCachedMessage("INFO");
+        Debug.logCachedMessage();
 
         // ------------------------------------------------------
         Debug.cacheMessage("Tasks ...", false);
         Debug.cacheMessage("done!", false);
-        Debug.logCachedMessage("INFO");
+        Debug.logCachedMessage();
 
         // ------------------------------------------------------
         Debug.cacheMessage("Foreign Cuboid files... ", true);
@@ -70,14 +70,14 @@ public class Bootstrapper {
         } else {
             Debug.cacheMessage("Nothing foreign to load found", false);
         }
-        Debug.logCachedMessage("INFO");
+        Debug.logCachedMessage();
 
         // ------------------------------------------------------
         Debug.cacheMessage("Native Cuboid Nodes...", true);
         RegionManager.get().load();
         RegionManager.get().save(true, true); // Save back
         Debug.cacheMessage("done!", false);
-        Debug.logCachedMessage("INFO");
+        Debug.logCachedMessage();
         FlatfileDataLegacy.cleanupFiles();
         
         Debug.log("Setting up Event Operators");
