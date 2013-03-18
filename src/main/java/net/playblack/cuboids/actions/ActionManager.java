@@ -11,7 +11,7 @@ import java.util.List;
 
 import net.playblack.cuboids.actions.events.CuboidEvent;
 import net.playblack.cuboids.exceptions.InvalidActionHandlerException;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 
 /**
@@ -53,7 +53,7 @@ public class ActionManager {
         //Props and thx and Kudos to the Bukkit folks for I took some pages out of their book (JavaPluginLoader)
         
         Method[] allMethods = ToolBox.safeMergeArrays(listener.getClass().getMethods(), listener.getClass().getDeclaredMethods(), new Method[1]);
-        EventLogger.getInstance().logMessage("methods in " + listener.getClass().getName() + ": " + allMethods.length, "INFO");
+        Debug.println("methods in " + listener.getClass().getName() + ": " + allMethods.length);
         //First check the public methods for Actionhandler annotations
         for(final Method m : allMethods) {
             final ActionHandler handler = m.getAnnotation(ActionHandler.class);

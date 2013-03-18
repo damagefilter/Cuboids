@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 import net.playblack.cuboids.converters.CuboidShell;
 import net.playblack.cuboids.converters.Loader;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 
 public class CuboidFLoader implements Loader {
 
@@ -35,9 +35,7 @@ public class CuboidFLoader implements Loader {
                 }
             }
         } catch (Exception e) {
-            EventLogger.getInstance().logMessage(
-                    "Exception while loading CuboidF: " + e.getMessage(),
-                    "SEVERE");
+            Debug.logWarning("Exception while loading CuboidF: " + e.getMessage());
         }
         return shells;
     }

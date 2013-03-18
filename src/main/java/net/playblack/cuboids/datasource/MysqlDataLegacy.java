@@ -12,7 +12,7 @@ import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 
 import net.playblack.mcutils.Vector;
@@ -28,13 +28,11 @@ public class MysqlDataLegacy implements BaseData {
 
     private HashMap<String, String> cfg;
     HashMap<String, ArrayList<Region>> loadedRegions = new HashMap<String, ArrayList<Region>>();
-    private EventLogger log;
     private boolean connected = false;
     private Connection connection;
 
-    public MysqlDataLegacy(HashMap<String, String> conf, EventLogger log) {
+    public MysqlDataLegacy(HashMap<String, String> conf) {
         cfg = conf;
-        this.log = log;
     }
 
     /**
@@ -57,9 +55,7 @@ public class MysqlDataLegacy implements BaseData {
                 return connection;
             }
         } catch (SQLException e) {
-            log.logMessage(
-                    "Regions2: SQL Connection Problem: " + e.getMessage(),
-                    "SEVERE");
+            Debug.logWarning("Regions2: SQL Connection Problem: " + e.getMessage());
             // log.logMessage("URL: "+cfg.get("url"), "INFO");
             return null;
         }
@@ -180,8 +176,8 @@ public class MysqlDataLegacy implements BaseData {
                         Double.parseDouble(point2[2]));
                 cube.setBoundingBox(p1, p2);
             } catch (NumberFormatException e) {
-                log.logMessage("Failed to parse points for Region "
-                        + cube.getName() + ", stopping!", "SEVERE");
+                Debug.logWarning("Failed to parse points for Region "
+                        + cube.getName() + ", stopping!");
                 e.printStackTrace();
                 return null;
             }
@@ -228,7 +224,7 @@ public class MysqlDataLegacy implements BaseData {
         RegionManager regionMan = RegionManager.get();
         
         if (getConnection() == null) {
-            log.logMessage("Failed to establish Database Connection, cannot load Region data! (legacy)", "SEVERE");
+            Debug.logError("Failed to establish Database Connection, cannot load Region data! (legacy)");
             return; // uh oh ...
         }
         
@@ -236,8 +232,8 @@ public class MysqlDataLegacy implements BaseData {
             PreparedStatement ps = getConnection().prepareStatement("SELECT * FROM nodes");
             loadedRegions = resultSetToRegion(ps.executeQuery());
         } catch (SQLException e) {
-            log.logMessage("Failed to load Region Nodes (legacy). Reason: "
-                    + e.getMessage(), "SEVERE");
+            Debug.logError("Failed to load Region Nodes (legacy). Reason: "
+                    + e.getMessage());
             e.printStackTrace();
             return;
         }
@@ -249,7 +245,7 @@ public class MysqlDataLegacy implements BaseData {
                 for(Region r : loadedRegions.get(key)) {
                     Region parent = findByName(key);
                     if(parent == null) {
-                        log.logMessage("Cannot find parent " + key + ". Dropping region " + r.getName(), "SEVERE");
+                        Debug.logWarning("Cannot find parent " + key + ". Dropping region " + r.getName());
                         continue; //Drop the region
                     }
                     r.setParent(parent);

@@ -9,7 +9,7 @@ import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 
 /**
  * Remove blocks in a cuboid selection
@@ -57,7 +57,7 @@ public class Cdel extends CBaseCommand {
                 MessageSystem.failMessage(player, "selectionNotDeleted");
             }
         } catch (BlockEditLimitExceededException e) {
-            EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+            Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {

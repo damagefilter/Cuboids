@@ -11,7 +11,7 @@ import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
@@ -26,7 +26,7 @@ import net.playblack.mcutils.Vector;
 public class FlatfileDataLegacy implements BaseData {
 
     private Object lock = new Object();
-    private EventLogger log;
+
     
     //List of cuboids with a parent that wasn't loaded yet 
     //Parent -> childs
@@ -35,8 +35,8 @@ public class FlatfileDataLegacy implements BaseData {
     // List of loaded nodes
     private ArrayList<Region> nodelist = new ArrayList<Region>();
 
-    public FlatfileDataLegacy(EventLogger log) {
-        this.log = log;
+    public FlatfileDataLegacy() {
+
     }
 
     @Override
@@ -58,7 +58,7 @@ public class FlatfileDataLegacy implements BaseData {
     
     @Override
     public void loadAll() {
-        log.logMessage("**** ATTEMPTING TO LOAD CUBOID-E FROM FILE **** ", "INFO");
+        Debug.log("**** ATTEMPTING TO LOAD CUBOID-E FROM FILE **** ");
         RegionManager handler = RegionManager.get();
         synchronized (lock) {
             
@@ -92,10 +92,10 @@ public class FlatfileDataLegacy implements BaseData {
                 }
                 reader = null;
             } catch (ArrayIndexOutOfBoundsException e) {
-                log.logMessage("Cuboids2: Failed to load Cuboid Data files!(AIOOBE) " + e.getMessage(), "SEVERE");
+                Debug.logWarning("Cuboids2: Failed to load Cuboid Data files!(AIOOBE) " + e.getMessage());
                 // e.printStackTrace();
             } catch (IOException f) {
-                log.logMessage("Cuboids2: Failed to load Cuboid Data files!(IOE) " + f.getMessage(), "SEVERE");
+                Debug.logWarning("Cuboids2: Failed to load Cuboid Data files!(IOE) " + f.getMessage());
                 // f.printStackTrace();
             }
             
@@ -151,7 +151,7 @@ public class FlatfileDataLegacy implements BaseData {
                 }
             }
             handler.cleanParentRelations();
-            log.logMessage("Cuboids2: Cuboids loaded successfully", "INFO");
+            Debug.log("Cuboids2: Cuboids loaded successfully");
         }
     }
 
@@ -195,7 +195,7 @@ public class FlatfileDataLegacy implements BaseData {
     private Region csvToCuboid(Region cube, String str) {
         String[] csv = str.split(",");
         
-        log.logMessage("Cuboids split amount: " + csv.length + " for " + csv[0], "INFO");
+        Debug.println("Cuboids split amount: " + csv.length + " for " + csv[0]);
         if (csv.length >= 23) {
             cube.setName(csv[0]);
             cube.setPriority(Integer.parseInt(csv[2]));

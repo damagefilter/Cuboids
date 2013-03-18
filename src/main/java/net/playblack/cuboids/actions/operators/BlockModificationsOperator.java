@@ -15,6 +15,7 @@ import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
 import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
+import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
 import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
@@ -44,8 +45,8 @@ public class BlockModificationsOperator implements ActionListener {
         return toRemove;
     }
     
-    public boolean shouldCancelExplosion(Location loc) {
-        return RegionManager.get().getActiveRegion(loc, false).getProperty("creeper-explosion") == Status.DENY;
+    public boolean shouldCancelExplosion(Location loc, ExplosionType type) {
+        return RegionManager.get().getActiveRegion(loc, false).getProperty("creeper-explosion") == Status.DENY && type == ExplosionType.CREEPER;
     }
     
     /**
@@ -95,7 +96,7 @@ public class BlockModificationsOperator implements ActionListener {
     
     @ActionHandler
     public void onEntityExplode(ExplosionEvent event) {
-        if(shouldCancelExplosion(event.getLocation())) {
+        if(shouldCancelExplosion(event.getLocation(), event.getExplosionType())) {
             event.cancel();
             return;
         }

@@ -6,7 +6,6 @@ import net.playblack.cuboids.datasource.XmlData;
 import net.playblack.cuboids.datasource.MysqlDataLegacy;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.mcutils.ColorManager;
-import net.playblack.mcutils.EventLogger;
 
 /**
  * Crossload cuboids from datasources
@@ -29,11 +28,10 @@ public class CloadFrom extends CBaseCommand {
             MessageSystem.failMessage(player, "permissionDenied");
         }
         if (command[1].equalsIgnoreCase("mysql")) {
-            MysqlDataLegacy ds = new MysqlDataLegacy(Config.get().getSqlConfig(),
-                    EventLogger.getInstance());
+            MysqlDataLegacy ds = new MysqlDataLegacy(Config.get().getSqlConfig());
             ds.loadAll();
         } else {
-            XmlData ds = new XmlData(EventLogger.getInstance());
+            XmlData ds = new XmlData();
             ds.loadAll();
         }
         MessageSystem.successMessage(player, "cuboidLoadedAll");

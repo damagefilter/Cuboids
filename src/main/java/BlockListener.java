@@ -135,7 +135,6 @@ public class BlockListener extends PluginListener {
         }
         
         Location l = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
-        
         ExplosionEvent event = new ExplosionEvent(new CanaryBaseEntity(e), l, ExplosionType.fromId(b.getStatus()), blocks);
         if(event.isCancelled()) {
             return true;
@@ -143,6 +142,7 @@ public class BlockListener extends PluginListener {
         //Not cancelled, process the list of blocks and remove those that should stay
         blocks = event.getAffectedBlocks();
         for(Location m : blocks.keySet()) {
+            
             for(int i = 0; i < blocksaffected.size(); ) {
                 Block x = (Block) blocksaffected.get(i);
                 if(m.samePosition(x.getX(), x.getY(), x.getZ())) {

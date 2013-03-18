@@ -11,7 +11,7 @@ import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.ColorManager;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 
 /**
  * Backup an area
@@ -46,7 +46,7 @@ public class Cbackup extends CBaseCommand {
             try {
                 tmp = gen.getWorldContent(tmp);
             } catch (BlockEditLimitExceededException e) {
-                EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+                Debug.logWarning(e.getMessage());
                 MessageSystem.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
                 return;

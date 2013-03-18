@@ -3,12 +3,10 @@ import net.playblack.cuboids.commands.*;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.selections.SelectionManager;
-import net.playblack.mcutils.EventLogger;
 
 public class CommandListener extends PluginListener {
     @Override
     public boolean onCommand(Player player, String[] split) {
-        EventLogger.getInstance().logMessage("Processing command...", "DEBUG");
         SelectionManager.get().getPlayerSelection(player.getName());
         CPlayer cplayer;
         try {
@@ -18,11 +16,7 @@ public class CommandListener extends PluginListener {
             cplayer = new CanaryPlayer(player);
         }
         CBaseCommand command;
-        EventLogger.getInstance().logMessage(
-                "Creating player: " + cplayer.toString(), "DEBUG");
-        EventLogger.getInstance().logMessage(
-                "Receiving command: " + etc.combineSplit(0, split, " ").trim(),
-                "DEBUG");
+
         if (split[0].equalsIgnoreCase("/chelp")) {
             command = new Chelp();
             command.execute(cplayer, split);
@@ -361,7 +355,6 @@ public class CommandListener extends PluginListener {
             command.execute(cplayer, split);
             return true;
         }
-        EventLogger.getInstance().logMessage("No C2 command - returning false", "DEBUG");
         return false;
     }
 }

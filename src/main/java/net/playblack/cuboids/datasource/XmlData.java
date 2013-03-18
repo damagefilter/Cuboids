@@ -18,7 +18,7 @@ import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 import net.visualillusionsent.utils.SystemUtils;
@@ -33,13 +33,11 @@ import net.visualillusionsent.utils.SystemUtils;
 public class XmlData implements BaseData {
 
     private Object lock = new Object();
-    private EventLogger log;
     /** Used to serialize the XML data into a bytestream */
     private XMLOutputter xmlSerializer = new XMLOutputter(Format.getPrettyFormat().setExpandEmptyElements(true).setOmitDeclaration(true).setOmitEncoding(true).setLineSeparator(SystemUtils.LINE_SEP));
     private SAXBuilder regionBuilder = new SAXBuilder();
     private HashMap<String,ArrayList<Region>> loadedRegions = new HashMap<String,ArrayList<Region>>();
-    public XmlData(EventLogger log) {
-        this.log = log;
+    public XmlData() {
     }
 
     @Override
@@ -47,7 +45,7 @@ public class XmlData implements BaseData {
         try {
             writeFile(regionToDom(node));
         } catch (IOException e) {
-            log.logMessage(e.getMessage(), "WARNING");
+            Debug.log(e.getMessage());
         }
     }
 
@@ -64,7 +62,7 @@ public class XmlData implements BaseData {
                 }
             }
             catch(IOException e) {
-                log.logMessage(e.getMessage(), "WARNING");
+                Debug.log(e.getMessage());
             }
             
         }
@@ -102,10 +100,10 @@ public class XmlData implements BaseData {
                     }
                 } 
                 catch (JDOMException e) {
-                    log.logMessage(e.getMessage(), "SEVERE");
+                    Debug.logWarning(e.getMessage());
                 } 
                 catch (IOException e) {
-                    log.logMessage(e.getMessage(), "SEVERE");
+                    Debug.logWarning(e.getMessage());
                 }
             }
             counter++;
@@ -118,7 +116,7 @@ public class XmlData implements BaseData {
                 for(Region r : loadedRegions.get(key)) {
                     Region parent = findByName(key);
                     if(parent == null) {
-                        log.logMessage("Cannot find parent " + key + ". Dropping region " + r.getName(), "SEVERE");
+                        Debug.logWarning("Cannot find parent " + key + ". Dropping region " + r.getName());
                         continue; //Drop the region
                     }
                     r.setParent(parent);
@@ -131,7 +129,7 @@ public class XmlData implements BaseData {
         for(Region root : loadedRegions.get("root")) {
             regionMan.addRoot(root);
         }
-        EventLogger.getInstance().logMessage("Loaded " + counter + " regions", "INFO");
+        Debug.log("Loaded " + counter + " regions");
     }
     
     /**
@@ -163,9 +161,9 @@ public class XmlData implements BaseData {
             }
             RegionManager.get().addRegion(r);
         } catch (JDOMException e) {
-            log.logMessage(e.getMessage(), "SEVERE");
+            Debug.logWarning(e.getMessage());
         } catch (IOException e) {
-            log.logMessage(e.getMessage(), "SEVERE");
+            Debug.logWarning(e.getMessage());
         }
     }
 
@@ -228,7 +226,7 @@ public class XmlData implements BaseData {
             newRegion.setOrigin(Vector.deserialize(meta.getChildText("origin")));
             newRegion.setOffset(Vector.deserialize(meta.getChildText("offset")));
         } catch (DeserializeException e) {
-            log.logMessage(e.getMessage() + " - dropping region!", "WARNING");
+            Debug.logWarning(e.getMessage() + " - dropping region!");
             return null;
         }
         for(Element prop : properties.getChildren()) {

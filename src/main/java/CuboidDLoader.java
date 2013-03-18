@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import net.playblack.cuboids.converters.CuboidShell;
 import net.playblack.cuboids.converters.Loader;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 
 public class CuboidDLoader implements Loader {
 
@@ -44,17 +44,9 @@ public class CuboidDLoader implements Loader {
             }
         } catch (IOException e) {
             // CuboidPlugin.log.severe("CuboidPlugin : severe error while loading cuboids");
-            EventLogger
-                    .getInstance()
-                    .logMessage(
-                            "IOException while loading CuboidD files! (File permissions?)",
-                            "WARNING");
+            Debug.logWarning("IOException while loading CuboidD files! (File permissions?)");
         } catch (ClassNotFoundException f) {
-            EventLogger
-                    .getInstance()
-                    .logMessage(
-                            "CuboidD class definition could not be found. Implementation failure! Report back to author!",
-                            "WARNING");
+            Debug.logWarning("CuboidD class definition could not be found. Implementation failure! Report back to author!");
         }
         return shells;
     }

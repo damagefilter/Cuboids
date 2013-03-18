@@ -1,7 +1,7 @@
 package net.playblack.cuboids;
 
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 
 /**
  * Save cuboids.
@@ -13,10 +13,8 @@ public class CuboidSaveTask implements Runnable {
 
     @Override
     public synchronized void run() {
-        EventLogger.getInstance().logMessage("Saving nodes", "INFO");
+        Debug.log("Saving nodes");
         RegionManager.get().save(false, false);
-        EventLogger.getInstance().logMessage(
-                "Next save in " + Config.get().getSaveDelay()
-                        + " minutes", "INFO");
+        Debug.log("Next save in " + Config.get().getSaveDelay() + " minutes");
     }
 }

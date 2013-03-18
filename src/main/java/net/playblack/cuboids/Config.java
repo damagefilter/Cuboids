@@ -12,7 +12,6 @@ import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
-import net.playblack.mcutils.EventLogger;
 import net.playblack.mcutils.PropsFile;
 
 /**
@@ -353,9 +352,9 @@ public class Config {
     //TODO: More datasource stuff
     public BaseData getDataSource() {
         if (sqlConfig == null) {
-            return new XmlData(EventLogger.getInstance());
+            return new XmlData();
         } else {
-            return new MysqlDataLegacy(sqlConfig, EventLogger.getInstance());
+            return new MysqlDataLegacy(sqlConfig);
         }
     }
 

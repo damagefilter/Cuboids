@@ -9,7 +9,7 @@ import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.ColorManager;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 
 /**
@@ -69,7 +69,7 @@ public class Credo extends CBaseCommand {
             try {
                 gen.execute(player, false);
             } catch (BlockEditLimitExceededException e) {
-                EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+                Debug.logWarning(e.getMessage());
                 MessageSystem.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
             } catch (SelectionIncompleteException e) {

@@ -9,7 +9,7 @@ import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 
 /**
  * Copy a selection into the clipboard
@@ -43,7 +43,7 @@ public class Ccopy extends CBaseCommand {
         try {
             sel = gen.getWorldContent(sel);
         } catch (BlockEditLimitExceededException e) {
-            EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+            Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
         } catch (SelectionIncompleteException e) {

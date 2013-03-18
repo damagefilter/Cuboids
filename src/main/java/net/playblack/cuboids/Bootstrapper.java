@@ -16,7 +16,7 @@ import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.help.CommandHelper;
 //import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 
 /**
  * The Bootstrapper takes care of loading all the required components to run the
@@ -35,26 +35,25 @@ public class Bootstrapper {
      * @param loaders
      */
     public Bootstrapper(CServer server, Loader[] loaders) {
-        EventLogger log = EventLogger.getInstance();
-        log.cacheMessage("Loading Cuboids2 ...", true);
+        Debug.cacheMessage("Loading Cuboids2 ...", true);
 
         // ------------------------------------------------------
         CServer.setServer(server);
-        log.logCachedMessage("INFO");
+        Debug.logCachedMessage("INFO");
 
         // ------------------------------------------------------
         Config.get(); // init this thing for a first time
-        log.cacheMessage("Version ... " + Config.get().getVersion(),
+        Debug.cacheMessage("Version ... " + Config.get().getVersion(),
                 true);
-        log.logCachedMessage("INFO");
+        Debug.logCachedMessage("INFO");
 
         // ------------------------------------------------------
-        log.cacheMessage("Tasks ...", false);
-        log.cacheMessage("done!", false);
-        log.logCachedMessage("INFO");
+        Debug.cacheMessage("Tasks ...", false);
+        Debug.cacheMessage("done!", false);
+        Debug.logCachedMessage("INFO");
 
         // ------------------------------------------------------
-        log.cacheMessage("Foreign Cuboid files... ", true);
+        Debug.cacheMessage("Foreign Cuboid files... ", true);
         boolean hasConverted = false;
         if (loaders != null) {
             Converter c = new Converter();
@@ -67,21 +66,21 @@ public class Bootstrapper {
             }
         }
         if (hasConverted) {
-            log.cacheMessage("done", false);
+            Debug.cacheMessage("done", false);
         } else {
-            log.cacheMessage("Nothing foreign to load found", false);
+            Debug.cacheMessage("Nothing foreign to load found", false);
         }
-        log.logCachedMessage("INFO");
+        Debug.logCachedMessage("INFO");
 
         // ------------------------------------------------------
-        log.cacheMessage("Native Cuboid Nodes...", true);
+        Debug.cacheMessage("Native Cuboid Nodes...", true);
         RegionManager.get().load();
         RegionManager.get().save(true, true); // Save back
-        log.cacheMessage("done!", false);
-        log.logCachedMessage("INFO");
+        Debug.cacheMessage("done!", false);
+        Debug.logCachedMessage("INFO");
         FlatfileDataLegacy.cleanupFiles();
         
-        log.logMessage("Setting up Event Operators", "INFO");
+        Debug.log("Setting up Event Operators");
         new BlockModificationsOperator();
         new DamageOperator();
         new MiscOperator();
@@ -89,8 +88,8 @@ public class Bootstrapper {
         new PlayerMovementOperator();
         new SelectionOperator();
         
-        //BIIIIIIIIG TODO: Move those into static {} defs at the command objects themselfes! 
-        log.logMessage("Init help System", "INFO");
+        
+        Debug.log("Init help System");
         CommandHelper.get().addHelp(
                 new Cbackup().getToolTip(),
                 new String[] { "backup", "restore", "cbackup", "edit",

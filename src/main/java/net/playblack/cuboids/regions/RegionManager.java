@@ -6,7 +6,7 @@ import net.playblack.cuboids.Config;
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.Location;
 
 /**
@@ -17,14 +17,12 @@ import net.playblack.mcutils.Location;
  */
 public class RegionManager {
     private ArrayList<Region> rootNodes = new ArrayList<Region>(15);
-    public EventLogger log;
     private BaseData dataSource;
     private Region global;
 
     private static RegionManager instance = null;
 
-    private RegionManager(EventLogger log, BaseData dataSource) {
-        this.log = log;
+    private RegionManager(BaseData dataSource) {
         this.dataSource = dataSource;
         Region insert = new Region();
         insert.putAll(Config.get().getGlobalSettings().getAllProperties());
@@ -33,8 +31,7 @@ public class RegionManager {
 
     public static RegionManager get() {
         if (instance == null) {
-            instance = new RegionManager(EventLogger.getInstance(), Config
-                    .get().getDataSource());
+            instance = new RegionManager(Config.get().getDataSource());
         }
         return instance;
     }
@@ -60,7 +57,7 @@ public class RegionManager {
      */
     public void load() {
         // load for old files
-        new FlatfileDataLegacy(log).loadAll();
+        new FlatfileDataLegacy().loadAll();
         dataSource.loadAll();
     }
 
@@ -130,7 +127,7 @@ public class RegionManager {
      */
     public boolean addRegion(Region cube) {
         if (cuboidExists(cube.getName(), cube.getWorld(), cube.getDimension())) {
-            log.logMessage("Region already exists! Not adding it", "INFO");
+            Debug.log("Region already exists! Not adding it");
             return false;
         }
         

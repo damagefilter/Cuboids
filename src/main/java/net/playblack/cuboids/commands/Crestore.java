@@ -10,7 +10,7 @@ import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.ColorManager;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 
 /**
  * Re an area
@@ -55,7 +55,7 @@ public class Crestore extends CBaseCommand {
                     return;
                 }
             } catch (BlockEditLimitExceededException e) {
-                EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+                Debug.logWarning(e.getMessage());
                 MessageSystem.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
             } catch (SelectionIncompleteException e) {

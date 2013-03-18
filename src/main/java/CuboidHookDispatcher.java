@@ -7,7 +7,7 @@ import net.playblack.cuboids.hookapi.AreaActionHook;
 import net.playblack.cuboids.hookapi.AreaChecksHook;
 import net.playblack.cuboids.hookapi.AreaFlagsHook;
 import net.playblack.cuboids.hookapi.CuboidHook;
-import net.playblack.mcutils.EventLogger;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.Vector;
 
 public class CuboidHookDispatcher implements PluginInterface {
@@ -32,11 +32,11 @@ public class CuboidHookDispatcher implements PluginInterface {
         try {
             return execute(args);
         } catch (InvalidApiHookException e) {
-            EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+            Debug.logWarning(e.getMessage());
             e.printStackTrace();
             return null;
         } catch (InvalidPlayerException e) {
-            EventLogger.getInstance().logMessage(e.getMessage(), "WARNING");
+            Debug.logWarning(e.getMessage());
             e.printStackTrace();
             return null;
         }
