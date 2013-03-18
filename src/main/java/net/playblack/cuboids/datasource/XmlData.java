@@ -14,7 +14,6 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import net.playblack.cuboids.Config;
-import net.playblack.cuboids.RegionFlagRegister;
 import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
@@ -198,7 +197,9 @@ public class XmlData implements BaseData {
         meta.addContent(new Element("world").setText(r.getWorld()));
         meta.addContent(new Element("dimension").setText(""+r.getDimension()));
         meta.addContent(new Element("origin").setText(r.getOrigin().serialize().toString()));
-        meta.addContent(new Element("offset").setText(r.getOffset().serialize().toString())); 
+        meta.addContent(new Element("offset").setText(r.getOffset().serialize().toString()));
+        meta.addContent(new Element("players").setText(r.getPlayerList()));
+        meta.addContent(new Element("groups").setText(r.getGroupList()));
         regionElement.addContent(meta);
         Element properties = new Element("properties");
         regionElement.addContent(properties);
@@ -221,6 +222,8 @@ public class XmlData implements BaseData {
         newRegion.setWorld(meta.getChildText("world"));
         newRegion.setWelcome(ToolBox.stringToNull(meta.getChildText("welcome")));
         newRegion.setFarewell(ToolBox.stringToNull(meta.getChildText("farewell")));
+        newRegion.addPlayer(meta.getChildText("players"));
+        newRegion.addGroup(meta.getChildText("groups"));
         try {
             newRegion.setOrigin(Vector.deserialize(meta.getChildText("origin")));
             newRegion.setOffset(Vector.deserialize(meta.getChildText("offset")));
@@ -229,8 +232,6 @@ public class XmlData implements BaseData {
             return null;
         }
         for(Element prop : properties.getChildren()) {
-            //Register this property first to make it known
-            RegionFlagRegister.registerFlag(prop.getName());
             newRegion.setProperty(prop.getName(), Status.fromString(prop.getText()));
         }
         if(lookupParent) {

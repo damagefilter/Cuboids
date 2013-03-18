@@ -1,5 +1,6 @@
 package net.playblack.cuboids.commands;
 
+import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
@@ -29,6 +30,13 @@ public class CmodSetFlag extends CBaseCommand {
                 return;
             }
         }
+        
+        if(command[1].equalsIgnoreCase("global")) {
+            Config.get().setGlobalProperty(command[4], Region.Status.fromString(command[5]));
+            MessageSystem.successMessage(player, "globalFlagSet");
+            return;
+        }
+        
         Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
         if(node == null) {
             MessageSystem.failMessage(player, "noCuboidFound");

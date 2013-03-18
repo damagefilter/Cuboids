@@ -528,11 +528,15 @@ public class Region {
     }
 
     /**
-     * Add a group to the list of allowed groups
+     * Add a group to the list of allowed groups.
+     * This will recognize a comma seperated list of group names and auto-adds them
      * @param group
      * @return
      */
     public boolean addGroup(String group) {
+        if(group == null) {
+            return false;
+        }
         if (groups.contains(group)) {
             return false;
         }
@@ -616,6 +620,9 @@ public class Region {
      *            String
      */
     public boolean addPlayer(String playerName) {
+        if(playerName == null) {
+            return false;
+        }
         if (players.contains(playerName)) {
             return false;
         }

@@ -45,7 +45,7 @@ public class RegionManager {
      * @param props
      */
     public void updateGlobalSettings() {
-        global = new Region(Config.get().getGlobalSettings());
+        global = Config.get().getGlobalSettings();
     }
 
     /*

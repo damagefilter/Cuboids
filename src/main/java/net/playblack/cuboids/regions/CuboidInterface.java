@@ -252,9 +252,11 @@ public class CuboidInterface {
             if (parent != null) {
                 cube.setParent(parent);
                 cube.putAll(parent.getAllProperties());
-                return regions.addRegion(cube);
+                //If a parent was found, the region already is available in the region list
+                return true;
             }
         }
+        //No parent was found so ths needs to be added to a root node
         return regions.addRegion(cube);
     }
 

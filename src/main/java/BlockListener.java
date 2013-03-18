@@ -128,10 +128,12 @@ public class BlockListener extends PluginListener {
     public boolean onExplosion(Block b, BaseEntity e, List blocksaffected) {
         //Assemble the list of blocks ...
         HashMap<Location, CBlock> blocks = new HashMap<Location, CBlock>();
+        
         for(Block x : (List<Block>)blocksaffected) {
             Location l = new Location(x.getX(), x.getY(), x.getZ(), x.getWorld().getType().getId(), x.getWorld().getName());
             blocks.put(l, new CBlock(x.getType(), x.getData()));
         }
+        
         Location l = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         
         ExplosionEvent event = new ExplosionEvent(new CanaryBaseEntity(e), l, ExplosionType.fromId(b.getStatus()), blocks);
