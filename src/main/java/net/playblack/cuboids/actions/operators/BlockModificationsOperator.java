@@ -33,12 +33,10 @@ public class BlockModificationsOperator implements ActionListener {
      * @param positions
      * @return
      */
-    public List<Location> checkCreeperExplosionBlocks(Set<Location> positions) {
-        RegionManager r = RegionManager.get();
+    public List<Location> checkExplosionBlocks(Set<Location> positions, ExplosionType t) {
         ArrayList<Location> toRemove = new ArrayList<Location>();
         for(Location l : positions) {
-            Region reg = r.getActiveRegion(l, false);
-            if(reg.getProperty("creeper-explosion") == Status.DENY) {
+            if(shouldCancelExplosion(l, t)) {
                 toRemove.add(l);
             }
         }
@@ -46,7 +44,9 @@ public class BlockModificationsOperator implements ActionListener {
     }
     
     public boolean shouldCancelExplosion(Location loc, ExplosionType type) {
-        return RegionManager.get().getActiveRegion(loc, false).getProperty("creeper-explosion") == Status.DENY && type == ExplosionType.CREEPER;
+        boolean creeperSecure = RegionManager.get().getActiveRegion(loc, false).getProperty("creeper-explosion") == Status.DENY && type == ExplosionType.CREEPER;
+        boolean tntSecure = RegionManager.get().getActiveRegion(loc, false).getProperty("tnt-explosion") == Status.DENY && type == ExplosionType.TNT;
+        return creeperSecure || tntSecure;
     }
     
     /**
@@ -103,7 +103,7 @@ public class BlockModificationsOperator implements ActionListener {
         //Remove blocks from protected regions but do the rest of the explosion
         HashMap<Location, CBlock> markedBlocks = event.getAffectedBlocks();
         //List of blocks that need to be removed
-        event.setProtectedBlocks(checkCreeperExplosionBlocks(markedBlocks.keySet()));
+        event.setProtectedBlocks(checkExplosionBlocks(markedBlocks.keySet(), event.getExplosionType()));
     }
     
     @ActionHandler
