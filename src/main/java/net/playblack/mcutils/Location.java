@@ -39,6 +39,14 @@ public class Location extends Vector {
 //        ToolBox.adjustWorldPosition(this);
     }
 
+    public Location(double x, double y, double z, String name, int dim) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.world = name;
+        this.dimension = dim;
+    }
+
     /**
      * @return the world
      */

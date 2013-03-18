@@ -39,10 +39,9 @@ public class CuboidSelection implements ISelection {
      * @param v2
      */
     public CuboidSelection(Vector v1, Vector v2) {
-        origin = v1;
-        offset = v2;
-        blockList = new LinkedHashMap<Vector, CBlock>(
-                (int) Vector.getAreaVolume(origin, offset));
+        origin = new Vector(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
+        offset = new Vector(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
+        blockList = new LinkedHashMap<Vector, CBlock>((int) Vector.getAreaVolume(origin, offset));
     }
 
     /**
@@ -52,10 +51,9 @@ public class CuboidSelection implements ISelection {
      * @param v2
      * @param blocks
      */
-    public CuboidSelection(Vector v1, Vector v2,
-            LinkedHashMap<Vector, CBlock> blocks) {
-        origin = v1;
-        offset = v2;
+    public CuboidSelection(Vector v1, Vector v2, LinkedHashMap<Vector, CBlock> blocks) {
+        origin = new Vector(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
+        offset = new Vector(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
         blockList = blocks;
     }
 
@@ -69,9 +67,9 @@ public class CuboidSelection implements ISelection {
         this.blockList = sel.getBlockList();
     }
 
-    public CuboidSelection(Vector origin, Vector offset, int size) {
-        this.origin = origin;
-        this.offset = offset;
+    public CuboidSelection(Vector v1, Vector v2, int size) {
+        origin = new Vector(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
+        offset = new Vector(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
         blockList = new LinkedHashMap<Vector, CBlock>(size);
     }
 
@@ -81,7 +79,7 @@ public class CuboidSelection implements ISelection {
      * @param o
      */
     public void setOrigin(Vector o) {
-        this.origin = o;
+        this.origin = new Vector(o.getBlockX(), o.getBlockY(), o.getBlockZ());
     }
 
     /**
@@ -99,7 +97,7 @@ public class CuboidSelection implements ISelection {
      * @param o
      */
     public void setOffset(Vector o) {
-        this.offset = o;
+        this.offset = new Vector(o.getBlockX(), o.getBlockY(), o.getBlockZ());
     }
 
     /**

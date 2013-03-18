@@ -25,11 +25,11 @@ public class ToolBox {
      * @return
      */
     public static void adjustWorldPosition(Vector pos) {
-         if(pos.getX() < 0D) {
-             pos.setX(pos.getX()+1D);
+         if(pos.getBlockX() < 0) {
+             pos.setX(pos.getBlockX()-1);
          }
-         if(pos.getZ() < 0D) {
-             pos.setZ(pos.getZ()+1D);
+         if(pos.getBlockZ() < 0) {
+             pos.setZ(pos.getBlockZ()-1);
          }
 //         return new Vector(pos.getX(), pos.getY(), pos.getZ());
 //         NOTE: This is a dirty quick fix to work around the fact that all of
@@ -42,12 +42,12 @@ public class ToolBox {
     }
     
     public static void adjustWorldPosition(Location loc) {
-        if(loc.getX() < 0D) {
-            loc.setX(loc.getX() + 1D);
+        if(loc.getBlockX() < 0) {
+            loc.setX(loc.getBlockX() - 1);
         }
         
-        if(loc.getZ() < 0D) {
-            loc.setZ(loc.getZ() + 1D);
+        if(loc.getBlockZ() < 0) {
+            loc.setZ(loc.getBlockZ() - 1);
         }
     }
     

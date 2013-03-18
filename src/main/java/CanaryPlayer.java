@@ -174,8 +174,7 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public net.playblack.mcutils.Location getLocation() {
-        return new net.playblack.mcutils.Location((int) getX(), (int) getY(), (int) getZ(),
-                getWorld().getName());
+        return new net.playblack.mcutils.Location(getX(), getY(), getZ(), getWorld().getName(), getWorld().getDimension());
     }
 
     @Override

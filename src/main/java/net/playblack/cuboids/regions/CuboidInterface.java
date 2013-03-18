@@ -183,7 +183,7 @@ public class CuboidInterface {
      */
     public void handleRegionsForPlayer(CPlayer player, Location from, Location to) {
         if(player.getCurrentRegion() != null) {
-            if(!player.getCurrentRegion().isWithin(player.getLocation())) {
+            if(!player.getCurrentRegion().isWithin(player.getLocation()) && !player.getCurrentRegion().isWithin(from)) {
                 player.setRegion(null);
             }
         }

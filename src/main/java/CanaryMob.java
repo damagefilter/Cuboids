@@ -112,8 +112,7 @@ public class CanaryMob implements CMob {
 
     @Override
     public Location getLocation() {
-        return new Location((int) getX(), (int) getY(), (int) getZ(),
-                world.getName());
+        return new net.playblack.mcutils.Location(getX(), getY(), getZ(), getWorld().getName(), getWorld().getDimension());
     }
 
     @Override

@@ -37,7 +37,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockRightClick(Player player, Block b, Item itemInHand) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
-        ToolBox.adjustWorldPosition(p);
+//        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -73,7 +73,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockDestroy(Player player, Block b) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(),player.getWorld().getType().getId(), player.getWorld().getName());
-        ToolBox.adjustWorldPosition(p);
+//        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -92,7 +92,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockBreak(Player player, Block b) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
-        ToolBox.adjustWorldPosition(p);
+//        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -111,7 +111,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockPlace(Player player, Block blockPlaced, Block b, Item itemInHand) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
-        ToolBox.adjustWorldPosition(p);
+//        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -154,7 +154,7 @@ public class BlockListener extends PluginListener {
                 for(int i = 0; i < blocksaffected.size(); ) {
                     Block x = (Block) blocksaffected.get(i);
                     Vector tmp = new Vector(x.getX(), x.getY(), x.getZ());
-                    ToolBox.adjustWorldPosition(tmp);
+//                    ToolBox.adjustWorldPosition(tmp);
                     if(m.samePosition2D(tmp)) {
                         blocksaffected.remove(i);
                     }

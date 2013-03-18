@@ -760,12 +760,7 @@ public class Region {
         }
         Vector min = Vector.getMinimum(origin, offset);
         Vector max = Vector.getMaximum(origin, offset);
-        if (v.isWithin(min, max)) {
-            return true;
-        } 
-        else {
-            return false;
-        }
+        return v.isWithin(min, max);
     }
     
     /**

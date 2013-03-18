@@ -92,8 +92,7 @@ public class CanaryWorld extends CWorld {
 
     @Override
     public void loadChunk(Vector position) {
-        loadChunk(position.getBlockX(), position.getBlockY(),
-                position.getBlockZ());
+        loadChunk(position.getBlockX(), position.getBlockY(), position.getBlockZ());
 
     }
 

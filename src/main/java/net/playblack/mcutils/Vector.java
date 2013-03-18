@@ -2,8 +2,6 @@ package net.playblack.mcutils;
 
 import java.util.Random;
 
-import net.playblack.cuboids.Config;
-import net.playblack.cuboids.Config.Implementation;
 import net.playblack.cuboids.exceptions.DeserializeException;
 
 public class Vector {
@@ -167,7 +165,7 @@ public class Vector {
      * @return
      */
     public boolean samePosition2D(Vector tmp) {
-        return this.x == tmp.x && this.z == tmp.z;
+        return getBlockX() == tmp.x && getBlockZ() == tmp.z;
     }
     /*
      * ******************************************************
@@ -288,7 +286,7 @@ public class Vector {
      * @return
      */
     public boolean isWithin(Vector min, Vector max) {
-        if (this.getBlockX() >= min.getBlockX()
+        if (       this.getBlockX() >= min.getBlockX()
                 && this.getBlockX() <= max.getBlockX()
                 && this.getBlockY() >= min.getBlockY()
                 && this.getBlockY() <= max.getBlockY()
@@ -441,12 +439,7 @@ public class Vector {
      * @return int x
      */
     public int getBlockX() {
-        if(Config.get().getImplementation() == Implementation.CANARY) {
-            if(x < -0.4D) {
-                return (int) (long)Math.floor(x - 0.5d);
-            }
-        }
-        return (int) Math.round(x);
+        return (int) Math.ceil(x - 0.4d);
         
     }
 
@@ -456,7 +449,7 @@ public class Vector {
      * @return int y
      */
     public int getBlockY() {
-        return (int) Math.round(y);
+        return (int) Math.ceil(y);
     }
 
     /**
@@ -465,12 +458,7 @@ public class Vector {
      * @return int z
      */
     public int getBlockZ() {
-        if(Config.get().getImplementation() == Implementation.CANARY) {
-            if(z < -0.4D) {
-                return (int) (long)Math.floor(z - 0.5d);
-            }
-        }
-        return (int) Math.round(z);
+        return (int) Math.ceil(z - 0.4d);
     }
 
     @Override
@@ -509,19 +497,8 @@ public class Vector {
         return tr;
     }
     
-    /**
-     * Checks if the X and Z axis are near zero with a 0.4 margin
-     * @return
-     */
-    public boolean xIsNearZero() {
-        return (x < 0 && x > -0.4) || (x > 0 && x < 0.4);
-    }
-    
-    /**
-     * Checks if the X and Z axis are near zero with a 0.4 margin
-     * @return
-     */
-    public boolean zIsNearZero() {
-        return (z < 0 && z > -0.4) || (z > 0 && z < 0.4);
+    public static Vector adjustToCanaryPosition(Vector v) {
+        ToolBox.adjustWorldPosition(v);
+        return v;
     }
 }
