@@ -49,6 +49,20 @@ public class Config {
         cuboidSetting =  new PropsFile("plugins/cuboids2/cuboid.properties");
         dsSetting =      new PropsFile("plugins/cuboids2/data.properties");
         
+        //quickly init all settings properties (for saving reasons)
+        getHealDelay();
+        getHealPower();
+        getInspectorItem();
+        getRegionItem();
+        getRemoteRegionItem();
+        getSaveDelay();
+        getSculptItem();
+        getUndoSteps();
+        isAllowUndo();
+        isAutoParent();
+        isUseDoubleAction();
+        isVerbose();
+        
         // Default setting for new cuboids
         //default-creeper-secure
         defaultSettings.put("creeper-explosion", cuboidSetting.getStatus("default-creeper-explosion", Region.Status.DENY));
@@ -172,6 +186,7 @@ public class Config {
             sqlConfig.put("user", dsSetting.getString("sql-user", "hans die"));
             sqlConfig.put("passwd", dsSetting.getString("sql-passwd", "bratwurst"));
         }
+        saveConfigs();
     }
 
     public static Config get() {

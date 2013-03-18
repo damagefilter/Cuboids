@@ -14,6 +14,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import net.playblack.cuboids.Config;
+import net.playblack.cuboids.RegionFlagRegister;
 import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
@@ -228,6 +229,8 @@ public class XmlData implements BaseData {
             return null;
         }
         for(Element prop : properties.getChildren()) {
+            //Register this property first to make it known
+            RegionFlagRegister.registerFlag(prop.getName());
             newRegion.setProperty(prop.getName(), Status.fromString(prop.getText()));
         }
         if(lookupParent) {

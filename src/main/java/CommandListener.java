@@ -302,6 +302,28 @@ public class CommandListener extends PluginListener {
                 command.execute(cplayer, split);
                 return true;
             }
+            
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && (split[2].equalsIgnoreCase("flag") && split[3].equalsIgnoreCase("set"))) {
+                command = new CmodSetFlag();
+                command.execute(cplayer, split);
+                return true;
+            }
+            
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && (split[2].equalsIgnoreCase("flag") && split[3].equalsIgnoreCase("remove"))) {
+                command = new CmodRemoveFlag();
+                command.execute(cplayer, split);
+                return true;
+            }
+            
+            if (split[0].equalsIgnoreCase("/cmod")
+                    && ((split[1].equalsIgnoreCase("flag") || split[2].equalsIgnoreCase("flag")) 
+                            && (split[2].equalsIgnoreCase("list") || split[3].equalsIgnoreCase("list")))) {
+                command = new CmodListFlags();
+                command.execute(cplayer, split);
+                return true;
+            }
         }
 
         if (split[0].equalsIgnoreCase("/csave")) {
@@ -339,8 +361,7 @@ public class CommandListener extends PluginListener {
             command.execute(cplayer, split);
             return true;
         }
-        EventLogger.getInstance().logMessage("No C2 command - returning false",
-                "DEBUG");
+        EventLogger.getInstance().logMessage("No C2 command - returning false", "DEBUG");
         return false;
     }
 }

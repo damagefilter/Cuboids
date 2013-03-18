@@ -14,6 +14,7 @@ public class Cuboids2 extends Plugin {
 
     @Override
     public void disable() {
+        //This'll work properly with the 1.5 crow
         CuboidInterface.get().killTasks();
         RegionManager.get().save(false, true);
         Config.get().saveConfigs();
@@ -70,7 +71,7 @@ public class Cuboids2 extends Plugin {
                 miscListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addCustomListener(new CuboidHookDispatcher());
     }
-
+    
     public void initialize() {
         etc.getLoader().addListener(PluginLoader.Hook.PLAYER_RESPAWN,
                 playerListener, this, PluginListener.Priority.CRITICAL);

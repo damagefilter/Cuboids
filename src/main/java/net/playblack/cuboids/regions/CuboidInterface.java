@@ -638,12 +638,6 @@ public class CuboidInterface {
             else {
                 MessageSystem.translateMessage(player, ColorManager.Rose, "youCanNotBuildHere");
             }
-//            String[] flags = cube.getFlagList().split(";");
-//            MessageSystem.translateMessage(player, ColorManager.LightGray, "flags");
-//            
-//            for(String line : flags) {
-//                player.sendMessage(line);
-//            }
             MessageSystem.translateMessage(player, ColorManager.LightGray, "players");
             player.sendMessage(ColorManager.Yellow + cube.getPlayerList());
             
@@ -666,7 +660,7 @@ public class CuboidInterface {
                 //TODO: Translate parent? hmmm
                 player.sendMessage(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + "none");
             } else {
-                player.sendMessage(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + cube.getParent());
+                player.sendMessage(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + cube.getParent().getName());
             }
         } 
         else {

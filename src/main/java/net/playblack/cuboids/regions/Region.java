@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.playblack.cuboids.RegionFlagRegister;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
@@ -469,8 +470,23 @@ public class Region {
      * @param name
      * @param value
      */
-    public void setProperty(String name, Status value) {
+    public boolean setProperty(String name, Status value) {
+        if(!RegionFlagRegister.isFlagValid(name)) {
+            return false;
+        }
+        if(value == Status.INVALID_PROPERTY) {
+            return false;
+        }
         properties.put(name, value);
+        return true;
+    }
+    
+    public boolean removeProperty(String name) {
+        if(properties.containsKey(name)) {
+            properties.remove(name);
+            return true;
+        }
+        return false;
     }
     
     /**
