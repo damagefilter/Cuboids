@@ -100,15 +100,10 @@ public class BlockModificationsOperator implements ActionListener {
             event.cancel();
             return;
         }
-        
         //Remove blocks from protected regions but do the rest of the explosion
         HashMap<Location, CBlock> markedBlocks = event.getAffectedBlocks();
-        List<Location> unmarkedBlocks = checkCreeperExplosionBlocks(markedBlocks.keySet());
-        
-        for(Location l : unmarkedBlocks) {
-            markedBlocks.remove(l);
-        }
-        event.setAffectedBlocks(markedBlocks);
+        //List of blocks that need to be removed
+        event.setProtectedBlocks(checkCreeperExplosionBlocks(markedBlocks.keySet()));
     }
     
     @ActionHandler

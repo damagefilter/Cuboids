@@ -1,6 +1,7 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
 import java.util.HashMap;
+import java.util.List;
 
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
@@ -59,6 +60,7 @@ public class ExplosionEvent extends CuboidEvent implements Cancellable {
     private IBaseEntity entity;
     private Location location;
     private HashMap<Location, CBlock> affectedBlocks;
+    private List<Location> protectedBlocks = null;
     
     public ExplosionEvent(IBaseEntity entity, Location location, ExplosionType explosiontype, HashMap<Location, CBlock> affectedBlocks) {
         this.explosionType = explosiontype;
@@ -93,8 +95,12 @@ public class ExplosionEvent extends CuboidEvent implements Cancellable {
         return affectedBlocks;
     }
 
-    public void setAffectedBlocks(HashMap<Location, CBlock> affectedBlocks) {
-        this.affectedBlocks = affectedBlocks;
+    public List<Location> getProtectedBlocks() {
+        return protectedBlocks;
     }
-    
+
+    public void setProtectedBlocks(List<Location> list) {
+        this.protectedBlocks = list;
+    }
+
 }

@@ -19,7 +19,10 @@ import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.Location;
+import net.playblack.mcutils.ToolBox;
+import net.playblack.mcutils.Vector;
 
 /**
  * Listens to block events
@@ -126,30 +129,37 @@ public class BlockListener extends PluginListener {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public boolean onExplosion(Block b, BaseEntity e, List blocksaffected) {
+        Debug.println("Canary fired onExplosion event!");
         //Assemble the list of blocks ...
         HashMap<Location, CBlock> blocks = new HashMap<Location, CBlock>();
         
         for(Block x : (List<Block>)blocksaffected) {
             Location l = new Location(x.getX(), x.getY(), x.getZ(), x.getWorld().getType().getId(), x.getWorld().getName());
+            ToolBox.adjustWorldPosition(l);
             blocks.put(l, new CBlock(x.getType(), x.getData()));
         }
         
         Location l = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         ExplosionEvent event = new ExplosionEvent(new CanaryBaseEntity(e), l, ExplosionType.fromId(b.getStatus()), blocks);
+        ActionManager.fireEvent(event);
         if(event.isCancelled()) {
             return true;
         }
         //Not cancelled, process the list of blocks and remove those that should stay
-        blocks = event.getAffectedBlocks();
-        for(Location m : blocks.keySet()) {
-            
-            for(int i = 0; i < blocksaffected.size(); ) {
-                Block x = (Block) blocksaffected.get(i);
-                if(m.samePosition(x.getX(), x.getY(), x.getZ())) {
-                    blocksaffected.remove(i);
-                }
-                else {
-                    i++;
+        List<Location> protectedBlocks = event.getProtectedBlocks();
+        if(protectedBlocks != null) {
+            for(Location m : protectedBlocks) {
+                
+                for(int i = 0; i < blocksaffected.size(); ) {
+                    Block x = (Block) blocksaffected.get(i);
+                    Vector tmp = new Vector(x.getX(), x.getY(), x.getZ());
+                    ToolBox.adjustWorldPosition(tmp);
+                    if(m.samePosition2D(tmp)) {
+                        blocksaffected.remove(i);
+                    }
+                    else {
+                        i++;
+                    }
                 }
             }
         }

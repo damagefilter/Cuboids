@@ -136,12 +136,36 @@ public class Vector {
      * Math Operations for your convenience!
      * ******************************************************
      */
-    public boolean samePosition(double x, double y, double z) {
-        return x == this.x && y == this.y && z == this.z;
+    
+    /**
+     * Check if the x and z coords are the same.
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    public boolean samePosition2D(double x, double y, double z) {
+        return x == this.x && z == this.z;
     }
     
-    public boolean samePosition(int x, int y, int z) {
-        return x == (int)this.x && y == (int)this.y && z == (int)this.z;
+    /**
+     * Check if the x and z coords are the same
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    public boolean samePosition2D(int x, int y, int z) {
+        return x == this.x && z == this.z;
+    }
+    
+    /**
+     * Check if the x and z coords of this and the other vector are the same
+     * @param tmp
+     * @return
+     */
+    public boolean samePosition2D(Vector tmp) {
+        return this.x == tmp.x && this.z == tmp.z;
     }
     /*
      * ******************************************************
