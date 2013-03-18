@@ -5,7 +5,6 @@ import net.playblack.cuboids.actions.events.CuboidEvent;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.mcutils.Location;
-import net.playblack.mcutils.ToolBox;
 
 public class BlockLeftClickEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled = false;
@@ -17,7 +16,6 @@ public class BlockLeftClickEvent extends CuboidEvent implements Cancellable {
         this.player = player;
         this.block = block;
         this.location = location;
-        ToolBox.adjustWorldPosition(this.location);
         
     }
     

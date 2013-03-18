@@ -37,6 +37,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockRightClick(Player player, Block b, Item itemInHand) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -72,6 +73,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockDestroy(Player player, Block b) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(),player.getWorld().getType().getId(), player.getWorld().getName());
+        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -90,6 +92,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockBreak(Player player, Block b) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -106,11 +109,9 @@ public class BlockListener extends PluginListener {
     }
 
     @Override
-    public boolean onBlockPlace(Player player, Block blockPlaced, Block b,
-            Item itemInHand) {
-        Location p = new Location(b.getX(), b.getY(), b.getZ(),
-                player.getWorld().getType().getId(), player.getWorld()
-                        .getName());
+    public boolean onBlockPlace(Player player, Block blockPlaced, Block b, Item itemInHand) {
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -169,6 +170,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onIgnite(Block b, Player player) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer = null;
         if (player != null) {
             try {
@@ -189,7 +191,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onFlow(Block b, Block to) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
-        
+        ToolBox.adjustWorldPosition(p);
         LiquidFlowEvent event = new LiquidFlowEvent(new CBlock(b.getType(), b.getData()), new CBlock(to.getType(), to.getData()), p);
         ActionManager.fireEvent(event);
         if(event.isCancelled()) {
@@ -201,6 +203,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockPhysics(Block b, boolean placed) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        ToolBox.adjustWorldPosition(p);
         BlockPhysicsEvent event = new BlockPhysicsEvent(new CBlock(b.getType(), b.getData()), p);
         ActionManager.fireEvent(event);
         if(event.isCancelled()) {
@@ -212,6 +215,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onBlockUpdate(Block b, int newBlockId) {
         Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        ToolBox.adjustWorldPosition(p);
         BlockUpdateEvent event = new BlockUpdateEvent(new CBlock(b.getType(), b.getData()), new CBlock(newBlockId), p);
         ActionManager.fireEvent(event);
         if(event.isCancelled()) {
@@ -223,6 +227,7 @@ public class BlockListener extends PluginListener {
     @Override
     public boolean onEndermanPickup(Enderman entity, Block b) {
         Location l = new Location(b.getX(), b.getY(), b.getZ(), entity.getWorld().getType().getId(), entity.getWorld().getName());
+        ToolBox.adjustWorldPosition(l);
         EndermanPickupEvent event = new EndermanPickupEvent(l, new CBlock(b.getType(), b.getData()));
         ActionManager.fireEvent(event);
         if(event.isCancelled()) {
