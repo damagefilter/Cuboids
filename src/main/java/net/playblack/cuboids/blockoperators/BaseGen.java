@@ -95,19 +95,16 @@ public abstract class BaseGen implements IShapeGen {
      * @param coords
      * @param world
      */
-    protected void changeBlock(CBlock block, Vector coords, CWorld world,
-            boolean queuedRun) {
+    protected void changeBlock(CBlock block, Vector coords, CWorld world, boolean queuedRun) {
         preloadChunk(coords, world);
         CBlock testBlock = world.getBlockAt(coords);
 
         // If the block in the world is the same as the one we want to set, we
         // don't need to set - return
-        if ((testBlock.getType() == block.getType())
-                && (testBlock.getData() == block.getData())) {
+        if ((testBlock.getType() == block.getType()) && (testBlock.getData() == block.getData())) {
             return;
         }
-        if ((queueables.contains(Integer.valueOf(block.getType())))
-                && (queuedRun == false)) {
+        if ((queueables.contains(Integer.valueOf(block.getType()))) && (queuedRun == false)) {
             // queue for later placement if we're not in the queued run already
             placeLast.put(coords, block);
             return;
@@ -124,42 +121,29 @@ public abstract class BaseGen implements IShapeGen {
      * @throws BlockEditLimitExceededException
      * @throws SelectionIncompleteException
      */
-    protected CuboidSelection scanWorld(boolean returnSelection,
-            boolean requireCompleteSelection)
-            throws BlockEditLimitExceededException,
-            SelectionIncompleteException {
+    protected CuboidSelection scanWorld(boolean returnSelection, boolean requireCompleteSelection) throws BlockEditLimitExceededException, SelectionIncompleteException {
         if (selection == null) {
             return null;
         }
         if (requireCompleteSelection && !selection.isComplete()) {
-            throw new SelectionIncompleteException(
-                    "Selection was not complete in "
-                            + this.getClass().getSimpleName());
+            throw new SelectionIncompleteException("Selection was not complete in " + this.getClass().getSimpleName());
         }
         if (selection.getBlockList().isEmpty() && selection.isComplete()) {
             double areaVolume = selection.getBoundarySize();
             if (areaVolume > 700000) {
-                throw new BlockEditLimitExceededException(
-                        "Too many blocks to process in "
-                                + this.getClass().getSimpleName() + " ("
-                                + areaVolume + " blocks)");
+                throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass().getSimpleName() + " (" + areaVolume + " blocks)");
             }
-        } else if (selection.getBlockList().size() > 700000) {
-            throw new BlockEditLimitExceededException(
-                    "Too many blocks to process in "
-                            + this.getClass().getSimpleName() + " ("
-                            + selection.getBlockList().size() + " blocks)");
+        } 
+        else if (selection.getBlockList().size() > 700000) {
+            throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass().getSimpleName() + " (" + selection.getBlockList().size() + " blocks)");
         }
         CuboidSelection tmp = new CuboidSelection();
         if (selection.getBlockList().isEmpty()) {
             tmp.setOffset(selection.getOffset());
             tmp.setOrigin(selection.getOrigin());
-            int length_x = (int) Vector.getDistance(selection.getOrigin()
-                    .getX(), selection.getOffset().getX()) + 1;
-            int length_y = (int) Vector.getDistance(selection.getOrigin()
-                    .getY(), selection.getOffset().getY()) + 1;
-            int length_z = (int) Vector.getDistance(selection.getOrigin()
-                    .getZ(), selection.getOffset().getZ()) + 1;
+            int length_x = (int) Vector.getDistance(selection.getOrigin().getX(), selection.getOffset().getX()) + 1;
+            int length_y = (int) Vector.getDistance(selection.getOrigin().getY(), selection.getOffset().getY()) + 1;
+            int length_z = (int) Vector.getDistance(selection.getOrigin().getZ(), selection.getOffset().getZ()) + 1;
             // We use that to calculate the blocks we want to put
             Vector min = Vector.getMinimum(tmp.getOrigin(), tmp.getOffset());
 
@@ -172,8 +156,7 @@ public abstract class BaseGen implements IShapeGen {
                 for (int x = 0; x < length_x; ++x) {
                     for (int y = 0; y < length_y; ++y) {
                         for (int z = 0; z < length_z; ++z) {
-                            Vector current = new Vector(min.getX() + x,
-                                    min.getY() + y, min.getZ() + z);
+                            Vector current = new Vector(min.getX() + x, min.getY() + y, min.getZ() + z);
                             tmp.setBlock(current, world.getBlockAt(current));
                         }
                     }

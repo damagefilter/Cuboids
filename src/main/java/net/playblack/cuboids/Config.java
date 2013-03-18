@@ -21,6 +21,13 @@ import net.playblack.mcutils.PropsFile;
  * 
  */
 public class Config {
+    public enum Implementation {
+        CANARY,
+        BUKKIT,
+        NOT_SET;
+    }
+    
+    private Implementation impl = Implementation.NOT_SET;
     private String name = "Cuboids2";
     private String version = "3.0.0";
     private String basePath = "plugins/cuboids2/";
@@ -386,6 +393,21 @@ public class Config {
             return true;
         }
         return false;
+    }
+    
+    public Implementation getImplementation() {
+        return impl;
+    }
+    
+    public void setImplementation(Implementation impl) {
+        //Only allow setting the implementation once!
+        if(impl == Implementation.NOT_SET) {
+            return;
+        }
+
+        if(this.impl == Implementation.NOT_SET) {
+            this.impl = impl;
+        }
     }
 
 }

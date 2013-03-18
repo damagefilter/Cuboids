@@ -1,5 +1,6 @@
 import net.playblack.cuboids.Bootstrapper;
 import net.playblack.cuboids.Config;
+import net.playblack.cuboids.Config.Implementation;
 import net.playblack.cuboids.converters.Loader;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.RegionManager;
@@ -24,7 +25,7 @@ public class Cuboids2 extends Plugin {
     public void enable() {
         Loader[] loaders = new Loader[] { new CuboidDLoader(),
                 new CuboidFLoader() };
-        b = new Bootstrapper(new CanaryServer(), loaders);
+        b = new Bootstrapper(new CanaryServer(), loaders, Implementation.CANARY);
         etc.getLoader().addListener(PluginLoader.Hook.PLAYER_MOVE,
                 playerListener, this, PluginListener.Priority.MEDIUM);
         etc.getLoader().addListener(PluginLoader.Hook.BLOCK_RIGHTCLICKED,

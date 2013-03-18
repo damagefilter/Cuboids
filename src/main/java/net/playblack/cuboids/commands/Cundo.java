@@ -21,8 +21,7 @@ import net.playblack.mcutils.ToolBox;
 public class Cundo extends CBaseCommand {
 
     public Cundo() {
-        super("Undo block operations:" + ColorManager.Yellow
-                + " /cundo [steps] [player]", 1, 3);
+        super("Undo block operations:" + ColorManager.Yellow + " /cundo [steps] [player]", 1, 3);
     }
 
     @Override
@@ -60,8 +59,8 @@ public class Cundo extends CBaseCommand {
         }
 
         for (int i = 0; i < steps; i++) {
-            CuboidSelection sel = SessionManager.getInstance()
-                    .getPlayerHistory(subject).undo();
+            CuboidSelection sel = SessionManager.getInstance().getPlayerHistory(subject).undo();
+            
             if (sel == null) {
                 MessageSystem.yellowNote(player, "allUndone");
                 return;

@@ -144,7 +144,7 @@ public class LineBlockTracer {
             return null;
         }
 
-        return player.getWorld().getBlockAt(target_x, target_y, target_z);
+        return player.getWorld().getBlockAt(new Vector(target_x, target_y, target_z));
     }
 
     /**
@@ -156,7 +156,7 @@ public class LineBlockTracer {
         if (length > range) {
             return null;
         } else {
-            return player.getWorld().getBlockAt(target_x, target_y, target_z);
+            return player.getWorld().getBlockAt(new Vector(target_x, target_y, target_z));
         }
     }
 
@@ -166,6 +166,6 @@ public class LineBlockTracer {
      * @return CBlock
      */
     public CBlock getLastBlock() {
-        return player.getWorld().getBlockAt(last_x, last_y, last_z);
+        return player.getWorld().getBlockAt(new Vector(last_x, last_y, last_z));
     }
 }

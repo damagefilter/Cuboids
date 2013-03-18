@@ -32,13 +32,13 @@ public class CanaryWorld extends CWorld {
     }
 
     @Override
-    public CBlock getBlockAt(Vector position) {
-        return getBlockAt(position.getBlockX(), position.getBlockY(),
-                position.getBlockZ());
+    public CBlock getBlockAt(Vector p) {
+//        Vector p = ToolBox.adjustToCanaryPosition(position);
+        return getBlockAt(p.getBlockX(), p.getBlockY(), p.getBlockZ());
     }
 
     @Override
-    public CBlock getBlockAt(int x, int y, int z) {
+    protected CBlock getBlockAt(int x, int y, int z) {
         Block b = world.getBlockAt(x, y, z);
         // Hey, are we a chest?
         if (b.getType() == 54) {
@@ -118,6 +118,7 @@ public class CanaryWorld extends CWorld {
         if (Block.Type.fromId(type) == null) { // Invalid Block!
             return;
         }
+        
         world.setBlockAt(type, v.getBlockX(), v.getBlockY(), v.getBlockZ());
         if (getBlockAt(v).getData() != data) {
             world.setBlockData(v.getBlockX(), v.getBlockY(), v.getBlockZ(),
@@ -128,14 +129,12 @@ public class CanaryWorld extends CWorld {
     @Override
     public void setBlockAt(short type, Vector v) {
         setBlockAt(type, (byte) 0, v);
-
     }
 
     @Override
     public void setBlockAt(Vector v, CBlock block) {
         setBlockAt(block.getType(), block.getData(), v);
-        Block test = world.getBlockAt(v.getBlockX(), v.getBlockY(),
-                v.getBlockZ());
+        Block test = world.getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ());
         if (block instanceof ChestBlock) {
             ChestBlock c = (ChestBlock) block;
             Chest chest = (Chest) world.getOnlyComplexBlock(test);
@@ -268,6 +267,16 @@ public class CanaryWorld extends CWorld {
 
     public String toString() {
         return "CanaryWorld";
+    }
+
+    @Override
+    public boolean isCanaryModWorld() {
+        return true;
+    }
+
+    @Override
+    public boolean isBukkitWorld() {
+        return false;
     }
 
 }

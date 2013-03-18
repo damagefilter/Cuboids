@@ -56,9 +56,7 @@ public class CuboidGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory)
-            throws BlockEditLimitExceededException,
-            SelectionIncompleteException {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         selection.clearBlocks();
         scanWorld(false, true);
 
@@ -75,8 +73,7 @@ public class CuboidGenerator extends BaseGen {
         }
         if (newHistory) {
             CuboidSelection world = scanWorld(true, true);
-            SessionManager.getInstance().getPlayerHistory(player.getName())
-                    .remember(new HistoryObject(world, selection));
+            SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
         boolean result = modifyWorld(true);
         return result;

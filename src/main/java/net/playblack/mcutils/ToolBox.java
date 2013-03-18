@@ -50,6 +50,24 @@ public class ToolBox {
             loc.setZ(loc.getZ() + 1D);
         }
     }
+    
+    /**
+     * Adjust to canary rounding error thing.
+     * This returns a new instance for region selection consistency reasons
+     * @param p
+     * @return
+     */
+    public static Vector adjustToCanaryPosition(Vector p) {
+        Vector loc = new Vector(p);
+        if(loc.getX() < -0.6D) {
+            loc.setX(loc.getBlockX() - 1);
+        }
+        
+        if(loc.getZ() < -0.6D) {
+            loc.setZ(loc.getBlockZ() - 1);
+        }
+        return loc;
+    }
 
     /**
      * Turn a String into a boolean value. If the string doesn't equal the words

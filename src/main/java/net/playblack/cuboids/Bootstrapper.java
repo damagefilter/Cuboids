@@ -2,6 +2,7 @@ package net.playblack.cuboids;
 
 //import java.util.concurrent.TimeUnit;
 
+import net.playblack.cuboids.Config.Implementation;
 import net.playblack.cuboids.actions.operators.BlockModificationsOperator;
 import net.playblack.cuboids.actions.operators.DamageOperator;
 import net.playblack.cuboids.actions.operators.MiscOperator;
@@ -34,7 +35,7 @@ public class Bootstrapper {
      * @param server
      * @param loaders
      */
-    public Bootstrapper(CServer server, Loader[] loaders) {
+    public Bootstrapper(CServer server, Loader[] loaders, Implementation impl) {
         Debug.cacheMessage("Loading Cuboids2 ...", true);
 
         // ------------------------------------------------------
@@ -42,7 +43,7 @@ public class Bootstrapper {
         Debug.logCachedMessage();
 
         // ------------------------------------------------------
-        Config.get(); // init this thing for a first time
+        Config.get().setImplementation(impl); // init this thing for a first time
         Debug.cacheMessage("Version ... " + Config.get().getVersion(),
                 true);
         Debug.logCachedMessage();

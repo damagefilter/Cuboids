@@ -2,6 +2,8 @@ package net.playblack.mcutils;
 
 import java.util.Random;
 
+import net.playblack.cuboids.Config;
+import net.playblack.cuboids.Config.Implementation;
 import net.playblack.cuboids.exceptions.DeserializeException;
 
 public class Vector {
@@ -439,7 +441,13 @@ public class Vector {
      * @return int x
      */
     public int getBlockX() {
-        return (int) Math.floor(getX());
+        if(Config.get().getImplementation() == Implementation.CANARY) {
+            if(x < -0.4D) {
+                return (int) (long)Math.floor(x - 0.5d);
+            }
+        }
+        return (int) Math.round(x);
+        
     }
 
     /**
@@ -448,7 +456,7 @@ public class Vector {
      * @return int y
      */
     public int getBlockY() {
-        return (int) Math.floor(getY());
+        return (int) Math.round(y);
     }
 
     /**
@@ -457,7 +465,12 @@ public class Vector {
      * @return int z
      */
     public int getBlockZ() {
-        return (int) Math.floor(getZ());
+        if(Config.get().getImplementation() == Implementation.CANARY) {
+            if(z < -0.4D) {
+                return (int) (long)Math.floor(z - 0.5d);
+            }
+        }
+        return (int) Math.round(z);
     }
 
     @Override
@@ -494,5 +507,21 @@ public class Vector {
         tr.setZ(Double.parseDouble(values[2]));
 
         return tr;
+    }
+    
+    /**
+     * Checks if the X and Z axis are near zero with a 0.4 margin
+     * @return
+     */
+    public boolean xIsNearZero() {
+        return (x < 0 && x > -0.4) || (x > 0 && x < 0.4);
+    }
+    
+    /**
+     * Checks if the X and Z axis are near zero with a 0.4 margin
+     * @return
+     */
+    public boolean zIsNearZero() {
+        return (z < 0 && z > -0.4) || (z > 0 && z < 0.4);
     }
 }

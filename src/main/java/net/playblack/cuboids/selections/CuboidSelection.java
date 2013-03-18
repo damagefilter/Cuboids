@@ -265,5 +265,4 @@ public class CuboidSelection implements ISelection {
     public boolean hasOffset() {
         return offset != null;
     }
-
 }

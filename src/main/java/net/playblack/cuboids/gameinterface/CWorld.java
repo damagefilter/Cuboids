@@ -56,7 +56,7 @@ public abstract class CWorld {
      * @param z
      * @return
      */
-    public abstract CBlock getBlockAt(int x, int y, int z);
+    protected abstract CBlock getBlockAt(int x, int y, int z);
 
     /**
      * Check if a chunk is loaded
@@ -163,4 +163,16 @@ public abstract class CWorld {
      * @return
      */
     public abstract String getFilePrefix();
+    
+    /**
+     * Check if this world is implemented as CanaryMod world
+     * @return
+     */
+    public abstract boolean isCanaryModWorld();
+    
+    /**
+     * Check if this world is implemented as Bukkit world
+     * @return
+     */
+    public abstract boolean isBukkitWorld();
 }
