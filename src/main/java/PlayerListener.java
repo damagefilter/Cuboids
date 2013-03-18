@@ -8,6 +8,7 @@ import net.playblack.cuboids.actions.events.forwardings.PlayerWalkEvent;
 import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.mcutils.ToolBox;
 
 /**
  * Listens to player events
@@ -34,10 +35,10 @@ public class PlayerListener extends PluginListener {
 
     @Override
     public void onPlayerMove(Player player, Location from, Location to) {
-        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location((int) to.x, (int) to.y,
-                (int) to.z, to.dimension, to.world);
-        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location((int) from.x, (int) from.y,
-                (int) from.z, from.dimension, from.world);
+        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.x, to.y, to.z, to.dimension, to.world);
+        ToolBox.adjustWorldPosition(vTo);
+        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location(from.x, from.y, from.z, from.dimension, from.world);
+        ToolBox.adjustWorldPosition(vFrom);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -56,10 +57,10 @@ public class PlayerListener extends PluginListener {
         if (!player.getWorld().isChunkLoaded((int) to.x, (int) to.y, (int) to.z)) {
             player.getWorld().loadChunk((int) to.x, (int) to.y, (int) to.z);
         }
-        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location((int) to.x, (int) to.y,
-                (int) to.z, to.dimension, to.world);
-        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location((int) from.x, (int) from.y,
-                (int) from.z, from.dimension, from.world);
+        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.x, to.y, to.z, to.dimension, to.world);
+        ToolBox.adjustWorldPosition(vTo);
+        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location(from.x, from.y, from.z, from.dimension, from.world);
+        ToolBox.adjustWorldPosition(vFrom);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().refreshPlayer(player.getName());

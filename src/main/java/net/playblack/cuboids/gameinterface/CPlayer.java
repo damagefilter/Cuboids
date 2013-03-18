@@ -88,18 +88,27 @@ public abstract class CPlayer implements IBaseEntity {
      * 
      * @return CItem[] representing the inventory
      */
-    public abstract CItem[] getInventory(int mode);
+    public abstract CInventory getInventory(int mode);
 
     /**
      * Returns the inventory for this player right as it currently is
      */
-    public abstract CItem[] getCurrentInventory();
+    public abstract CInventory getCurrentInventory();
     /**
      * Set player inventory
      * 
      * @param items
      */
-    public abstract void setInventory(CItem[] items);
+    public abstract void setInventory(CInventory items);
+    
+    /**
+     * Set the inventory for a specified mode.
+     * This will not change the players actual inventory but only
+     * put the inventory into a map for later referencing it
+     * @param inv
+     * @param mode
+     */
+    public abstract void setInventoryForMode(CInventory inv, int mode);
 
     /**
      * Teleport a player to the position v in world world
@@ -218,18 +227,22 @@ public abstract class CPlayer implements IBaseEntity {
 
         if(!r.equals(currentRegion)) {
             sendFarewell();
+            
             if(r.getProperty("creative") != Status.ALLOW) {
+                if(!adminCreative) {
+                    if(isInCreativeMode()) {
+                        setGameMode(0);
+                    }
+                }
+            }
+            else if(r.getProperty("creative") == Status.ALLOW) {
                 if(isInCreativeMode()) {
                     adminCreative = true;
                 }
                 else {
-                    setGameMode(0);
+                    adminCreative = false;
+                    setGameMode(1);
                 }
-                
-            }
-            else {
-                adminCreative = false;
-                setGameMode(1);
             }
             if(r.getProperty("healing") == Status.ALLOW) {
                 CuboidInterface.get().getThreadManager().schedule(new HealThread(
@@ -245,6 +258,12 @@ public abstract class CPlayer implements IBaseEntity {
         
     }
     
+    /**
+     * get the recent game mode of the player
+     * @return
+     */
+    public abstract int getGameMode();
+
     /**
      * Return the Region that has last been set to this player
      * This may return null if the player is not inside any region

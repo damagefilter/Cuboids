@@ -1,14 +1,18 @@
 
+import java.util.HashMap;
+
 import net.playblack.cuboids.blocks.CItem;
+import net.playblack.cuboids.gameinterface.CInventory;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.Vector;
 
 public class CanaryPlayer extends CPlayer {
-    Player player;
-    CanaryWorld world;
-//TODO: Create inventory interface to get rid of this CItem array bullshit!
-//    private HashMap<Integer, CItem[]> inventories;
+    private Player player;
+    private CanaryWorld world;
+    private HashMap<Integer, CInventory> inventories = new HashMap<Integer, CInventory>();
+    
     public CanaryPlayer(Player p) {
         this.player = p;
         world = new CanaryWorld(p.getWorld());
@@ -103,7 +107,10 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public void setGameMode(int creative) {
+        setInventoryForMode(getCurrentInventory(), getGameMode());
         player.setCreativeMode(creative);
+        setInventory(getInventory(creative));
+        
     }
 
     @Override
@@ -117,39 +124,35 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public CItem[] getInventory(int mode) {
-        Item[] canaryItems = player.getInventory().getContents();
-        CItem[] items = new CItem[canaryItems.length];
-        for (int i = 0; i < canaryItems.length; i++) {
-            if (canaryItems[i] == null) {
-                continue;
-            }
-            items[i] = new CItem(canaryItems[i].getItemId(),
-                    canaryItems[i].getDamage(), canaryItems[i].getAmount(),
-                    canaryItems[i].getSlot());
+    public CInventory getInventory(int mode) {
+        if(!inventories.containsKey(mode)) {
+            inventories.put(mode, new CanaryInventory());
         }
-        return items;
+        return inventories.get(mode);
     }
 
     @Override
-    public void setInventory(CItem[] items) {
+    public void setInventory(CInventory items) {
         if (items == null) {
             player.getInventory().clearContents();
             return;
         }
-        Item[] canaryItems = new Item[items.length];
-        for (int i = 0; i < items.length; i++) {
-            if (items[i] == null) {
-                continue;
-            }
-            canaryItems[i] = new Item(items[i].getId(), items[i].getAmount(),
-                    items[i].getSlot(), items[i].getData());
-        }
         try {
-            player.getInventory().setContents(canaryItems);
+            if(items.hasItems()) {
+                ((CanaryInventory)items).setThisContents();
+            }
+            else {
+                player.getInventory().clearContents();
+            }
+            
         } catch (ArrayIndexOutOfBoundsException e) {
-            // might happen because of derp
+            Debug.logStack(e);
         }
+    }
+    
+    @Override
+    public void setInventoryForMode(CInventory inv, int mode) {
+        inventories.put(mode, inv);
     }
 
     @Override
@@ -181,9 +184,8 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public CItem[] getCurrentInventory() {
-        // TODO Auto-generated method stub
-        return null;
+    public CInventory getCurrentInventory() {
+        return new CanaryInventory(player.getInventory());
     }
 
     @Override
@@ -209,6 +211,11 @@ public class CanaryPlayer extends CPlayer {
     @Override
     public boolean isPlayer() {
         return player.isPlayer();
+    }
+
+    @Override
+    public int getGameMode() {
+        return player.getCreativeMode();
     }
 
 }

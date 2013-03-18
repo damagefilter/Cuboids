@@ -121,70 +121,58 @@ public class Config {
         defaultSettings.put("water-bucket", cuboidSetting.getStatus("default-water-bucket", Region.Status.DEFAULT));
         
         defaultSettings.put("lava-bucket", cuboidSetting.getStatus("default-lava-bucket", Region.Status.DENY));
-
+        //Register all of cuboids own flags
+        for(String key : defaultSettings.keySet()) {
+            RegionFlagRegister.registerFlag(key);
+        }
         
         
         // Global Settings
         global.setName("__GLOBAL__");
         
         //disable-pvp-global
-        RegionFlagRegister.registerFlag("pvp-damage");
         global.setProperty("pvp-damage", cuboidSetting.getStatus("global-pvp-damage", Status.ALLOW));
         
         //disable-creeper-secure-global
-        RegionFlagRegister.registerFlag("creeper-explosion");
         global.setProperty("creeper-explosion", cuboidSetting.getStatus("global-creeper-explosion", Status.ALLOW));
         
         //sanctuary-global
-        RegionFlagRegister.registerFlag("mob-damage");
         global.setProperty("mob-damage", cuboidSetting.getStatus("global-mob-damage", Status.ALLOW));
         
         //sanctuary-global
-        RegionFlagRegister.registerFlag("mob-spawn");
         global.setProperty("mob-spawn", cuboidSetting.getStatus("global-mob-spawn", Status.ALLOW));
         
         //sanctuary-animal-spawn-global
-        RegionFlagRegister.registerFlag("animal-spawn");
         global.setProperty("animal-spawn", cuboidSetting.getStatus("global-animal-spawn", Status.ALLOW));
         
         //tnt-secure-global
-        RegionFlagRegister.registerFlag("tnt-explosion");
         global.setProperty("tnt-explosion", cuboidSetting.getStatus("global-tnt-explosion", Status.ALLOW));
         
         //firespread-block-global
-        RegionFlagRegister.registerFlag("firespread");
         global.setProperty("firespread", cuboidSetting.getStatus("global-firespread", Region.Status.ALLOW));
         
         //protection-global
-        RegionFlagRegister.registerFlag("protection");
         global.setProperty("protection", cuboidSetting.getStatus("global-protection", Region.Status.DEFAULT));
         
         //stop-lava-flow-global
-        RegionFlagRegister.registerFlag("lava-flow");
         global.setProperty("lava-flow", cuboidSetting.getStatus("global-lava-flow", Region.Status.DEFAULT));
         
         //stop-lava-flow-global
-        RegionFlagRegister.registerFlag("water-flow");
         global.setProperty("water-flow", cuboidSetting.getStatus("global-water-flow", Region.Status.DEFAULT));
         
         //default-physics-control
-        RegionFlagRegister.registerFlag("physics");
         global.setProperty("physics", cuboidSetting.getStatus("global-physics", Region.Status.ALLOW));
         
         //default-enderman-control
-        RegionFlagRegister.registerFlag("enderman-pickup");
         global.setProperty("enderman-pickup", cuboidSetting.getStatus("global-enderman-pickup", Region.Status.DEFAULT));
         
         //switch on/off item restriction
-        RegionFlagRegister.registerFlag("restrict-items");
         global.setProperty("restrict-items", cuboidSetting.getStatus("global-restrict-items", Region.Status.DEFAULT));
         
-        RegionFlagRegister.registerFlag("water-bucket");
         global.setProperty("water-bucket", cuboidSetting.getStatus("global-water-bucket", Region.Status.DEFAULT));
         
-        RegionFlagRegister.registerFlag("lava-bucket");
         global.setProperty("lava-bucket", cuboidSetting.getStatus("global-lava-bucket", Region.Status.DEFAULT));
-
+        
         String[] itemsList = cuboidSetting.getString("restricted-items", "").split(",");
         restrictedItems = new ArrayList<Integer>(itemsList.length);
         for (String i : itemsList) {
