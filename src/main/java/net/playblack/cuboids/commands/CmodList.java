@@ -14,8 +14,7 @@ import net.playblack.mcutils.ToolBox;
 public class CmodList extends CBaseCommand {
 
     public CmodList() {
-        super("List areas in the recent world:" + ColorManager.Yellow
-                + " /cmod list [page]", 2, 3);
+        super("List areas in the recent world:" + ColorManager.Yellow + " /cmod list [page]", 2, 3);
     }
 
     @Override

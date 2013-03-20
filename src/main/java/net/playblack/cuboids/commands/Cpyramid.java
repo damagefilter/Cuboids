@@ -21,8 +21,7 @@ import net.playblack.mcutils.ToolBox;
 public class Cpyramid extends CBaseCommand {
 
     public Cpyramid() {
-        super("Create a sphere:" + ColorManager.Yellow
-                + " /cpyramid <radius> <block>:[data] [hollow]", 3, 4);
+        super("Create a sphere:" + ColorManager.Yellow + " /cpyramid <radius> <block>:[data] [hollow]", 3, 4);
     }
 
     @Override

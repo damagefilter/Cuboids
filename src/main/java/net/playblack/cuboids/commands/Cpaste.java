@@ -19,8 +19,7 @@ import net.playblack.mcutils.Debug;
 public class Cpaste extends CBaseCommand {
 
     public Cpaste() {
-        super("Paste a selection from clipboard relative to your position: "
-                + ColorManager.Yellow + "/cpaste", 1);
+        super("Paste a selection from clipboard relative to your position: " + ColorManager.Yellow + "/cpaste", 1);
     }
 
     @Override
@@ -35,8 +34,7 @@ public class Cpaste extends CBaseCommand {
             }
         }
 
-        CuboidSelection sel = SessionManager.getInstance().getClipboard(
-                player.getName());
+        CuboidSelection sel = SessionManager.getInstance().getClipboard(player.getName());
         if (sel == null || !sel.isComplete()) {
             MessageSystem.failMessage(player, "clipboardEmpty");
             return;

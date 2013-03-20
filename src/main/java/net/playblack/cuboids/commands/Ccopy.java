@@ -20,8 +20,7 @@ import net.playblack.mcutils.Debug;
 public class Ccopy extends CBaseCommand {
 
     public Ccopy() {
-        super("Copy a selection into your clipboard: " + ColorManager.Yellow
-                + " /ccopy", 1);
+        super("Copy a selection into your clipboard: " + ColorManager.Yellow + " /ccopy", 1);
     }
 
     @Override

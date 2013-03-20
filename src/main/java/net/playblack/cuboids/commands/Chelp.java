@@ -14,8 +14,7 @@ import net.playblack.mcutils.ToolBox;
 public class Chelp extends CBaseCommand {
 
     public Chelp() {
-        super("Display this help:" + ColorManager.Yellow
-                + " /chelp <term term term ...>[page]", 2);
+        super("Display this help:" + ColorManager.Yellow + " /chelp <term term term ...>[page]", 2);
     }
 
     @Override

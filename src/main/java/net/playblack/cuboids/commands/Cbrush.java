@@ -17,8 +17,7 @@ import net.playblack.mcutils.ToolBox;
 public class Cbrush extends CBaseCommand {
 
     public Cbrush() {
-        super("Set the property of a brush:" + ColorManager.Yellow
-                + " /cbrush <radius> <block>:[data]", 3);
+        super("Set the property of a brush:" + ColorManager.Yellow + " /cbrush <radius> <block>:[data]", 3);
     }
 
     @Override

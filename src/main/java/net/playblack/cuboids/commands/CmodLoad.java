@@ -17,8 +17,7 @@ import net.playblack.mcutils.ColorManager;
 public class CmodLoad extends CBaseCommand {
 
     public CmodLoad() {
-        super("Load areas points into your selection:" + ColorManager.Yellow
-                + " /cmod <area> loadpoints", 3);
+        super("Load areas points into your selection:" + ColorManager.Yellow + " /cmod <area> loadpoints", 3);
     }
 
     @Override
@@ -31,8 +30,7 @@ public class CmodLoad extends CBaseCommand {
         if (!player.hasPermission("cIgnoreRestrictions")) {
             if (!player.hasPermission("cAreaMod")) {
                 if (!player.hasPermission("cselect")) {
-                    MessageSystem.failMessage(player,
-                            "permissionDenied");
+                    MessageSystem.failMessage(player, "permissionDenied");
                     return;
                 }
             }

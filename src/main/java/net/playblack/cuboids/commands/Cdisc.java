@@ -23,8 +23,7 @@ public class Cdisc extends CBaseCommand {
     private boolean fill;
 
     public Cdisc(String variant) {
-        super("Create disc/circle: " + ColorManager.Yellow + variant
-                + " <radius> <block>:[data] [height]", 3, 4);
+        super("Create disc/circle: " + ColorManager.Yellow + variant + " <radius> <block>:[data] [height]", 3, 4);
         if (variant.equalsIgnoreCase("/ccircle")) {
             fill = false;
         } else {

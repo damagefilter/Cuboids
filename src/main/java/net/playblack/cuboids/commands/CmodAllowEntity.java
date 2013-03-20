@@ -13,8 +13,7 @@ import net.playblack.mcutils.ColorManager;
 public class CmodAllowEntity extends CBaseCommand {
 
     public CmodAllowEntity() {
-        super("Allow an entity in cuboid:" + ColorManager.Yellow
-                + " /cmod <area> allow <player g:group o:owner>", 4);
+        super("Allow an entity in cuboid:" + ColorManager.Yellow + " /cmod <area> allow <player g:group o:owner>", 4);
     }
 
     @Override

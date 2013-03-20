@@ -21,8 +21,7 @@ import net.playblack.mcutils.ToolBox;
 public class Credo extends CBaseCommand {
 
     public Credo() {
-        super("Redo block operations:" + ColorManager.Yellow
-                + " /credo [steps] [player]", 1, 3);
+        super("Redo block operations:" + ColorManager.Yellow + " /credo [steps] [player]", 1, 3);
     }
 
     @Override

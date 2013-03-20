@@ -14,7 +14,6 @@ import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
@@ -56,21 +55,6 @@ public class CuboidInterface {
         return threadManager;
     }
     
-    public boolean setProperty(CPlayer player, String cubeName, String property, String value) {
-        Region.Status state = Region.Status.fromString(value);
-        if(state == Status.INVALID_PROPERTY) {
-            MessageSystem.failMessage(player, "invalidPropertyState");
-            return false;
-        }
-        
-        Region rg = (Region)regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getDimension());
-        if(rg == null) {
-            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
-            return false;
-        }
-        
-        return false;
-    }
 
     /*
      * **************************************************************************************
@@ -748,7 +732,8 @@ public class CuboidInterface {
         // Following is all taken from CuboidPlugin
         // Because I suck at making paging
         if (cuboids == null || cuboids.isEmpty()) {
-            MessageSystem.customMessage(player, ColorManager.LightGray, "No cuboids for world " + world + " in Dimension " + dimName);
+            MessageSystem.translateMessage(player, ColorManager.LightGray, "noCuboidsInworldAndDimemsion", new String[] {world, dimName});
+            //(player, ColorManager.LightGray, "No cuboids for world " + world + " in Dimension " + dimName);
             return;
         }
         maxPages = (int) Math.ceil(cuboids.size() / perPage);
@@ -759,9 +744,8 @@ public class CuboidInterface {
             page = 1;
         }
         amount = (page - 1) * perPage;
-        MessageSystem.customMessage(player, ColorManager.Yellow,
-                "Cuboid Nodes (" + dimName + " in " + world + ") Page " + page
-                        + " from " + maxPages);
+        
+        MessageSystem.translateMessage(player, ColorManager.Yellow, "cuboidsInWorld", dimName, world, Integer.toString(page), Integer.toString(maxPages));
         for (int i = amount; i < (amount + perPage); i++) {
             if (cuboids.size() <= i) {
                 break;
@@ -787,10 +771,8 @@ public class CuboidInterface {
                 return;
             }
         }
-        player.sendMessage(ColorManager.LightGreen + "Restricted Commands for "
-                + cube.getName());
-        player.sendMessage(ColorManager.LightGray
-                + cube.getRestrictedCommands().toString());
+        MessageSystem.translateMessage(player, ColorManager.LightGray , "restrictedCommandsForCuboid", cube.getName());
+        player.sendMessage(ColorManager.Rose + cube.getRestrictedCommands().toString());
     }
 
     public void killTasks() {

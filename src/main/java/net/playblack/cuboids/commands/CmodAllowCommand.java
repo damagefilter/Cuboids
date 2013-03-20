@@ -13,8 +13,7 @@ import net.playblack.mcutils.ColorManager;
 public class CmodAllowCommand extends CBaseCommand {
 
     public CmodAllowCommand() {
-        super("Allow a command in your area:" + ColorManager.Yellow
-                + " /cmod <area> allowcommand <command,command ...>", 4);
+        super("Allow a command in your area:" + ColorManager.Yellow + " /cmod <area> allowcommand <command,command ...>", 4);
     }
 
     @Override

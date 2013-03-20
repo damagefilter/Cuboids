@@ -20,8 +20,7 @@ import net.playblack.mcutils.Debug;
 public class Cdel extends CBaseCommand {
 
     public Cdel() {
-        super("Remove contents of a selection:" + ColorManager.Yellow
-                + " /cdel", 1);
+        super("Remove contents of a selection:" + ColorManager.Yellow + " /cdel", 1);
     }
 
     @Override

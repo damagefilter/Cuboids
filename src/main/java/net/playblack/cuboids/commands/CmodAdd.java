@@ -18,8 +18,7 @@ import net.playblack.mcutils.ColorManager;
 public class CmodAdd extends CBaseCommand {
 
     public CmodAdd() {
-        super("Add a new Cuboid: " + ColorManager.Yellow
-                + "/cmod <area> add/create", 3);
+        super("Add a new Cuboid: " + ColorManager.Yellow + "/cmod <area> add/create", 3);
     }
 
     @Override

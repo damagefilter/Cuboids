@@ -16,8 +16,7 @@ public class Csave extends CBaseCommand {
 
     public Csave(boolean saveAll) {
         super(
-                "Save cuboid(s): " + ColorManager.Yellow + "/csave" + saveAll != null
-                        && (saveAll) ? "-all" : " <area>", 1, 2);
+                "Save cuboid(s): " + ColorManager.Yellow + "/csave" + saveAll != null && (saveAll) ? "-all" : " <area>", 1, 2);
         this.saveAll = saveAll;
     }
 

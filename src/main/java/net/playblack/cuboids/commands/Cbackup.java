@@ -22,8 +22,7 @@ import net.playblack.mcutils.Debug;
 public class Cbackup extends CBaseCommand {
 
     public Cbackup() {
-        super("Backup a cuboid area: " + ColorManager.Yellow
-                + "/cbackup <area>", 2);
+        super("Backup a cuboid area: " + ColorManager.Yellow + "/cbackup <area>", 2);
     }
 
     @Override
@@ -51,8 +50,7 @@ public class Cbackup extends CBaseCommand {
                 e.printStackTrace();
                 return;
             } catch (SelectionIncompleteException e) {
-                MessageSystem.failMessage(player,
-                        "selectionIncomplete");
+                MessageSystem.failMessage(player, "selectionIncomplete");
                 return;
             }
             CuboidSerializer ser = new FlatFileSerializer(tmp);

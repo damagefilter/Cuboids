@@ -20,8 +20,7 @@ import net.playblack.mcutils.Debug;
 public class Cfill extends CBaseCommand {
 
     public Cfill() {
-        super("Fill a selection: " + ColorManager.Yellow
-                + "/cfill <block id>:[data]", 2);
+        super("Fill a selection: " + ColorManager.Yellow + "/cfill <block id>:[data]", 2);
     }
 
     @Override

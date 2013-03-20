@@ -79,4 +79,12 @@ public class MessageSystem extends LocaleHelper {
     public static void translateMessage(CPlayer player, String color, String message) {
         player.sendMessage(color + ms.localeTranslate(message));
     }
+    
+    public static void translateMessage(CPlayer player, String message, String[] args) {
+        player.sendMessage(ms.localeTranslateFormat(message, args));
+    }
+    
+    public static void translateMessage(CPlayer player, String color, String message, String... args) {
+        player.sendMessage(color + ms.localeTranslateFormat(message, args));
+    }
 }

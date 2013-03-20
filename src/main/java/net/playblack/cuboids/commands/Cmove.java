@@ -20,8 +20,7 @@ import net.playblack.mcutils.ToolBox;
 public class Cmove extends CBaseCommand {
 
     public Cmove() {
-        super("Move the contents of a selection: " + ColorManager.Yellow
-                + "/cmove <distance> <NORTH/EAST/SOUTH/WEST/UP/DOWN>", 3);
+        super("Move the contents of a selection: " + ColorManager.Yellow + "/cmove <distance> <NORTH/EAST/SOUTH/WEST/UP/DOWN>", 3);
     }
 
     @Override

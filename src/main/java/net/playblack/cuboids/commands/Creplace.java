@@ -20,8 +20,7 @@ import net.playblack.mcutils.Debug;
 public class Creplace extends CBaseCommand {
 
     public Creplace() {
-        super("Replace blocks in a selection:" + ColorManager.Yellow
-                + " /creplace <block>:[data] <substitute>:[data]", 3);
+        super("Replace blocks in a selection:" + ColorManager.Yellow + " /creplace <block>:[data] <substitute>:[data]", 3);
     }
 
     @Override

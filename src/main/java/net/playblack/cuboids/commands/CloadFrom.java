@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.cuboids.datasource.XmlData;
 import net.playblack.cuboids.datasource.MysqlDataLegacy;
 import net.playblack.cuboids.gameinterface.CPlayer;
@@ -15,8 +16,7 @@ import net.playblack.mcutils.ColorManager;
  */
 public class CloadFrom extends CBaseCommand {
     public CloadFrom() {
-        super("Load cuboids: " + ColorManager.Yellow
-                + "/cloadfrom <mysql/flatfile>", 2);
+        super("Load cuboids: " + ColorManager.Yellow + "/cloadfrom <mysql/flatfile/xml>", 2);
     }
 
     @Override
@@ -30,7 +30,13 @@ public class CloadFrom extends CBaseCommand {
         if (command[1].equalsIgnoreCase("mysql")) {
             MysqlDataLegacy ds = new MysqlDataLegacy(Config.get().getSqlConfig());
             ds.loadAll();
-        } else {
+        }
+        //Flatfile now does legacy loading
+        else if(command[1].equalsIgnoreCase("flatfile")) {
+            FlatfileDataLegacy ds = new FlatfileDataLegacy();
+            ds.loadAll();
+        }
+        else {
             XmlData ds = new XmlData();
             ds.loadAll();
         }

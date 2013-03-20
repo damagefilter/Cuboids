@@ -16,9 +16,7 @@ import net.playblack.mcutils.Vector;
 public class CmodTpTo extends CBaseCommand {
 
     public CmodTpTo() {
-        super(
-                "Set cuboid parent: " + ColorManager.Yellow
-                        + "/cmod <area> tpto", 3);
+        super("Set cuboid parent: " + ColorManager.Yellow+ "/cmod <area> tpto", 3);
     }
 
     @Override

@@ -13,8 +13,7 @@ import net.playblack.mcutils.ColorManager;
 public class CmodShowCmdBlacklist extends CBaseCommand {
 
     public CmodShowCmdBlacklist() {
-        super("Show blacklisted commands:" + ColorManager.Yellow
-                + " /cmod <area> cmdblacklist", 3);
+        super("Show blacklisted commands:" + ColorManager.Yellow + " /cmod <area> cmdblacklist", 3);
     }
 
     @Override

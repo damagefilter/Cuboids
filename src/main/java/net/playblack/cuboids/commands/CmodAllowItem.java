@@ -13,8 +13,7 @@ import net.playblack.mcutils.ColorManager;
 public class CmodAllowItem extends CBaseCommand {
 
     public CmodAllowItem() {
-        super("Allow an item in cuboid:" + ColorManager.Yellow
-                + " /cmod <area> allowitem <item name or item id>", 4);
+        super("Allow an item in cuboid:" + ColorManager.Yellow + " /cmod <area> allowitem <item name or item id>", 4);
     }
 
     @Override

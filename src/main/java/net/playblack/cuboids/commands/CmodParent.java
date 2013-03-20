@@ -13,8 +13,7 @@ import net.playblack.mcutils.ColorManager;
 public class CmodParent extends CBaseCommand {
 
     public CmodParent() {
-        super("Set cuboid parent:" + ColorManager.Yellow
-                + " /cmod <area> parent <parent_name>", 4);
+        super("Set cuboid parent:" + ColorManager.Yellow + " /cmod <area> parent <parent_name>", 4);
     }
 
     @Override

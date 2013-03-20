@@ -14,8 +14,7 @@ import net.playblack.mcutils.ColorManager;
 public class Cexpand extends CBaseCommand {
 
     public Cexpand() {
-        super("Expand the current cuboid selection: " + ColorManager.Yellow
-                + "/cexpand", 1);
+        super("Expand the current cuboid selection: " + ColorManager.Yellow + "/cexpand", 1);
     }
 
     @Override
@@ -30,8 +29,7 @@ public class Cexpand extends CBaseCommand {
             }
         }
 
-        SelectionManager.get().getPlayerSelection(player.getName())
-                .expandVert();
+        SelectionManager.get().getPlayerSelection(player.getName()).expandVert();
         MessageSystem.successMessage(player, "selectionExpanded");
     }
 }

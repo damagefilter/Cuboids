@@ -17,8 +17,7 @@ import net.playblack.mcutils.Vector;
 public class Cceiling extends CBaseCommand {
 
     public Cceiling() {
-        super("Set ceiling level, use -r: player pos + height: "
-                + ColorManager.Yellow + "/cceiling <height> [-r]", 2, 3);
+        super("Set ceiling level, use -r: player pos + height: " + ColorManager.Yellow + "/cceiling <height> [-r]", 2, 3);
     }
 
     @Override

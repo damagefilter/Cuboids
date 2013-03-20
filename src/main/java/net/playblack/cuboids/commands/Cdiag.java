@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import java.util.ArrayList;
 
+import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
@@ -26,7 +27,7 @@ public class Cdiag extends CBaseCommand {
         }
         if (player.hasPermission("cIgnoreRestrictions")) {
             ArrayList<Region> nodes = RegionManager.get().getCuboidsContaining(player.getLocation(), player.getWorld().getName(), player.getWorld().getDimension());
-            player.sendMessage(ColorManager.LightGreen + "Cuboids containnig your current location:");
+            MessageSystem.translateMessage(player, ColorManager.LightGreen, "cuboidContainingYou");
             for (Region cube : nodes) {
                 player.sendMessage(ColorManager.Yellow + "Name: " + ColorManager.LightGray + cube.getName());
                 String parent = "none";

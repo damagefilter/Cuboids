@@ -13,8 +13,7 @@ import net.playblack.mcutils.ColorManager;
 public class CmodInfo extends CBaseCommand {
 
     public CmodInfo() {
-        super("Explain a Cuboid:" + ColorManager.Yellow + " /cmod <area> info",
-                3);
+        super("Explain a Cuboid:" + ColorManager.Yellow + " /cmod <area> info", 3);
     }
 
     @Override
