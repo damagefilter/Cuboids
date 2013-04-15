@@ -24,7 +24,7 @@ public class CmodSetFlag extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
+        if (!player.hasPermission("cuboids.super.admin")) {
             if (!player.hasPermission("cuboids.flags."+command[command.length-2])) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
@@ -43,7 +43,7 @@ public class CmodSetFlag extends CBaseCommand {
             return;
         }
 
-        if (node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod") || player.hasPermission("cIgnoreRestrictions")) {
+        if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
             if(node.setProperty(command[command.length-2], Region.Status.fromString(command[command.length-1]))) {
                 MessageSystem.successMessage(player, "regionFlagSet");
             }

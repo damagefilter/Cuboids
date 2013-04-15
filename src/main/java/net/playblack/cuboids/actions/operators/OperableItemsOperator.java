@@ -31,7 +31,7 @@ public class OperableItemsOperator implements ActionListener {
      * @return
      */
     public boolean canUseBlock(CPlayer player, CBlock block, Location point) {
-        if(player.hasPermission("cIgnoreRestrictions")) {
+        if(player.hasPermission("cuboids.super.admin")) {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);
@@ -42,7 +42,7 @@ public class OperableItemsOperator implements ActionListener {
     }
     
     public boolean canUseBucket(CPlayer player, Location point, boolean lavaBucket) {
-        if(player.hasPermission("cIgnoreRestrictions")) {
+        if(player.hasPermission("cuboids.super.admin")) {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);

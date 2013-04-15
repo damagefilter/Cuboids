@@ -30,14 +30,14 @@ public class Cbackup extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
+        if (!player.hasPermission("cuboids.super.admin")) {
             if (!player.hasPermission("cbackup")) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
         Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
-        if (node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod")) {
+        if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod")) {
             GenericGenerator gen = new GenericGenerator(new CuboidSelection(node.getOrigin(), node.getOffset()), player.getWorld());
 
             CuboidSelection tmp = new CuboidSelection(node.getOrigin(), node.getOffset());

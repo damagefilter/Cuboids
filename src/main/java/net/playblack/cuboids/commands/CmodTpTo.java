@@ -31,7 +31,7 @@ public class CmodTpTo extends CBaseCommand {
         }
         Vector target = Vector.getCenterPoint(targetCube.getOrigin(), targetCube.getOffset());
 
-        if (player.hasPermission("cIgnoreRestrictions") || (player.hasPermission("cteleport") && targetCube.playerIsAllowed(player.getName(), player.getGroups()))) {
+        if (player.hasPermission("cuboids.super.admin") || (player.hasPermission("cteleport") && targetCube.playerIsAllowed(player.getName(), player.getGroups()))) {
             if (!player.getWorld().isChunkLoaded(target)) {
                 player.getWorld().loadChunk(target);
             }

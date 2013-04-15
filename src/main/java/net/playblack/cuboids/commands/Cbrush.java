@@ -25,7 +25,7 @@ public class Cbrush extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
+        if (!player.hasPermission("cuboids.super.admin")) {
             if (!(player.hasPermission("cWorldMod") && player
                     .hasPermission("cbrush"))) {
                 MessageSystem.failMessage(player, "permissionDenied");

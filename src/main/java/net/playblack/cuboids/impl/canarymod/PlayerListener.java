@@ -113,7 +113,7 @@ public class PlayerListener implements PluginListener {
 //    @Override
 //    public boolean onItemUse(Player player, Block blockPlaced,
 //            Block blockClicked, Item item) {
-//        if (player.canUseCommand("/cIgnoreRestrictions")) {
+//        if (player.canUseCommand("/cuboids.super.admin")) {
 //            return false; // allow
 //        }
 //        if (blockPlaced == null) {

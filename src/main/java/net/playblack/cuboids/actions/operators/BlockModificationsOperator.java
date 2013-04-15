@@ -55,7 +55,7 @@ public class BlockModificationsOperator implements ActionListener {
      * @return
      */
     public boolean canUseLighter(CPlayer player, Location point) {
-        if(player.hasPermission("cIgnoreRestrictions")) {
+        if(player.hasPermission("cuboids.super.admin")) {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);

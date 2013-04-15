@@ -37,7 +37,7 @@ public class CmodRemoveFlag extends CBaseCommand {
             return;
         }
 
-        if (node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod") || player.hasPermission("cIgnoreRestrictions")) {
+        if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
             if(node.removeProperty(command[2])) {
                 MessageSystem.successMessage(player, "regionFlagRemoved");
             }

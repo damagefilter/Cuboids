@@ -27,7 +27,7 @@ public class Cpaste extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
+        if (!player.hasPermission("cuboids.super.admin")) {
             if (!player.hasPermission("cWorldMod")) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;

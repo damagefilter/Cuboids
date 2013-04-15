@@ -59,7 +59,7 @@ public class SelectionOperator implements ActionListener {
             }
         }
         
-        if(!player.hasPermission("cIgnoreRestrictions")) {
+        if(!player.hasPermission("cuboids.super.admin")) {
             if(!player.hasPermission("cselect")) {
                 return false;
             }

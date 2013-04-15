@@ -28,8 +28,8 @@ public class CmodRename extends CBaseCommand {
                 command[1], player.getWorld().getName(),
                 player.getWorld().getDimension());
 
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!(node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod"))) {
+        if (!player.hasPermission("cuboids.super.admin")) {
+            if (!(node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod"))) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }

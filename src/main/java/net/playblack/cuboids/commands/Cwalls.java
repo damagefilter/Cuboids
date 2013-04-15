@@ -36,7 +36,7 @@ public class Cwalls extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        if (!player.hasPermission("cIgnoreRestrictions")) {
+        if (!player.hasPermission("cuboids.super.admin")) {
             if (!player.hasPermission("cWorldMod")) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;

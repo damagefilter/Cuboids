@@ -26,7 +26,7 @@ public class BrushOperator implements ActionListener {
      */
     public void handleBrush(CPlayer player, Vector point) {
         if (player.getItemInHand().getId() == Config.get().getSculptItem()) {
-            if ((player.hasPermission("cWorldMod") && player.hasPermission("cbrush")) || player.hasPermission("cIgnoreRestrictions")) {
+            if ((player.hasPermission("cWorldMod") && player.hasPermission("cbrush")) || player.hasPermission("cuboids.super.admin")) {
                 PlayerSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
                 selection.setOrigin(point);
                 SphereGenerator gen = new SphereGenerator(selection,player.getWorld());
