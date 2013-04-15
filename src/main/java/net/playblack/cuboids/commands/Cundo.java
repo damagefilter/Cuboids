@@ -14,9 +14,9 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * Undo things
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Cundo extends CBaseCommand {
 
@@ -28,12 +28,6 @@ public class Cundo extends CBaseCommand {
     public void execute(CPlayer player, String[] command) {
         if (!parseCommand(player, command)) {
             return;
-        }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("cWorldMod")) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
         }
         if (!Config.get().isAllowUndo()) {
             MessageSystem.failMessage(player, "undoDisabled");
@@ -60,7 +54,7 @@ public class Cundo extends CBaseCommand {
 
         for (int i = 0; i < steps; i++) {
             CuboidSelection sel = SessionManager.getInstance().getPlayerHistory(subject).undo();
-            
+
             if (sel == null) {
                 MessageSystem.yellowNote(player, "allUndone");
                 return;

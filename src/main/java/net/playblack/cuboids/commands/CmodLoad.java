@@ -1,23 +1,18 @@
 package net.playblack.cuboids.commands;
 
-import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.cuboids.selections.CuboidSelection;
-import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.mcutils.ColorManager;
 
 /**
- * Load cuboid areas edges into player selection
- * 
+ * Load a single cuboid
+ *
  * @author Chris
- * 
+ *
  */
 public class CmodLoad extends CBaseCommand {
-
     public CmodLoad() {
-        super("Load areas points into your selection:" + ColorManager.Yellow + " /cmod <area> loadpoints", 3);
+        super("Load a cuboid: " + ColorManager.Yellow + "/cmod load <area>", 2);
     }
 
     @Override
@@ -25,20 +20,6 @@ public class CmodLoad extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        Region cube = RegionManager.get().getRegionByName(command[1],
-                player.getWorld().getName(), player.getWorld().getDimension());
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("cAreaMod")) {
-                if (!player.hasPermission("cselect")) {
-                    MessageSystem.failMessage(player, "permissionDenied");
-                    return;
-                }
-            }
-        }
-        CuboidSelection selection = SelectionManager.get()
-                .getPlayerSelection(player.getName());
-        selection.setOrigin(cube.getOrigin());
-        selection.setOffset(cube.getOffset());
-        MessageSystem.successMessage(player, "pointsLoaded");
+        CuboidInterface.get().loadCuboid(player, command[1]);
     }
 }

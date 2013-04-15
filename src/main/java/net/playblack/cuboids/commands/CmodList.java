@@ -7,14 +7,14 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * List all cuboids in the recent world
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class CmodList extends CBaseCommand {
 
     public CmodList() {
-        super("List areas in the recent world:" + ColorManager.Yellow + " /cmod list [page]", 2, 3);
+        super("List areas in the recent world:" + ColorManager.Yellow + " /cmod list [page]", 1, 2);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class CmodList extends CBaseCommand {
         }
         int page = 1;
         if (command.length == 3) {
-            page = ToolBox.parseInt(command[2]);
+            page = ToolBox.parseInt(command[1]);
             if (page < 1) {
                 page = 1;
             }

@@ -11,9 +11,9 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * High-Protect an area
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Highprotect extends CBaseCommand {
 
@@ -27,12 +27,9 @@ public class Highprotect extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!(player.hasPermission("ccreate"))
-                    && player.hasPermission("cprotection")) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
+        if (!(player.hasPermission("ccreate"))) {
+            MessageSystem.failMessage(player, "permissionDenied");
+            return;
         }
         CuboidSelection selection = SelectionManager.get()
                 .getPlayerSelection(player.getName());

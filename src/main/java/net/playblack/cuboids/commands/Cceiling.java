@@ -10,9 +10,9 @@ import net.playblack.mcutils.Vector;
 
 /**
  * Set ceiling level of current selection
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Cceiling extends CBaseCommand {
 
@@ -24,13 +24,6 @@ public class Cceiling extends CBaseCommand {
     public void execute(CPlayer player, String[] command) {
         if (!parseCommand(player, command)) {
             return;
-        }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!(player.hasPermission("cselect") && player
-                    .hasPermission("ccreate"))) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
         }
 
         int height = ToolBox.parseInt(command[1]);

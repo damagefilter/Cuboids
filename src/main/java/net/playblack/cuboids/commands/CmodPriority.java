@@ -8,14 +8,14 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * Set the priority of a cuboid
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class CmodPriority extends CBaseCommand {
 
     public CmodPriority() {
-        super("Set cuboid priority:" + ColorManager.Yellow + " /cmod <area> priority <level>", 4);
+        super("Set cuboid priority:" + ColorManager.Yellow + " /cmod priority <area> <level>", 3);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class CmodPriority extends CBaseCommand {
             return;
         }
         // player cube prio
-        int prio = ToolBox.parseInt(command[3]);
+        int prio = ToolBox.parseInt(command[2]);
         if (prio < 0) {
             MessageSystem.failMessage(player, "invalidPriority");
             return;

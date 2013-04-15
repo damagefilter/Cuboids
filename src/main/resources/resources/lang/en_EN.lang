@@ -1,0 +1,131 @@
+# This file NEEDS to be in UTF-8 format!
+# Permission related Fail Messages
+true=true
+yes=yes
+on=on
+allow=allow
+false=false
+no=no
+off=off
+deny=deny
+
+permissionDenied=Permission denied.
+playerNotOwner=You are not the owner of this Cuboid
+
+# Selection messages
+selectionIncomplete=Your selection is not finished. Please set start and end point
+selectionDeleted=The contents of the selection have been deleted
+selectionNotDeleted=The contents of the selection have not been deleted
+selectionExpanded=Selection has been expanded top-to-bottom
+selectionFilled=Selection has been filled
+selectionNotFilled=Selection has not been filled
+selectionMoved=Selection has been moved
+selectionNotMoved=Selection has not been moved
+selectionPasted=Selection has been pasted
+selectionNotPasted=Selection has not been pasted
+selectionReplaced=Selection has been replaced
+selectionNotReplaced=Selection has not been replaced
+originSet=Point 1 set
+offsetSet=Point 2 set
+
+
+# Region related messages
+cuboidNotFoundOnCommand=There is no Cuboid with this name.
+cuboidLoaded=Cuboid was loaded
+cuboidLoadedAll=All Cuboids have been loaded from disk
+cuboidSaved=Cuboid has been saved
+cuboidNotSaved=Cuboid has not been saved
+cuboidSavedAll=All Cuboids have been saved
+
+cuboidRemoved=Cuboid has been removed
+
+cuboidUpdated=Cuboid has been updated
+cuboidNotUpdated=Cuboid has not been updated
+
+cuboidMoved=Cuboid has been moved
+cuboidNotMoved=Cuboid has not been moved
+
+cuboidNotCreated=Cuboid has not been created
+cuboidCreated=Cuboid has been created
+cuboidExists=A Cuboid with this name already exists in this world and dimension
+
+cuboidRenamed=Cuboid has been renamed
+
+
+# Command responses
+prioritySet=Priority has been set
+priorityNotSet=Priority has not been set
+invalidPriority=Priority is invalid
+
+parentSet=Parent region has been set
+parentNotSet=Parent region has not been set
+notWithinSpecifiedParent=The Cuboid is not within the specified parent - Not set
+
+noCuboidFound=No cuboid here
+backupSuccess=Backup succeeded
+brushSet=Brush has been set
+negativeNumber=Please specify a number > 0
+ceilingSet=Ceiling level has been set
+floorSet=Floor level has been set
+copiedToClipboard=Copied to clipboard
+
+originNotSet=First point must be set
+offsetNotSet=Second point must be set
+pointsLoaded=Cuboids points have been loaded
+
+farewellSet=Farewell message has been set
+welcomeSet=Welcome message has been set
+
+discCreated=Disk has been created.
+circleCreated=Circle has been created
+discNotCreated=Disk has not been created
+
+pyramidCreated=A pyramid has been constructed
+pyramidNotCreated=There were not enough slaves to build a pyramid
+
+sphereCreated=A sphere has magically appeared
+sphereNotCreated=The sphere gods decided there shall be no sphere
+
+wallsCreated=Walls have been build
+facesCreated=A Cubes faces have been build
+wallsNotCreated=There shall be no more walls!
+
+invalidBlock=Invalid block specified.
+invalidHeight=Invalid height specified. Please use a positive number (> 0)
+invalidRadius=Please specify a radius > 0
+invalidCharacters=There are invalid characters in the name
+invalidCardinalDirection=Invalid cardinal direction
+invalidDistance=Invalid distance
+
+globalFlagRemoved=Global flag has been removed
+regionFlagRemoved=Flag has been removed from Cuboid
+globalFlagSet=Global flag has been set
+regionFlagSet=Flag has been set
+
+invalidRegionFlagValue=Invalid flag value
+
+
+# Stuff
+youOwnThisArea=You own this Cuboid
+youCanBuildHere=You can build in this Cuboid
+youCanNotBuildHere=You may not build here
+players=Players:
+groups=Groups:
+noCuboidsInworldAndDimemsion=No cuboids in %s, in dimension %s
+cuboidsInWorld=Cuboids (%s in %s) Page %s from %s
+restrictedCommandsForCuboid=Restricted commands for %s
+disallowedCommands=Restricted commands:
+disallowedItems=Restricted items
+cuboidContainingYou=Cuboids containing your location: 
+playerTeleported=Teleported!
+clipboardEmpty=The clipboard is empty
+
+undoDisabled=Undo/Redo functionality is disabled
+allRedone=Nothing left to redo
+redoDone=Redone
+allUndone=Nothing left do undo
+undoDone=Undone
+
+restoreSuccess=Cuboid has been restored
+restoreFail=Something went wrong while restoring the Cuboid
+

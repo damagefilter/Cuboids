@@ -15,9 +15,9 @@ import net.playblack.mcutils.Debug;
 
 /**
  * Backup an area
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Cbackup extends CBaseCommand {
 
@@ -39,9 +39,9 @@ public class Cbackup extends CBaseCommand {
         Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
         if (node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod")) {
             GenericGenerator gen = new GenericGenerator(new CuboidSelection(node.getOrigin(), node.getOffset()), player.getWorld());
-            
+
             CuboidSelection tmp = new CuboidSelection(node.getOrigin(), node.getOffset());
-            
+
             try {
                 tmp = gen.getWorldContent(tmp);
             } catch (BlockEditLimitExceededException e) {

@@ -8,15 +8,14 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Rename a Cuboid
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class CmodRename extends CBaseCommand {
 
     public CmodRename() {
-        super("Rename a Cuboid: " + ColorManager.Yellow
-                + "/cmod <old area> rename <new area name>", 4);
+        super("Rename a Cuboid: " + ColorManager.Yellow + "/cmod rename <old area> <new area name>", 3);
     }
 
     @Override

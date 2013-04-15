@@ -10,28 +10,20 @@ import net.playblack.mcutils.Vector;
 
 /**
  * Set floor level of current selection
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Cfloor extends CBaseCommand {
 
     public Cfloor() {
-        super("Set floorlevel, use -r: player pos - height:"
-                + ColorManager.Yellow + " /cfloor <height> [-r]", 2, 3);
+        super("Set floorlevel, use -r: player pos - height:" + ColorManager.Yellow + " /cfloor <height> [-r]", 2, 3);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
         if (!parseCommand(player, command)) {
             return;
-        }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!(player.hasPermission("cselect") && player
-                    .hasPermission("ccreate"))) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
         }
 
         int height = ToolBox.parseInt(command[1]);

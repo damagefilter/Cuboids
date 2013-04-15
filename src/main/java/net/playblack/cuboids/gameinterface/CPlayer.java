@@ -8,34 +8,34 @@ import net.playblack.cuboids.HealThread;
 import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
+import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Location;
 import net.playblack.mcutils.Vector;
 
 public abstract class CPlayer implements IBaseEntity {
 
-    protected HashMap<Integer, CItem[]> inventories = new HashMap<Integer, CItem[]>();
-    
+    protected HashMap<Integer, CInventory> inventories = new HashMap<Integer, CInventory>();
+
     Region currentRegion;
     private boolean adminCreative; //this is if creative wasn't set by cuboids
     /**
      * Send a message to the player
-     * 
+     *
      * @param message
      */
     public abstract void sendMessage(String message);
 
     /**
      * Notify the player (send him a red message)
-     * 
+     *
      * @param message
      */
     public abstract void notify(String message);
 
     /**
      * Execute a permissions check on the player
-     * 
+     *
      * @param permission
      * @return
      */
@@ -43,7 +43,7 @@ public abstract class CPlayer implements IBaseEntity {
 
     /**
      * Get the item in hand, if any, this may return null
-     * 
+     *
      * @return
      */
     public abstract CItem getItemInHand();
@@ -52,7 +52,7 @@ public abstract class CPlayer implements IBaseEntity {
      * Get an array with all groups this player is in. This might not work with
      * the greater idiocy of permission plugins but I show you how much fucks I
      * give about that:
-     * 
+     *
      * @return
      */
     public abstract String[] getGroups();
@@ -67,10 +67,10 @@ public abstract class CPlayer implements IBaseEntity {
      * @param creative
      */
     public abstract void setGameMode(int mode);
-    
+
     /**
      * Check if a player is in creative mode
-     * 
+     *
      * @return
      */
     public abstract boolean isInCreativeMode();
@@ -84,8 +84,8 @@ public abstract class CPlayer implements IBaseEntity {
      * Get the full player inventory as item array,
      * depending on what game mode,
      * @see CPlayer.setGameMode()
-     * @param mode the inventory for what mode? 
-     * 
+     * @param mode the inventory for what mode?
+     *
      * @return CItem[] representing the inventory
      */
     public abstract CInventory getInventory(int mode);
@@ -96,11 +96,11 @@ public abstract class CPlayer implements IBaseEntity {
     public abstract CInventory getCurrentInventory();
     /**
      * Set player inventory
-     * 
+     *
      * @param items
      */
     public abstract void setInventory(CInventory items);
-    
+
     /**
      * Set the inventory for a specified mode.
      * This will not change the players actual inventory but only
@@ -112,7 +112,7 @@ public abstract class CPlayer implements IBaseEntity {
 
     /**
      * Teleport a player to the position v in world world
-     * 
+     *
      * @param v
      * @param world
      */
@@ -120,11 +120,11 @@ public abstract class CPlayer implements IBaseEntity {
 
     /**
      * Check if this player is an admin
-     * 
+     *
      * @return
      */
     public abstract boolean isAdmin();
-    
+
     /**
      * Check if this player is allowed to modify a block at a given location
      * @param location
@@ -135,13 +135,13 @@ public abstract class CPlayer implements IBaseEntity {
         if(hasPermission("cIgnoreRestrictions") || cube.playerIsAllowed(getName(), getGroups())) {
             return true;
         }
-        
+
         if(cube.getProperty("protection") == Region.Status.ALLOW) {
             return false;
         }
         return true;
     }
-    
+
     /**
      * Check if this player is allowed to use an item in his hand
      * @param location
@@ -152,13 +152,13 @@ public abstract class CPlayer implements IBaseEntity {
         if(hasPermission("cIgnoreRestrictions") || currentRegion == null) {
             return true;
         }
-        
+
         if(currentRegion.getProperty("restrict-items") == Status.ALLOW) {
             return currentRegion.isItemRestricted(item.getId());
         }
         return true;
     }
-    
+
     /**
      * Check if this player can go wherever it's about to go
      * @param location
@@ -174,7 +174,7 @@ public abstract class CPlayer implements IBaseEntity {
         }
         return true;
     }
-    
+
     /**
      * Check if this player is inside any region
      * @return
@@ -182,7 +182,7 @@ public abstract class CPlayer implements IBaseEntity {
     public boolean isInRegion() {
         return currentRegion != null;
     }
-    
+
     /**
      * Check if the player currently is inside any region
      * @param r
@@ -191,7 +191,7 @@ public abstract class CPlayer implements IBaseEntity {
     public boolean isInRegion(Region r) {
         return currentRegion == null || currentRegion == r;
     }
-    
+
     /**
      * Check if this player is allowed in the region he is in.
      * Returns true if player is in no region.
@@ -203,7 +203,7 @@ public abstract class CPlayer implements IBaseEntity {
         }
         return currentRegion.playerIsAllowed(getName(), getGroups());
     }
-    
+
     /**
      * Put this player into a new region.
      * This will send farewell and welcome messages if applicable.
@@ -216,18 +216,18 @@ public abstract class CPlayer implements IBaseEntity {
             if(currentRegion == null && isInCreativeMode()) {
                 adminCreative = true;
             }
-            
+
             if(isInCreativeMode() && !adminCreative) {
                 setGameMode(0);
             }
-            
+
             currentRegion = null;
             return;
         }
 
         if(!r.equals(currentRegion)) {
             sendFarewell();
-            
+
             if(r.getProperty("creative") != Status.ALLOW) {
                 if(!adminCreative) {
                     if(isInCreativeMode()) {
@@ -246,18 +246,18 @@ public abstract class CPlayer implements IBaseEntity {
             }
             if(r.getProperty("healing") == Status.ALLOW) {
                 CuboidInterface.get().getThreadManager().schedule(new HealThread(
-                      this, r, 
+                      this, r,
                       CuboidInterface.get().getThreadManager(), Config.get().getHealPower(),
-                      Config.get().getHealDelay()), 
+                      Config.get().getHealDelay()),
                       0,
                       TimeUnit.SECONDS);
             }
             currentRegion = r;
             sendWelcome();
         }
-        
+
     }
-    
+
     /**
      * get the recent game mode of the player
      * @return
@@ -272,13 +272,13 @@ public abstract class CPlayer implements IBaseEntity {
     public Region getCurrentRegion() {
         return currentRegion;
     }
-    
+
     private void sendFarewell() {
         if(currentRegion != null && currentRegion.getFarewell() != null) {
             sendMessage(currentRegion.getFarewell());
         }
     }
-    
+
     private void sendWelcome() {
         if(currentRegion != null && currentRegion.getWelcome() != null) {
             sendMessage(currentRegion.getWelcome());

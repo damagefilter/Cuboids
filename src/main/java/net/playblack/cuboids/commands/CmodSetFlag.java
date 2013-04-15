@@ -9,14 +9,14 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Backup an area
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class CmodSetFlag extends CBaseCommand {
 
     public CmodSetFlag() {
-        super("Set a flag in the given area: " + ColorManager.Yellow + "/cmod <area> flag set <flag> <ALLOW|DENY|DEFAULT>", 6);
+        super("Set a flag in the given area: " + ColorManager.Yellow + "/cmod flag set [area] <flag> <ALLOW|DENY|DEFAULT>", 3, 4);
     }
 
     @Override
@@ -25,32 +25,32 @@ public class CmodSetFlag extends CBaseCommand {
             return;
         }
         if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission(command[4])) {
+            if (!player.hasPermission("cuboids.flags."+command[command.length-2])) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
-        
+
         if(command[1].equalsIgnoreCase("global")) {
-            Config.get().setGlobalProperty(command[4], Region.Status.fromString(command[5]));
+            Config.get().setGlobalProperty(command[4], Region.Status.fromString(command[1]));
             MessageSystem.successMessage(player, "globalFlagSet");
             return;
         }
-        
-        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
+
+        Region node = RegionManager.get().getRegionByName(command[command.length-3], player.getWorld().getName(), player.getWorld().getDimension());
         if(node == null) {
-            MessageSystem.failMessage(player, "noCuboidFound");
+            node = Config.get().getGlobalSettings();
             return;
         }
-        
+
         if (node.playerIsOwner(player.getName()) || player.hasPermission("cAreaMod") || player.hasPermission("cIgnoreRestrictions")) {
-            if(node.setProperty(command[4], Region.Status.fromString(command[5]))) {
+            if(node.setProperty(command[command.length-2], Region.Status.fromString(command[command.length-1]))) {
                 MessageSystem.successMessage(player, "regionFlagSet");
             }
             else {
                 MessageSystem.failMessage(player, "invalidRegionFlagValue");
             }
-        } 
+        }
         else {
             MessageSystem.failMessage(player, "playerNotOwner");
         }

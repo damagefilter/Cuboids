@@ -41,7 +41,7 @@ public class Vector {
 
     /**
      * Copy constructor copies the primitives
-     * 
+     *
      * @param key
      */
     public Vector(Vector key) {
@@ -52,7 +52,7 @@ public class Vector {
 
     /**
      * Retrieve X component of Vector
-     * 
+     *
      * @return double x
      */
     public double getX() {
@@ -61,7 +61,7 @@ public class Vector {
 
     /**
      * Set x component with native double
-     * 
+     *
      * @param x
      */
     public void setX(double x) {
@@ -70,7 +70,7 @@ public class Vector {
 
     /**
      * Set x component with a int2double conversion
-     * 
+     *
      * @param x
      */
     public void setX(int x) {
@@ -79,7 +79,7 @@ public class Vector {
 
     /**
      * Retrieve Y component of Vector
-     * 
+     *
      * @return double y
      */
     public double getY() {
@@ -88,7 +88,7 @@ public class Vector {
 
     /**
      * Set y component with native double
-     * 
+     *
      * @param y
      */
     public void setY(double y) {
@@ -97,7 +97,7 @@ public class Vector {
 
     /**
      * Set y component with a int2double conversion
-     * 
+     *
      * @param y
      */
     public void setY(int y) {
@@ -106,7 +106,7 @@ public class Vector {
 
     /**
      * Retrieve Z component of Vector
-     * 
+     *
      * @return double z
      */
     public double getZ() {
@@ -115,7 +115,7 @@ public class Vector {
 
     /**
      * Set y component with native double
-     * 
+     *
      * @param z
      */
     public void setZ(double z) {
@@ -124,7 +124,7 @@ public class Vector {
 
     /**
      * Set z component with a int2double conversion
-     * 
+     *
      * @param z
      */
     public void setZ(int z) {
@@ -136,7 +136,7 @@ public class Vector {
      * Math Operations for your convenience!
      * ******************************************************
      */
-    
+
     /**
      * Check if the x and z coords are the same.
      * @param x
@@ -147,7 +147,7 @@ public class Vector {
     public boolean samePosition2D(double x, double y, double z) {
         return x == this.x && z == this.z;
     }
-    
+
     /**
      * Check if the x and z coords are the same
      * @param x
@@ -158,7 +158,7 @@ public class Vector {
     public boolean samePosition2D(int x, int y, int z) {
         return x == this.x && z == this.z;
     }
-    
+
     /**
      * Check if the x and z coords of this and the other vector are the same
      * @param tmp
@@ -175,7 +175,7 @@ public class Vector {
 
     /**
      * Retrieve the length of this vector
-     * 
+     *
      * @return
      */
     public double getVectorLength() {
@@ -187,7 +187,7 @@ public class Vector {
 
     /**
      * Retrieve the distance between this vector and the given Vector v, rooted<br>
-     * 
+     *
      * @param v
      * @return double The Distance
      */
@@ -200,7 +200,7 @@ public class Vector {
 
     /**
      * Retrieve the distance between 2 given vectors<br>
-     * 
+     *
      * @param v
      * @return double The Distance
      */
@@ -213,7 +213,7 @@ public class Vector {
 
     /**
      * Retrieve the distance between 2 given doubles<br>
-     * 
+     *
      * @param v
      * @return double The Distance
      */
@@ -225,7 +225,7 @@ public class Vector {
     /**
      * Retrieve the distance between this vector and the given Vector v,
      * unrooted<br>
-     * 
+     *
      * @param v
      * @return double The Distance
      */
@@ -246,7 +246,7 @@ public class Vector {
     /**
      * Calculates the number of Blocks in each direction and returns a new
      * Vector with the resulting values.
-     * 
+     *
      * @param v1
      * @param v2
      * @return new Vector holding the amount of blocks in each direction.
@@ -263,7 +263,7 @@ public class Vector {
 
     /**
      * Get the number of blocks that are encompassed by the given two vectors
-     * 
+     *
      * @param v1
      * @param v2
      * @return
@@ -280,7 +280,7 @@ public class Vector {
 
     /**
      * Check if this vector is contained within the range of the given two
-     * 
+     *
      * @param min
      * @param max
      * @return
@@ -302,7 +302,7 @@ public class Vector {
 
     /**
      * Retrieve the major of two vectors (the one farther away from 0,0,0)
-     * 
+     *
      * @param v1
      * @param v2
      * @return Major Vector, null if something went wrong
@@ -322,7 +322,7 @@ public class Vector {
 
     /**
      * Retrieve the minor of two vectors (the one nearer to 0,0,0
-     * 
+     *
      * @param v1
      * @param v2
      * @return Minor Vector, null if something went wrong
@@ -342,7 +342,7 @@ public class Vector {
 
     /**
      * Checks if another object is equivalent.
-     * 
+     *
      * @param obj
      * @return whether the other object is equivalent
      */
@@ -359,7 +359,7 @@ public class Vector {
 
     /**
      * Gets the minimum components of two vectors.
-     * 
+     *
      * @param v1
      * @param v2
      * @return minimum
@@ -371,7 +371,7 @@ public class Vector {
 
     /**
      * Gets the maximum components of two vectors.
-     * 
+     *
      * @param v1
      * @param v2
      * @return maximum
@@ -383,7 +383,7 @@ public class Vector {
 
     /**
      * Return a random vector that is within v1 and v2
-     * 
+     *
      * @param v1
      * @param v2
      * @return
@@ -410,7 +410,7 @@ public class Vector {
 
     /**
      * Transform the given Vector to a block Vector (int)floor(Value)
-     * 
+     *
      * @param v
      * @return new Vector
      */
@@ -421,7 +421,7 @@ public class Vector {
 
     /**
      * Calculates the center point between 2 points
-     * 
+     *
      * @param p1
      * @param p2
      * @return Vector between p1 and p2
@@ -435,30 +435,33 @@ public class Vector {
 
     /**
      * Get component X as int
-     * 
+     *
      * @return int x
      */
     public int getBlockX() {
-        return (int) Math.ceil(x - 0.4d);
-        
+        int i = (int)x;
+        return x < i ? i - 1 : i;
+
     }
 
     /**
      * Get component Y as int
-     * 
+     *
      * @return int y
      */
     public int getBlockY() {
-        return (int) Math.ceil(y);
+        int i = (int)y;
+        return y < i ? i - 1 : i;
     }
 
     /**
      * Get component Z as int
-     * 
+     *
      * @return int z
      */
     public int getBlockZ() {
-        return (int) Math.ceil(z - 0.4d);
+        int i = (int)z;
+        return z < i ? i - 1 : i;
     }
 
     @Override
@@ -472,7 +475,7 @@ public class Vector {
 
     /**
      * Serialize this Vector into a Stringbuilder. This returns [x,y,z]
-     * 
+     *
      * @return
      */
     public StringBuilder serialize() {
@@ -496,7 +499,7 @@ public class Vector {
 
         return tr;
     }
-    
+
     public static Vector adjustToCanaryPosition(Vector v) {
         ToolBox.adjustWorldPosition(v);
         return v;

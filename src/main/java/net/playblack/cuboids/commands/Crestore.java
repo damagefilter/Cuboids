@@ -14,27 +14,20 @@ import net.playblack.mcutils.Debug;
 
 /**
  * Re an area
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Crestore extends CBaseCommand {
 
     public Crestore() {
-        super("Restore a cuboid area from backup:" + ColorManager.Yellow
-                + " /crestore <area>", 2);
+        super("Restore a cuboid area from backup:" + ColorManager.Yellow + " /crestore <area>", 2);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
         if (!parseCommand(player, command)) {
             return;
-        }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("cbackup")) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
         }
         String world = player.getWorld().getFilePrefix();
         File f = new File("plugins/cuboids2/backups/blocks_" + world + "_" + command[1]);

@@ -9,29 +9,71 @@ import net.playblack.cuboids.actions.operators.MiscOperator;
 import net.playblack.cuboids.actions.operators.OperableItemsOperator;
 import net.playblack.cuboids.actions.operators.PlayerMovementOperator;
 import net.playblack.cuboids.actions.operators.SelectionOperator;
-import net.playblack.cuboids.commands.*;
+import net.playblack.cuboids.commands.Cbackup;
+import net.playblack.cuboids.commands.Cbrush;
+import net.playblack.cuboids.commands.Cceiling;
+import net.playblack.cuboids.commands.Ccopy;
+import net.playblack.cuboids.commands.Cdel;
+import net.playblack.cuboids.commands.Cdisc;
+import net.playblack.cuboids.commands.Cexpand;
+import net.playblack.cuboids.commands.Cfill;
+import net.playblack.cuboids.commands.Cfloor;
+import net.playblack.cuboids.commands.Chelp;
+import net.playblack.cuboids.commands.Cinfo;
+import net.playblack.cuboids.commands.CmodAdd;
+import net.playblack.cuboids.commands.CmodAllowCommand;
+import net.playblack.cuboids.commands.CmodAllowEntity;
+import net.playblack.cuboids.commands.CmodAllowItem;
+import net.playblack.cuboids.commands.CmodDisallowEntity;
+import net.playblack.cuboids.commands.CmodInfo;
+import net.playblack.cuboids.commands.CmodList;
+import net.playblack.cuboids.commands.CmodLoad;
+import net.playblack.cuboids.commands.CmodLoadFrom;
+import net.playblack.cuboids.commands.CmodLoadPoints;
+import net.playblack.cuboids.commands.CmodMessages;
+import net.playblack.cuboids.commands.CmodMove;
+import net.playblack.cuboids.commands.CmodParent;
+import net.playblack.cuboids.commands.CmodPriority;
+import net.playblack.cuboids.commands.CmodRemove;
+import net.playblack.cuboids.commands.CmodRename;
+import net.playblack.cuboids.commands.CmodRestrictCommand;
+import net.playblack.cuboids.commands.CmodRestrictItem;
+import net.playblack.cuboids.commands.CmodSave;
+import net.playblack.cuboids.commands.CmodShowCmdBlacklist;
+import net.playblack.cuboids.commands.CmodTpTo;
+import net.playblack.cuboids.commands.Cmove;
+import net.playblack.cuboids.commands.Cpaste;
+import net.playblack.cuboids.commands.Cpyramid;
+import net.playblack.cuboids.commands.Credo;
+import net.playblack.cuboids.commands.Creplace;
+import net.playblack.cuboids.commands.Crestore;
+import net.playblack.cuboids.commands.Csphere;
+import net.playblack.cuboids.commands.Cundo;
+import net.playblack.cuboids.commands.Cwalls;
+import net.playblack.cuboids.commands.Highprotect;
+import net.playblack.cuboids.commands.Protect;
 import net.playblack.cuboids.converters.Converter;
 import net.playblack.cuboids.converters.Loader;
 import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.help.CommandHelper;
-//import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Debug;
+//import net.playblack.cuboids.regions.CuboidInterface;
 
 /**
  * The Bootstrapper takes care of loading all the required components to run the
  * Plugin and also receives the server implementation.
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Bootstrapper {
     /**
      * Expects the server implementation and a list of loaders for foreign
      * cuboids. Leave the list null if nothing should be loaded from foreign
      * sources
-     * 
+     *
      * @param server
      * @param loaders
      */
@@ -80,7 +122,7 @@ public class Bootstrapper {
         Debug.cacheMessage("done!", false);
         Debug.logCachedMessage();
         FlatfileDataLegacy.cleanupFiles();
-        
+
         Debug.log("Setting up Event Operators");
         new BlockModificationsOperator();
         new DamageOperator();
@@ -88,8 +130,8 @@ public class Bootstrapper {
         new OperableItemsOperator();
         new PlayerMovementOperator();
         new SelectionOperator();
-        
-        
+
+
         Debug.log("Init help System");
         CommandHelper.get().addHelp(
                 new Cbackup().getToolTip(),
@@ -120,10 +162,10 @@ public class Bootstrapper {
                 new String[] { "chelp", "help" });
         CommandHelper.get().addHelp(new Cinfo().getToolTip(),
                 new String[] { "cinfo", "info", "cuboid" });
-        CommandHelper.get().addHelp(new Cload().getToolTip(),
+        CommandHelper.get().addHelp(new CmodLoad().getToolTip(),
                 new String[] { "cload", "load", "cuboid" });
         CommandHelper.get().addHelp(
-                new CloadFrom().getToolTip(),
+                new CmodLoadFrom().getToolTip(),
                 new String[] { "cloadfrom", "loadfrom", "load", "crossload",
                         "cuboid" });
         CommandHelper.get().addHelp(new CmodAdd().getToolTip(),
@@ -148,7 +190,7 @@ public class Bootstrapper {
                 new String[] { "cmod", "info", "cinfo", "cuboid" });
         CommandHelper.get().addHelp(new CmodList().getToolTip(),
                 new String[] { "cmod", "list", "all", "cuboid" });
-        CommandHelper.get().addHelp(new CmodLoad().getToolTip(),
+        CommandHelper.get().addHelp(new CmodLoadPoints().getToolTip(),
                 new String[] { "cmod", "loadpoints", "selection", "load" });
         CommandHelper.get().addHelp(
                 new CmodMessages("farewell").getToolTip(),
@@ -205,13 +247,10 @@ public class Bootstrapper {
                 new Crestore().getToolTip(),
                 new String[] { "crestore", "restore", "backup", "selection",
                         "edit", "cuboid" });
-        CommandHelper.get()
-                .addHelp(
-                        new Csave(false).getToolTip(),
+        CommandHelper.get().addHelp(
+                        new CmodSave().getToolTip(),
                         new String[] { "csave", "save", "selection", "edit",
                                 "cuboid" });
-        CommandHelper.get().addHelp(new Csave(true).getToolTip(),
-                new String[] { "csave-all", "saveall", "edit", "cuboid" });
         CommandHelper.get()
                 .addHelp(
                         new Csphere().getToolTip(),

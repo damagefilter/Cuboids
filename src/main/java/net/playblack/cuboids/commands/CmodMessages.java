@@ -7,16 +7,16 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Set welcome and / or farewell messages
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class CmodMessages extends CBaseCommand {
 
     private boolean setFarewell = false;
 
     public CmodMessages(String action) {
-        super("Set area message: " + ColorManager.Yellow + "/cmod <area> " + action + " <Your message (leave blank to remove message)>", 3);
+        super("Set area message: " + ColorManager.Yellow + "/cmod" + action + "<area> [message]", 2);
         if (action.equalsIgnoreCase("farewell") || action.equalsIgnoreCase("goodbye")) {
             setFarewell = true;
         }
@@ -29,9 +29,9 @@ public class CmodMessages extends CBaseCommand {
         }
         String message = null;
         StringBuilder toMessage = new StringBuilder();
-        if (command.length > 3) {
-            for (int i = 3; i < command.length; i++) {
-                if (i > 3) {
+        if (command.length > 2) {
+            for (int i = 2; i < command.length; i++) {
+                if (i > 2) {
                     toMessage.append(" ");
                 }
                 toMessage.append(command[i]);

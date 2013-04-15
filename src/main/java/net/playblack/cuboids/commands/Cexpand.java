@@ -7,9 +7,9 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Expand cuboid selection
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Cexpand extends CBaseCommand {
 
@@ -22,13 +22,6 @@ public class Cexpand extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("cselect")) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
-        }
-
         SelectionManager.get().getPlayerSelection(player.getName()).expandVert();
         MessageSystem.successMessage(player, "selectionExpanded");
     }

@@ -10,9 +10,9 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Cuboid Diagnostic tool. Shows list of all recorded areas at selected point 1
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Cdiag extends CBaseCommand {
 
@@ -25,18 +25,16 @@ public class Cdiag extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        if (player.hasPermission("cIgnoreRestrictions")) {
-            ArrayList<Region> nodes = RegionManager.get().getCuboidsContaining(player.getLocation(), player.getWorld().getName(), player.getWorld().getDimension());
-            MessageSystem.translateMessage(player, ColorManager.LightGreen, "cuboidContainingYou");
-            for (Region cube : nodes) {
-                player.sendMessage(ColorManager.Yellow + "Name: " + ColorManager.LightGray + cube.getName());
-                String parent = "none";
-                if(cube.hasParent()) {
-                    parent = cube.getParent().getName();
-                }
-                player.sendMessage(ColorManager.Yellow + "Parent: " + ColorManager.LightGray + parent);
-                player.sendMessage(ColorManager.DarkPurple + "------------------------------------------------");
+        ArrayList<Region> nodes = RegionManager.get().getCuboidsContaining(player.getLocation(), player.getWorld().getName(), player.getWorld().getDimension());
+        MessageSystem.translateMessage(player, ColorManager.LightGreen, "cuboidContainingYou");
+        for (Region cube : nodes) {
+            player.sendMessage(ColorManager.Yellow + "Name: " + ColorManager.LightGray + cube.getName());
+            String parent = "none";
+            if(cube.hasParent()) {
+                parent = cube.getParent().getName();
             }
+            player.sendMessage(ColorManager.Yellow + "Parent: " + ColorManager.LightGray + parent);
+            player.sendMessage(ColorManager.DarkPurple + "------------------------------------------------");
         }
     }
 }

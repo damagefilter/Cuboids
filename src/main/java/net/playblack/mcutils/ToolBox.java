@@ -4,13 +4,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.mcutils.Vector;
 
 /**
  * This is a collection of useful stuff that we might or might not need
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class ToolBox {
     private ToolBox() {
@@ -20,7 +19,7 @@ public class ToolBox {
     /**
      * Adjust the calculated block positions. This is used to correct some
      * positioning bugs
-     * 
+     *
      * @param pos
      * @return
      */
@@ -40,17 +39,17 @@ public class ToolBox {
 //        return pos;
        // EDIT 2013: It came back again, lol
     }
-    
+
     public static void adjustWorldPosition(Location loc) {
         if(loc.getBlockX() < 0) {
             loc.setX(loc.getBlockX() - 1);
         }
-        
+
         if(loc.getBlockZ() < 0) {
             loc.setZ(loc.getBlockZ() - 1);
         }
     }
-    
+
     /**
      * Adjust to canary rounding error thing.
      * This returns a new instance for region selection consistency reasons
@@ -62,7 +61,7 @@ public class ToolBox {
         if(loc.getX() < -0.6D) {
             loc.setX(loc.getBlockX() - 1);
         }
-        
+
         if(loc.getZ() < -0.6D) {
             loc.setZ(loc.getBlockZ() - 1);
         }
@@ -72,7 +71,7 @@ public class ToolBox {
     /**
      * Turn a String into a boolean value. If the string doesn't equal the words
      * true or false, this'll return false
-     * 
+     *
      * @param boo
      * @return boolean
      */
@@ -89,12 +88,11 @@ public class ToolBox {
     }
 
     public static String stringToNull(String str) {
-        String s = null;
         if (str == null) {
             return null;
         }
-        if (str.equalsIgnoreCase("null")) {
-            return s;
+        if (str.equalsIgnoreCase("null") || str.isEmpty() || str.equals(" ")) {
+            return null;
         } else {
             return str;
         }
@@ -142,7 +140,7 @@ public class ToolBox {
         }
         return i;
     }
-    
+
     /**
      * Merge 2 arrays into one. This will NOT omit duplicate entries
      * @param first
@@ -154,7 +152,7 @@ public class ToolBox {
         System.arraycopy(second, 0, result, first.length, second.length);
         return result;
     }
-    
+
     /**
      * Merge 2 arrays into one, eliminating all duplicates.
      * TODO: Sure needs some performance improvements. HashSets ain't the best of all things for this task.
@@ -173,6 +171,6 @@ public class ToolBox {
         }
         return res.toArray(result);
     }
-    
-    
+
+
 }

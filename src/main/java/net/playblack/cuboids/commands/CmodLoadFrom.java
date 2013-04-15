@@ -3,8 +3,8 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.datasource.FlatfileDataLegacy;
-import net.playblack.cuboids.datasource.XmlData;
 import net.playblack.cuboids.datasource.MysqlDataLegacy;
+import net.playblack.cuboids.datasource.XmlData;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.mcutils.ColorManager;
 
@@ -12,11 +12,11 @@ import net.playblack.mcutils.ColorManager;
  * Crossload cuboids from datasources
  * TODO: Put legacy loading into here!
  * @author Chris
- * 
+ *
  */
-public class CloadFrom extends CBaseCommand {
-    public CloadFrom() {
-        super("Load cuboids: " + ColorManager.Yellow + "/cloadfrom <mysql/flatfile/xml>", 2);
+public class CmodLoadFrom extends CBaseCommand {
+    public CmodLoadFrom() {
+        super("Load cuboids: " + ColorManager.Yellow + "/cmod loadfrom <mysql|flatfile|xml>", 2);
     }
 
     @Override
@@ -24,9 +24,7 @@ public class CloadFrom extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            MessageSystem.failMessage(player, "permissionDenied");
-        }
+
         if (command[1].equalsIgnoreCase("mysql")) {
             MysqlDataLegacy ds = new MysqlDataLegacy(Config.get().getSqlConfig());
             ds.loadAll();

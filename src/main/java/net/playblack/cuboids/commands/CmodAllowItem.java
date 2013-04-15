@@ -1,19 +1,21 @@
 package net.playblack.cuboids.commands;
 
+import java.util.Arrays;
+
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.mcutils.ColorManager;
 
 /**
  * Allow item in a cuboid
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class CmodAllowItem extends CBaseCommand {
 
     public CmodAllowItem() {
-        super("Allow an item in cuboid:" + ColorManager.Yellow + " /cmod <area> allowitem <item name or item id>", 4);
+        super("Allow an item in cuboid:" + ColorManager.Yellow + " /cmod allowitem <area> <item name or item id>", 3);
     }
 
     @Override
@@ -21,6 +23,6 @@ public class CmodAllowItem extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.get().allowItem(player, command);
+        CuboidInterface.get().allowItem(player, Arrays.copyOfRange(command, 2, command.length));
     }
 }

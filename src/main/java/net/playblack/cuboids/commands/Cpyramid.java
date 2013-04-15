@@ -14,27 +14,20 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * Create a pyramid around a center point
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Cpyramid extends CBaseCommand {
 
     public Cpyramid() {
-        super("Create a sphere:" + ColorManager.Yellow + " /cpyramid <radius> <block>:[data] [hollow]", 3, 4);
+        super("Create a pyramid:" + ColorManager.Yellow + " /cpyramid <radius> <block>:[data] [hollow]", 3, 4);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
         if (!parseCommand(player, command)) {
             return;
-        }
-        // Check for the proper permissions
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("cWorldMod")) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
         }
         boolean fill = true;
         if (command.length == 4) {

@@ -6,8 +6,8 @@ import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.events.forwardings.EntitySpawnEvent;
 import net.playblack.cuboids.actions.events.forwardings.ItemDropEvent;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
+import net.playblack.cuboids.regions.RegionManager;
 
 public class MiscOperator implements ActionListener {
 
@@ -18,15 +18,18 @@ public class MiscOperator implements ActionListener {
             event.cancel();
         }
     }
-    
+
     @ActionHandler
     public void onMobSpawn(EntitySpawnEvent event) {
+        if(!event.getEntity().isMob()) {
+            return;
+        }
         Region r = RegionManager.get().getActiveRegion(event.getEntity().getLocation(), false);
         if(r.getProperty("mob-spawn") == Status.DENY) {
             event.cancel();
         }
     }
-    
+
     static {
         ActionManager.registerActionListener("Cuboids2", new MiscOperator());
     }

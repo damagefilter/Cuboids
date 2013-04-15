@@ -1,0 +1,131 @@
+# This file NEEDS to be in UTF-8 format!
+# Permission related Fail Messages
+true=wahr
+yes=ja
+on=an
+allow=erlaubt
+false=falsch
+no=nein
+off=aus
+deny=verweigert
+
+permissionDenied=Berechtigung fehlt
+playerNotOwner=Dieser Cuboid gehört dir nicht
+
+# Selection messages
+selectionIncomplete=Deine Auswahl ist nciht komplett. Bitte Start- und Endpunkt setzen
+selectionDeleted=Inhalt der Auswahl gelöscht
+selectionNotDeleted=Inhalt der Auswahl wurde nicht gelöscht
+selectionExpanded=Auswahl wurde von oben nach unten aufgespannt
+selectionFilled=Auswahl wurde gefüllt
+selectionNotFilled=Auswahl konnte nicht gefüllt werden
+selectionMoved=Auswahl wurde verschoben
+selectionNotMoved=Auswahl konnte nicht verschoben werden
+selectionPasted=Auswahl wurde eingefügt
+selectionNotPasted=Auswahl konnte nicht eingefügt werden
+selectionReplaced=Auswahl wurde ersetzt
+selectionNotReplaced=Auswahl konnte nicht ersetzt werden
+originSet=Startpunkt gesetzt
+offsetSet=Endpunkt gesetzt
+
+
+# Region related messages
+cuboidNotFoundOnCommand=Es gibt keinen Cuboid mit diesem Namen
+cuboidLoaded=Cuboid wurde geladen
+cuboidLoadedAll=Alle Cuboiden wurden geladen
+cuboidSaved=Cuboid wurde gespeichert
+cuboidNotSaved=Cuboid konnte nicht gespeichert werden
+cuboidSavedAll=All Cuboiden wurden gespeichert
+
+cuboidRemoved=Cuboid wurde entfernt
+
+cuboidUpdated=Cuboid wurde erneuert
+cuboidNotUpdated=Cuboid konnte nicht erneuert werden
+
+cuboidMoved=Cuboid wurde versetzt
+cuboidNotMoved=Cuboid konnte nicht versetzt werden
+
+cuboidNotCreated=Cuboid konnte nicht erstellt werden
+cuboidCreated=Cuboid wurde erstellt
+cuboidExists=Ein Cuboid mit diesem Namen existiert bereits in dieser Welt und dieser Dimension
+
+cuboidRenamed=Cuboid wurde umbenannt
+
+
+# Command responses
+prioritySet=Priorität wurde gesetzt
+priorityNotSet=Priorität konnte nicht gesetzt werden
+invalidPriority=Ungültiger Wert für Priorität
+
+parentSet=Vater-Cuboid wurde gesetzt
+parentNotSet=Vater-Cuboid konnte nicht gesetzt werden
+notWithinSpecifiedParent=Der Cuboid ist nicht komplett innerhalb des Vater-Cuboids
+
+noCuboidFound=Hier ist kein Cuboid
+backupSuccess=Backup erfolgreich
+brushSet=Brush wurde gesetzt
+negativeNumber=Bitte eine Zahl > 0 angeben
+ceilingSet=Decken Ebene wurde gesetzt
+floorSet=Boden Ebene wurde gesetzt
+copiedToClipboard=In die Zwischenablage kopiert
+
+originNotSet=Startpunkt muss gesetzt sein
+offsetNotSet=Endpunkt muss gesetzt sein
+pointsLoaded=Cuboids Punkte wurden geladen
+
+farewellSet=Abschiedsnachricht wurde gesetzt
+welcomeSet=Wilkommensnachricht wurde gesetzt
+
+discCreated=Scheibe wurde erstellt
+circleCreated=Kreis wurde erstellt
+discNotCreated=Scheibe konnte nicht erstellt werden
+
+pyramidCreated=Eine Pyramide wurde erbaut
+pyramidNotCreated=Es gab nciht genug Sklaven um diese Pyramide zu erbauen. Schade
+
+sphereCreated=Und plötzlich erschien eine Kugel!
+sphereNotCreated=Die Kugelgötter haben enschieden: Es soll keine Kugel geben!
+
+wallsCreated=Mauern wurden gebaut
+facesCreated=Seiten wurden gebaut.
+wallsNotCreated=Es soll keine Mauern mehr geben!
+
+invalidBlock=Dies ist kein gültiger Block
+invalidHeight=Ungültige Höhenangabe. Bitte gib eine Zahl > 0 ein
+invalidRadius=Ungültiger Radius. Bitte gib eine Zahl > 0 ein
+invalidCharacters=Es sind ungültige zeichen in diesem Namen
+invalidCardinalDirection=Ungültige Himmelsrichtung
+invalidDistance=Ungültige Distanz.
+
+globalFlagRemoved=Globale Eigenschaft entfernt
+regionFlagRemoved=Eigenschaft aus Cuboid entfernt
+globalFlagSet=Gloable Eigenschaft gesetzt
+regionFlagSet=Eigenschaft in Cuboid gesetzt
+
+invalidRegionFlagValue=Ungültiger Wert für Eigenschaft
+
+
+# Stuff
+youOwnThisArea=Dieser Cuboid gehört dir
+youCanBuildHere=Du kannst in diesem Cuboid bauen
+youCanNotBuildHere=Du darfst in diesem Cuboid nicht bauen.
+players=Spieler:
+groups=Gruppen:
+noCuboidsInworldAndDimemsion=Keine Cuboiden in %s, in %s
+cuboidsInWorld=Cuboiden (%s in %s) Seite %s von %s
+restrictedCommandsForCuboid=Verbotene Befehle für %s
+disallowedCommands=Verbotene Befehle:
+disallowedItems=Verbotene Items
+cuboidContainingYou=Cuboiden an deiner Position: 
+playerTeleported=Teleportiert!
+clipboardEmpty=Die Zwischenablage ist leer
+
+undoDisabled=Undo/Redo ist nicht aktiv.
+allRedone=Nichts mehr zum Wiederherstellen übrig
+redoDone=Wiederhergestellt.
+allUndone=Nichts mehr zum Rückgängig machen übrig.
+undoDone=Rückgängig gemacht
+
+restoreSuccess=Cuboid wurde wiederhergestellt
+restoreFail=Etwas ging schief beim Wiederherstellen des Cuboiden.
+

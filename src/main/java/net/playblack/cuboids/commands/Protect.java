@@ -2,8 +2,8 @@ package net.playblack.cuboids.commands;
 
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
@@ -11,9 +11,9 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Protect an area
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Protect extends CBaseCommand {
 
@@ -27,11 +27,9 @@ public class Protect extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!(player.hasPermission("ccreate")) && player.hasPermission("cprotection")) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
+        if (!(player.hasPermission("ccreate"))) {
+            MessageSystem.failMessage(player, "permissionDenied");
+            return;
         }
         CuboidSelection selection = SelectionManager.get()
                 .getPlayerSelection(player.getName());

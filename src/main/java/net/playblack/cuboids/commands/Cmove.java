@@ -13,9 +13,9 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * Move the contents of a selection, leaving empty space.
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Cmove extends CBaseCommand {
 
@@ -27,12 +27,6 @@ public class Cmove extends CBaseCommand {
     public void execute(CPlayer player, String[] command) {
         if (!parseCommand(player, command)) {
             return;
-        }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("cWorldMod")) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
         }
         CuboidSelection origin = SelectionManager.get().getPlayerSelection(player.getName());
         OffsetGenerator gen = new OffsetGenerator(origin, player.getWorld());

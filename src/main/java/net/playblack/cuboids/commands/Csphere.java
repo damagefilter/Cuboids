@@ -14,27 +14,20 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * Create a sphere or ball around a center point
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Csphere extends CBaseCommand {
 
     public Csphere() {
-        super("Create a sphere: " + ColorManager.Yellow + "/csphere <radius> <block>:[data] <hollow>", 3, 4);
+        super("Create a sphere: " + ColorManager.Yellow + "/csphere <radius> <block>:[data] [hollow]", 3, 4);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
         if (!parseCommand(player, command)) {
             return;
-        }
-        // Check for the proper permissions
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("cWorldMod")) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
         }
         boolean fill = true;
         if (command.length == 4) {

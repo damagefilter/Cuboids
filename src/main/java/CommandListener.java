@@ -1,5 +1,52 @@
 import net.playblack.cuboids.InvalidPlayerException;
-import net.playblack.cuboids.commands.*;
+import net.playblack.cuboids.commands.CBaseCommand;
+import net.playblack.cuboids.commands.Cbackup;
+import net.playblack.cuboids.commands.Cbrush;
+import net.playblack.cuboids.commands.Cceiling;
+import net.playblack.cuboids.commands.Ccopy;
+import net.playblack.cuboids.commands.Cdel;
+import net.playblack.cuboids.commands.Cdiag;
+import net.playblack.cuboids.commands.Cdisc;
+import net.playblack.cuboids.commands.Cexpand;
+import net.playblack.cuboids.commands.Cfill;
+import net.playblack.cuboids.commands.Cfloor;
+import net.playblack.cuboids.commands.Chelp;
+import net.playblack.cuboids.commands.Cinfo;
+import net.playblack.cuboids.commands.CmodAdd;
+import net.playblack.cuboids.commands.CmodAllowCommand;
+import net.playblack.cuboids.commands.CmodAllowEntity;
+import net.playblack.cuboids.commands.CmodAllowItem;
+import net.playblack.cuboids.commands.CmodDisallowEntity;
+import net.playblack.cuboids.commands.CmodInfo;
+import net.playblack.cuboids.commands.CmodList;
+import net.playblack.cuboids.commands.CmodListFlags;
+import net.playblack.cuboids.commands.CmodLoad;
+import net.playblack.cuboids.commands.CmodLoadFrom;
+import net.playblack.cuboids.commands.CmodLoadPoints;
+import net.playblack.cuboids.commands.CmodMessages;
+import net.playblack.cuboids.commands.CmodMove;
+import net.playblack.cuboids.commands.CmodParent;
+import net.playblack.cuboids.commands.CmodPriority;
+import net.playblack.cuboids.commands.CmodRemove;
+import net.playblack.cuboids.commands.CmodRemoveFlag;
+import net.playblack.cuboids.commands.CmodRename;
+import net.playblack.cuboids.commands.CmodRestrictCommand;
+import net.playblack.cuboids.commands.CmodRestrictItem;
+import net.playblack.cuboids.commands.CmodSave;
+import net.playblack.cuboids.commands.CmodSetFlag;
+import net.playblack.cuboids.commands.CmodShowCmdBlacklist;
+import net.playblack.cuboids.commands.CmodTpTo;
+import net.playblack.cuboids.commands.Cmove;
+import net.playblack.cuboids.commands.Cpaste;
+import net.playblack.cuboids.commands.Cpyramid;
+import net.playblack.cuboids.commands.Credo;
+import net.playblack.cuboids.commands.Creplace;
+import net.playblack.cuboids.commands.Crestore;
+import net.playblack.cuboids.commands.Csphere;
+import net.playblack.cuboids.commands.Cundo;
+import net.playblack.cuboids.commands.Cwalls;
+import net.playblack.cuboids.commands.Highprotect;
+import net.playblack.cuboids.commands.Protect;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.selections.SelectionManager;
@@ -196,7 +243,7 @@ public class CommandListener extends PluginListener {
 
             if (split[0].equalsIgnoreCase("/cmod")
                     && split[2].equalsIgnoreCase("loadpoints")) {
-                command = new CmodLoad();
+                command = new CmodLoadPoints();
                 command.execute(cplayer, split);
                 return true;
             }
@@ -296,23 +343,23 @@ public class CommandListener extends PluginListener {
                 command.execute(cplayer, split);
                 return true;
             }
-            
+
             if (split[0].equalsIgnoreCase("/cmod")
                     && (split[2].equalsIgnoreCase("flag") && split[3].equalsIgnoreCase("set"))) {
                 command = new CmodSetFlag();
                 command.execute(cplayer, split);
                 return true;
             }
-            
+
             if (split[0].equalsIgnoreCase("/cmod")
                     && (split[2].equalsIgnoreCase("flag") && split[3].equalsIgnoreCase("remove"))) {
                 command = new CmodRemoveFlag();
                 command.execute(cplayer, split);
                 return true;
             }
-            
+
             if (split[0].equalsIgnoreCase("/cmod")
-                    && ((split[1].equalsIgnoreCase("flag") || split[2].equalsIgnoreCase("flag")) 
+                    && ((split[1].equalsIgnoreCase("flag") || split[2].equalsIgnoreCase("flag"))
                             && (split[2].equalsIgnoreCase("list") || split[3].equalsIgnoreCase("list")))) {
                 command = new CmodListFlags();
                 command.execute(cplayer, split);
@@ -321,25 +368,25 @@ public class CommandListener extends PluginListener {
         }
 
         if (split[0].equalsIgnoreCase("/csave")) {
-            command = new Csave(false);
+            command = new CmodSave();
             command.execute(cplayer, split);
             return true;
         }
 
         if (split[0].equalsIgnoreCase("/csave-all")) {
-            command = new Csave(true);
+            command = new CmodSave();
             command.execute(cplayer, split);
             return true;
         }
 
         if (split[0].equalsIgnoreCase("/cload")) {
-            command = new Cload();
+            command = new CmodLoad();
             command.execute(cplayer, split);
             return true;
         }
 
         if (split[0].equalsIgnoreCase("/cloadfrom")) {
-            command = new CloadFrom();
+            command = new CmodLoadFrom();
             command.execute(cplayer, split);
             return true;
         }

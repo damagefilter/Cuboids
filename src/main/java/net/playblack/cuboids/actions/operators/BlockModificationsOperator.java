@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
@@ -17,17 +16,17 @@ import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
-import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
+import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
+import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Location;
 
 public class BlockModificationsOperator implements ActionListener {
-    
+
     /**
      * Create a list of blocks that should not be affected by the explosion
      * @param positions
@@ -42,13 +41,13 @@ public class BlockModificationsOperator implements ActionListener {
         }
         return toRemove;
     }
-    
+
     public boolean shouldCancelExplosion(Location loc, ExplosionType type) {
         boolean creeperSecure = RegionManager.get().getActiveRegion(loc, false).getProperty("creeper-explosion") == Status.DENY && type == ExplosionType.CREEPER;
         boolean tntSecure = RegionManager.get().getActiveRegion(loc, false).getProperty("tnt-explosion") == Status.DENY && type == ExplosionType.TNT;
         return creeperSecure || tntSecure;
     }
-    
+
     /**
      * Check if a player can use a lighter, eg. start a fire.
      * @param player
@@ -68,7 +67,7 @@ public class BlockModificationsOperator implements ActionListener {
         }
         return true;
     }
-    
+
     public boolean canEndermanUseBlock(Location location) {
         Region r = RegionManager.get().getActiveRegion(location, false);
         if(r.getProperty("enderman-pickup") == Status.DENY) {
@@ -76,7 +75,7 @@ public class BlockModificationsOperator implements ActionListener {
         }
         return true;
     }
-    
+
     // *******************************
     // Listener creation stuff
     // *******************************
@@ -86,14 +85,14 @@ public class BlockModificationsOperator implements ActionListener {
             event.cancel();
         }
     }
-    
+
     @ActionHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         if(!event.getPlayer().canModifyBlock(event.getLocation())) {
             event.cancel();
         }
     }
-    
+
     @ActionHandler
     public void onEntityExplode(ExplosionEvent event) {
         if(shouldCancelExplosion(event.getLocation(), event.getExplosionType())) {
@@ -105,10 +104,10 @@ public class BlockModificationsOperator implements ActionListener {
         //List of blocks that need to be removed
         event.setProtectedBlocks(checkExplosionBlocks(markedBlocks.keySet(), event.getExplosionType()));
     }
-    
+
     @ActionHandler
     public void onIgnite(IgniteEvent event) {
-        
+
         if(event.getSource() == FireSource.LIGHTER) {
             if(!canUseLighter(event.getPlayer(), event.getLocation())) {
                 event.cancel();
@@ -121,7 +120,7 @@ public class BlockModificationsOperator implements ActionListener {
             }
         }
     }
-    
+
     @ActionHandler
     public void onLiquidFlow(LiquidFlowEvent event) {
         Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
@@ -132,7 +131,7 @@ public class BlockModificationsOperator implements ActionListener {
             event.cancel();
         }
     }
-    
+
     @ActionHandler
     public void onBlockPhysics(BlockPhysicsEvent event) {
         Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
@@ -140,7 +139,7 @@ public class BlockModificationsOperator implements ActionListener {
             event.cancel();
         }
     }
-    
+
     @ActionHandler
     public void onBlockUpdate(BlockUpdateEvent event) {
         if(event.getBlock().getType() == 60 && event.getTargetBlock().getType() != 60) {
@@ -150,14 +149,14 @@ public class BlockModificationsOperator implements ActionListener {
             }
         }
     }
-    
+
     @ActionHandler
     public void onEndermanPickup(EndermanPickupEvent event) {
         if(canEndermanUseBlock(event.getLocation())) {
             event.cancel();
         }
     }
-    
+
     static {
         ActionManager.registerActionListener("Cuboids2", new BlockModificationsOperator());
     }

@@ -13,9 +13,9 @@ import net.playblack.mcutils.Debug;
 
 /**
  * Copy a selection into the clipboard
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class Ccopy extends CBaseCommand {
 
@@ -28,13 +28,6 @@ public class Ccopy extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("cWorldMod")) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
-        }
-
         SelectionManager selectionManager = SelectionManager.get();
         CuboidSelection sel = selectionManager.getPlayerSelection(player
                 .getName());

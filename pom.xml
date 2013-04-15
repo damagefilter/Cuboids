@@ -69,7 +69,7 @@
    <dependency>
     <groupId>net.canarymod</groupId>
     <artifactId>CanaryMod</artifactId>
-    <version>5.7.11</version>
+    <version>11.2</version>
     <scope>system</scope>
     <systemPath>${basedir}/lib/CanaryMod.jar</systemPath>
    </dependency>
@@ -77,9 +77,15 @@
    <dependency>
     <groupId>net.canarymod</groupId>
     <artifactId>servero</artifactId>
-    <version>5.7.11</version>
+    <version>11.2</version>
     <scope>system</scope>
     <systemPath>${basedir}/lib/minecraft_servero.jar</systemPath>
+   </dependency>
+   <!-- Recode -->
+   <dependency>
+    <groupId>net.canarymod</groupId>
+    <artifactId>CanaryLib</artifactId>
+    <version>0.6-SNAPSHOT</version>
    </dependency>
    <!-- End: CanaryMod -->
   </dependencies>

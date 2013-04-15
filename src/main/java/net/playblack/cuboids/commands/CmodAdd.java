@@ -3,34 +3,28 @@ package net.playblack.cuboids.commands;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.CuboidInterface;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
 
 /**
  * Add a new Cuboid
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class CmodAdd extends CBaseCommand {
 
     public CmodAdd() {
-        super("Add a new Cuboid: " + ColorManager.Yellow + "/cmod <area> add/create", 3);
+        super("Add a new Cuboid: " + ColorManager.Yellow + "/cmod add <area>", 2);
     }
 
     @Override
     public void execute(CPlayer player, String[] command) {
         if (!parseCommand(player, command)) {
             return;
-        }
-        if (!player.hasPermission("cIgnoreRestrictions")) {
-            if (!player.hasPermission("ccreate")) {
-                MessageSystem.failMessage(player, "permissionDenied");
-                return;
-            }
         }
         if (command[1].matches("[,:]")) {
             MessageSystem.failMessage(player, "invalidCharacters");
