@@ -1040,7 +1040,14 @@ public class Region {
      * @param welcome the welcome to set
      */
     public void setWelcome(String welcome) {
-        this.welcome = welcome;
+        //TODO: Use a regex instead? Can't think of any :S
+        char[] chars = welcome.toCharArray();
+        for(int i = 0; i < chars.length; ++i) {
+            if((i+1 < chars.length) && (chars[i] == '&' && chars[i+1] != ' ')) {
+                chars[i] = '§';
+            }
+        }
+        this.welcome = String.copyValueOf(chars);
     }
 
     /**
@@ -1054,7 +1061,14 @@ public class Region {
      * @param farewell the farewell to set
      */
     public void setFarewell(String farewell) {
-        this.farewell = farewell;
+      //TODO: Use a regex instead? Can't think of any :S
+        char[] chars = farewell.toCharArray();
+        for(int i = 0; i < chars.length; ++i) {
+            if((i+1 < chars.length) && (chars[i] == '&' && chars[i+1] != ' ')) {
+                chars[i] = '§';
+            }
+        }
+        this.farewell = String.copyValueOf(chars);
     }
 
     public String getFlagList() {

@@ -224,6 +224,9 @@ public abstract class CPlayer implements IBaseEntity {
             currentRegion = null;
             return;
         }
+        if(currentRegion == null && isInCreativeMode()) {
+            adminCreative = true;
+        }
 
         if(!r.equals(currentRegion)) {
             sendFarewell();
