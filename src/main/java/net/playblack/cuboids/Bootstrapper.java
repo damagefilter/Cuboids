@@ -91,12 +91,7 @@ public class Bootstrapper {
         Debug.logCachedMessage();
 
         // ------------------------------------------------------
-        Debug.cacheMessage("Tasks ...", false);
-        Debug.cacheMessage("done!", false);
-        Debug.logCachedMessage();
-
-        // ------------------------------------------------------
-        Debug.cacheMessage("Foreign Cuboid files... ", true);
+        Debug.cacheMessage("Looking for CuboidPlugin files... ", true);
         boolean hasConverted = false;
         if (loaders != null) {
             Converter c = new Converter();
@@ -123,7 +118,6 @@ public class Bootstrapper {
         Debug.logCachedMessage();
         FlatfileDataLegacy.cleanupFiles();
 
-        Debug.log("Setting up Event Operators");
         new BlockModificationsOperator();
         new DamageOperator();
         new MiscOperator();
@@ -131,8 +125,6 @@ public class Bootstrapper {
         new PlayerMovementOperator();
         new SelectionOperator();
 
-
-        Debug.log("Init help System");
         CommandHelper.get().addHelp(
                 new Cbackup().getToolTip(),
                 new String[] { "backup", "restore", "cbackup", "edit",
