@@ -8,12 +8,12 @@ import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
+import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Location;
 
 public class OperableItemsOperator implements ActionListener {
-    
+
     /**
      * Checks if the player can use the item in his hand (right-mouse-use)
      * where ever he is currently standing in.
@@ -23,7 +23,7 @@ public class OperableItemsOperator implements ActionListener {
     public boolean canUseItem(CPlayer player) {
         return player.canUseItem(player.getItemInHand());
     }
-    
+
     /**
      * Check if player can use a block (switch, button, chests etc etc)
      * @param player
@@ -38,9 +38,9 @@ public class OperableItemsOperator implements ActionListener {
         if(r.playerIsAllowed(player.getName(), player.getGroups())) {
             return true;
         }
-        return r.isItemRestricted(block.getType());
+        return !r.isItemRestricted(block.getType());
     }
-    
+
     public boolean canUseBucket(CPlayer player, Location point, boolean lavaBucket) {
         if(player.hasPermission("cuboids.super.admin")) {
             return true;
@@ -60,8 +60,8 @@ public class OperableItemsOperator implements ActionListener {
         }
         return true;
     }
-    
-    
+
+
     // *******************************
     // Listener creation stuff
     // *******************************
@@ -71,14 +71,14 @@ public class OperableItemsOperator implements ActionListener {
             event.cancel();
         }
     }
-    
+
     @ActionHandler
     public void onBlockLeftClick(BlockLeftClickEvent event) {
         if(!canUseBlock(event.getPlayer(), event.getBlock(), event.getLocation())) {
             event.cancel();
         }
     }
-    
+
     static {
         ActionManager.registerActionListener("Cuboids2", new OperableItemsOperator());
     }

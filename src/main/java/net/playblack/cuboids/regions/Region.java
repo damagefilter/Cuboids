@@ -14,33 +14,33 @@ import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
 public class Region {
-    
+
     /** List of all child nodes */
     protected ArrayList<Region> childs = new ArrayList<Region>(5);
-    
+
     /** Reference to this Cuboids parent*/ //This'll get ugly when reading from datasource
     protected Region parent;
-    
+
     /** The name of this cuboid*/
     protected String name;
-    
+
     /** The name of the world this cuboid sits in*/
     protected String world;
-    
+
     /** The ID of the dimension for this cuboid. This may always be 0 in some implementations */
     protected int dimension;
-    
+
     /** Cuboids priority. Cuboids with higher priority will be considered when areas clash*/
     protected int priority;
-    
-    
+
+
     public enum Status {
         ALLOW,
         DENY,
         INHERIT,
         DEFAULT,
         INVALID_PROPERTY;
-        
+
         public static Status fromString(String str) {
             if(str.equalsIgnoreCase(ALLOW.name())) {
                 return ALLOW;
@@ -58,7 +58,7 @@ public class Region {
                 return INVALID_PROPERTY;
             }
         }
-        
+
         /**
          * Returns allow or deny from a boolean value
          * @param check
@@ -72,7 +72,7 @@ public class Region {
                 return DENY;
             }
         }
-        
+
         /**
          * Returns allow or default from boolean value
          * @param check
@@ -87,49 +87,49 @@ public class Region {
             }
         }
     }
-    
-    
+
+
     /** Map of all currently existing property */
     private HashMap<String, Status> properties;
-    
+
     /** Flag as changed to make it available for the saving thread */
     public boolean hasChanged = false;
-    
-    
+
+
     /** List of allowed players*/
     private ArrayList<String> players;
-    
+
     /** List of allowed groups*/
     private ArrayList<String> groups;
-    
+
     private Vector origin;
     private Vector offset;
-    
+
     /** Welcome / Farewell messages to display*/
     private String welcome, farewell;
-    
+
     /** List of commands that should be denied in this area */
     private ArrayList<String> restrictedCommands = new ArrayList<String>();
-    
+
     /** List of restricted item IDs */
     private ArrayList<Integer> restrictedItems = new ArrayList<Integer>();
-    
-    
+
+
     public Region() {
         properties = new HashMap<String, Status>();
         players = new ArrayList<String>();
         groups = new ArrayList<String>();
-        
-        
+
+
     }
-    
+
     public Region(Region parent) {
         this.parent = parent;
         if(parent != null) {
             parent.childs.add(this);
         }
     }
-    
+
     /**
      * Recursively add player to this Region and its childs.
      * This will set the currentRegion in the player
@@ -152,7 +152,7 @@ public class Region {
             }
         }
     }
-    
+
     /**
      * Recursively remove player from this Region and its childs
      * @param player
@@ -164,15 +164,15 @@ public class Region {
                 player.setRegion(parent);
             }
             //Assume we're not in any region anymore.
-            //If we are we 
+            //If we are we
             player.setRegion(null);
             for(Region child : childs) {
                 child.removePlayerWithin(player, toCheck);
-                
+
             }
         }
     }
-    
+
     /**
      * Set the parent region for the this region.
      * This will also update the parents child list and adjust priority levels
@@ -180,7 +180,7 @@ public class Region {
      */
     public void setParent(Region cube) {
         parent = cube;
-        
+
         if(parent != null) {
             parent.childs.add(this);
             if(parent.priority >= priority) {
@@ -188,7 +188,7 @@ public class Region {
             }
         }
     }
-    
+
     /**
      * Get the parent cuboid for this guy
      * @return
@@ -196,7 +196,7 @@ public class Region {
     public Region getParent() {
         return parent;
     }
-    
+
     /**
      * Get the name of this cuboid
      * @return
@@ -204,7 +204,7 @@ public class Region {
     public String getName() {
         return name;
     }
-    
+
     /**
      * Set the name of this cuboid
      * @param name
@@ -239,7 +239,7 @@ public class Region {
     public void setDimension(int dimension) {
         this.dimension = dimension;
     }
-    
+
     /**
      * get this regiosn priority
      * @return
@@ -247,7 +247,7 @@ public class Region {
     public int getPriority() {
         return priority;
     }
-    
+
     /**
      * Set this regions priority and update all childs accordingly
      * @param prio
@@ -259,21 +259,21 @@ public class Region {
             child.setPriority(child.getPriority() + difference);
             child.hasChanged = true;
         }
-        
+
     }
-    
+
     public boolean equalsWorld(CWorld world) {
         return (world.getDimension() == dimension) && (this.world.equals(world.getName()));
     }
-    
+
     public boolean equalsWorld(Region other) {
         return (other.dimension == dimension) && (world.equals(other.world));
     }
-    
+
     public boolean equalsWorld(String name, int dim) {
         return (dim == dimension) && (world.equals(name));
     }
-    
+
     /**
      * Detach this region from its parent and update the parent
      */
@@ -291,7 +291,7 @@ public class Region {
         c.setParent(this);
         childs.add(c);
     }
-    
+
     /**
      * Remove a child from this regions child list
      * @param c
@@ -299,7 +299,7 @@ public class Region {
     public void detachChild(Region c) {
         childs.remove(c);
     }
-    
+
     /**
      * Detach all childs from this cuboid and update their parents.
      * Returns the list of all childs for further processing.
@@ -312,11 +312,11 @@ public class Region {
         //return all childs
         return childs;
     }
-    
+
     public void clearChilds() {
         childs.clear();
     }
-    
+
     /**
      * Try finding a cuboid with the given name within the childs.
      * This is NOT very performant as it needs to query A LOT of childs!
@@ -342,7 +342,7 @@ public class Region {
         }
         return null;
     }
-    
+
     /**
      * Query for a cuboid at the specified location. This will return the cuboid that
      * should be taken into consideration when processing stuff.
@@ -364,7 +364,7 @@ public class Region {
                 else if (current.getPriority() == c.getPriority()) {
                     current = current.getSize() > c.getSize() ? c : current;
                 }
-                
+
                 Region check = c.queryChilds(loc, current.getPriority());
                 if(check.getPriority() > current.getPriority()) {
                     current = check;
@@ -376,7 +376,7 @@ public class Region {
         }
         return current;
     }
-    
+
     /**
      * Query the childs of this cuboid to see if they space-wise
      * contain the given cuboid, in order to find the given cuboids appropriate parent
@@ -398,7 +398,7 @@ public class Region {
                         current = current.getSize() > c.getSize() ? c : current;
                     }
                 }
-                
+
                 Region check = c.queryChilds(cube);
                 if(check.getPriority() > current.getPriority()) {
                     current = check;
@@ -410,7 +410,7 @@ public class Region {
         }
         return current;
     }
-    
+
     /**
      * Fix childs and remove those that are not 100%
      * inside this parent node. Return a list of those if they
@@ -426,7 +426,7 @@ public class Region {
             }
             detached.addAll(child.fixChilds());
         }
-        
+
         return detached;
     }
     /**
@@ -436,9 +436,9 @@ public class Region {
     public boolean isGlobal() {
         return name.equals("__WORLD__");
     }
-    
-    
-    
+
+
+
     /**
      * Check if this is a root cuboid, that means it has no parent
      * @return
@@ -454,7 +454,7 @@ public class Region {
      */
     public List<Region> getChildsDeep(List<Region> collection) {
         for(Region r : childs) {
-            
+
             collection.addAll(r.getChildsDeep(collection));
         }
         if(!collection.contains(this)) {
@@ -462,9 +462,9 @@ public class Region {
         }
         return collection;
     }
-    
-    
-    
+
+
+
     /**
      * Set a property and its status for this cuboid
      * @param name
@@ -480,7 +480,7 @@ public class Region {
         properties.put(name, value);
         return true;
     }
-    
+
     public boolean removeProperty(String name) {
         if(properties.containsKey(name)) {
             properties.remove(name);
@@ -488,7 +488,7 @@ public class Region {
         }
         return false;
     }
-    
+
     /**
      * Get the status for a given property for this cuboid
      * @param name
@@ -500,7 +500,7 @@ public class Region {
         }
         return Status.DEFAULT;
     }
-    
+
     /**
      * Check if this cuboid has a given property.
      * @param name
@@ -509,7 +509,7 @@ public class Region {
     public boolean propertyExists(String name) {
         return properties.containsKey(name);
     }
-    
+
     /**
      * Put this map of properties into the existing one of this cuboid,
      * this will override all already existing local values
@@ -518,11 +518,11 @@ public class Region {
     public void putAll(HashMap<String, Status> map) {
         properties.putAll(map);
     }
-    
+
     public HashMap<String, Status> getAllProperties() {
         return new HashMap<String, Region.Status>(properties);
     }
-    
+
     public boolean hasParent() {
         return parent != null;
     }
@@ -569,7 +569,7 @@ public class Region {
 
     /**
      * Add a couple of groups to the list of allowed groups.
-     * 
+     *
      * @param groups
      *            Array
      */
@@ -579,10 +579,10 @@ public class Region {
         }
 
     }
-    
+
     /**
      * Remove a group name to the list of allowed group names.
-     * 
+     *
      * @param groupName
      *            String
      */
@@ -603,7 +603,7 @@ public class Region {
 
     /**
      * Remove a couple of groups to the list of allowed groups names.
-     * 
+     *
      * @param groupNames
      *            Array
      */
@@ -612,10 +612,10 @@ public class Region {
             removeGroup(groupNames[i]);
         }
     }
-    
+
     /**
      * Add a player name to the list of allowed player names.
-     * 
+     *
      * @param playerName
      *            String
      */
@@ -643,7 +643,7 @@ public class Region {
 
     /**
      * Add a couple of players to the list of allowed player names.
-     * 
+     *
      * @param playerNames
      *            Array
      */
@@ -653,10 +653,10 @@ public class Region {
         }
 
     }
-    
+
     /**
      * Remove a player name to the list of allowed player names.
-     * 
+     *
      * @param playerName
      *            String
      */
@@ -676,7 +676,7 @@ public class Region {
 
     /**
      * Remove a couple of players to the list of allowed player names.
-     * 
+     *
      * @param playerNames
      *            Array
      */
@@ -685,10 +685,10 @@ public class Region {
             removePlayer(playerNames[i]);
         }
     }
-    
+
     /**
      * Check if this cuboid is inside another
-     * 
+     *
      * @param v1
      *            Other Cuboid Point 1
      * @param v2
@@ -715,8 +715,8 @@ public class Region {
             }
         }
     }
-    
-    
+
+
     /**
      * Check if this Region is within the given one
      * @param r
@@ -748,7 +748,7 @@ public class Region {
             return false;
         }
     }
-    
+
     /**
      * Check if the given Location is within this Region
      * @param v
@@ -762,7 +762,7 @@ public class Region {
         Vector max = Vector.getMaximum(origin, offset);
         return v.isWithin(min, max);
     }
-    
+
     /**
      * Calculate and get the volume size of this region
      * @return
@@ -772,12 +772,12 @@ public class Region {
                 * (int) Vector.getDistance(origin.getBlockY(), offset.getBlockY())
                 * (int) Vector.getDistance(origin.getBlockZ(), offset.getBlockZ());
     }
-    
-    
+
+
     /**
      * Check if a given player is the owner of this cuboid. That is to say, if
      * his name is inside the list of players as o:.
-     * 
+     *
      * @param player
      * @return True if player is allowed, false otherwise
      */
@@ -789,11 +789,11 @@ public class Region {
         }
         return false;
     }
-    
-    
+
+
     /**
      * Add a commands to the list of tabu commands.
-     * 
+     *
      * @param command
      *            String
      */
@@ -809,7 +809,7 @@ public class Region {
 
     /**
      * Add a couple of commands to the list of tabu commands.
-     * 
+     *
      * @param commands
      *            Array
      */
@@ -824,7 +824,7 @@ public class Region {
 
     /**
      * Remove a commands to the list of tabu commands.
-     * 
+     *
      * @param command
      *            String
      */
@@ -836,7 +836,7 @@ public class Region {
 
     /**
      * Return the arraylist containing restricted commands
-     * 
+     *
      * @return
      */
     public ArrayList<String> getRestrictedCommands() {
@@ -851,10 +851,10 @@ public class Region {
             return false;
         }
     }
-    
+
     /**
      * Add items to regions restricted items list
-     * 
+     *
      * @param id
      */
     public void addRestrictedItem(int id) {
@@ -867,7 +867,7 @@ public class Region {
     /**
      * Add one or more comma seperated items from string to the restricted items
      * list
-     * 
+     *
      * @param items
      */
     public void addRestrictedItem(String items) {
@@ -885,7 +885,7 @@ public class Region {
 
     /**
      * Remove items to regions restricted items list
-     * 
+     *
      * @param id
      */
     public void removeRestrictedItem(int id) {
@@ -894,7 +894,7 @@ public class Region {
 
     /**
      * Check if item is restricted
-     * 
+     *
      * @param id
      * @return true if item is restricted, false otherwise
      */
@@ -912,7 +912,7 @@ public class Region {
     /**
      * Check if a given player is allowed in this cuboid. This will take into account
      * ownership of this cuboid as well as groups
-     * 
+     *
      * @param player
      * @return True if player is allowed, false otherwise
      */
@@ -920,7 +920,7 @@ public class Region {
         if(playerIsOwner(player)) {
             return true;
         }
-        
+
         for (String groupname : group) {
             if (groups.contains(groupname)) {
                 return true;
@@ -929,7 +929,7 @@ public class Region {
         for (int i = 0; i < group.length; i++) {
             if (groups.contains(group[i].toLowerCase())) {
                 return true;
-            } 
+            }
             else if (groups.contains("g:" + group[i].toLowerCase())) {
                 return true;
             }
@@ -941,7 +941,7 @@ public class Region {
         }
         return false;
     }
-    
+
     public String getPlayerList() {
         StringBuilder players = new StringBuilder();
         for (int i = 0; i < this.players.size(); i++) {
@@ -957,7 +957,7 @@ public class Region {
             return out;
         }
     }
-    
+
     public String getGroupList() {
         StringBuilder groups = new StringBuilder();
         for (int i = 0; i < this.groups.size(); i++) {
@@ -973,24 +973,23 @@ public class Region {
             return out;
         }
     }
-    
+
     public String getItemListAsNames() {
         StringBuilder items = new StringBuilder();
         for (Integer i : restrictedItems) {
-            items.append(CServer.getServer().getItemName(i.intValue())).append(
-                    ",");
+            items.append(CServer.getServer().getItemName(i.intValue())).append(",");
         }
         if (items.length() == 0) {
             return "";
         }
         return items.toString();
     }
-    
-    
+
+
     /* ************************************************
-     * 
+     *
      * GETTER / SETTER STUFF
-     * 
+     *
      * ************************************************/
 
     /**
@@ -1022,7 +1021,7 @@ public class Region {
         this.offset = offset;
 //        ToolBox.adjustWorldPosition(offset);
     }
-    
+
     public void setBoundingBox(Vector origin, Vector offset) {
         this.origin = origin;
         this.offset = offset;
@@ -1071,7 +1070,7 @@ public class Region {
             else {
                 count = 0;
                 builder.append(";");
-                
+
             }
         }
         return builder.toString();
@@ -1088,7 +1087,7 @@ public class Region {
         }
         return false;
     }
-    
+
     @Override
     public int hashCode() {
         return getSize() + priority + dimension;

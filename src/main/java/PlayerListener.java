@@ -2,19 +2,18 @@
 import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.events.forwardings.EntityDamageEvent;
-import net.playblack.cuboids.actions.events.forwardings.ItemDropEvent;
 import net.playblack.cuboids.actions.events.forwardings.EntityDamageEvent.DamageSource;
+import net.playblack.cuboids.actions.events.forwardings.ItemDropEvent;
 import net.playblack.cuboids.actions.events.forwardings.PlayerWalkEvent;
 import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.mcutils.ToolBox;
 
 /**
  * Listens to player events
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class PlayerListener extends PluginListener {
 
@@ -36,9 +35,9 @@ public class PlayerListener extends PluginListener {
     @Override
     public void onPlayerMove(Player player, Location from, Location to) {
         net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.x, to.y, to.z, to.dimension, to.world);
-        ToolBox.adjustWorldPosition(vTo);
+//        ToolBox.adjustWorldPosition(vTo);
         net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location(from.x, from.y, from.z, from.dimension, from.world);
-        ToolBox.adjustWorldPosition(vFrom);
+//        ToolBox.adjustWorldPosition(vFrom);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -46,7 +45,7 @@ public class PlayerListener extends PluginListener {
             // Fallback
             cplayer = new CanaryPlayer(player);
         }
-        
+
         PlayerWalkEvent event = new PlayerWalkEvent(cplayer, vFrom, vTo);
         ActionManager.fireEvent(event);
         //event.isCancelled() has no effect here
@@ -58,9 +57,9 @@ public class PlayerListener extends PluginListener {
             player.getWorld().loadChunk((int) to.x, (int) to.y, (int) to.z);
         }
         net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.x, to.y, to.z, to.dimension, to.world);
-        ToolBox.adjustWorldPosition(vTo);
+//        ToolBox.adjustWorldPosition(vTo);
         net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location(from.x, from.y, from.z, from.dimension, from.world);
-        ToolBox.adjustWorldPosition(vFrom);
+//        ToolBox.adjustWorldPosition(vFrom);
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().refreshPlayer(player.getName());
@@ -77,20 +76,20 @@ public class PlayerListener extends PluginListener {
     }
 
     @Override
-    public boolean onDamage(PluginLoader.DamageType type, BaseEntity attacker, BaseEntity defender, int amount) {
-        if (attacker == null) {
-            return false;
+    public HookParametersDamage onDamage(HookParametersDamage hook) {
+        if (hook.getAttacker() == null) {
+            return hook;
         }
-        
-        CanaryBaseEntity a = new CanaryBaseEntity(attacker);
-        CanaryBaseEntity d = new CanaryBaseEntity(defender);
-        DamageSource ds = damageSourceFromCanary(type);
-        EntityDamageEvent event = new EntityDamageEvent(a, d, ds, amount);
+
+        CanaryBaseEntity a = new CanaryBaseEntity(hook.getAttacker());
+        CanaryBaseEntity d = new CanaryBaseEntity(hook.getDefender());
+        DamageSource ds = damageSourceFromCanary(hook.getDamageSource().getDamageType());
+        EntityDamageEvent event = new EntityDamageEvent(a, d, ds, hook.getDamageAmount());
         ActionManager.fireEvent(event);
         if(event.isCancelled()) {
-            return true;
+            hook.setCanceled();
         }
-        return false;
+        return hook;
     }
 
     //TODO: Check if this is covered by block-right-click!
@@ -154,8 +153,8 @@ public class PlayerListener extends PluginListener {
         }
         return false;
     }
-    
-    private EntityDamageEvent.DamageSource damageSourceFromCanary(PluginLoader.DamageType type) {
+
+    private EntityDamageEvent.DamageSource damageSourceFromCanary(DamageType type) {
         switch(type) {
             case ANVIL:
                 return DamageSource.FALLING_ANVIL;

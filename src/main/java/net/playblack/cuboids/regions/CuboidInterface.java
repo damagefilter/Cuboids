@@ -73,6 +73,10 @@ public class CuboidInterface {
      */
     public void setWelcome(CPlayer player, String cuboid, String message) {
         Region cube = (Region)regions.getRegionByName(cuboid, player.getWorld().getName(), player.getWorld().getDimension());
+        if(cube == null) {
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
+            return;
+        }
         cube.setWelcome(message);
         cube.hasChanged = true;
     }
@@ -369,14 +373,13 @@ public class CuboidInterface {
     }
 
     public boolean disallowItem(CPlayer player, String[] command) {
-        Region cube = regions.getRegionByName(command[1], player.getWorld()
-                .getName(), player.getWorld().getDimension());
+        Region cube = regions.getRegionByName(command[0], player.getWorld().getName(), player.getWorld().getDimension());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName())
                     || player.hasPermission("cuboids.super.areamod")
                     || player.hasPermission("cuboids.super.admin")) {
 
-                for (int i = 3; i < command.length; i++) {
+                for (int i = 1; i < command.length; i++) {
                     cube.addRestrictedItem(CServer.getServer().getItemId(
                             command[i]));
                 }

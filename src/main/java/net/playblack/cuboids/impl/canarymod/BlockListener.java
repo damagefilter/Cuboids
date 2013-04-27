@@ -3,6 +3,7 @@ package net.playblack.cuboids.impl.canarymod;
 import java.util.HashMap;
 import java.util.List;
 
+import net.canarymod.Canary;
 import net.canarymod.api.entity.Fireball;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.living.monster.Creeper;
@@ -146,6 +147,7 @@ public class BlockListener implements PluginListener {
         BlockPlaceEvent event = new BlockPlaceEvent(cplayer, new CBlock(b.getTypeId(),  b.getData()), p);
         ActionManager.fireEvent(event);
         if(event.isCancelled()) {
+            Canary.println("place was canceled");
             hook.setCanceled();
         }
     }

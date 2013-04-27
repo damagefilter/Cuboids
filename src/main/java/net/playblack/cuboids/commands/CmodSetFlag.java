@@ -40,7 +40,6 @@ public class CmodSetFlag extends CBaseCommand {
         Region node = RegionManager.get().getRegionByName(command[command.length-3], player.getWorld().getName(), player.getWorld().getDimension());
         if(node == null) {
             node = Config.get().getGlobalSettings();
-            return;
         }
 
         if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {

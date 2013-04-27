@@ -6,6 +6,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.playblack.cuboids.Config;
+import net.playblack.cuboids.exceptions.DeserializeException;
+import net.playblack.cuboids.regions.Region;
+import net.playblack.cuboids.regions.Region.Status;
+import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.mcutils.Debug;
+import net.playblack.mcutils.ToolBox;
+import net.playblack.mcutils.Vector;
+import net.visualillusionsent.utils.SystemUtils;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -13,22 +23,12 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import net.playblack.cuboids.Config;
-import net.playblack.cuboids.exceptions.DeserializeException;
-import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.cuboids.regions.Region.Status;
-import net.playblack.mcutils.Debug;
-import net.playblack.mcutils.ToolBox;
-import net.playblack.mcutils.Vector;
-import net.visualillusionsent.utils.SystemUtils;
-
 /**
  * XmlData extends BaseData and represents the data layer for retrieving
  * Regions from xml files.
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class XmlData implements BaseData {
 
@@ -64,13 +64,13 @@ public class XmlData implements BaseData {
             catch(IOException e) {
                 Debug.log(e.getMessage());
             }
-            
+
         }
     }
 
     @Override
     public void loadAll() {
-        
+
         RegionManager regionMan = RegionManager.get();
         loadedRegions.put("root", new ArrayList<Region>());
         File regionFolder = new File(Config.get().getBasePath() + "regions/");
@@ -98,17 +98,17 @@ public class XmlData implements BaseData {
                             loadedRegions.get(parentName).add(r);
                         }
                     }
-                } 
+                }
                 catch (JDOMException e) {
                     Debug.logWarning(e.getMessage());
-                } 
+                }
                 catch (IOException e) {
                     Debug.logWarning(e.getMessage());
                 }
             }
             counter++;
         }
-        
+
         //Sort out parents and stuff.
         for(String key : loadedRegions.keySet()) {
             //Root has no parents to sort out
@@ -123,15 +123,15 @@ public class XmlData implements BaseData {
                 }
             }
         }
-        
+
         //Now that we have all the parents sorted out, we can just add all nodes under "root" to the regionmanager
-        
+
         for(Region root : loadedRegions.get("root")) {
             regionMan.addRoot(root);
         }
         Debug.log("Loaded " + counter + " regions");
     }
-    
+
     /**
      * Get a region from the given list with the given name
      * @param name
@@ -173,24 +173,43 @@ public class XmlData implements BaseData {
         File file = new File(path);
         file.delete();
     }
-    
+
     private void writeFile(Document xmlDoc) throws IOException {
         Element meta = xmlDoc.getRootElement().getChild("meta");
         FileWriter writer = new FileWriter(Config.get().getBasePath() + "regions/" + meta.getChildText("world") + "_" + meta.getChildText("name") + "_" + meta.getChildText("dimension") + ".xml");
         xmlSerializer.output(xmlDoc, writer);
     }
-    
+
     private Document regionToDom(Region r) {
         Document data = new Document(new Element("region"));
         Element regionElement = data.getRootElement();
         Element meta = new Element("meta");
-        
+
         meta.addContent(new Element("welcome").setText(r.getWelcome()));
         meta.addContent(new Element("farewell").setText(r.getFarewell()));
         meta.addContent(new Element("name").setText(r.getName()));
         if(r.hasParent()) {
             meta.addContent(new Element("parent").setText(r.getParent().getName()));
         }
+
+        if(r.getRestrictedCommands().size() > 0) {
+            StringBuilder str = new StringBuilder();
+            for(String cmd : r.getRestrictedCommands()) {
+                str.append(cmd).append(",");
+            }
+            str.deleteCharAt(str.length() - 1);
+            meta.addContent(new Element("restricted-commands").setText(str.toString()));
+        }
+
+        if(r.getRestrictedItems().size() > 0) {
+            StringBuilder str = new StringBuilder();
+            for(Integer cmd : r.getRestrictedItems()) {
+                str.append(cmd).append(",");
+            }
+            str.deleteCharAt(str.length() - 1);
+            meta.addContent(new Element("restricted-items").setText(str.toString()));
+        }
+
         meta.addContent(new Element("priority").setText(""+r.getPriority()));
         meta.addContent(new Element("world").setText(r.getWorld()));
         meta.addContent(new Element("dimension").setText(""+r.getDimension()));
@@ -207,13 +226,13 @@ public class XmlData implements BaseData {
         }
         return data;
     }
-    
+
     private Region domToRegion(Document doc, boolean lookupParent) {
         Region newRegion = new Region();
         Element root = doc.getRootElement();
         Element meta = root.getChild("meta");
         Element properties = root.getChild("properties");
-        
+
         newRegion.setName(meta.getChildText("name"));
         newRegion.setPriority(Integer.parseInt(meta.getChildText("priority")));
         newRegion.setDimension(Integer.parseInt(meta.getChildText("dimension")));
@@ -237,6 +256,15 @@ public class XmlData implements BaseData {
                 newRegion.setParent(RegionManager.get().getPossibleParent(newRegion));
             }
         }
+
+        if(meta.getChildText("restricted-commands") != null) {
+            newRegion.addRestrictedCommand(meta.getChildText("restricted-commands"));
+        }
+
+        if(meta.getChildText("restricted-items") != null) {
+            newRegion.addRestrictedItem(meta.getChildText("restricted-items"));
+        }
+
         return newRegion;
     }
 }
