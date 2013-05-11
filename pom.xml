@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.playblack.cuboids</groupId>
   <artifactId>cuboids2</artifactId>
-  <version>4.0.0</version>
+  <version>3.0-SNAPSHOT</version>
   <name>Cuboids2</name>
   <description>Cuboid-based area protection and world editing</description>
   <url>http://playblack.net</url>
@@ -85,7 +85,7 @@
    <dependency>
     <groupId>net.canarymod</groupId>
     <artifactId>CanaryLib</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.8-SNAPSHOT</version>
    </dependency>
    <!-- End: CanaryMod -->
   </dependencies>
