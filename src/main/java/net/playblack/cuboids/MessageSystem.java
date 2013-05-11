@@ -7,9 +7,9 @@ import net.visualillusionsent.utils.LocaleHelper;
 
 /**
  * Message System. To send messages to a player or global chat. depending
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class MessageSystem extends LocaleHelper {
     private final static MessageSystem ms;
@@ -34,7 +34,7 @@ public class MessageSystem extends LocaleHelper {
 
     /**
      * Send a red message to the player from the error message pool
-     * 
+     *
      * @param player
      * @param messageKey
      */
@@ -44,7 +44,7 @@ public class MessageSystem extends LocaleHelper {
 
     /**
      * Send a green message to the player from the messages pool
-     * 
+     *
      * @param player
      * @param messageKey
      */
@@ -54,7 +54,7 @@ public class MessageSystem extends LocaleHelper {
 
     /**
      * Send a message from the messages list in yellow to the player
-     * 
+     *
      * @param player
      * @param messageKey
      */
@@ -64,7 +64,7 @@ public class MessageSystem extends LocaleHelper {
 
     /**
      * Send a red custom message
-     * 
+     *
      * @param player
      * @param message
      */
@@ -75,16 +75,16 @@ public class MessageSystem extends LocaleHelper {
     public static void customMessage(CPlayer player, String color, String message) {
         player.sendMessage(color + message);
     }
-    
+
     public static void translateMessage(CPlayer player, String color, String message) {
         player.sendMessage(color + ms.localeTranslate(message));
     }
-    
+
     public static void translateMessage(CPlayer player, String message, String[] args) {
-        player.sendMessage(ms.localeTranslateFormat(message, args));
+        player.sendMessage(ms.localeTranslateMessage(message, (Object[])args));
     }
-    
+
     public static void translateMessage(CPlayer player, String color, String message, String... args) {
-        player.sendMessage(color + ms.localeTranslateFormat(message, args));
+        player.sendMessage(color + ms.localeTranslateMessage(message, (Object[])args));
     }
 }
