@@ -118,7 +118,7 @@ public class CanaryWorld extends CWorld {
 
     @Override
     public int getHighestBlock(int x, int z) {
-        return world.getYHeighestBlockAt(x, z);
+        return world.getHighestBlockAt(x, z);
     }
 
     @Override

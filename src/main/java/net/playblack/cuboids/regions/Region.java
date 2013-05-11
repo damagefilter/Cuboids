@@ -528,6 +528,30 @@ public class Region {
     }
 
     /**
+     * Check if this region is in the parental hierarchy of the given region
+     * @param r
+     * @return
+     */
+    public boolean isParentOf(Region r) {
+        if(r == null) {
+            return false;
+        }
+        return r.parentsToList(r, new ArrayList<Region>()).contains(this);
+    }
+
+    /**
+     * Check if this Cuboid is a child of the given Cuboid
+     * @param r
+     * @return
+     */
+    public boolean isChildOf(Region r) {
+        if(r == null) {
+            return false;
+        }
+        return r.getChildsDeep(new ArrayList<Region>()).contains(this);
+    }
+
+    /**
      * Add a group to the list of allowed groups.
      * This will recognize a comma seperated list of group names and auto-adds them
      * @param group
@@ -1040,6 +1064,10 @@ public class Region {
      * @param welcome the welcome to set
      */
     public void setWelcome(String welcome) {
+        if(welcome == null) {
+            this.welcome = null;
+            return;
+        }
         //TODO: Use a regex instead? Can't think of any :S
         char[] chars = welcome.toCharArray();
         for(int i = 0; i < chars.length; ++i) {
@@ -1061,6 +1089,10 @@ public class Region {
      * @param farewell the farewell to set
      */
     public void setFarewell(String farewell) {
+        if(farewell == null) {
+            this.farewell = null;
+            return;
+        }
       //TODO: Use a regex instead? Can't think of any :S
         char[] chars = farewell.toCharArray();
         for(int i = 0; i < chars.length; ++i) {
@@ -1088,6 +1120,16 @@ public class Region {
             }
         }
         return builder.toString();
+    }
+
+    public ArrayList<Region> parentsToList(Region r, ArrayList<Region> parents) {
+        if(r.parent == null) {
+            return parents;
+        }
+        if(!parents.contains(r.parent)) {
+            parents.add(r.parent);
+        }
+        return parentsToList(r.parent, parents);
     }
 
     @Override

@@ -53,7 +53,7 @@ public class Cundo extends CBaseCommand {
         }
 
         for (int i = 0; i < steps; i++) {
-            CuboidSelection sel = SessionManager.getInstance().getPlayerHistory(subject).undo();
+            CuboidSelection sel = SessionManager.get().getPlayerHistory(subject).undo();
 
             if (sel == null) {
                 MessageSystem.yellowNote(player, "allUndone");

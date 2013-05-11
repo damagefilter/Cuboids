@@ -1,6 +1,5 @@
 package net.playblack.cuboids.gameinterface;
 
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import net.playblack.cuboids.Config;
@@ -15,10 +14,10 @@ import net.playblack.mcutils.Vector;
 
 public abstract class CPlayer implements IBaseEntity {
 
-    protected HashMap<Integer, CInventory> inventories = new HashMap<Integer, CInventory>();
+    protected boolean wasCreativeWhenEnteringRegion = false;
 
-    Region currentRegion;
-    private boolean adminCreative; //this is if creative wasn't set by cuboids
+    protected Region currentRegion;
+    protected boolean adminCreative; //this is if creative wasn't set by cuboids
     /**
      * Send a message to the player
      *
@@ -213,39 +212,41 @@ public abstract class CPlayer implements IBaseEntity {
     public void setRegion(Region r) {
         if(r == null) {
             sendFarewell();
-            if(currentRegion == null && isInCreativeMode()) {
-                adminCreative = true;
-            }
+//            if((currentRegion == null || (currentRegion != null && currentRegion.getProperty("creative") != Status.ALLOW)) && isInCreativeMode()) {
+//                adminCreative = true;
+//            }
 
-            if(isInCreativeMode() && !adminCreative) {
+//            if(isInCreativeMode() && !adminCreative) {
                 setGameMode(0);
-            }
+//            }
 
             currentRegion = null;
             return;
         }
-        if(currentRegion == null && isInCreativeMode()) {
-            adminCreative = true;
-        }
 
         if(!r.equals(currentRegion)) {
-            sendFarewell();
-
+            if(currentRegion != null && !currentRegion.isParentOf(r)) {
+                sendFarewell();
+//                if(currentRegion.getProperty("creative") != Status.ALLOW && isInCreativeMode()) {
+//                    adminCreative = true;
+//                }
+            }
+//            if(currentRegion == null && isInCreativeMode()) {
+//                adminCreative = true;
+//            }
             if(r.getProperty("creative") != Status.ALLOW) {
-                if(!adminCreative) {
-                    if(isInCreativeMode()) {
-                        setGameMode(0);
-                    }
-                }
+//                if(!adminCreative) {
+                    setGameMode(0);
+//                }
             }
             else if(r.getProperty("creative") == Status.ALLOW) {
-                if(isInCreativeMode()) {
-                    adminCreative = true;
-                }
-                else {
+//                if(isInCreativeMode()) {
+//                    adminCreative = true;
+//                }
+//                else {
                     adminCreative = false;
                     setGameMode(1);
-                }
+//                }
             }
             if(r.getProperty("healing") == Status.ALLOW) {
                 CuboidInterface.get().getThreadManager().schedule(new HealThread(
@@ -255,8 +256,17 @@ public abstract class CPlayer implements IBaseEntity {
                       0,
                       TimeUnit.SECONDS);
             }
-            currentRegion = r;
-            sendWelcome();
+            if(currentRegion != null && !currentRegion.isChildOf(r)) {
+                currentRegion = r;
+                sendWelcome();
+            }
+            else if(currentRegion == null) {
+                currentRegion = r;
+                sendWelcome();
+            }
+            else {
+                currentRegion = r;
+            }
         }
 
     }

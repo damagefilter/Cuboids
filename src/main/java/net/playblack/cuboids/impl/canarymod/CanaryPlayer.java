@@ -2,10 +2,12 @@ package net.playblack.cuboids.impl.canarymod;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.Item;
+import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CInventory;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CWorld;
+import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.Location;
 import net.playblack.mcutils.Vector;
@@ -136,9 +138,32 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public void setGameMode(int mode) {
-        setInventoryForMode(getCurrentInventory(), getGameMode());
-        player.setMode(mode);
-        setInventory(getInventory(mode));
+        if(adminCreative && !isInCreativeMode()) {
+            adminCreative = false;
+        }
+
+        if(currentRegion == null && isInCreativeMode()) {
+            adminCreative = true;
+        }
+
+        if(currentRegion != null) {
+            if(currentRegion.getProperty("creative") != Status.ALLOW && isInCreativeMode()) {
+                adminCreative = true;
+            }
+        }
+
+        if(mode == 0) {
+            if(!adminCreative) {
+                setInventoryForMode(getCurrentInventory(), getGameMode());
+                player.setMode(mode);
+                setInventory(getInventory(mode));
+            }
+        }
+        if(mode == 1 && !adminCreative) {
+            setInventoryForMode(getCurrentInventory(), getGameMode());
+            player.setMode(mode);
+            setInventory(getInventory(mode));
+        }
     }
 
     @Override
@@ -153,10 +178,7 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public CInventory getInventory(int mode) {
-        if(!inventories.containsKey(mode)) {
-            inventories.put(mode, new CanaryInventory());
-        }
-        return inventories.get(mode);
+        return SessionManager.get().getPlayerInventory(getName(), mode);
     }
 
     @Override
@@ -185,7 +207,7 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public void setInventoryForMode(CInventory inv, int mode) {
-        inventories.put(mode, inv);
+        SessionManager.get().setPlayerInventory(getName(), mode, inv);
     }
 
     @Override

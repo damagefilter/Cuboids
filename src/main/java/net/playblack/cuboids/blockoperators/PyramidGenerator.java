@@ -115,7 +115,7 @@ public class PyramidGenerator extends BaseGen {
         CuboidSelection world = scanWorld(true, false);
 
         if (newHistory) {
-            SessionManager.getInstance().getPlayerHistory(player.getName())
+            SessionManager.get().getPlayerHistory(player.getName())
                     .remember(new HistoryObject(world, selection));
         }
         boolean result = modifyWorld(false);

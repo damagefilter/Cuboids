@@ -331,7 +331,7 @@ public class CmodCommands implements CommandListener {
             description = "Remove a Cuboid",
             permissions = { "cuboids.cmod.remove", "cuboids.super.admin" },
             toolTip = "/cmod remove <area>",
-            min = 3)
+            min = 2)
     public void cmodRemove(MessageReceiver caller, String[] args) {
         try {
             new net.playblack.cuboids.commands.CmodRemove().execute(CServer.getServer().getPlayer(caller.getName()), args);

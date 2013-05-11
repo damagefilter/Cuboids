@@ -11,9 +11,9 @@ import net.playblack.mcutils.Location;
 
 /**
  * This manages CuboidNodes and takes care of lookups etc
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class RegionManager {
     private ArrayList<Region> rootNodes = new ArrayList<Region>(15);
@@ -38,7 +38,7 @@ public class RegionManager {
 
     /**
      * This must be called after the global settings in Config have changed!!!
-     * 
+     *
      * @param props
      */
     public void updateGlobalSettings() {
@@ -63,7 +63,7 @@ public class RegionManager {
 
     /**
      * Load a single cuboid from file
-     * 
+     *
      * @param name
      * @param world
      */
@@ -73,7 +73,7 @@ public class RegionManager {
 
     /**
      * Save all cuboid files to backend
-     * 
+     *
      * @param silent
      * @param force
      */
@@ -83,7 +83,7 @@ public class RegionManager {
 
     /**
      * Save a single cuboid to backend
-     * 
+     *
      * @param name
      * @param world
      * @return
@@ -95,7 +95,7 @@ public class RegionManager {
 
     /**
      * Save a single cuboid to backend
-     * 
+     *
      * @param node
      */
     public void saveSingle(Region node) {
@@ -121,7 +121,7 @@ public class RegionManager {
 
     /**
      * Add a new managed region and sort it in.
-     * 
+     *
      * @param cube
      * @return
      */
@@ -130,7 +130,7 @@ public class RegionManager {
             Debug.log("Region already exists! Not adding it");
             return false;
         }
-        
+
         Region parent = getPossibleParent(cube);
         if(parent != null) {
             cube.setParent(parent);
@@ -146,7 +146,7 @@ public class RegionManager {
 
     /**
      * Add a new root node
-     * 
+     *
      * @param root
      */
     public void addRoot(Region root) {
@@ -162,7 +162,7 @@ public class RegionManager {
      * @return
      */
     public void removeRegion(Region cube) {
-        
+
         if(rootNodes.contains(cube)) {
             rootNodes.remove(cube);
         }
@@ -170,14 +170,14 @@ public class RegionManager {
         //If we don't do this, all childs will be thrown away
         //in the next GC cycle
         ArrayList<Region> cleanUpList = cube.detachAllChilds();
-        
+
         //Put parent-less childs into the root list
         for(Region child : cleanUpList) {
             if(child.getParent() == null) {
                 addRoot(child);
             }
         }
-        //In this was not a root region, we need to detach it from its parent 
+        //In this was not a root region, we need to detach it from its parent
         //so it will not be taken into consideration anymore
         cube.detach();
         removeNodeFile(cube);
@@ -207,7 +207,7 @@ public class RegionManager {
                 }
                 tree.hasChanged = true;
             }
-            
+
             if(parent == null) {
                 tree.setParent(null);
                 rootList.add(tree);
@@ -235,7 +235,7 @@ public class RegionManager {
 
     /**
      * Check if a cuboid with the given name, in the give world exists
-     * 
+     *
      * @param cube
      * @param world
      * @return
@@ -293,7 +293,7 @@ public class RegionManager {
             }
         }
     }
-    
+
     public void removePlayerFromRegion(CPlayer player, Location loc) {
         Region r = player.getCurrentRegion();
         if(r != null) {
@@ -306,13 +306,12 @@ public class RegionManager {
     /**
      * Create a list of Regions that contain the given Vector in the given
      * world
-     * 
+     *
      * @param v
      * @param world
      * @return
      */
-    public ArrayList<Region> getCuboidsContaining(Location v,
-            String world, int dimension) {
+    public ArrayList<Region> getCuboidsContaining(Location v, String world, int dimension) {
         ArrayList<Region> list = new ArrayList<Region>();
         if (v == null) {
             return list;
@@ -321,7 +320,7 @@ public class RegionManager {
             if (tree.equalsWorld(world, dimension)) {
                 if (tree.isWithin(v)) {
                     for (Region node : tree.getChildsDeep(new ArrayList<Region>())) {
-                        if (node.isWithin(v)) {
+                        if (node.isWithin(v) && !list.contains(node)) {
                             list.add(node);
                         }
                     }
@@ -336,7 +335,7 @@ public class RegionManager {
 
     /**
      * Get a list of all cuboids in the given world
-     * 
+     *
      * @param world
      * @param dimension
      * @return CuboidNode List or null if there were no cuboids
@@ -359,7 +358,7 @@ public class RegionManager {
     /**
      * Return the Region with the given name or null if not existent.
      * This operation can be very performance sensitive, use with care!
-     * 
+     *
      * @param name
      * @param world
      * @return CuboidNode or null
@@ -377,9 +376,9 @@ public class RegionManager {
     }
 
     /**
-     * This'll try to find the best parent for a given cuboid, if there can be one. 
+     * This'll try to find the best parent for a given cuboid, if there can be one.
      * Returns null if no suitable parent was found
-     * 
+     *
      * @param cube
      * @return
      */
@@ -416,7 +415,7 @@ public class RegionManager {
 
     /**
      * Return the cuboid tree data.
-     * 
+     *
      * @return
      */
     public ArrayList<Region> getRootNodeList() {
@@ -442,7 +441,7 @@ public class RegionManager {
                 //Parent is already set and updated, no need for more
             }
         }
-        
+
     }
 
 }

@@ -28,13 +28,9 @@ public class Cdiag extends CBaseCommand {
         ArrayList<Region> nodes = RegionManager.get().getCuboidsContaining(player.getLocation(), player.getWorld().getName(), player.getWorld().getDimension());
         MessageSystem.translateMessage(player, ColorManager.LightGreen, "cuboidContainingYou");
         for (Region cube : nodes) {
-            player.sendMessage(ColorManager.Yellow + "Name: " + ColorManager.LightGray + cube.getName());
-            String parent = "none";
-            if(cube.hasParent()) {
-                parent = cube.getParent().getName();
-            }
-            player.sendMessage(ColorManager.Yellow + "Parent: " + ColorManager.LightGray + parent);
-            player.sendMessage(ColorManager.DarkPurple + "------------------------------------------------");
+            player.sendMessage(ColorManager.Yellow + "Name: " + ColorManager.LightGray + cube.getName() + " : " + (cube.hasParent()? cube.getParent().getName() : "Global"));
         }
+        player.sendMessage(ColorManager.DarkPurple + "------------------------------------------------");
+        player.sendMessage(ColorManager.Gold + "I think you are here: " + (player.getCurrentRegion() != null ? player.getCurrentRegion().getName() : "Global"));
     }
 }

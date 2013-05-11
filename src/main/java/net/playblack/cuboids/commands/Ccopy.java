@@ -43,7 +43,7 @@ public class Ccopy extends CBaseCommand {
         }
         sel.setOrigin(player.getPosition());
         // gen.
-        SessionManager.getInstance().setClipboard(player.getName(), sel);
+        SessionManager.get().setClipboard(player.getName(), sel);
         MessageSystem.successMessage(player, "copiedToClipboard");
     }
 }

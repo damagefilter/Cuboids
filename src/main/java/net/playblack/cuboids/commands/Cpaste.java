@@ -34,7 +34,7 @@ public class Cpaste extends CBaseCommand {
             }
         }
 
-        CuboidSelection sel = SessionManager.getInstance().getClipboard(player.getName());
+        CuboidSelection sel = SessionManager.get().getClipboard(player.getName());
         if (sel == null || !sel.isComplete()) {
             MessageSystem.failMessage(player, "clipboardEmpty");
             return;

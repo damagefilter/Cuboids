@@ -73,7 +73,7 @@ public class CuboidGenerator extends BaseGen {
         }
         if (newHistory) {
             CuboidSelection world = scanWorld(true, true);
-            SessionManager.getInstance().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
+            SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
         boolean result = modifyWorld(true);
         return result;

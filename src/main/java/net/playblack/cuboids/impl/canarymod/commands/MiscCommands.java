@@ -40,7 +40,7 @@ public class MiscCommands implements CommandListener {
 
     @Command(aliases = { "highprotect" },
             description = "Create a top-to-bottom protected area from your selection.",
-            permissions = { "cuboids.selection.highprotect", "cuboids.super.admin" },
+            permissions = { "cuboids.cmod.add.high", "cuboids.super.admin" },
             toolTip = "/highprotect <player/group..> <area name>",
             min = 3)
     public void highprotect(MessageReceiver caller, String[] args) {
@@ -53,7 +53,7 @@ public class MiscCommands implements CommandListener {
 
     @Command(aliases = { "protect" },
             description = "Create a protected area from your selection.",
-            permissions = { "cuboids.selection.protect", "cuboids.super.admin" },
+            permissions = { "cuboids.cmod.add", "cuboids.super.admin" },
             toolTip = "/protect <player/group..> <area name>",
             min = 3)
     public void protect(MessageReceiver caller, String[] args) {
