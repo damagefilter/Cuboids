@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.playblack.cuboids</groupId>
   <artifactId>cuboids2</artifactId>
-  <version>3.1</version>
+  <version>3.0-SNAPSHOT</version>
   <name>Cuboids2</name>
   <description>Cuboid-based area protection and world editing</description>
   <url>http://playblack.net</url>
