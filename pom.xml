@@ -105,6 +105,12 @@
         </executions>
         <configuration>
           <finalName>${project.artifactId}-${project.version}</finalName>
+          <artifactSet>
+            <excludes>
+              <exclude>net.canarymod:*</exclude>
+              <exclude>net.canarymod:servero</exclude>
+            </excludes>
+          </artifactSet>
           <filters>
             <filter>
               <artifact>*:*</artifact>
