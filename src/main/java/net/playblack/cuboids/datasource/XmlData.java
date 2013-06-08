@@ -69,7 +69,7 @@ public class XmlData implements BaseData {
     }
 
     @Override
-    public void loadAll() {
+    public int loadAll() {
 
         RegionManager regionMan = RegionManager.get();
         loadedRegions.put("root", new ArrayList<Region>());
@@ -77,7 +77,7 @@ public class XmlData implements BaseData {
         if(!regionFolder.exists()) {
             regionFolder.mkdirs();
         }
-        int counter = 0;
+        int numRegions = 0;
         //Load all files sorted by parents.
         //Parentless regions get sorted into "root"
         for(File file : regionFolder.listFiles()) {
@@ -106,7 +106,7 @@ public class XmlData implements BaseData {
                     Debug.logWarning(e.getMessage());
                 }
             }
-            counter++;
+            numRegions++;
         }
 
         //Sort out parents and stuff.
@@ -116,8 +116,8 @@ public class XmlData implements BaseData {
                 for(Region r : loadedRegions.get(key)) {
                     Region parent = findByName(key);
                     if(parent == null) {
-                        Debug.logWarning("Cannot find parent " + key + ". Dropping region " + r.getName());
-                        continue; //Drop the region
+                        Debug.logWarning("Cannot find parent " + key + ". Dropping regions with this parent!");
+                        break;
                     }
                     r.setParent(parent);
                 }
@@ -125,11 +125,10 @@ public class XmlData implements BaseData {
         }
 
         //Now that we have all the parents sorted out, we can just add all nodes under "root" to the regionmanager
-
         for(Region root : loadedRegions.get("root")) {
             regionMan.addRoot(root);
         }
-        Debug.log("Loaded " + counter + " regions");
+        return numRegions;
     }
 
     /**

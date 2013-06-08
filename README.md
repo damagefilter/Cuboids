@@ -1,5 +1,5 @@
 # Cuboids 2
-### Area protection and World Editing Plugin for CanaryMod and soon Bukkit
+### Area protection Plugin for CanaryMod and Canary Classic
 
 Copyright (c) 2013, PlayBlack
 

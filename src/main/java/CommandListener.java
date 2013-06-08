@@ -10,7 +10,6 @@ import net.playblack.cuboids.commands.Cdisc;
 import net.playblack.cuboids.commands.Cexpand;
 import net.playblack.cuboids.commands.Cfill;
 import net.playblack.cuboids.commands.Cfloor;
-import net.playblack.cuboids.commands.Chelp;
 import net.playblack.cuboids.commands.Cinfo;
 import net.playblack.cuboids.commands.CmodAdd;
 import net.playblack.cuboids.commands.CmodAllowCommand;
@@ -63,12 +62,6 @@ public class CommandListener extends PluginListener {
             cplayer = new CanaryPlayer(player);
         }
         CBaseCommand command;
-
-        if (split[0].equalsIgnoreCase("/chelp")) {
-            command = new Chelp();
-            command.execute(cplayer, split);
-            return true;
-        }
 
         if (split[0].equalsIgnoreCase("/cdel")) {
             command = new Cdel();

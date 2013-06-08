@@ -21,18 +21,6 @@ public class MessageSystem extends LocaleHelper {
     }
 
     /**
-     * get instance is deprecated!
-     * @return
-     */
-    @Deprecated
-    public static MessageSystem getInstance() {
-//        if (ms == null) {
-//            ms = new MessageSystem();
-//        }
-        return ms;
-    }
-
-    /**
      * Send a red message to the player from the error message pool
      *
      * @param player

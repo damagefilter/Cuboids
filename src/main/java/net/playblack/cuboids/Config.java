@@ -22,7 +22,7 @@ import net.playblack.mcutils.PropsFile;
 public class Config {
     public enum Implementation {
         CANARY,
-        BUKKIT,
+        CANARY_NEW,
         NOT_SET;
     }
 

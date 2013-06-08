@@ -14,15 +14,14 @@ import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
-
 import net.playblack.mcutils.Vector;
 
 /**
  * MysqlData extends BaseData and represents the data layer for retrieving
  * Regions from a MySQL database.
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class MysqlDataLegacy implements BaseData {
 
@@ -37,7 +36,7 @@ public class MysqlDataLegacy implements BaseData {
 
     /**
      * Get a mysql connection to work with
-     * 
+     *
      * @return
      */
     private Connection getConnection() {
@@ -64,7 +63,7 @@ public class MysqlDataLegacy implements BaseData {
 
     /**
      * Check if the given Node has a save in the database already
-     * 
+     *
      * @param node
      * @return true if node exists, false otherwise
      * @throws SQLException
@@ -85,7 +84,7 @@ public class MysqlDataLegacy implements BaseData {
 
     /**
      * This updates the given node in the database, use only if node exists!
-     * 
+     *
      * @param node
      * @throws SQLException
      */
@@ -101,12 +100,12 @@ public class MysqlDataLegacy implements BaseData {
             Region cube = new Region();
             cube.setProperty("pvp-damage", Status.softFromBoolean(ToolBox.stringToBoolean(rs.getString("allowPvp"))));
 //            cube.setAllowPvp(ToolBox.stringToBoolean(rs.getString("allowPvp")));
-            
+
             cube.setProperty("firespread", Status.softFromBoolean(!ToolBox.stringToBoolean(rs.getString("blockFireSpread"))));
 //            cube.setBlockFireSpread(ToolBox.stringToBoolean(rs.getString("blockFireSpread")));
             cube.setProperty("creeper-explosion", Status.softFromBoolean(ToolBox.stringToBoolean(rs.getString("creeperSecure"))));
 //            cube.setCreeperSecure(ToolBox.stringToBoolean(rs.getString("creeperSecure")));
-            
+
             if (ToolBox.stringToNull(rs.getString("farewell")) != null) {
                 cube.setFarewell(rs.getString("farewell"));
             }
@@ -120,7 +119,7 @@ public class MysqlDataLegacy implements BaseData {
 //            cube.setLavaControl(ToolBox.stringToBoolean(rs.getString("lavaControl")));
             cube.setName(rs.getString("name"));
             cube.setPriority(rs.getInt("priority"));
-            
+
             cube.setProperty("protection", Status.softFromBoolean(ToolBox.stringToBoolean(rs.getString("protection"))));
 //            cube.setProtection(ToolBox.stringToBoolean(rs.getString("protection")));
             cube.setProperty("enter-cuboid", Status.softFromBoolean(!ToolBox.stringToBoolean(rs.getString("restriction"))));
@@ -134,7 +133,7 @@ public class MysqlDataLegacy implements BaseData {
 //            cube.setTntSecure(ToolBox.stringToBoolean(rs.getString("tntSecure")));
             cube.setProperty("water-flow", Status.softFromBoolean(!ToolBox.stringToBoolean(rs.getString("waterControl"))));
 //            cube.setWaterControl(ToolBox.stringToBoolean(rs.getString("waterControl")));
-            
+
             if (ToolBox.stringToNull(rs.getString("welcome")) != null) {
                 cube.setWelcome(ToolBox.stringToNull(rs.getString("welcome")));
             }
@@ -220,46 +219,48 @@ public class MysqlDataLegacy implements BaseData {
     }
 
     @Override
-    public void loadAll() {
+    public int loadAll() {
         RegionManager regionMan = RegionManager.get();
-        
+
         if (getConnection() == null) {
             Debug.logError("Failed to establish Database Connection, cannot load Region data! (legacy)");
-            return; // uh oh ...
+            return 0; // uh oh ...
         }
-        
+
         try {
             PreparedStatement ps = getConnection().prepareStatement("SELECT * FROM nodes");
             loadedRegions = resultSetToRegion(ps.executeQuery());
         } catch (SQLException e) {
-            Debug.logError("Failed to load Region Nodes (legacy). Reason: "
-                    + e.getMessage());
+            Debug.logError("Failed to load Region Nodes (legacy). Reason: " + e.getMessage());
             e.printStackTrace();
-            return;
+            return 0;
         }
-        
+
       //Sort out parents and stuff.
+        int numRegions = 0;
         for(String key : loadedRegions.keySet()) {
             //Root has no parents to sort out
             if(!key.equals("root")) {
+                Region parent = findByName(key);
                 for(Region r : loadedRegions.get(key)) {
-                    Region parent = findByName(key);
                     if(parent == null) {
-                        Debug.logWarning("Cannot find parent " + key + ". Dropping region " + r.getName());
-                        continue; //Drop the region
+                        Debug.logWarning("Cannot find parent " + key + ". Dropping regions with this parent.");
+                        break;
                     }
+                    numRegions++;
                     r.setParent(parent);
                 }
             }
         }
-        
+
         //Now that we have all the parents sorted out, we can just add all nodes under "root" to the regionmanager
-        
         for(Region root : loadedRegions.get("root")) {
+            numRegions++;
             regionMan.addRoot(root);
         }
+        return numRegions;
     }
-    
+
     /**
      * Get a region from the given list with the given name
      * @param name

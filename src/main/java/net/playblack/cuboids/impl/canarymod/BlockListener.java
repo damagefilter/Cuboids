@@ -15,6 +15,7 @@ import net.canarymod.hook.player.BlockDestroyHook;
 import net.canarymod.hook.player.BlockLeftClickHook;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.canarymod.hook.player.BlockRightClickHook;
+import net.canarymod.hook.player.PlayerLeftClickHook;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.BlockUpdateHook;
 import net.canarymod.hook.world.ExplosionHook;
@@ -48,6 +49,7 @@ public class BlockListener implements PluginListener {
 
     @HookHandler
     public void blockRightClick(BlockRightClickHook hook) {
+        hook.getPlayer().sendMessage("Block right clicking!");
         Block b = hook.getBlockClicked();
         Location p = new Location(b.getX(), b.getY(), b.getZ(), hook.getPlayer().getWorld().getType().getId(), hook.getPlayer().getWorld().getName());
         CPlayer cplayer;
@@ -65,10 +67,7 @@ public class BlockListener implements PluginListener {
     }
 
     @HookHandler
-    public void leftClick(BlockLeftClickHook hook) {
-        if(hook.getBlock() != null) {
-            return;
-        }
+    public void leftClick(PlayerLeftClickHook hook) {
         if(!armSwingTimings.containsKey(hook.getPlayer().getName())) {
             armSwingTimings.put(hook.getPlayer().getName(), new Long(0));
         }

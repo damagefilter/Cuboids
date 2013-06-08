@@ -4,7 +4,6 @@ import net.canarymod.chat.MessageReceiver;
 import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandListener;
 import net.playblack.cuboids.InvalidPlayerException;
-import net.playblack.cuboids.commands.Chelp;
 import net.playblack.cuboids.commands.Cinfo;
 import net.playblack.cuboids.commands.Highprotect;
 import net.playblack.cuboids.commands.Protect;
@@ -12,19 +11,6 @@ import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Debug;
 
 public class MiscCommands implements CommandListener {
-
-    @Command(aliases = { "chelp" },
-            description = "Display Cuboids-internal Help content.",
-            permissions = { "cuboids.misc.help", "cuboids.super.admin" },
-            toolTip = "/chelp [help search terms ...] [page]",
-            min = 2)
-    public void chelp(MessageReceiver caller, String[] args) {
-        try {
-            new Chelp().execute(CServer.getServer().getPlayer(caller.getName()), args);
-        } catch (InvalidPlayerException e) {
-            Debug.logError(e.getMessage());
-        }
-    }
 
     @Command(aliases = { "cinfo" },
             description = "Explains the Cuboid you're currently inside.",

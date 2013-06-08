@@ -9,8 +9,8 @@ import java.util.HashMap;
 
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.regions.Region.Status;
+import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
@@ -18,20 +18,20 @@ import net.playblack.mcutils.Vector;
 /**
  * FlatFileData extends BaseData and represents the data layer for retrieving
  * Cuboids from text files.
- * 
+ *
  * @author Chris
- * 
+ *
  */
 
 public class FlatfileDataLegacy implements BaseData {
 
     private Object lock = new Object();
 
-    
-    //List of cuboids with a parent that wasn't loaded yet 
+
+    //List of cuboids with a parent that wasn't loaded yet
     //Parent -> childs
     private HashMap<String, ArrayList<String>> parentUpdateList = new HashMap<String, ArrayList<String>>();
-    
+
     // List of loaded nodes
     private ArrayList<Region> nodelist = new ArrayList<Region>();
 
@@ -55,13 +55,13 @@ public class FlatfileDataLegacy implements BaseData {
     }
 
 
-    
+
     @Override
-    public void loadAll() {
-        Debug.log("**** ATTEMPTING TO LOAD CUBOID-E FROM FILE **** ");
+    public int loadAll() {
         RegionManager handler = RegionManager.get();
+        int loadedNodes = 0;
         synchronized (lock) {
-            
+
             try {
                 // Load node files into a big big (probably) node list
                 // ObjectInputStream ois;
@@ -87,6 +87,9 @@ public class FlatfileDataLegacy implements BaseData {
                         c.setWorld(world);
                         c.setDimension(dimension);
                         c = csvToCuboid(c, props);
+                        if(c != null) {
+                            nodelist.add(csvToCuboid(c, props));
+                        }
                         reader.close();
                     }
                 }
@@ -98,61 +101,34 @@ public class FlatfileDataLegacy implements BaseData {
                 Debug.logWarning("Cuboids2: Failed to load Cuboid Data files!(IOE) " + f.getMessage());
                 // f.printStackTrace();
             }
-            
+            //Used for returning how many nodes were loaded
+            loadedNodes = nodelist.size();
+
             //All nodes collected, lets fix up the parents
             for(String parentName : parentUpdateList.keySet()) {
                 Region parent = findByNameFromNodeList(parentName);
                 if(parent == null) {
                     continue;
                 }
-                for(String cubename : parentUpdateList.get(parentName)) {
-                    Region cube = findByNameFromNodeList(cubename);
+                for(String child : parentUpdateList.get(parentName)) {
+                    Region cube = findByNameFromNodeList(child);
                     if(cube != null) {
                         cube.setParent(parent);
-                        
+
                     }
                 }
             }
-            
+
             // Create root nodes
             // System.out.println("Cuboids2: Processing Node Files ...");
             for (int i = 0; i < nodelist.size(); i++) {
-                // System.out.println("Running: "+i);
-                if (nodelist.get(i).getParent() == null) {
-                    if (handler.cuboidExists(nodelist.get(i).getName(),
-                            nodelist.get(i).getWorld(), nodelist.get(i)
-                                    .getDimension())) {
-                        nodelist.remove(i);
-                        i = -1;
-                    } else {
-                        // System.out.println("Cuboids2: Root Node: "+nodelist.get(i).getCuboid().getName());
-                        if (nodelist.get(i) != null && !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
-                            // System.out.println("Adding root node now.");
-                            handler.addRoot(nodelist.get(i));
-                            // rootNodes.add(nodelist.get(i));
-                            nodelist.remove(i);
-                            i = -1;
-                        }
-                    }
-                }
-            }
-            // Sort parents
-            // System.out.println("Cuboids2: Parenting Child Nodes");
-            for (int i = 0; i < nodelist.size(); i++) {
-                if (nodelist.get(i).getParent() != null) {
-                    Region parent = handler.getRegionByName(nodelist.get(i).getParent().getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension());
-                    if (parent != null && !handler.cuboidExists(nodelist.get(i).getName(), nodelist.get(i).getWorld(), nodelist.get(i).getDimension())) {
-                        // System.out.println("Cuboids2: Add child: "+nodelist.get(i).getCuboid().getName());
-                        // System.out.println("to parent: "+parent.getCuboid().getName());
-                        parent.attachRegion(nodelist.get(i));
-                        nodelist.remove(i);
-                        i = -1;
-                    }
+                if(!nodelist.get(i).hasParent()) {
+                    handler.addRoot(nodelist.get(i));
                 }
             }
             handler.cleanParentRelations();
-            Debug.log("Cuboids2: Cuboids loaded successfully");
         }
+        return loadedNodes;
     }
 
     private Region findByNameFromNodeList(String name) {
@@ -188,13 +164,13 @@ public class FlatfileDataLegacy implements BaseData {
 
     /**
      * Deserialize a string to a CuboidE object
-     * 
+     *
      * @param str
      * @return
      */
     private Region csvToCuboid(Region cube, String str) {
         String[] csv = str.split(",");
-        
+
         Debug.println("Cuboids split amount: " + csv.length + " for " + csv[0]);
         if (csv.length >= 23) {
             cube.setName(csv[0]);
@@ -235,8 +211,8 @@ public class FlatfileDataLegacy implements BaseData {
             if (csv.length >= 29) {
                 cube.setProperty("more-mobs", Status.softFromBoolean(ToolBox.stringToBoolean(csv[28])));
             }
-            if (!csv[1].equalsIgnoreCase("null")) {
-                if(parentUpdateList.get(csv[1]) == null) {
+            if (ToolBox.stringToNull(csv[1]) != null) {
+                if(!parentUpdateList.containsKey(csv[1])) {
                     parentUpdateList.put(csv[1], new ArrayList<String>());
                 }
                 parentUpdateList.get(csv[1]).add(cube.getName());

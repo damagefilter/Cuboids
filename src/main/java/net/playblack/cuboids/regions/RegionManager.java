@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.datasource.BaseData;
-import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.Location;
@@ -55,10 +54,8 @@ public class RegionManager {
     /**
      * Load all cuboids from the data source
      */
-    public void load() {
-        // load for old files
-        new FlatfileDataLegacy().loadAll();
-        dataSource.loadAll();
+    public int load() {
+        return dataSource.loadAll();
     }
 
     /**
