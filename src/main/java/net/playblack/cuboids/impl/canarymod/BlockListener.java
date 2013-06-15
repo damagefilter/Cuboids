@@ -11,6 +11,7 @@ import net.canarymod.api.entity.living.monster.Enderman;
 import net.canarymod.api.world.blocks.Block;
 import net.canarymod.hook.HookHandler;
 import net.canarymod.hook.entity.EndermanPickupBlockHook;
+import net.canarymod.hook.entity.HangingEntityDestroyHook;
 import net.canarymod.hook.player.BlockDestroyHook;
 import net.canarymod.hook.player.BlockLeftClickHook;
 import net.canarymod.hook.player.BlockPlaceHook;
@@ -32,6 +33,7 @@ import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
 import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
+import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
@@ -268,5 +270,26 @@ public class BlockListener implements PluginListener {
         if(event.isCancelled()) {
             hook.setCanceled();
         }
+    }
+
+    @HookHandler
+    public void onHangingEntityDestroy(HangingEntityDestroyHook hook) {
+        CPlayer player = null;
+
+        Location loc = new Location(hook.getPainting().getX(),
+                hook.getPainting().getY(),
+                hook.getPainting().getZ(),
+                hook.getPainting().getWorld().getType().getId(), hook.getPainting().getWorld().getName());
+        try {
+            player = CServer.getServer().getPlayer(hook.getPlayer().getName());
+        } catch (InvalidPlayerException e) {
+            player = new CanaryPlayer(hook.getPlayer());
+        }
+        EntityHangingDestroyEvent event = new EntityHangingDestroyEvent(player, loc);
+        ActionManager.fireEvent(event);
+        if(event.isCancelled()) {
+            hook.setCanceled();
+        }
+
     }
 }

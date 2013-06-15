@@ -13,6 +13,7 @@ import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
 import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
+import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
@@ -63,6 +64,20 @@ public class BlockModificationsOperator implements ActionListener {
             return true;
         }
         if(r.getProperty("firespread") == Status.DENY) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean canDestroyPaintings(CPlayer player, Location point) {
+        if(player.hasPermission("cuboids.super.admin")) {
+            return true;
+        }
+        Region r = RegionManager.get().getActiveRegion(point, false);
+        if(r.playerIsAllowed(player.getName(), player.getGroups())) {
+            return true;
+        }
+        if(r.getProperty("protection") == Status.ALLOW) {
             return false;
         }
         return true;
@@ -153,6 +168,13 @@ public class BlockModificationsOperator implements ActionListener {
     @ActionHandler
     public void onEndermanPickup(EndermanPickupEvent event) {
         if(canEndermanUseBlock(event.getLocation())) {
+            event.cancel();
+        }
+    }
+
+    @ActionHandler
+    public void onEntityHangingDestroy(EntityHangingDestroyEvent event) {
+        if(canDestroyPaintings(event.getPlayer(), event.getLocation())) {
             event.cancel();
         }
     }
