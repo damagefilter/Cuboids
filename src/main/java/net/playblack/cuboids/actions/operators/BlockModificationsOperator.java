@@ -158,6 +158,6 @@ public class BlockModificationsOperator implements ActionListener {
     }
 
     static {
-        ActionManager.registerActionListener("Cuboids2", new BlockModificationsOperator());
+        ActionManager.registerActionListener("Cuboids", new BlockModificationsOperator());
     }
 }

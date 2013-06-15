@@ -3,8 +3,8 @@ package net.playblack.cuboids.actions.operators;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.actions.ActionHandler;
-import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.ActionListener;
+import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
@@ -23,7 +23,7 @@ import net.playblack.mcutils.Vector;
  *
  */
 public class SelectionOperator implements ActionListener {
-    
+
     /**
      * Explain the current region
      * @param player
@@ -34,11 +34,11 @@ public class SelectionOperator implements ActionListener {
         if(player.getItemInHand().getId() != Config.get().getInspectorItem()) {
             return false;
         }
-        
+
         CuboidInterface.get().explainRegion(player, p, true);
         return true;
     }
-    
+
     /**
      * Handle the selection of points of a selection.
      * @param player
@@ -58,7 +58,7 @@ public class SelectionOperator implements ActionListener {
                 return false;
             }
         }
-        
+
         if(!player.hasPermission("cuboids.super.admin")) {
             if(!player.hasPermission("cselect")) {
                 return false;
@@ -74,7 +74,7 @@ public class SelectionOperator implements ActionListener {
         }
         return true;
     }
-    
+
     private void setPointClassicStyle(CPlayer player, Location point) {
         CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
         if(selection.isComplete()) {
@@ -103,9 +103,9 @@ public class SelectionOperator implements ActionListener {
             MessageSystem.successMessage(player, "originSet");
             MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
         }
-        
+
     }
-    
+
     private void setPointNormalStyle(CPlayer player, Location point, boolean rightClick) {
         CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
         if(rightClick) {
@@ -119,11 +119,11 @@ public class SelectionOperator implements ActionListener {
             MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
         }
     }
-    
+
     // *******************************
     // Listener creation stuff
     // *******************************
-    
+
     @ActionHandler
     public void onBlockRightClick(BlockRightClickEvent event) {
         //Set seletion?
@@ -135,7 +135,7 @@ public class SelectionOperator implements ActionListener {
         }
         explainRegion(event.getPlayer(), event.getLocation());
     }
-    
+
     @ActionHandler
     public void onArmSwing(ArmSwingEvent event) {
         Vector v = new LineBlockTracer(event.getPlayer()).getTargetVector();
@@ -146,7 +146,7 @@ public class SelectionOperator implements ActionListener {
 //        System.out.println("armswing selection");
         setSelectionPoint(event.getPlayer(), loc, false, true);
     }
-    
+
     @ActionHandler
     public void onBlockLeftClick(BlockLeftClickEvent event) {
 //        System.out.println("onBlockLOeftClick selection");
@@ -154,9 +154,9 @@ public class SelectionOperator implements ActionListener {
             event.cancel();
         }
     }
-    
+
     //Register that thing
     static {
-        ActionManager.registerActionListener("Cuboids2", new SelectionOperator());
+        ActionManager.registerActionListener("Cuboids", new SelectionOperator());
     }
 }

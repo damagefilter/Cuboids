@@ -31,6 +31,6 @@ public class MiscOperator implements ActionListener {
     }
 
     static {
-        ActionManager.registerActionListener("Cuboids2", new MiscOperator());
+        ActionManager.registerActionListener("Cuboids", new MiscOperator());
     }
 }

@@ -20,7 +20,7 @@ import net.playblack.mcutils.Vector;
 public class BrushOperator implements ActionListener {
     /**
      * Handle brush action, make undo etc and execute in world
-     * 
+     *
      * @param player
      * @param point
      */
@@ -45,7 +45,7 @@ public class BrushOperator implements ActionListener {
             }
         }
     }
-    
+
     @ActionHandler
     public void onArmSwing(ArmSwingEvent event) {
         Vector v = new LineBlockTracer(event.getPlayer()).getTargetVector();
@@ -53,8 +53,8 @@ public class BrushOperator implements ActionListener {
             handleBrush(event.getPlayer(), v);
         }
     }
-    
+
     static {
-        ActionManager.registerActionListener("Cuboids2", new BrushOperator());
+        ActionManager.registerActionListener("Cuboids", new BrushOperator());
     }
 }

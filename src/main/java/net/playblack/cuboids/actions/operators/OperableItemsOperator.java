@@ -80,6 +80,6 @@ public class OperableItemsOperator implements ActionListener {
     }
 
     static {
-        ActionManager.registerActionListener("Cuboids2", new OperableItemsOperator());
+        ActionManager.registerActionListener("Cuboids", new OperableItemsOperator());
     }
 }

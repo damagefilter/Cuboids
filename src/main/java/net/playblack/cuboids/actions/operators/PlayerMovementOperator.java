@@ -7,18 +7,18 @@ import net.playblack.cuboids.actions.events.forwardings.PlayerWalkEvent;
 import net.playblack.cuboids.regions.CuboidInterface;
 
 public class PlayerMovementOperator implements ActionListener {
-    
+
     @ActionHandler
     public void onPlayerMove(PlayerWalkEvent event) {
-        
+
         if(!event.getPlayer().canMoveTo(event.getTo())) {
             event.getPlayer().teleportTo(event.getFrom());
         }
-        
+
         CuboidInterface.get().handleRegionsForPlayer(event.getPlayer(), event.getFrom(), event.getTo());
     }
-    
+
     static {
-        ActionManager.registerActionListener("Cuboids2", new PlayerMovementOperator());
+        ActionManager.registerActionListener("Cuboids", new PlayerMovementOperator());
     }
 }

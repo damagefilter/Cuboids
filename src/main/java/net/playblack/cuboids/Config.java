@@ -27,9 +27,9 @@ public class Config {
     }
 
     private Implementation impl = Implementation.NOT_SET;
-    private String name = "Cuboids2";
-    private String version = "4.0.0";
-    private String basePath = "plugins/cuboids2/";
+//    private String name = "Cuboids";
+//    private String version = "3.2.1";
+    private String basePath = "plugins/cuboids/";
 
     // global settings go into this
     private Region global = new Region();
@@ -51,9 +51,9 @@ public class Config {
     private static Config instance = null;
 
     private Config() {
-        pluginSetting =  new PropsFile("plugins/cuboids2/settings.properties");
-        cuboidSetting =  new PropsFile("plugins/cuboids2/cuboid.properties");
-        dsSetting =      new PropsFile("plugins/cuboids2/data.properties");
+        pluginSetting =  new PropsFile(basePath + "settings.properties");
+        cuboidSetting =  new PropsFile(basePath + "cuboid.properties");
+        dsSetting =      new PropsFile(basePath + "data.properties");
 
         //quickly init all settings properties (for saving reasons)
         getHealDelay();
@@ -127,6 +127,8 @@ public class Config {
         defaultSettings.put("water-bucket", cuboidSetting.getStatus("default-water-bucket", Region.Status.DEFAULT));
 
         defaultSettings.put("lava-bucket", cuboidSetting.getStatus("default-lava-bucket", Region.Status.DENY));
+
+        defaultSettings.put("animal-damage", cuboidSetting.getStatus("default-animal-damage", Region.Status.DEFAULT));
         //Register all of cuboids own flags
         for(String key : defaultSettings.keySet()) {
             RegionFlagRegister.registerFlag(key);
@@ -179,6 +181,8 @@ public class Config {
 
         global.setProperty("lava-bucket", cuboidSetting.getStatus("global-lava-bucket", Region.Status.DEFAULT));
 
+        global.setProperty("animal-damage", cuboidSetting.getStatus("global-animal-damage", Region.Status.DEFAULT));
+
         String[] itemsList = cuboidSetting.getString("restricted-items", "").split(",");
         restrictedItems = new ArrayList<Integer>(itemsList.length);
         for (String i : itemsList) {
@@ -188,7 +192,7 @@ public class Config {
             }
         }
 
-        String dataSource = dsSetting.getString("data-source", "flatfile");
+        String dataSource = dsSetting.getString("data-source", "xml");
         if (dataSource.equalsIgnoreCase("mysql")) {
             sqlConfig = new HashMap<String, String>(3);
             sqlConfig.put("url", dsSetting.getString("sql-url", "localhost"));
@@ -210,7 +214,7 @@ public class Config {
     }
 
     /**
-     * Returns the current base path, usually plugins/cuboids2/.
+     * Returns the current base path, usually plugins/cuboids/.
      * Note that there's a trailing /
      * @return
      */
@@ -294,20 +298,6 @@ public class Config {
      */
     public boolean isAutoParent() {
         return autoParent;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return the version
-     */
-    public String getVersion() {
-        return version;
     }
 
     /**
