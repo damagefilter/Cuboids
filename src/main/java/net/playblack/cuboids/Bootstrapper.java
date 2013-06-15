@@ -34,7 +34,6 @@ public class Bootstrapper {
      * @param loaders
      */
     public Bootstrapper(CServer server, Loader[] loaders, Implementation impl) {
-        Debug.cacheMessage("Loading Cuboids2 ...", true);
         // ------------------------------------------------------
         CServer.setServer(server);
         Config.get().setImplementation(impl); // init this thing for a first time

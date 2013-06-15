@@ -13,7 +13,7 @@ import net.playblack.cuboids.impl.canarymod.commands.SelectionEditingCommands;
 import net.playblack.cuboids.impl.canarymod.commands.WorldEditingCommands;
 import net.playblack.mcutils.Debug;
 
-public class Cuboids2 extends Plugin {
+public class Cuboids extends Plugin {
 
     @Override
     public boolean enable() {

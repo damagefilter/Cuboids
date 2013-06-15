@@ -21,7 +21,7 @@ public class CuboidDLoader implements Loader {
                 return shells;
             }
             if (cuboidDPath.listFiles().length > 0) {
-                File test = new File("plugins/cuboids2/backups_cuboidD/");
+                File test = new File("plugins/cuboids/backups_cuboidD/");
                 if (!test.exists()) {
                     test.mkdirs();
                 }
@@ -36,7 +36,7 @@ public class CuboidDLoader implements Loader {
                     ois.close();
                     // Move away the files to somewhere else so they won't get
                     // converted again.
-                    File b = new File("plugins/cuboids2/backups_cuboidD/"
+                    File b = new File("plugins/cuboids/backups_cuboidD/"
                             + cuboid.getName());
                     cuboid.renameTo(b);
 

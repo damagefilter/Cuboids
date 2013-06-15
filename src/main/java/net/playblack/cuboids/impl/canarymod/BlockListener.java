@@ -49,7 +49,6 @@ public class BlockListener implements PluginListener {
 
     @HookHandler
     public void blockRightClick(BlockRightClickHook hook) {
-        hook.getPlayer().sendMessage("Block right clicking!");
         Block b = hook.getBlockClicked();
         Location p = new Location(b.getX(), b.getY(), b.getZ(), hook.getPlayer().getWorld().getType().getId(), hook.getPlayer().getWorld().getName());
         CPlayer cplayer;

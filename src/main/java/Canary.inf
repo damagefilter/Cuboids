@@ -1,4 +1,4 @@
-main-class=net.playblack.cuboids.impl.canarymod.Cuboids2
+main-class=net.playblack.cuboids.impl.canarymod.Cuboids
 author=damagefilter
 version=3.2-SNAPSHOT
-name=Cuboids2
+name=Cuboids

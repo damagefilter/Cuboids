@@ -5,7 +5,7 @@ import net.playblack.cuboids.converters.Loader;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.RegionManager;
 
-public class Cuboids2 extends Plugin {
+public class Cuboids extends Plugin {
 
     PlayerListener playerListener = new PlayerListener();
     BlockListener blockListener = new BlockListener();

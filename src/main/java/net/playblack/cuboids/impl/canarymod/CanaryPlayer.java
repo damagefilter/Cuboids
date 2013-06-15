@@ -86,7 +86,7 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public double getRotation() {
-        return getRotation();
+        return player.getRotation();
     }
 
     @Override

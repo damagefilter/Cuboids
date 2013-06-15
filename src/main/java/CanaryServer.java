@@ -57,7 +57,7 @@ public class CanaryServer extends CServer {
         if (!playerList.containsKey(name)) {
             Player p = etc.getServer().matchPlayer(name);
             if (p == null) {
-                throw new InvalidPlayerException("Cuboids2 cannot find player with this name: " + name + " (Player offline?)");
+                throw new InvalidPlayerException("Cannot find player with this name: " + name + " (Player offline?)");
             }
             playerList.put(name, new CanaryPlayer(p));
         }
@@ -68,7 +68,7 @@ public class CanaryServer extends CServer {
     public CPlayer refreshPlayer(String name) throws InvalidPlayerException {
         Player p = etc.getServer().matchPlayer(name);
         if (p == null) {
-            throw new InvalidPlayerException("Cuboids2 cannot find player with this name: " + name + " (Player offline?)");
+            throw new InvalidPlayerException("Cannot find player with this name: " + name + " (Player offline?)");
         }
         playerList.remove(name);
         playerList.put(name, new CanaryPlayer(p));

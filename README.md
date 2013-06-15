@@ -1,4 +1,4 @@
-# Cuboids 2
+# Cuboids
 ### Area protection Plugin for CanaryMod and Canary Classic
 
 Copyright (c) 2013, PlayBlack

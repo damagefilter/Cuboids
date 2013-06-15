@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.playblack.cuboids</groupId>
-  <artifactId>cuboids2</artifactId>
+  <artifactId>cuboids</artifactId>
   <version>3.2-SNAPSHOT</version>
-  <name>Cuboids2</name>
+  <name>Cuboids</name>
   <description>Cuboid-based area protection and world editing</description>
   <url>http://playblack.net</url>
   <inceptionYear>2012</inceptionYear>

@@ -117,7 +117,7 @@ public class CanaryWorld extends CWorld {
         if (Block.Type.fromId(type) == null) { // Invalid Block!
             return;
         }
-        
+
         world.setBlockAt(type, v.getBlockX(), v.getBlockY(), v.getBlockZ());
         if (getBlockAt(v).getData() != data) {
             world.setBlockData(v.getBlockX(), v.getBlockY(), v.getBlockZ(),
@@ -198,7 +198,7 @@ public class CanaryWorld extends CWorld {
     }
 
     /**
-     * Convert Canary Item list to Cuboids2 Item list
+     * Convert Canary Item list to Cuboids Item list
      */
     private ArrayList<CItem> itemsToArrayList(Item[] items) {
         if (items == null || items.length == 0) {
@@ -217,7 +217,7 @@ public class CanaryWorld extends CWorld {
 
     /**
      * Turn items to array
-     * 
+     *
      * @param items
      * @return
      */
@@ -243,7 +243,7 @@ public class CanaryWorld extends CWorld {
 
     /**
      * Recycle a block instance to reduce load on the GC
-     * 
+     *
      * @param type
      * @param data
      * @return

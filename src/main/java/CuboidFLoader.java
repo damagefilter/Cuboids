@@ -17,7 +17,7 @@ public class CuboidFLoader implements Loader {
                 return shells;
             }
             if (cuboidFPath.listFiles().length > 0) {
-                File test = new File("plugins/cuboids2/backups_cuboidF/");
+                File test = new File("plugins/cuboids/backups_cuboidF/");
                 if (!test.exists()) {
                     test.mkdirs();
                 }
@@ -29,7 +29,7 @@ public class CuboidFLoader implements Loader {
                             "plugins/config/CuboidPlugin/areas/"
                                     + files.getName());
                     shells.add(new CuboidFShell(file));
-                    File b = new File("plugins/cuboids2/backups_cuboidF/"
+                    File b = new File("plugins/cuboids/backups_cuboidF/"
                             + files.getName());
                     files.renameTo(b);
                 }
