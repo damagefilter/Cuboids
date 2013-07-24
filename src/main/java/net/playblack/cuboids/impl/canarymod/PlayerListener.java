@@ -1,6 +1,5 @@
 package net.playblack.cuboids.impl.canarymod;
 
-
 import net.canarymod.api.DamageType;
 import net.canarymod.api.entity.EntityItem;
 import net.canarymod.api.entity.living.humanoid.Player;
@@ -26,6 +25,7 @@ import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.ToolBox;
 
 public class PlayerListener implements PluginListener {
+
     @HookHandler
     public void onDisconnect(DisconnectionHook hook) {
         CServer.getServer().removePlayer(hook.getPlayer().getName());
@@ -34,7 +34,7 @@ public class PlayerListener implements PluginListener {
     @HookHandler
     public void onBan(BanHook hook) {
         Player player = hook.getBannedPlayer();
-        if(player == null) {
+        if (player == null) {
             return;
         }
         CServer.getServer().removePlayer(player.getName());
@@ -72,8 +72,8 @@ public class PlayerListener implements PluginListener {
         Player player = hook.getPlayer();
         Location to = hook.getDestination();
         Location from = player.getLocation();
-        if (!player.getWorld().isChunkLoaded((int)to.getX(), (int)to.getZ())) {
-            player.getWorld().loadChunk((int)to.getX(), (int)to.getZ());
+        if (!player.getWorld().isChunkLoaded((int) to.getX(), (int) to.getZ())) {
+            player.getWorld().loadChunk((int) to.getX(), (int) to.getZ());
         }
         net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.getX(), to.getY(), to.getZ(), to.getType().getId(), to.getWorldName());
         ToolBox.adjustWorldPosition(vTo);
@@ -88,7 +88,7 @@ public class PlayerListener implements PluginListener {
         }
         PlayerWalkEvent event = new PlayerWalkEvent(cplayer, vFrom, vTo);
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
         }
     }
@@ -103,7 +103,7 @@ public class PlayerListener implements PluginListener {
         DamageSource ds = damageSourceFromCanary(hook.getDamageSource().getDamagetype(), true);
         EntityDamageEvent event = new EntityDamageEvent(a, d, ds, hook.getDamageDealt());
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             return true;
         }
         return false;
@@ -150,7 +150,6 @@ public class PlayerListener implements PluginListener {
 //        return !BlockActionHandler.handleOperableItems(cplayer, v,
 //                item.getItemId());
 //    }
-
     public boolean onItemDrop(ItemDropHook hook) {
         if (!(hook.getPlayer() == null)) {
             CPlayer cplayer;
@@ -163,7 +162,7 @@ public class PlayerListener implements PluginListener {
             EntityItem item = hook.getItem();
             ItemDropEvent event = new ItemDropEvent(new CItem(item.getItem().getId(), item.getItem().getDamage(), item.getItem().getAmount(), item.getItem().getSlot()), cplayer);
             ActionManager.fireEvent(event);
-            if(event.isCancelled()) {
+            if (event.isCancelled()) {
                 return true;
             }
             return false;
@@ -172,7 +171,7 @@ public class PlayerListener implements PluginListener {
     }
 
     private EntityDamageEvent.DamageSource damageSourceFromCanary(DamageType type, boolean hasAttacker) {
-        switch(type) {
+        switch (type) {
             case ANVIL:
                 return DamageSource.FALLING_ANVIL;
             case ARROW:
@@ -198,7 +197,6 @@ public class PlayerListener implements PluginListener {
             case LAVA:
                 return DamageSource.LAVA;
             case MOB:
-                return DamageSource.ENTITY;
             case PLAYER:
                 return DamageSource.ENTITY;
             case POTION:

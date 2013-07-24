@@ -11,18 +11,20 @@ public class CanaryBaseEntity implements IBaseEntity {
 
     Entity entity;
     CanaryWorld world;
+
     public CanaryBaseEntity(Entity entity) {
         this.entity = entity;
         world = new CanaryWorld(entity.getWorld());
     }
 
     @Override
-    public int getHealth() {
+    public float getHealth() {
         return 0;
     }
 
     @Override
-    public void setHealth(int health) { }
+    public void setHealth(float health) {
+    }
 
     @Override
     public String getName() {
@@ -31,7 +33,7 @@ public class CanaryBaseEntity implements IBaseEntity {
 
     @Override
     public CWorld getWorld() {
-        if(world.getHandle() != entity.getWorld()) {
+        if (world.getHandle() != entity.getWorld()) {
             world = new CanaryWorld(entity.getWorld());
         }
         return world;
@@ -81,26 +83,25 @@ public class CanaryBaseEntity implements IBaseEntity {
 
     @Override
     public boolean isPlayer() {
-        if(entity.isLiving()) {
-            return ((EntityLiving)entity).isPlayer();
+        if (entity.isLiving()) {
+            return ((EntityLiving) entity).isPlayer();
         }
         return false;
     }
 
     @Override
     public boolean isMob() {
-        if(entity.isLiving()) {
-            return ((EntityLiving)entity).isMob();
+        if (entity.isLiving()) {
+            return ((EntityLiving) entity).isMob();
         }
         return false;
     }
 
     @Override
     public boolean isAnimal() {
-        if(entity.isLiving()) {
-            return ((EntityLiving)entity).isAnimal();
+        if (entity.isLiving()) {
+            return ((EntityLiving) entity).isAnimal();
         }
         return false;
     }
-
 }

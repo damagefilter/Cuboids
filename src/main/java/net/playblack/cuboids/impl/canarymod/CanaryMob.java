@@ -8,6 +8,7 @@ import net.playblack.mcutils.Location;
 import net.playblack.mcutils.Vector;
 
 public class CanaryMob implements CMob {
+
     EntityMob mob;
     CanaryWorld world;
 
@@ -17,12 +18,12 @@ public class CanaryMob implements CMob {
     }
 
     @Override
-    public int getHealth() {
+    public float getHealth() {
         return mob.getHealth();
     }
 
     @Override
-    public void setHealth(int health) {
+    public void setHealth(float health) {
         mob.setHealth(health);
     }
 

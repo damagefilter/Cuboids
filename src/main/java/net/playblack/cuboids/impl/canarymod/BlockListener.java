@@ -16,12 +16,13 @@ import net.canarymod.hook.player.BlockDestroyHook;
 import net.canarymod.hook.player.BlockLeftClickHook;
 import net.canarymod.hook.player.BlockPlaceHook;
 import net.canarymod.hook.player.BlockRightClickHook;
-import net.canarymod.hook.player.PlayerLeftClickHook;
+import net.canarymod.hook.player.PlayerArmSwingHook;
 import net.canarymod.hook.world.BlockPhysicsHook;
 import net.canarymod.hook.world.BlockUpdateHook;
 import net.canarymod.hook.world.ExplosionHook;
 import net.canarymod.hook.world.FlowHook;
 import net.canarymod.hook.world.IgnitionHook;
+import net.canarymod.logger.Logman;
 import net.canarymod.plugin.PluginListener;
 import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.ActionManager;
@@ -47,6 +48,7 @@ import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
 public class BlockListener implements PluginListener {
+
     private HashMap<String, Long> armSwingTimings = new HashMap<String, Long>();
 
     @HookHandler
@@ -68,8 +70,8 @@ public class BlockListener implements PluginListener {
     }
 
     @HookHandler
-    public void leftClick(PlayerLeftClickHook hook) {
-        if(!armSwingTimings.containsKey(hook.getPlayer().getName())) {
+    public void leftClick(PlayerArmSwingHook hook) {
+        if (!armSwingTimings.containsKey(hook.getPlayer().getName())) {
             armSwingTimings.put(hook.getPlayer().getName(), new Long(0));
         }
         long theTime = armSwingTimings.get(hook.getPlayer().getName());
@@ -90,12 +92,12 @@ public class BlockListener implements PluginListener {
 
     @HookHandler
     public void blockLeftClick(BlockLeftClickHook hook) {
-        if(hook.getBlock() == null) {
+        if (hook.getBlock() == null) {
             return;
         }
         Block b = hook.getBlock();
         Player player = hook.getPlayer();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(),player.getWorld().getType().getId(), player.getWorld().getName());
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
 //        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
@@ -106,7 +108,7 @@ public class BlockListener implements PluginListener {
         }
         BlockLeftClickEvent event = new BlockLeftClickEvent(cplayer, new CBlock(b.getTypeId(), b.getData()), p);
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
         }
     }
@@ -124,9 +126,9 @@ public class BlockListener implements PluginListener {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
-        BlockBreakEvent event = new BlockBreakEvent(cplayer, new CBlock(b.getTypeId(),  b.getData()), p);
+        BlockBreakEvent event = new BlockBreakEvent(cplayer, new CBlock(b.getTypeId(), b.getData()), p);
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
         }
     }
@@ -144,10 +146,10 @@ public class BlockListener implements PluginListener {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
-        BlockPlaceEvent event = new BlockPlaceEvent(cplayer, new CBlock(b.getTypeId(),  b.getData()), p);
+        BlockPlaceEvent event = new BlockPlaceEvent(cplayer, new CBlock(b.getTypeId(), b.getData()), p);
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
-            Canary.println("place was canceled");
+        if (event.isCancelled()) {
+//            Logman.println("place was canceled");
             hook.setCanceled();
         }
     }
@@ -157,18 +159,18 @@ public class BlockListener implements PluginListener {
         //Assemble the list of blocks ...
         HashMap<Location, CBlock> blocks = new HashMap<Location, CBlock>();
 
-        for(Block x : hook.getAffectedBlocks()) {
+        for (Block x : hook.getAffectedBlocks()) {
             Location l = new Location(x.getX(), x.getY(), x.getZ(), x.getWorld().getType().getId(), x.getWorld().getName());
 //            ToolBox.adjustWorldPosition(l);
             blocks.put(l, new CBlock(x.getTypeId(), x.getData()));
         }
         Block b = hook.getBlock();
         ExplosionType type = ExplosionType.TNT;
-        if(hook.getEntity() != null) {
-            if(hook.getEntity() instanceof Fireball) {
+        if (hook.getEntity() != null) {
+            if (hook.getEntity() instanceof Fireball) {
                 type = ExplosionType.GHAST_FIREBALL;
             }
-            if(hook.getEntity() instanceof Creeper) {
+            if (hook.getEntity() instanceof Creeper) {
                 type = ExplosionType.CREEPER;
             }
         }
@@ -176,23 +178,22 @@ public class BlockListener implements PluginListener {
         Location l = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         ExplosionEvent event = new ExplosionEvent(new CanaryBaseEntity(hook.getEntity()), l, type, blocks);
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
             return;
         }
         //Not cancelled, process the list of blocks and remove those that should stay
         List<Location> protectedBlocks = event.getProtectedBlocks();
         List<Block> blocksaffected = hook.getAffectedBlocks();
-        if(protectedBlocks != null) {
-            for(Location m : protectedBlocks) {
-                for(int i = 0; i < blocksaffected.size(); ) {
+        if (protectedBlocks != null) {
+            for (Location m : protectedBlocks) {
+                for (int i = 0; i < blocksaffected.size();) {
                     Block x = (Block) blocksaffected.get(i);
                     Vector tmp = new Vector(x.getX(), x.getY(), x.getZ());
 //                    ToolBox.adjustWorldPosition(tmp);
-                    if(m.samePosition2D(tmp)) {
+                    if (m.samePosition2D(tmp)) {
                         blocksaffected.remove(i);
-                    }
-                    else {
+                    } else {
                         i++;
                     }
                 }
@@ -217,7 +218,7 @@ public class BlockListener implements PluginListener {
         }
         IgniteEvent event = new IgniteEvent(FireSource.fromInt(b.getStatus()), p, new CBlock(b.getTypeId(), b.getData()), cplayer);
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
         }
     }
@@ -230,7 +231,7 @@ public class BlockListener implements PluginListener {
         ToolBox.adjustWorldPosition(p);
         LiquidFlowEvent event = new LiquidFlowEvent(new CBlock(b.getTypeId(), b.getData()), new CBlock(to.getTypeId(), to.getData()), p);
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
         }
     }
@@ -242,7 +243,7 @@ public class BlockListener implements PluginListener {
         ToolBox.adjustWorldPosition(p);
         BlockPhysicsEvent event = new BlockPhysicsEvent(new CBlock(b.getTypeId(), b.getData()), p);
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
         }
     }
@@ -254,7 +255,7 @@ public class BlockListener implements PluginListener {
         ToolBox.adjustWorldPosition(p);
         BlockUpdateEvent event = new BlockUpdateEvent(new CBlock(b.getTypeId(), b.getData()), new CBlock(hook.getNewBlockId()), p);
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
         }
     }
@@ -267,7 +268,7 @@ public class BlockListener implements PluginListener {
         ToolBox.adjustWorldPosition(l);
         EndermanPickupEvent event = new EndermanPickupEvent(l, new CBlock(b.getTypeId(), b.getData()));
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
         }
     }
@@ -287,7 +288,7 @@ public class BlockListener implements PluginListener {
         }
         EntityHangingDestroyEvent event = new EntityHangingDestroyEvent(player, loc);
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
         }
 

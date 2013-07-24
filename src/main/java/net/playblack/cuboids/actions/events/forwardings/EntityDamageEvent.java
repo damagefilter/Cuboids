@@ -5,8 +5,9 @@ import net.playblack.cuboids.actions.events.CuboidEvent;
 import net.playblack.cuboids.gameinterface.IBaseEntity;
 
 public class EntityDamageEvent extends CuboidEvent implements Cancellable {
-    
+
     public enum DamageSource {
+
         CREEPER_EXPLOSION,
         ENTITY,
         EXPLOSION,
@@ -26,20 +27,19 @@ public class EntityDamageEvent extends CuboidEvent implements Cancellable {
         FALLING_BLOCK,
         GENERIC;
     }
-    
     private boolean isCancelled = false;
     private IBaseEntity attacker;
     private IBaseEntity defender;
     private DamageSource damageSource;
-    private int damage;
-    
-    public EntityDamageEvent(IBaseEntity attacker, IBaseEntity defender, DamageSource damageSource, int damage) {
+    private float damage;
+
+    public EntityDamageEvent(IBaseEntity attacker, IBaseEntity defender, DamageSource damageSource, float damage) {
         this.attacker = attacker;
         this.defender = defender;
         this.damageSource = damageSource;
         this.damage = damage;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return isCancelled;
@@ -53,17 +53,22 @@ public class EntityDamageEvent extends CuboidEvent implements Cancellable {
     public IBaseEntity getAttacker() {
         return attacker;
     }
+
     public IBaseEntity getDefender() {
         return defender;
     }
+
     public DamageSource getDamageSource() {
         return damageSource;
     }
-    public int getDamage() {
+
+    public float getDamage() {
         return damage;
     }
+
     /**
      * Override the damage done
+     *
      * @param newDamage
      */
     public void setDamage(int newDamage) {

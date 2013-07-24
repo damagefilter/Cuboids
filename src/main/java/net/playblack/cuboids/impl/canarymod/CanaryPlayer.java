@@ -1,5 +1,6 @@
 package net.playblack.cuboids.impl.canarymod;
 
+import net.canarymod.api.GameMode;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.Item;
 import net.playblack.cuboids.SessionManager;
@@ -13,21 +14,24 @@ import net.playblack.mcutils.Location;
 import net.playblack.mcutils.Vector;
 
 public class CanaryPlayer extends CPlayer {
+
     Player player;
     CanaryWorld world;
     String[] groups;
+
     public CanaryPlayer(Player player) {
         this.player = player;
         this.world = new CanaryWorld(player.getWorld());
         groups = new String[]{player.getGroup().getName()};
     }
+
     @Override
-    public int getHealth() {
+    public float getHealth() {
         return player.getHealth();
     }
 
     @Override
-    public void setHealth(int health) {
+    public void setHealth(float health) {
         player.setHealth(health);
     }
 
@@ -49,12 +53,12 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public Vector getPosition() {
-        return new Vector(player.getX(),player.getY(), player.getZ());
+        return new Vector(player.getX(), player.getY(), player.getZ());
     }
 
     @Override
     public Location getLocation() {
-        return new Location(player.getX(),player.getY(), player.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        return new Location(player.getX(), player.getY(), player.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
     }
 
     @Override
@@ -106,7 +110,7 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public void sendMessage(String message) {
-        player.sendMessage(message);
+        player.message(message);
     }
 
     @Override
@@ -130,45 +134,45 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public String[] getGroups() {
-        if(!groups[0].equals(player.getGroup().getName())) {
-            groups = new String[] {player.getGroup().getName()};
+        if (!groups[0].equals(player.getGroup().getName())) {
+            groups = new String[]{player.getGroup().getName()};
         }
         return groups;
     }
 
     @Override
     public void setGameMode(int mode) {
-        if(adminCreative && !isInCreativeMode()) {
+        if (adminCreative && !isInCreativeMode()) {
             adminCreative = false;
         }
 
-        if(currentRegion == null && isInCreativeMode()) {
+        if (currentRegion == null && isInCreativeMode()) {
             adminCreative = true;
         }
 
-        if(currentRegion != null) {
-            if(currentRegion.getProperty("creative") != Status.ALLOW && isInCreativeMode()) {
+        if (currentRegion != null) {
+            if (currentRegion.getProperty("creative") != Status.ALLOW && isInCreativeMode()) {
                 adminCreative = true;
             }
         }
 
-        if(mode == 0) {
-            if(!adminCreative) {
+        if (mode == 0) {
+            if (!adminCreative) {
                 setInventoryForMode(getCurrentInventory(), getGameMode());
-                player.setMode(mode);
+                player.setMode(GameMode.fromId(mode));
                 setInventory(getInventory(mode));
             }
         }
-        if(mode == 1 && !adminCreative) {
+        if (mode == 1 && !adminCreative) {
             setInventoryForMode(getCurrentInventory(), getGameMode());
-            player.setMode(mode);
+            player.setMode(GameMode.fromId(mode));
             setInventory(getInventory(mode));
         }
     }
 
     @Override
     public boolean isInCreativeMode() {
-        return player.getMode() == 1;
+        return player.getMode().getId() == 1;
     }
 
     @Override
@@ -193,10 +197,9 @@ public class CanaryPlayer extends CPlayer {
             return;
         }
         try {
-            if(items.hasItems()) {
-                ((CanaryInventory)items).setThisContents();
-            }
-            else {
+            if (items.hasItems()) {
+                ((CanaryInventory) items).setThisContents();
+            } else {
                 player.getInventory().clearContents();
             }
 
@@ -222,7 +225,6 @@ public class CanaryPlayer extends CPlayer {
 
     @Override
     public int getGameMode() {
-        return player.getMode();
+        return player.getMode().getId();
     }
-
 }
