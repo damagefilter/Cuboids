@@ -18,7 +18,8 @@ public class Cuboids extends Plugin {
     @Override
     public boolean enable() {
         Debug.overrideLogger(getLogman());
-        new Bootstrapper(new CanaryServer(), new Loader[] {new CuboidFLoader()}, Implementation.CANARY);
+        new Bootstrapper(new CanaryServer(), new Loader[] {new CuboidFLoader()}, Implementation.CANARY)
+        .bootstrap();
         try {
             Canary.commands().registerCommands(new CmodCommands(), this, false);
             Canary.commands().registerCommands(new MiscCommands(), this, false);

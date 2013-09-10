@@ -20,16 +20,16 @@ public class Vector {
     }
 
     public Vector(int x, int y, int z) {
-        this.x = (double) x;
-        this.y = (double) y;
-        this.z = (double) z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
 //        ToolBox.adjustWorldPosition(this);
     }
 
     public Vector(float x, float y, float z) {
-        this.x = (double) x;
-        this.y = (double) y;
-        this.z = (double) z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
 //        ToolBox.adjustWorldPosition(this);
     }
 
@@ -74,7 +74,7 @@ public class Vector {
      * @param x
      */
     public void setX(int x) {
-        this.x = (double) x;
+        this.x = x;
     }
 
     /**
@@ -101,7 +101,7 @@ public class Vector {
      * @param y
      */
     public void setY(int y) {
-        this.y = (double) y;
+        this.y = y;
     }
 
     /**
@@ -128,7 +128,7 @@ public class Vector {
      * @param z
      */
     public void setZ(int z) {
-        this.z = (double) z;
+        this.z = z;
     }
 
     /*
@@ -467,6 +467,11 @@ public class Vector {
     @Override
     public String toString() {
         return "x: " + getX() + ", y: " + getY() + ", z: " + getZ();
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (x+y+z);
     }
 
     public String explain() {

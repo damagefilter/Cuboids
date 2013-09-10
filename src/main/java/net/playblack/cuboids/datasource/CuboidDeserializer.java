@@ -19,9 +19,9 @@ import net.playblack.mcutils.Vector;
 
 /**
  * The deserializer. Reads from data source and creates CuboidSelection objects
- * 
+ *
  * @author Chris
- * 
+ *
  */
 public class CuboidDeserializer {
 
@@ -32,15 +32,13 @@ public class CuboidDeserializer {
     /**
      * Prepared stuff for deserializing. Please check for file_exists before
      * calling this and send the according world name along.
-     * 
+     *
      * @param name
      * @param world
      */
     public CuboidDeserializer(String name, String world) {
-        String blockLocation = "plugins/cuboids2/backups/blocks_"
-                + world.toUpperCase() + "_" + name;
-        String extrasLocation = "plugins/cuboids2/backups/contents_"
-                + world.toUpperCase() + "_" + name;
+        String blockLocation = "plugins/cuboids2/backups/blocks_" + world.toUpperCase() + "_" + name;
+        String extrasLocation = "plugins/cuboids2/backups/contents_" + world.toUpperCase() + "_" + name;
         cuboid = new CuboidSelection();
         try {
             // get file input streams
@@ -51,10 +49,8 @@ public class CuboidDeserializer {
             DataInputStream inExtras = new DataInputStream(fstreamExtras);
             // Finally get the damn readers!
 
-            BufferedReader blockInput = new BufferedReader(
-                    new InputStreamReader(inBlocks));
-            BufferedReader extrasInput = new BufferedReader(
-                    new InputStreamReader(inExtras));
+            BufferedReader blockInput = new BufferedReader(new InputStreamReader(inBlocks));
+            BufferedReader extrasInput = new BufferedReader(new InputStreamReader(inExtras));
 
             // Now read
             String line;
@@ -63,16 +59,9 @@ public class CuboidDeserializer {
                 // the extrasInput
                 while ((line = extrasInput.readLine()) != null) {
                     String[] split = line.split("=");
-                    extraData.put(Integer.parseInt(split[0]), split[1]); // This
-                                                                         // will
-                                                                         // be
-                                                                         // converted
-                                                                         // to
-                                                                         // useful
-                                                                         // stuff
-                                                                         // later
+                    //This will be converted to useful stuff later
+                    extraData.put(Integer.parseInt(split[0]), split[1]);
                 }
-                line = null;
 
                 while ((line = blockInput.readLine()) != null) {
                     blockData.add(line); // this will be converted after this
@@ -83,6 +72,7 @@ public class CuboidDeserializer {
             } finally {
                 try {
                     extrasInput.close();
+                    blockInput.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -95,8 +85,7 @@ public class CuboidDeserializer {
 
     }
 
-    private void generateFromLine(String line, int lineNumber,
-            CuboidSelection selection) throws DeserializeException {
+    private void generateFromLine(String line, int lineNumber, CuboidSelection selection) throws DeserializeException {
         String[] split = line.split("\\|"); // results in 0=block,1=vector
         CBlock block = null;
         Vector key = null;
@@ -128,8 +117,7 @@ public class CuboidDeserializer {
         }
     }
 
-    private void generateChestContents(int index, ChestBlock block)
-            throws DeserializeException {
+    private void generateChestContents(int index, ChestBlock block) throws DeserializeException {
         String chestContents = extraData.get(Integer.valueOf(index));
         if (chestContents != null) {
             String[] itemSplit = chestContents.split("\\|");

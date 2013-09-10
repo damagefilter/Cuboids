@@ -53,7 +53,7 @@ public class CanaryWorld extends CWorld {
         Block b = world.getBlockAt(x, y, z);
         // Hey, are we a chest?
         if (b.getTypeId() == 54) {
-            Chest chest = (Chest) b.getWorld().getOnlyComplexBlock(b);
+            Chest chest = (Chest) b.getWorld().getOnlyTileEntity(b);
             if (chest != null) {
                 ChestBlock bc = new ChestBlock();
                 if (chest.hasAttachedChest()) {
@@ -72,7 +72,7 @@ public class CanaryWorld extends CWorld {
 
         // Or maybe ... a sign?
         else if (b.getTypeId() == 63) {
-            Sign sign = (Sign) b.getWorld().getComplexBlock(b);
+            Sign sign = (Sign) b.getWorld().getTileEntity(b);
             // 4 lines per sign, eh?
             String[] text = new String[4];
             text[0] = sign.getTextOnLine(0);
@@ -86,7 +86,7 @@ public class CanaryWorld extends CWorld {
         // or are we a simple world block?
         else {
             // return new CBlock((short)b.getType(), (byte)b.getData());
-            return recycleBlock((short) b.getTypeId(), (byte) b.getData());
+            return recycleBlock(b.getTypeId(), (byte) b.getData());
         }
     }
 
@@ -145,7 +145,7 @@ public class CanaryWorld extends CWorld {
         Block test = world.getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ());
         if (block instanceof ChestBlock) {
             ChestBlock c = (ChestBlock) block;
-            Chest chest = (Chest) world.getOnlyComplexBlock(test);
+            Chest chest = (Chest) world.getOnlyTileEntity(test);
             if (chest != null) {
                 if (chest.hasAttachedChest()) {
                     try {
@@ -174,7 +174,7 @@ public class CanaryWorld extends CWorld {
         if (block instanceof SignBlock) {
             SignBlock c = (SignBlock) block;
             try {
-                Sign sign = (Sign) world.getComplexBlock(test);
+                Sign sign = (Sign) world.getTileEntity(test);
                 for (int i = 0; i < c.getSignTextArray().length; i++) {
                     sign.setTextOnLine(c.getTextOnLine(i), i);
                 }

@@ -177,6 +177,7 @@ public class XmlData implements BaseData {
         Element meta = xmlDoc.getRootElement().getChild("meta");
         FileWriter writer = new FileWriter(Config.get().getBasePath() + "regions/" + meta.getChildText("world") + "_" + meta.getChildText("name") + "_" + meta.getChildText("dimension") + ".xml");
         xmlSerializer.output(xmlDoc, writer);
+        writer.close();
     }
 
     private Document regionToDom(Region r) {

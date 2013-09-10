@@ -20,40 +20,31 @@ import net.playblack.mcutils.PropsFile;
  *
  */
 public class Config {
+
     public enum Implementation {
         CANARY,
         CANARY_NEW,
         NOT_SET;
     }
-
     private Implementation impl = Implementation.NOT_SET;
-//    private String name = "Cuboids";
-//    private String version = "3.2.1";
     private String basePath = "plugins/cuboids/";
-
     // global settings go into this
     private Region global = new Region();
-
-
     private HashMap<String, String> sqlConfig = null;
     private boolean autoParent = true;
-
     // Cuboids Default Settings
     HashMap<String, Region.Status> defaultSettings = new HashMap<String, Region.Status>();
-
     ArrayList<Integer> restrictedItems;
-
     //The config files
     PropsFile pluginSetting;
     PropsFile cuboidSetting;
     PropsFile dsSetting;
-
     private static Config instance = null;
 
     private Config() {
-        pluginSetting =  new PropsFile(basePath + "settings.properties");
-        cuboidSetting =  new PropsFile(basePath + "cuboid.properties");
-        dsSetting =      new PropsFile(basePath + "data.properties");
+        pluginSetting = new PropsFile(basePath + "settings.properties");
+        cuboidSetting = new PropsFile(basePath + "cuboid.properties");
+        dsSetting = new PropsFile(basePath + "data.properties");
 
         //quickly init all settings properties (for saving reasons)
         getHealDelay();
@@ -130,7 +121,7 @@ public class Config {
 
         defaultSettings.put("animal-damage", cuboidSetting.getStatus("default-animal-damage", Region.Status.DEFAULT));
         //Register all of cuboids own flags
-        for(String key : defaultSettings.keySet()) {
+        for (String key : defaultSettings.keySet()) {
             RegionFlagRegister.registerFlag(key);
         }
 
@@ -214,8 +205,9 @@ public class Config {
     }
 
     /**
-     * Returns the current base path, usually plugins/cuboids/.
-     * Note that there's a trailing /
+     * Returns the current base path, usually plugins/cuboids/. Note that
+     * there's a trailing /
+     *
      * @return
      */
     public String getBasePath() {
@@ -319,9 +311,9 @@ public class Config {
         HashMap<String, Region.Status> temp = new HashMap<String, Region.Status>(defaultSettings);
         Iterator<String> it = temp.keySet().iterator();
 
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             String key = it.next();
-            if(!player.hasPermission(key)) {
+            if (!player.hasPermission(key)) {
                 it.remove();
             }
         }
@@ -369,7 +361,7 @@ public class Config {
 
     public boolean setGlobalProperty(String name, Region.Status value) {
         boolean result = global.setProperty(name, value);
-        if(result) {
+        if (result) {
             RegionManager.get().updateGlobalSettings();
             return true;
         }
@@ -378,7 +370,7 @@ public class Config {
 
     public boolean removeGlobalProperty(String name) {
         boolean result = global.removeProperty(name);
-        if(result) {
+        if (result) {
             RegionManager.get().updateGlobalSettings();
             return true;
         }
@@ -391,13 +383,12 @@ public class Config {
 
     public void setImplementation(Implementation impl) {
         //Only allow setting the implementation once!
-        if(impl == Implementation.NOT_SET) {
+        if (impl == Implementation.NOT_SET) {
             return;
         }
 
-        if(this.impl == Implementation.NOT_SET) {
+        if (this.impl == Implementation.NOT_SET) {
             this.impl = impl;
         }
     }
-
 }

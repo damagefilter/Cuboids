@@ -25,6 +25,10 @@ import net.playblack.mcutils.Debug;
  *
  */
 public class Bootstrapper {
+
+    private CServer server;
+    private Loader[] loaders;
+    private Implementation impl;
     /**
      * Expects the server implementation and a list of loaders for foreign
      * cuboids. Leave the list null if nothing should be loaded from foreign
@@ -34,7 +38,15 @@ public class Bootstrapper {
      * @param loaders
      */
     public Bootstrapper(CServer server, Loader[] loaders, Implementation impl) {
-        // ------------------------------------------------------
+        this.server = server;
+        this.loaders = loaders;
+        this.impl = impl;
+
+    }
+
+    @SuppressWarnings("unused")
+    public void bootstrap() {
+     // ------------------------------------------------------
         CServer.setServer(server);
         Config.get().setImplementation(impl); // init this thing for a first time
         // ------------------------------------------------------

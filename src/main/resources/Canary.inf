@@ -1,4 +1,4 @@
-main-class=net.playblack.cuboids.impl.canarymod.Cuboids2
-isLibrary=false
+main-class=net.playblack.cuboids.impl.canarymod.Cuboids
 author=damagefilter
-version=4.0.0
+version=3.3-SNAPSHOT
+name=Cuboids

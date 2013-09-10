@@ -3,7 +3,6 @@ package net.playblack.cuboids.impl.canarymod;
 import java.util.HashMap;
 import java.util.List;
 
-import net.canarymod.Canary;
 import net.canarymod.api.entity.Fireball;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.living.monster.Creeper;
@@ -22,7 +21,6 @@ import net.canarymod.hook.world.BlockUpdateHook;
 import net.canarymod.hook.world.ExplosionHook;
 import net.canarymod.hook.world.FlowHook;
 import net.canarymod.hook.world.IgnitionHook;
-import net.canarymod.logger.Logman;
 import net.canarymod.plugin.PluginListener;
 import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.ActionManager;
@@ -188,7 +186,7 @@ public class BlockListener implements PluginListener {
         if (protectedBlocks != null) {
             for (Location m : protectedBlocks) {
                 for (int i = 0; i < blocksaffected.size();) {
-                    Block x = (Block) blocksaffected.get(i);
+                    Block x = blocksaffected.get(i);
                     Vector tmp = new Vector(x.getX(), x.getY(), x.getZ());
 //                    ToolBox.adjustWorldPosition(tmp);
                     if (m.samePosition2D(tmp)) {
