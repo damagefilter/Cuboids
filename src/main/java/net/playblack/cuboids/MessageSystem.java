@@ -16,8 +16,9 @@ public class MessageSystem extends LocaleHelper {
     static {
         ms = new MessageSystem();
     }
-    private MessageSystem() {
-        localeCodeOverride = Config.get().getLang();
+    protected MessageSystem() {
+        //isExternal, externalDirectory, LocaleCode
+        super(false, null, Config.get().getLang());
     }
 
     /**
@@ -27,7 +28,7 @@ public class MessageSystem extends LocaleHelper {
      * @param messageKey
      */
     public static void failMessage(CPlayer player, String messageKey) {
-        player.notify(ms.localeTranslate(messageKey));
+        player.notify(ms.systemTranslate(messageKey));
     }
 
     /**
@@ -37,7 +38,7 @@ public class MessageSystem extends LocaleHelper {
      * @param messageKey
      */
     public static void successMessage(CPlayer player, String messageKey) {
-        player.sendMessage(ColorManager.LightGreen + ms.localeTranslate(messageKey));
+        player.sendMessage(ColorManager.LightGreen + ms.systemTranslate(messageKey));
     }
 
     /**
@@ -47,7 +48,7 @@ public class MessageSystem extends LocaleHelper {
      * @param messageKey
      */
     public static void yellowNote(CPlayer player, String messageKey) {
-        player.sendMessage(ColorManager.Yellow + ms.localeTranslate(messageKey));
+        player.sendMessage(ColorManager.Yellow + ms.systemTranslate(messageKey));
     }
 
     /**
@@ -65,14 +66,14 @@ public class MessageSystem extends LocaleHelper {
     }
 
     public static void translateMessage(CPlayer player, String color, String message) {
-        player.sendMessage(color + ms.localeTranslate(message));
+        player.sendMessage(color + ms.systemTranslate(message));
     }
 
     public static void translateMessage(CPlayer player, String message, String[] args) {
-        player.sendMessage(ms.localeTranslateMessage(message, (Object[])args));
+        player.sendMessage(ms.systemTranslate(message, (Object[])args));
     }
 
     public static void translateMessage(CPlayer player, String color, String message, String... args) {
-        player.sendMessage(color + ms.localeTranslateMessage(message, (Object[])args));
+        player.sendMessage(color + ms.systemTranslate(message, (Object[])args));
     }
 }
