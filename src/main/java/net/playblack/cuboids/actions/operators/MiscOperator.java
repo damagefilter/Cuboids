@@ -13,8 +13,9 @@ public class MiscOperator implements ActionListener {
 
     @ActionHandler
     public void onItemDrop(ItemDropEvent event) {
-        Region r = RegionManager.get().getActiveRegion(event.getPlayer().getLocation(), false);
-        if (r.getProperty("creative") == Status.ALLOW) {
+        Region itemRegion = RegionManager.get().getActiveRegion(event.getItemDropLocation(), false);
+        Region playerRegion = RegionManager.get().getActiveRegion(event.getPlayer().getLocation(), false);
+        if (itemRegion.getProperty("creative") == Status.ALLOW || playerRegion.getProperty("creative") == Status.ALLOW) {
             event.cancel();
         }
     }

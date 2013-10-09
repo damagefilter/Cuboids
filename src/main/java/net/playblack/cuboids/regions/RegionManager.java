@@ -9,7 +9,7 @@ import net.playblack.mcutils.Location;
 import java.util.ArrayList;
 
 /**
- * This manages CuboidNodes and takes care of lookups etc
+ * This manages Regions and takes care of lookups etc
  *
  * @author Chris
  */
@@ -37,7 +37,6 @@ public class RegionManager {
     /**
      * This must be called after the global settings in Config have changed!!!
      *
-     * @param props
      */
     public void updateGlobalSettings() {
         global = Config.get().getGlobalSettings();
@@ -337,7 +336,7 @@ public class RegionManager {
      *
      * @param world
      * @param dimension
-     * @return CuboidNode List or null if there were no cuboids
+     * @return Region List or null if there were no cuboids
      */
     public ArrayList<Region> getAllInDimension(String world, int dimension) {
         ArrayList<Region> list = new ArrayList<Region>();
@@ -361,7 +360,7 @@ public class RegionManager {
      *
      * @param name
      * @param world
-     * @return CuboidNode or null
+     * @return Region or null
      */
     public Region getRegionByName(String name, String world, int dimension) {
         for (Region tree : rootNodes) {
@@ -398,13 +397,13 @@ public class RegionManager {
         }
         if (matches.size() > 0) {
             Region min = null;
-            for (int e = 0; e < matches.size(); e++) {
+            for (Region matche : matches) {
                 if (min == null) {
-                    min = matches.get(e);
+                    min = matche;
                 }
-                if (min.getPriority() > matches.get(e).getPriority()) {
-                    if (!matches.get(e).getName().equals(cube.getName())) {
-                        min = matches.get(e);
+                if (min.getPriority() > matche.getPriority()) {
+                    if (!matche.getName().equals(cube.getName())) {
+                        min = matche;
                     }
                 }
             }

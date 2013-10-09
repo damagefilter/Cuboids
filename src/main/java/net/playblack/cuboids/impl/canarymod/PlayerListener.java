@@ -157,8 +157,9 @@ public class PlayerListener implements PluginListener {
                 // Fallback
                 cplayer = new CanaryPlayer(hook.getPlayer());
             }
+
             EntityItem item = hook.getItem();
-            ItemDropEvent event = new ItemDropEvent(new CItem(item.getItem().getId(), item.getItem().getDamage(), item.getItem().getAmount(), item.getItem().getSlot()), cplayer);
+            ItemDropEvent event = new ItemDropEvent(new CItem(item.getItem().getId(), item.getItem().getDamage(), item.getItem().getAmount(), item.getItem().getSlot()), cplayer, Cuboids.toLocalLocation(item.getLocation()));
             ActionManager.fireEvent(event);
             if (event.isCancelled()) {
                 hook.setCanceled();

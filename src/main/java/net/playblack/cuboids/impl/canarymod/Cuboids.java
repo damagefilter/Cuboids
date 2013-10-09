@@ -7,11 +7,13 @@ import net.playblack.cuboids.Bootstrapper;
 import net.playblack.cuboids.Config.Implementation;
 import net.playblack.cuboids.CuboidFLoader;
 import net.playblack.cuboids.converters.Loader;
+import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.impl.canarymod.commands.CmodCommands;
 import net.playblack.cuboids.impl.canarymod.commands.MiscCommands;
 import net.playblack.cuboids.impl.canarymod.commands.SelectionEditingCommands;
 import net.playblack.cuboids.impl.canarymod.commands.WorldEditingCommands;
 import net.playblack.mcutils.Debug;
+import net.playblack.mcutils.Location;
 
 public class Cuboids extends Plugin {
 
@@ -39,6 +41,10 @@ public class Cuboids extends Plugin {
     @Override
     public void disable() {
         Canary.commands().unregisterCommands(this);
+    }
+
+    public static Location toLocalLocation(net.canarymod.api.world.position.Location loc) {
+        return new Location(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), CServer.getServer().getWorld(loc.getWorldName(), loc.getType().getId()));
     }
 
 }

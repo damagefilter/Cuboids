@@ -1,5 +1,7 @@
 package net.playblack.mcutils;
 
+import net.playblack.cuboids.gameinterface.CWorld;
+
 public class Location extends Vector {
     private String world;
     private int dimension;
@@ -27,6 +29,15 @@ public class Location extends Vector {
         this.z = z;
         this.dimension = dimension;
         this.world = world;
+//        ToolBox.adjustWorldPosition(this);
+    }
+
+    public Location(int x, int y, int z, CWorld world) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.dimension = world.getDimension();
+        this.world = world.getName();
 //        ToolBox.adjustWorldPosition(this);
     }
 
