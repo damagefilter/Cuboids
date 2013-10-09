@@ -19,7 +19,7 @@ public class ChestBlock extends CBlock {
 
     /**
      * Put an item into the chest
-     * 
+     *
      * @param item
      */
     public void putItem(CItem item) {
@@ -28,20 +28,17 @@ public class ChestBlock extends CBlock {
 
     /**
      * Check if an item like this one is in the chest
-     * 
+     *
      * @param item
      * @return true if yes, false otherwise
      */
     public boolean itemIsInChest(CItem item) {
-        if (items.contains(item)) {
-            return true;
-        }
-        return false;
+        return items.contains(item);
     }
 
     /**
      * Remove an item from this chest and return it
-     * 
+     *
      * @param index
      * @return
      */
@@ -51,7 +48,7 @@ public class ChestBlock extends CBlock {
 
     /**
      * Override the current item list with a new one
-     * 
+     *
      * @param items
      */
     public void putItemList(ArrayList<CItem> items) {

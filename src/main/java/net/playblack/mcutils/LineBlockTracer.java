@@ -7,19 +7,19 @@ import net.playblack.cuboids.gameinterface.CPlayer;
  * LineBlockTracer is a derivative class from Ho0ber's HitBlox class,
  * currently in use by CanaryMod. (https://github.com/FallenMoonNetwork/CanaryMod/blob/crow/src/HitBlox.java)
  * I stripped it down to what Cuboids2 needs specifically.
+ *
  * @author chris
  * @author Ho0ber
- *
  */
 public class LineBlockTracer {
     private CPlayer player;
-    private double   rot_x, rot_y, view_height;
-    private double   length, h_length, step;
-    private int      range;
-    private double   x_offset, y_offset, z_offset;
-    private int      last_x, last_y, last_z;
-    private int      target_x, target_y, target_z;
-    
+    private double rot_x, rot_y, view_height;
+    private double length, h_length, step;
+    private int range;
+    private double x_offset, y_offset, z_offset;
+    private int last_x, last_y, last_z;
+    private int target_x, target_y, target_z;
+
     /**
      * Constructor requiring player, uses default values
      *
@@ -55,7 +55,7 @@ public class LineBlockTracer {
         range = in_range;
         step = in_step;
         length = 0;
-        
+
         rot_x = (player.getPitch() + 90) % 360;
         rot_y = player.getRotation() * -1;
 
@@ -66,7 +66,7 @@ public class LineBlockTracer {
         last_y = target_y;
         last_z = target_z;
     }
-    
+
     /**
      * Returns the block at the cursor, or null if out of range
      *
@@ -74,7 +74,7 @@ public class LineBlockTracer {
      */
     public CBlock getTargetBlock() {
         while ((getNextBlock() != null) && (getCurBlock().getType() == 0)) {
-            ;
+
         }
         return getCurBlock();
     }
@@ -86,11 +86,11 @@ public class LineBlockTracer {
      * @param blockIds The block ids to ignore.
      * @return
      */
-    public CBlock getTargetBlockIgnoring(int... blockIds){
+    public CBlock getTargetBlockIgnoring(int... blockIds) {
         blockLoop:
         while (getNextBlock() != null) {
-            for (int i : blockIds){
-                if (getCurBlock().getType() == i){
+            for (int i : blockIds) {
+                if (getCurBlock().getType() == i) {
                     continue blockLoop;
                 }
             }
@@ -107,11 +107,12 @@ public class LineBlockTracer {
      */
     public Vector getTargetVector() {
         while ((getNextBlock() != null) && (getCurBlock().getType() == 0)) {
-            ;
+
         }
         if (getCurBlock() != null) {
             return new Vector(last_x, last_y, last_z);
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -155,7 +156,8 @@ public class LineBlockTracer {
     public CBlock getCurBlock() {
         if (length > range) {
             return null;
-        } else {
+        }
+        else {
             return player.getWorld().getBlockAt(new Vector(target_x, target_y, target_z));
         }
     }

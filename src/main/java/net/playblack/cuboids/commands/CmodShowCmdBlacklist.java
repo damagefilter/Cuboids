@@ -6,9 +6,8 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Show the list of blacklisted commands
- * 
+ *
  * @author Chris
- * 
  */
 public class CmodShowCmdBlacklist extends CBaseCommand {
 

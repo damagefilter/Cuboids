@@ -7,7 +7,6 @@ import java.util.logging.Logger;
  * The static log manager.
  *
  * @author chris
- *
  */
 public class Debug {
     private static Logger log = Logger.getLogger("Minecraft");
@@ -19,21 +18,24 @@ public class Debug {
         log = logger;
         loggerIsOverridden = true;
     }
-   /**
-    * Log message
-    * @param message
-    */
+
+    /**
+     * Log message
+     *
+     * @param message
+     */
     public static void log(String message) {
         if (cacheRunning) {
             cacheMessage(message, true);
             return;
         }
 
-        log.log(Level.INFO, (loggerIsOverridden == true ? "" : "[Cuboids2] ") + message);
+        log.log(Level.INFO, (loggerIsOverridden ? "" : "[Cuboids2] ") + message);
     }
 
     /**
      * Log warning
+     *
      * @param msg
      */
     public static void logWarning(String msg) {
@@ -41,11 +43,12 @@ public class Debug {
             cacheMessage(msg, true);
             return;
         }
-        log.log(Level.WARNING, (loggerIsOverridden == true ? "" : "[Cuboids2] ") + msg);
+        log.log(Level.WARNING, (loggerIsOverridden ? "" : "[Cuboids2] ") + msg);
     }
 
     /**
      * Log error (severe)
+     *
      * @param msg
      */
     public static void logError(String msg) {
@@ -53,15 +56,16 @@ public class Debug {
             cacheMessage(msg, true);
             return;
         }
-        log.log(Level.SEVERE, (loggerIsOverridden == true ? "" : "[Cuboids2] ") + msg);
+        log.log(Level.SEVERE, (loggerIsOverridden ? "" : "[Cuboids2] ") + msg);
     }
 
     /**
      * Log stacktrace
+     *
      * @param t
      */
     public static void logStack(Throwable t) {
-        log.log(Level.WARNING, (loggerIsOverridden == true ? "" : "[Cuboids2] ") + t.getMessage(), t);
+        log.log(Level.WARNING, (loggerIsOverridden ? "" : "[Cuboids2] ") + t.getMessage(), t);
     }
 
     public static void println(String msg) {

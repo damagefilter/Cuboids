@@ -13,7 +13,6 @@ import net.playblack.mcutils.ColorManager;
  * Add a new Cuboid
  *
  * @author Chris
- *
  */
 public class CmodAdd extends CBaseCommand {
 
@@ -45,7 +44,8 @@ public class CmodAdd extends CBaseCommand {
         defaultC.addPlayer("o:" + player.getName());
         if (CuboidInterface.get().addCuboid(defaultC)) {
             MessageSystem.successMessage(player, "cuboidCreated");
-        } else {
+        }
+        else {
             MessageSystem.failMessage(player, "cuboidExists");
             MessageSystem.failMessage(player, "cuboidNotCreated");
         }

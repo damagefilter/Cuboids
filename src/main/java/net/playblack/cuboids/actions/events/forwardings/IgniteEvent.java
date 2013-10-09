@@ -7,16 +7,16 @@ import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.mcutils.Location;
 
 public class IgniteEvent extends CuboidEvent implements Cancellable {
-    
+
     public enum FireSource {
         LAVA,
         LIGHTER,
         SPREAD,
         FIRE_DAMAGE,
         LIGHTING;
-        
+
         public static FireSource fromInt(int in) {
-            switch(in) {
+            switch (in) {
                 case 1:
                     return LAVA;
                 case 2:
@@ -32,21 +32,21 @@ public class IgniteEvent extends CuboidEvent implements Cancellable {
             }
         }
     }
-    
+
     private boolean isCancelled;
-    
+
     private FireSource source;
     private Location location;
     private CBlock block;
     private CPlayer player;
-    
+
     public IgniteEvent(FireSource source, Location location, CBlock block, CPlayer player) {
         this.source = source;
         this.location = location;
         this.block = block;
         this.player = player;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return isCancelled;

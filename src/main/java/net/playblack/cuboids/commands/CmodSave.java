@@ -8,7 +8,6 @@ import net.playblack.mcutils.ColorManager;
  * Save a single or all cuboids
  *
  * @author Chris
- *
  */
 public class CmodSave extends CBaseCommand {
 
@@ -24,7 +23,8 @@ public class CmodSave extends CBaseCommand {
         }
         if (command.length == 1) {
             CuboidInterface.get().saveAll(player);
-        } else {
+        }
+        else {
             CuboidInterface.get().saveCuboid(player, command[1]);
         }
     }

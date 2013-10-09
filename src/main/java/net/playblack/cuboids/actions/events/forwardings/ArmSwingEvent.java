@@ -5,16 +5,16 @@ import net.playblack.cuboids.gameinterface.CPlayer;
 
 /**
  * Fired when cuboids catches an arm-swing event
- * @author chris
  *
+ * @author chris
  */
 public class ArmSwingEvent extends CuboidEvent {
     private CPlayer player;
-    
+
     public ArmSwingEvent(CPlayer player) {
         this.player = player;
     }
-    
+
     public CPlayer getPlayer() {
         return player;
     }

@@ -12,7 +12,6 @@ import net.playblack.mcutils.ColorManager;
  * Load cuboid areas edges into player selection
  *
  * @author Chris
- *
  */
 public class CmodLoadPoints extends CBaseCommand {
 

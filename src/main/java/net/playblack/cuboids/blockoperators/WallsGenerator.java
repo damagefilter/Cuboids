@@ -12,9 +12,8 @@ import net.playblack.mcutils.Vector;
 
 /**
  * Generate walls along the line of a cuboid selection
- * 
+ *
  * @author Chris
- * 
  */
 public class WallsGenerator extends BaseGen {
 
@@ -25,7 +24,7 @@ public class WallsGenerator extends BaseGen {
 
     /**
      * The selection you pass along here will be written into the world!
-     * 
+     *
      * @param selection
      * @param world
      */
@@ -35,7 +34,7 @@ public class WallsGenerator extends BaseGen {
 
     /**
      * Set true to build only the walls not the floor and ceiling
-     * 
+     *
      * @param wo
      */
     public void setWallsOnly(boolean wo) {
@@ -44,7 +43,7 @@ public class WallsGenerator extends BaseGen {
 
     /**
      * Set the block (Material) the walls shall be made of
-     * 
+     *
      * @param block
      */
     public void setWallMaterial(CBlock block) {
@@ -53,7 +52,7 @@ public class WallsGenerator extends BaseGen {
 
     /**
      * Set the material the floor shall be made of
-     * 
+     *
      * @param block
      */
     public void setFloorMaterial(CBlock block) {
@@ -62,7 +61,7 @@ public class WallsGenerator extends BaseGen {
 
     /**
      * Set the material the ceiling shall be made of
-     * 
+     *
      * @param block
      */
     public void setCeilingMaterial(CBlock block) {

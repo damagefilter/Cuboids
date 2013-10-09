@@ -12,9 +12,8 @@ import net.playblack.mcutils.Vector;
 
 /**
  * Generate walls along the line of a cuboid selection
- * 
+ *
  * @author Chris
- * 
  */
 public class PyramidGenerator extends BaseGen {
 
@@ -24,7 +23,7 @@ public class PyramidGenerator extends BaseGen {
 
     /**
      * The selection you pass along here will be written into the world!
-     * 
+     *
      * @param selection
      * @param world
      */
@@ -34,7 +33,7 @@ public class PyramidGenerator extends BaseGen {
 
     /**
      * Set the material of the sphere
-     * 
+     *
      * @param block
      */
     public void setMaterial(CBlock block) {
@@ -47,7 +46,7 @@ public class PyramidGenerator extends BaseGen {
 
     /**
      * Set fill true to make a filled sphere, false to make it hollow(rly...)
-     * 
+     *
      * @param wo
      */
     public void setHollow(boolean sleepy) {

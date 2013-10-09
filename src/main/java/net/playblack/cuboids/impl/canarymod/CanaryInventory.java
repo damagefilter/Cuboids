@@ -7,6 +7,7 @@ import net.playblack.cuboids.gameinterface.CInventory;
 public class CanaryInventory extends CInventory {
     Inventory inventory;
     Item[] itemList;
+
     public CanaryInventory(Inventory inventory) {
         this.inventory = inventory;
         itemList = inventory.getContents();
@@ -20,14 +21,14 @@ public class CanaryInventory extends CInventory {
         try {
             inventory.setContents(itemList);
         }
-        catch(ArrayIndexOutOfBoundsException e) {
+        catch (ArrayIndexOutOfBoundsException e) {
 
         }
     }
 
     @Override
     public boolean hasItems() {
-        if(inventory == null) {
+        if (inventory == null) {
             return false;
         }
         return itemList.length > 0;

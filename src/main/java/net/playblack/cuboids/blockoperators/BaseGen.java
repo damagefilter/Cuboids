@@ -1,8 +1,5 @@
 package net.playblack.cuboids.blockoperators;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
@@ -10,11 +7,14 @@ import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public abstract class BaseGen implements IShapeGen {
 
     protected CuboidSelection selection;
     protected CWorld world;
-    protected Object lock = new Object();
+    protected final Object lock = new Object();
     /**
      * List of block id's that need to be put last into the world
      */
@@ -76,7 +76,7 @@ public abstract class BaseGen implements IShapeGen {
 
     /**
      * Preload a chunk in the world
-     * 
+     *
      * @param v
      * @param world
      */
@@ -90,7 +90,7 @@ public abstract class BaseGen implements IShapeGen {
      * Softly change a block in the world. Pre-checks in this method make heavy
      * block modifications more lightweight because it checks if a bloick really
      * needs to be changed
-     * 
+     *
      * @param block
      * @param coords
      * @param world
@@ -104,7 +104,7 @@ public abstract class BaseGen implements IShapeGen {
         if ((testBlock.getType() == block.getType()) && (testBlock.getData() == block.getData())) {
             return;
         }
-        if ((queueables.contains(Integer.valueOf(block.getType()))) && (queuedRun == false)) {
+        if ((queueables.contains(Integer.valueOf(block.getType()))) && (!queuedRun)) {
             // queue for later placement if we're not in the queued run already
             placeLast.put(coords, block);
             return;
@@ -114,11 +114,11 @@ public abstract class BaseGen implements IShapeGen {
 
     /**
      * Fill the current selection with blocks that are currently in the world
-     * 
-     * @param returnSelection
-     *            true if you want to return the selection instead of
-     *            overwriting the blocks of the internal one
+     *
+     * @param returnSelection true if you want to return the selection instead of
+     *                        overwriting the blocks of the internal one
      * @throws BlockEditLimitExceededException
+     *
      * @throws SelectionIncompleteException
      */
     protected CuboidSelection scanWorld(boolean returnSelection, boolean requireCompleteSelection) throws BlockEditLimitExceededException, SelectionIncompleteException {
@@ -133,7 +133,7 @@ public abstract class BaseGen implements IShapeGen {
             if (areaVolume > 700000) {
                 throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass().getSimpleName() + " (" + areaVolume + " blocks)");
             }
-        } 
+        }
         else if (selection.getBlockList().size() > 700000) {
             throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass().getSimpleName() + " (" + selection.getBlockList().size() + " blocks)");
         }
@@ -181,9 +181,10 @@ public abstract class BaseGen implements IShapeGen {
     /**
      * Return a cuboid selection with the current world content of the world you
      * passed along in the constructor!
-     * 
+     *
      * @return
      * @throws BlockEditLimitExceededException
+     *
      * @throws SelectionIncompleteException
      */
     public CuboidSelection getWorldContent(CuboidSelection sel)

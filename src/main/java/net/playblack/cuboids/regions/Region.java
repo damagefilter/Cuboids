@@ -1,9 +1,5 @@
 package net.playblack.cuboids.regions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import net.playblack.cuboids.RegionFlagRegister;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -13,24 +9,40 @@ import net.playblack.mcutils.Location;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class Region {
 
-    /** List of all child nodes */
+    /**
+     * List of all child nodes
+     */
     protected ArrayList<Region> childs = new ArrayList<Region>(5);
 
-    /** Reference to this Cuboids parent*/ //This'll get ugly when reading from datasource
+    /**
+     * Reference to this Cuboids parent
+     */ //This'll get ugly when reading from datasource
     protected Region parent;
 
-    /** The name of this cuboid*/
+    /**
+     * The name of this cuboid
+     */
     protected String name;
 
-    /** The name of the world this cuboid sits in*/
+    /**
+     * The name of the world this cuboid sits in
+     */
     protected String world;
 
-    /** The ID of the dimension for this cuboid. This may always be 0 in some implementations */
+    /**
+     * The ID of the dimension for this cuboid. This may always be 0 in some implementations
+     */
     protected int dimension;
 
-    /** Cuboids priority. Cuboids with higher priority will be considered when areas clash*/
+    /**
+     * Cuboids priority. Cuboids with higher priority will be considered when areas clash
+     */
     protected int priority;
 
 
@@ -42,16 +54,16 @@ public class Region {
         INVALID_PROPERTY;
 
         public static Status fromString(String str) {
-            if(str.equalsIgnoreCase(ALLOW.name())) {
+            if (str.equalsIgnoreCase(ALLOW.name())) {
                 return ALLOW;
             }
-            else if(str.equalsIgnoreCase(DENY.name())) {
+            else if (str.equalsIgnoreCase(DENY.name())) {
                 return DENY;
             }
-            else if(str.equalsIgnoreCase(INHERIT.name())) {
+            else if (str.equalsIgnoreCase(INHERIT.name())) {
                 return INHERIT;
             }
-            else if(str.equalsIgnoreCase(DEFAULT.name())) {
+            else if (str.equalsIgnoreCase(DEFAULT.name())) {
                 return DEFAULT;
             }
             else {
@@ -61,11 +73,12 @@ public class Region {
 
         /**
          * Returns allow or deny from a boolean value
+         *
          * @param check
          * @return
          */
         public static Status fromBoolean(boolean check) {
-            if(check) {
+            if (check) {
                 return ALLOW;
             }
             else {
@@ -75,11 +88,12 @@ public class Region {
 
         /**
          * Returns allow or default from boolean value
+         *
          * @param check
          * @return
          */
         public static Status softFromBoolean(boolean check) {
-            if(check) {
+            if (check) {
                 return ALLOW;
             }
             else {
@@ -89,29 +103,43 @@ public class Region {
     }
 
 
-    /** Map of all currently existing property */
+    /**
+     * Map of all currently existing property
+     */
     private HashMap<String, Status> properties;
 
-    /** Flag as changed to make it available for the saving thread */
+    /**
+     * Flag as changed to make it available for the saving thread
+     */
     public boolean hasChanged = false;
 
 
-    /** List of allowed players*/
+    /**
+     * List of allowed players
+     */
     private ArrayList<String> players;
 
-    /** List of allowed groups*/
+    /**
+     * List of allowed groups
+     */
     private ArrayList<String> groups;
 
     private Vector origin;
     private Vector offset;
 
-    /** Welcome / Farewell messages to display*/
+    /**
+     * Welcome / Farewell messages to display
+     */
     private String welcome, farewell;
 
-    /** List of commands that should be denied in this area */
+    /**
+     * List of commands that should be denied in this area
+     */
     private ArrayList<String> restrictedCommands = new ArrayList<String>();
 
-    /** List of restricted item IDs */
+    /**
+     * List of restricted item IDs
+     */
     private ArrayList<Integer> restrictedItems = new ArrayList<Integer>();
 
 
@@ -125,7 +153,7 @@ public class Region {
 
     public Region(Region parent) {
         this.parent = parent;
-        if(parent != null) {
+        if (parent != null) {
             parent.childs.add(this);
         }
     }
@@ -134,6 +162,7 @@ public class Region {
      * Recursively add player to this Region and its childs.
      * This will set the currentRegion in the player
      * Recursively goes down
+     *
      * @param player
      * @param loc
      */
@@ -141,12 +170,12 @@ public class Region {
         if (!player.getName().equalsIgnoreCase("no_players")) {
             //Add into this cuboid
             if (!player.getName().substring(2).isEmpty()) {
-                if(isWithin(loc)) {
+                if (isWithin(loc)) {
                     player.setRegion(this);
                 }
             }
-            for(Region child : childs) {
-                if(child.isWithin(loc)) {
+            for (Region child : childs) {
+                if (child.isWithin(loc)) {
                     child.addPlayerWithin(player, loc);
                 }
             }
@@ -155,18 +184,19 @@ public class Region {
 
     /**
      * Recursively remove player from this Region and its childs
+     *
      * @param player
      * @param toCheck
      */
     public void removePlayerWithin(CPlayer player, Location toCheck) {
-        if(!isWithin(toCheck)) {
-            if(parent != null && parent.isWithin(toCheck)) {
+        if (!isWithin(toCheck)) {
+            if (parent != null && parent.isWithin(toCheck)) {
                 player.setRegion(parent);
             }
             //Assume we're not in any region anymore.
             //If we are we
             player.setRegion(null);
-            for(Region child : childs) {
+            for (Region child : childs) {
                 child.removePlayerWithin(player, toCheck);
 
             }
@@ -176,14 +206,15 @@ public class Region {
     /**
      * Set the parent region for the this region.
      * This will also update the parents child list and adjust priority levels
+     *
      * @param cube
      */
     public void setParent(Region cube) {
         parent = cube;
 
-        if(parent != null) {
+        if (parent != null) {
             parent.childs.add(this);
-            if(parent.priority >= priority) {
+            if (parent.priority >= priority) {
                 this.priority = parent.priority + 1;
             }
         }
@@ -191,6 +222,7 @@ public class Region {
 
     /**
      * Get the parent cuboid for this guy
+     *
      * @return
      */
     public Region getParent() {
@@ -199,6 +231,7 @@ public class Region {
 
     /**
      * Get the name of this cuboid
+     *
      * @return
      */
     public String getName() {
@@ -207,11 +240,13 @@ public class Region {
 
     /**
      * Set the name of this cuboid
+     *
      * @param name
      */
     public void setName(String name) {
         this.name = name;
     }
+
     /**
      * @return the world
      */
@@ -242,6 +277,7 @@ public class Region {
 
     /**
      * get this regiosn priority
+     *
      * @return
      */
     public int getPriority() {
@@ -250,12 +286,13 @@ public class Region {
 
     /**
      * Set this regions priority and update all childs accordingly
+     *
      * @param prio
      */
     public void setPriority(int prio) {
         int difference = prio - priority;
         this.priority = prio;
-        for(Region child : childs) {
+        for (Region child : childs) {
             child.setPriority(child.getPriority() + difference);
             child.hasChanged = true;
         }
@@ -278,13 +315,15 @@ public class Region {
      * Detach this region from its parent and update the parent
      */
     public void detach() {
-        if(parent != null) {
+        if (parent != null) {
             parent.detachChild(this);
             parent = null;
         }
     }
+
     /**
      * Add a region to the list of childs of tis cuboid
+     *
      * @param c
      */
     public void attachRegion(Region c) {
@@ -294,6 +333,7 @@ public class Region {
 
     /**
      * Remove a child from this regions child list
+     *
      * @param c
      */
     public void detachChild(Region c) {
@@ -306,7 +346,7 @@ public class Region {
      */
     public ArrayList<Region> detachAllChilds() {
         //first override parents
-        for(Region child : childs) {
+        for (Region child : childs) {
             child.setParent(parent);
         }
         //return all childs
@@ -320,23 +360,24 @@ public class Region {
     /**
      * Try finding a cuboid with the given name within the childs.
      * This is NOT very performant as it needs to query A LOT of childs!
+     *
      * @param name
      * @return
      */
     public Region queryChilds(String name) {
-        Region candidate = null;
-        if(this.name.equals(name)) {
+        Region candidate;
+        if (this.name.equals(name)) {
             return this;
         }
-        if(parent != null &&  parent.name.equals(name)) {
+        if (parent != null && parent.name.equals(name)) {
             return parent;
         }
-        for(Region c : childs) {
-            if(c.getName().equals(name)) {
+        for (Region c : childs) {
+            if (c.getName().equals(name)) {
                 return c;
             }
             candidate = c.queryChilds(name);
-            if(candidate != null && candidate.getName().equals(name)) {
+            if (candidate != null && candidate.getName().equals(name)) {
                 return candidate;
             }
         }
@@ -347,18 +388,19 @@ public class Region {
      * Query for a cuboid at the specified location. This will return the cuboid that
      * should be taken into consideration when processing stuff.
      * That is: the one with the max priority or if prio clashes, then the smaller one
+     *
      * @param loc
      * @param priority You should set this to 0 it's for internal stuffs
      * @return
      */
     public Region queryChilds(Location loc, int priority) {
-        if(!isWithin(loc)) {
+        if (!isWithin(loc)) {
             return null;
         }
         Region current = this;
-        for(Region c : childs) {
-            if(c.isWithin(loc)) {
-                if(current.getPriority() < c.getPriority()) {
+        for (Region c : childs) {
+            if (c.isWithin(loc)) {
+                if (current.getPriority() < c.getPriority()) {
                     current = c;
                 }
                 else if (current.getPriority() == c.getPriority()) {
@@ -366,10 +408,10 @@ public class Region {
                 }
 
                 Region check = c.queryChilds(loc, current.getPriority());
-                if(check.getPriority() > current.getPriority()) {
+                if (check.getPriority() > current.getPriority()) {
                     current = check;
                 }
-                else if(check.getPriority() == current.getPriority()) {
+                else if (check.getPriority() == current.getPriority()) {
                     current = current.getSize() > check.getSize() ? check : current;
                 }
             }
@@ -380,30 +422,31 @@ public class Region {
     /**
      * Query the childs of this cuboid to see if they space-wise
      * contain the given cuboid, in order to find the given cuboids appropriate parent
+     *
      * @param cube
      * @return
      */
     public Region queryChilds(Region cube) {
         Region current = this;
-        for(Region c : childs) {
-            if(cube.cuboidIsWithin(c, true)) {
-                if(current == null) {
+        for (Region c : childs) {
+            if (cube.cuboidIsWithin(c, true)) {
+                if (current == null) {
                     current = c;
                 }
                 else {
-                    if(c.getPriority() > current.getPriority()) {
+                    if (c.getPriority() > current.getPriority()) {
                         current = c;
                     }
-                    else if(c.getPriority() == current.getPriority()) {
+                    else if (c.getPriority() == current.getPriority()) {
                         current = current.getSize() > c.getSize() ? c : current;
                     }
                 }
 
                 Region check = c.queryChilds(cube);
-                if(check.getPriority() > current.getPriority()) {
+                if (check.getPriority() > current.getPriority()) {
                     current = check;
                 }
-                else if(check.getPriority() == current.getPriority()) {
+                else if (check.getPriority() == current.getPriority()) {
                     current = current.getSize() > check.getSize() ? check : current;
                 }
             }
@@ -415,12 +458,13 @@ public class Region {
      * Fix childs and remove those that are not 100%
      * inside this parent node. Return a list of those if they
      * end up without parent
+     *
      * @return
      */
     public ArrayList<Region> fixChilds() {
         ArrayList<Region> detached = new ArrayList<Region>();
-        for(Region child : childs) {
-            if(!child.cuboidIsWithin(this, true)) {
+        for (Region child : childs) {
+            if (!child.cuboidIsWithin(this, true)) {
                 child.detach();
                 detached.add(child);
             }
@@ -429,8 +473,10 @@ public class Region {
 
         return detached;
     }
+
     /**
      * Check if this is the global settings Cuboid
+     *
      * @return
      */
     public boolean isGlobal() {
@@ -438,9 +484,9 @@ public class Region {
     }
 
 
-
     /**
      * Check if this is a root cuboid, that means it has no parent
+     *
      * @return
      */
     public boolean isRoot() {
@@ -450,31 +496,31 @@ public class Region {
     /**
      * Recursively generates a list of childs and their childs etc.
      * and returns an unmodifiable view of this list
+     *
      * @return
      */
     public List<Region> getChildsDeep(List<Region> collection) {
-        for(Region r : childs) {
-
+        for (Region r : childs) {
             collection.addAll(r.getChildsDeep(collection));
         }
-        if(!collection.contains(this)) {
+        if (!collection.contains(this)) {
             collection.add(this);
         }
         return collection;
     }
 
 
-
     /**
      * Set a property and its status for this cuboid
+     *
      * @param name
      * @param value
      */
     public boolean setProperty(String name, Status value) {
-        if(!RegionFlagRegister.isFlagValid(name)) {
+        if (!RegionFlagRegister.isFlagValid(name)) {
             return false;
         }
-        if(value == Status.INVALID_PROPERTY) {
+        if (value == Status.INVALID_PROPERTY) {
             return false;
         }
         properties.put(name, value);
@@ -482,7 +528,7 @@ public class Region {
     }
 
     public boolean removeProperty(String name) {
-        if(properties.containsKey(name)) {
+        if (properties.containsKey(name)) {
             properties.remove(name);
             return true;
         }
@@ -491,11 +537,12 @@ public class Region {
 
     /**
      * Get the status for a given property for this cuboid
+     *
      * @param name
      * @return
      */
     public Status getProperty(String name) {
-        if(properties.containsKey(name)) {
+        if (properties.containsKey(name)) {
             return properties.get(name);
         }
         return Status.DEFAULT;
@@ -503,6 +550,7 @@ public class Region {
 
     /**
      * Check if this cuboid has a given property.
+     *
      * @param name
      * @return
      */
@@ -513,6 +561,7 @@ public class Region {
     /**
      * Put this map of properties into the existing one of this cuboid,
      * this will override all already existing local values
+     *
      * @param map
      */
     public void putAll(HashMap<String, Status> map) {
@@ -529,11 +578,12 @@ public class Region {
 
     /**
      * Check if this region is in the parental hierarchy of the given region
+     *
      * @param r
      * @return
      */
     public boolean isParentOf(Region r) {
-        if(r == null) {
+        if (r == null) {
             return false;
         }
         return r.parentsToList(r, new ArrayList<Region>()).contains(this);
@@ -541,11 +591,12 @@ public class Region {
 
     /**
      * Check if this Cuboid is a child of the given Cuboid
+     *
      * @param r
      * @return
      */
     public boolean isChildOf(Region r) {
-        if(r == null) {
+        if (r == null) {
             return false;
         }
         return r.getChildsDeep(new ArrayList<Region>()).contains(this);
@@ -554,11 +605,12 @@ public class Region {
     /**
      * Add a group to the list of allowed groups.
      * This will recognize a comma seperated list of group names and auto-adds them
+     *
      * @param group
      * @return
      */
     public boolean addGroup(String group) {
-        if(group == null) {
+        if (group == null) {
             return false;
         }
         if (groups.contains(group)) {
@@ -568,7 +620,8 @@ public class Region {
         if (group.indexOf(",") >= 0) {
             addGroup(group.split(","));
             return true;
-        } else {
+        }
+        else {
             if (group.indexOf("g:") >= 0) {
                 if (!group.equalsIgnoreCase("no_groups")) {
                     if (!group.equalsIgnoreCase("g:")) {
@@ -577,7 +630,8 @@ public class Region {
                         return true;
                     }
                 }
-            } else {
+            }
+            else {
                 // Could use some smuck up but heck, it's beeing used only
                 // so-many times
                 if (!group.equalsIgnoreCase("no_groups")) {
@@ -594,8 +648,7 @@ public class Region {
     /**
      * Add a couple of groups to the list of allowed groups.
      *
-     * @param groups
-     *            Array
+     * @param groups Array
      */
     public void addGroup(String[] groups) {
         for (int i = 0; i < groups.length; i++) {
@@ -607,20 +660,22 @@ public class Region {
     /**
      * Remove a group name to the list of allowed group names.
      *
-     * @param groupName
-     *            String
+     * @param groupName String
      */
     public boolean removeGroup(String groupName) {
         if (groups.contains(groupName)) {
             groups.remove(groupName);
             return true;
-        } else if (groups.contains("g:" + groupName)) {
+        }
+        else if (groups.contains("g:" + groupName)) {
             groups.remove("g:" + groupName);
             return true;
-        } else if (groups.contains(groupName.substring(2))) {
+        }
+        else if (groups.contains(groupName.substring(2))) {
             groups.remove(groupName.substring(2));
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -628,8 +683,7 @@ public class Region {
     /**
      * Remove a couple of groups to the list of allowed groups names.
      *
-     * @param groupNames
-     *            Array
+     * @param groupNames Array
      */
     public void removeGroup(String[] groupNames) {
         for (int i = 0; i < groupNames.length; i++) {
@@ -640,11 +694,10 @@ public class Region {
     /**
      * Add a player name to the list of allowed player names.
      *
-     * @param playerName
-     *            String
+     * @param playerName String
      */
     public boolean addPlayer(String playerName) {
-        if(playerName == null) {
+        if (playerName == null) {
             return false;
         }
         if (players.contains(playerName)) {
@@ -653,7 +706,8 @@ public class Region {
         if (playerName.indexOf(",") >= 0) {
             addPlayer(playerName.split(","));
             return true;
-        } else {
+        }
+        else {
             if (!playerName.equalsIgnoreCase("no_players")) {
                 if (!playerName.equalsIgnoreCase("o:")) {
                     players.add(playerName.replace(" ", ""));
@@ -668,8 +722,7 @@ public class Region {
     /**
      * Add a couple of players to the list of allowed player names.
      *
-     * @param playerNames
-     *            Array
+     * @param playerNames Array
      */
     public void addPlayer(String[] playerNames) {
         for (int i = 0; i < playerNames.length; i++) {
@@ -681,18 +734,19 @@ public class Region {
     /**
      * Remove a player name to the list of allowed player names.
      *
-     * @param playerName
-     *            String
+     * @param playerName String
      */
     public boolean removePlayer(String playerName) {
 
         if (players.contains(playerName)) {
             players.remove(playerName);
             return true;
-        } else if (players.contains("o:" + playerName)) {
+        }
+        else if (players.contains("o:" + playerName)) {
             players.remove("o:" + playerName);
             return true;
-        } else {
+        }
+        else {
             return false;
         }
 
@@ -701,8 +755,7 @@ public class Region {
     /**
      * Remove a couple of players to the list of allowed player names.
      *
-     * @param playerNames
-     *            Array
+     * @param playerNames Array
      */
     public void removePlayer(String[] playerNames) {
         for (int i = 0; i < playerNames.length; i++) {
@@ -713,73 +766,58 @@ public class Region {
     /**
      * Check if this cuboid is inside another
      *
-     * @param v1
-     *            Other Cuboid Point 1
-     * @param v2
-     *            Other Cuboid Point 2
-     * @param complete
-     *            true: Cuboid must be completely inside, false: Cuboid can be
-     *            inside only partially
+     * @param v1       Other Cuboid Point 1
+     * @param v2       Other Cuboid Point 2
+     * @param complete true: Cuboid must be completely inside, false: Cuboid can be
+     *                 inside only partially
      * @return true if cuboid is inside another, false otherwise
      */
     public boolean cuboidIsWithin(Vector v1, Vector v2, boolean complete) {
         Vector min = Vector.getMinor(v1, v2);
         Vector max = Vector.getMajor(v1, v2);
-        if (complete == true) {
-            if (origin.isWithin(min, max) && offset.isWithin(min, max)) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            if (origin.isWithin(min, max) || offset.isWithin(min, max)) {
-                return true;
-            } else {
-                return false;
-            }
+        if (complete) {
+            return origin.isWithin(min, max) && offset.isWithin(min, max);
+        }
+        else {
+            return origin.isWithin(min, max) || offset.isWithin(min, max);
         }
     }
 
 
     /**
      * Check if this Region is within the given one
-     * @param r
+     *
+     * @param cube
      * @param complete
      * @return
      */
-    public boolean cuboidIsWithin(Region r, boolean complete) {
-        Region cube = (Region)r;
+    public boolean cuboidIsWithin(Region cube, boolean complete) {
         if (this.equalsWorld(cube)) {
             Vector min = Vector.getMinimum(cube.getOrigin(),
                     cube.getOffset());
             Vector max = Vector.getMaximum(cube.getOrigin(),
                     cube.getOffset());
 
-            if (complete == true) {
-                if (origin.isWithin(min, max) && offset.isWithin(min, max)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                if (origin.isWithin(min, max) || offset.isWithin(min, max)) {
-                    return true;
-                } else {
-                    return false;
-                }
+            if (complete) {
+                return origin.isWithin(min, max) && offset.isWithin(min, max);
             }
-        } else {
+            else {
+                return origin.isWithin(min, max) || offset.isWithin(min, max);
+            }
+        }
+        else {
             return false;
         }
     }
 
     /**
      * Check if the given Location is within this Region
+     *
      * @param v
      * @return
      */
     public boolean isWithin(Location v) {
-        if(!equalsWorld(v.getWorld(), v.getDimension())) {
+        if (!equalsWorld(v.getWorld(), v.getDimension())) {
             return false;
         }
         Vector min = Vector.getMinimum(origin, offset);
@@ -789,6 +827,7 @@ public class Region {
 
     /**
      * Calculate and get the volume size of this region
+     *
      * @return
      */
     public int getSize() {
@@ -818,14 +857,14 @@ public class Region {
     /**
      * Add a commands to the list of tabu commands.
      *
-     * @param command
-     *            String
+     * @param command String
      */
     public void addRestrictedCommand(String command) {
         if (!command.equalsIgnoreCase("no_commands")) {
             if (command.indexOf(",") >= 0) {
                 addRestrictedCommand(command.split(","));
-            } else {
+            }
+            else {
                 restrictedCommands.add(command);
             }
         }
@@ -834,8 +873,7 @@ public class Region {
     /**
      * Add a couple of commands to the list of tabu commands.
      *
-     * @param commands
-     *            Array
+     * @param commands Array
      */
     public void addRestrictedCommand(String[] commands) {
         for (int i = 0; i < commands.length; i++) {
@@ -849,8 +887,7 @@ public class Region {
     /**
      * Remove a commands to the list of tabu commands.
      *
-     * @param command
-     *            String
+     * @param command String
      */
     public void removeRestrictedCommand(String command) {
         if (restrictedCommands.contains(command)) {
@@ -868,12 +905,7 @@ public class Region {
     }
 
     public boolean commandIsRestricted(String command) {
-        if (restrictedCommands.contains(command)
-                || restrictedCommands.contains(command.substring(1))) {
-            return true;
-        } else {
-            return false;
-        }
+        return restrictedCommands.contains(command) || restrictedCommands.contains(command.substring(1));
     }
 
     /**
@@ -923,10 +955,7 @@ public class Region {
      * @return true if item is restricted, false otherwise
      */
     public boolean isItemRestricted(int id) {
-        if (restrictedItems.contains(Integer.valueOf(id))) {
-            return true;
-        }
-        return false;
+        return restrictedItems.contains(Integer.valueOf(id));
     }
 
     public ArrayList<Integer> getRestrictedItems() {
@@ -941,7 +970,7 @@ public class Region {
      * @return True if player is allowed, false otherwise
      */
     public boolean playerIsAllowed(String player, String[] group) {
-        if(playerIsOwner(player)) {
+        if (playerIsOwner(player)) {
             return true;
         }
 
@@ -977,7 +1006,8 @@ public class Region {
         String out = players.toString();
         if (out.length() == 0) {
             return "no_players";
-        } else {
+        }
+        else {
             return out;
         }
     }
@@ -993,7 +1023,8 @@ public class Region {
         String out = groups.toString();
         if (out.length() == 0) {
             return "no_groups";
-        } else {
+        }
+        else {
             return out;
         }
     }
@@ -1064,14 +1095,14 @@ public class Region {
      * @param welcome the welcome to set
      */
     public void setWelcome(String welcome) {
-        if(welcome == null) {
+        if (welcome == null) {
             this.welcome = null;
             return;
         }
         //TODO: Use a regex instead? Can't think of any :S
         char[] chars = welcome.toCharArray();
-        for(int i = 0; i < chars.length; ++i) {
-            if((i+1 < chars.length) && (chars[i] == '&' && chars[i+1] != ' ')) {
+        for (int i = 0; i < chars.length; ++i) {
+            if ((i + 1 < chars.length) && (chars[i] == '&' && chars[i + 1] != ' ')) {
                 chars[i] = '§';
             }
         }
@@ -1089,14 +1120,14 @@ public class Region {
      * @param farewell the farewell to set
      */
     public void setFarewell(String farewell) {
-        if(farewell == null) {
+        if (farewell == null) {
             this.farewell = null;
             return;
         }
-      //TODO: Use a regex instead? Can't think of any :S
+        //TODO: Use a regex instead? Can't think of any :S
         char[] chars = farewell.toCharArray();
-        for(int i = 0; i < chars.length; ++i) {
-            if((i+1 < chars.length) && (chars[i] == '&' && chars[i+1] != ' ')) {
+        for (int i = 0; i < chars.length; ++i) {
+            if ((i + 1 < chars.length) && (chars[i] == '&' && chars[i + 1] != ' ')) {
                 chars[i] = '§';
             }
         }
@@ -1106,12 +1137,12 @@ public class Region {
     public String getFlagList() {
         StringBuilder builder = new StringBuilder();
         int count = 0;
-        for(String key : properties.keySet()) {
-            if(count <= 3) {
+        for (String key : properties.keySet()) {
+            if (count <= 3) {
                 builder.append(ColorManager.Rose).append(key).append(": ")
-                .append(ColorManager.LightGreen)
-                .append(properties.get(key).name())
-                .append(", ");
+                        .append(ColorManager.LightGreen)
+                        .append(properties.get(key).name())
+                        .append(", ");
             }
             else {
                 count = 0;
@@ -1123,10 +1154,10 @@ public class Region {
     }
 
     public ArrayList<Region> parentsToList(Region r, ArrayList<Region> parents) {
-        if(r.parent == null) {
+        if (r.parent == null) {
             return parents;
         }
-        if(!parents.contains(r.parent)) {
+        if (!parents.contains(r.parent)) {
             parents.add(r.parent);
         }
         return parentsToList(r.parent, parents);
@@ -1134,11 +1165,11 @@ public class Region {
 
     @Override
     public boolean equals(Object other) {
-        if(other == null) {
+        if (other == null) {
             return false;
         }
-        if(other instanceof Region) {
-            Region c = (Region)other;
+        if (other instanceof Region) {
+            Region c = (Region) other;
             return (c.name.equals(name)) && (c.getSize() == getSize()) && (c.world.equals(world)) && (c.dimension == dimension);
         }
         return false;

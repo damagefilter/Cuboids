@@ -1,7 +1,7 @@
 package net.playblack.cuboids.gameinterface;
 
-import net.playblack.mcutils.Vector;
 import net.playblack.mcutils.Location;
+import net.playblack.mcutils.Vector;
 
 public interface IBaseEntity {
 

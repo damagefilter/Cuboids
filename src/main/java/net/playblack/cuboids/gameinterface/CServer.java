@@ -1,9 +1,9 @@
 package net.playblack.cuboids.gameinterface;
 
-import java.util.ArrayList;
-
 import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.regions.Region;
+
+import java.util.ArrayList;
 
 public abstract class CServer {
 
@@ -11,7 +11,7 @@ public abstract class CServer {
 
     /**
      * Get a world by its name
-     * 
+     *
      * @param name
      * @return
      */
@@ -19,7 +19,7 @@ public abstract class CServer {
 
     /**
      * Get a world by its id
-     * 
+     *
      * @param id
      * @return
      */
@@ -29,21 +29,22 @@ public abstract class CServer {
 
     /**
      * Get the id of a dimension by its name
-     * 
+     *
      * @param name
      * @return
      */
     public abstract int getDimensionId(String name);
-    
+
     /**
      * get all players online on this server
+     *
      * @return
      */
     public abstract ArrayList<CPlayer> getPlayers();
 
     /**
      * Get a player by name
-     * 
+     *
      * @param name
      * @return
      * @throws InvalidPlayerException when given player does not exist (is not online)
@@ -53,7 +54,7 @@ public abstract class CServer {
     /**
      * Force to update the player reference in the player cache and return the
      * new one
-     * 
+     *
      * @param name
      * @return
      * @throws InvalidPlayerException when given player does not exist (is not online)
@@ -62,14 +63,14 @@ public abstract class CServer {
 
     /**
      * Remove player from the server list
-     * 
+     *
      * @param player
      */
     public abstract void removePlayer(String player);
 
     /**
      * Schedule a task in the server queue
-     * 
+     *
      * @param delay
      * @param task
      */
@@ -77,7 +78,7 @@ public abstract class CServer {
 
     /**
      * Schedule a periodic task in the server queue
-     * 
+     *
      * @param delay
      * @param task
      */
@@ -85,7 +86,7 @@ public abstract class CServer {
 
     /**
      * Get a new Mob instance with a mob with the given name.
-     * 
+     *
      * @param name
      * @param world
      * @return
@@ -94,7 +95,7 @@ public abstract class CServer {
 
     /**
      * Give me an instance of your server implementation!
-     * 
+     *
      * @param server
      */
     public static void setServer(CServer server) {
@@ -103,7 +104,7 @@ public abstract class CServer {
 
     /**
      * Return the current server instance
-     * 
+     *
      * @return
      */
     public static CServer getServer() {
@@ -112,7 +113,7 @@ public abstract class CServer {
 
     /**
      * Retrieve the id of an item by its name
-     * 
+     *
      * @param itemName
      * @return
      */
@@ -120,7 +121,7 @@ public abstract class CServer {
 
     /**
      * Retrieve the name of an item by its id
-     * 
+     *
      * @param id
      * @return
      */
@@ -128,26 +129,27 @@ public abstract class CServer {
 
     /**
      * Get the number of online players
-     * 
+     *
      * @return
      */
     public abstract int getPlayersOnline();
 
     /**
      * Get the number of max. allowed players on the server
-     * 
+     *
      * @return
      */
     public abstract int getMaxPlayers();
-    
+
     /**
      * Check if this region contains a player
+     *
      * @param r
      * @return true if r contains any players, false otherwise
      */
     public boolean isPlayerInRegion(Region r) {
-        for(CPlayer p : getPlayers()) {
-            if(p.isInRegion(r)) {
+        for (CPlayer p : getPlayers()) {
+            if (p.isInRegion(r)) {
                 return true;
             }
         }

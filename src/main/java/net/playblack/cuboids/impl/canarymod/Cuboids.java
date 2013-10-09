@@ -18,15 +18,15 @@ public class Cuboids extends Plugin {
     @Override
     public boolean enable() {
         Debug.overrideLogger(getLogman());
-        new Bootstrapper(new CanaryServer(), new Loader[] {new CuboidFLoader()}, Implementation.CANARY)
-        .bootstrap();
+        new Bootstrapper(new CanaryServer(), new Loader[]{new CuboidFLoader()}, Implementation.CANARY)
+                .bootstrap();
         try {
             Canary.commands().registerCommands(new CmodCommands(), this, false);
             Canary.commands().registerCommands(new MiscCommands(), this, false);
             Canary.commands().registerCommands(new SelectionEditingCommands(), this, false);
             Canary.commands().registerCommands(new WorldEditingCommands(), this, false);
         }
-        catch(CommandDependencyException e) {
+        catch (CommandDependencyException e) {
             Debug.logStack(e);
             return false;
         }

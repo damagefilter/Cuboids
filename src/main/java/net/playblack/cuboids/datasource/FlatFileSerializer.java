@@ -1,9 +1,9 @@
 package net.playblack.cuboids.datasource;
 
+import net.playblack.cuboids.selections.CuboidSelection;
+
 import java.io.FileWriter;
 import java.io.IOException;
-
-import net.playblack.cuboids.selections.CuboidSelection;
 
 public class FlatFileSerializer extends CuboidSerializer {
 
@@ -30,10 +30,12 @@ public class FlatFileSerializer extends CuboidSerializer {
                         + System.getProperty("line.separator"));
             }
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } finally {
+        }
+        finally {
             try {
                 if (blockWriter != null) {
                     blockWriter.close();
@@ -41,7 +43,8 @@ public class FlatFileSerializer extends CuboidSerializer {
                 if (extraWriter != null) {
                     extraWriter.close();
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }

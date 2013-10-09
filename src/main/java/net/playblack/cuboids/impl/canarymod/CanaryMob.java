@@ -35,9 +35,10 @@ public class CanaryMob implements CMob {
     @Override
     public CWorld getWorld() {
         // Player has switched worlds
-        if (mob.getWorld().getName() != mob.getWorld().getName()) {
+        if (!mob.getWorld().getName().equals(mob.getWorld().getName())) {
             this.world = new CanaryWorld(mob.getWorld());
-        } else if (world.getDimension() != mob.getWorld().getType().getId()) {
+        }
+        else if (world.getDimension() != mob.getWorld().getType().getId()) {
             this.world = new CanaryWorld(mob.getWorld());
         }
         return world;

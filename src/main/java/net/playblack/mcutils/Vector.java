@@ -1,8 +1,8 @@
 package net.playblack.mcutils;
 
-import java.util.Random;
-
 import net.playblack.cuboids.exceptions.DeserializeException;
+
+import java.util.Random;
 
 public class Vector {
     protected double x, y, z;
@@ -139,6 +139,7 @@ public class Vector {
 
     /**
      * Check if the x and z coords are the same.
+     *
      * @param x
      * @param y
      * @param z
@@ -150,6 +151,7 @@ public class Vector {
 
     /**
      * Check if the x and z coords are the same
+     *
      * @param x
      * @param y
      * @param z
@@ -161,6 +163,7 @@ public class Vector {
 
     /**
      * Check if the x and z coords of this and the other vector are the same
+     *
      * @param tmp
      * @return
      */
@@ -286,18 +289,12 @@ public class Vector {
      * @return
      */
     public boolean isWithin(Vector min, Vector max) {
-        if (       this.getBlockX() >= min.getBlockX()
+        return this.getBlockX() >= min.getBlockX()
                 && this.getBlockX() <= max.getBlockX()
                 && this.getBlockY() >= min.getBlockY()
                 && this.getBlockY() <= max.getBlockY()
                 && this.getBlockZ() >= min.getBlockZ()
-                && this.getBlockZ() <= max.getBlockZ()
-
-        ) {
-            return true;
-        } else {
-            return false;
-        }
+                && this.getBlockZ() <= max.getBlockZ();
     }
 
     /**
@@ -313,9 +310,11 @@ public class Vector {
         double max = Math.max(v1.getVectorLength(), v2.getVectorLength());
         if (max == dv1) {
             return v1;
-        } else if (max == dv2) {
+        }
+        else if (max == dv2) {
             return v2;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -333,9 +332,11 @@ public class Vector {
         double min = Math.min(v1.getVectorLength(), v2.getVectorLength());
         if (min == dv1) {
             return v1;
-        } else if (min == dv2) {
+        }
+        else if (min == dv2) {
             return v2;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -439,7 +440,7 @@ public class Vector {
      * @return int x
      */
     public int getBlockX() {
-        int i = (int)x;
+        int i = (int) x;
         return x < i ? i - 1 : i;
 
     }
@@ -450,7 +451,7 @@ public class Vector {
      * @return int y
      */
     public int getBlockY() {
-        int i = (int)y;
+        int i = (int) y;
         return y < i ? i - 1 : i;
     }
 
@@ -460,7 +461,7 @@ public class Vector {
      * @return int z
      */
     public int getBlockZ() {
-        int i = (int)z;
+        int i = (int) z;
         return z < i ? i - 1 : i;
     }
 
@@ -471,7 +472,7 @@ public class Vector {
 
     @Override
     public int hashCode() {
-        return (int) (x+y+z);
+        return (int) (x + y + z);
     }
 
     public String explain() {

@@ -1,9 +1,5 @@
 package net.playblack.cuboids;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.XmlData;
 import net.playblack.cuboids.gameinterface.CPlayer;
@@ -13,25 +9,28 @@ import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.PropsFile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+
 /**
  * Configuration settings.
  *
  * @author Chris
- *
  */
 public class Config {
 
     public enum Implementation {
         CANARY,
         CANARY_NEW,
-        NOT_SET;
+        NOT_SET
     }
+
     private Implementation impl = Implementation.NOT_SET;
     private String basePath = "plugins/cuboids/";
     // global settings go into this
     private Region global = new Region();
     private HashMap<String, String> sqlConfig = null;
-    private boolean autoParent = true;
     // Cuboids Default Settings
     HashMap<String, Region.Status> defaultSettings = new HashMap<String, Region.Status>();
     ArrayList<Integer> restrictedItems;
@@ -289,6 +288,7 @@ public class Config {
      * @return the autoParent
      */
     public boolean isAutoParent() {
+        boolean autoParent = true;
         return autoParent;
     }
 

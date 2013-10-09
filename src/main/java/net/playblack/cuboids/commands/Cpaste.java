@@ -12,9 +12,8 @@ import net.playblack.mcutils.Debug;
 
 /**
  * Paste a selection from clipboard into the world
- * 
+ *
  * @author Chris
- * 
  */
 public class Cpaste extends CBaseCommand {
 
@@ -46,13 +45,16 @@ public class Cpaste extends CBaseCommand {
             try {
                 if (gen.execute(player, true)) {
                     MessageSystem.successMessage(player, "selectionPasted");
-                } else {
+                }
+                else {
                     MessageSystem.failMessage(player, "selectionNotPasted");
                 }
-            } catch (SelectionIncompleteException e) {
+            }
+            catch (SelectionIncompleteException e) {
                 MessageSystem.failMessage(player, "selectionIncomplete");
             }
-        } catch (BlockEditLimitExceededException e) {
+        }
+        catch (BlockEditLimitExceededException e) {
             Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();

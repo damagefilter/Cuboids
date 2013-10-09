@@ -1,17 +1,16 @@
 package net.playblack.cuboids;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
+
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This runs every time a player runs into a healing area and has hearts left to
  * fill
- * 
+ *
  * @author Chris
- * 
  */
 public class HealThread implements Runnable {
 
@@ -22,8 +21,8 @@ public class HealThread implements Runnable {
     long healDelay;
 
     public HealThread(CPlayer player, Region cube,
-            ScheduledExecutorService threadManager, int healPower,
-            long healDelay) {
+                      ScheduledExecutorService threadManager, int healPower,
+                      long healDelay) {
         this.player = player;
         this.healPower = healPower;
         this.healDelay = healDelay;

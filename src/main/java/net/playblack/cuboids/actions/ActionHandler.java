@@ -7,13 +7,13 @@ import java.lang.annotation.Target;
 
 /**
  * Used to annotate Cuboid actions as such, to make sure they are called when required.
- * @author chris
  *
+ * @author chris
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ActionHandler {
-    public enum Priority { LOW, MEDIUM, HIGH; }
-    
+    public enum Priority {LOW, MEDIUM, HIGH}
+
     Priority priority() default Priority.MEDIUM;
 }

@@ -6,7 +6,6 @@ import net.playblack.cuboids.gameinterface.CPlayer;
  * A base command. Totally not took the idea from CanaryMods BaseCommand :P
  *
  * @author Chris
- *
  */
 public abstract class CBaseCommand {
     protected String toolTip;
@@ -44,7 +43,8 @@ public abstract class CBaseCommand {
                 && ((command.length > maxParams) || (maxParams != -1))) {
             player.notify(toolTip);
             return false;
-        } else {
+        }
+        else {
             return true;
         }
     }

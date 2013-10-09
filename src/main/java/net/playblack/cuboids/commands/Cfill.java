@@ -13,9 +13,8 @@ import net.playblack.mcutils.Debug;
 
 /**
  * Fill a cuboid region
- * 
+ *
  * @author Chris
- * 
  */
 public class Cfill extends CBaseCommand {
 
@@ -55,15 +54,18 @@ public class Cfill extends CBaseCommand {
         try {
             if (gen.execute(player, true)) {
                 MessageSystem.successMessage(player, "selectionFilled");
-            } else {
+            }
+            else {
                 MessageSystem.failMessage(player, "selectionIncomplete");
                 MessageSystem.failMessage(player, "selectionNotFilled");
             }
-        } catch (BlockEditLimitExceededException e) {
+        }
+        catch (BlockEditLimitExceededException e) {
             Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
-        } catch (SelectionIncompleteException e) {
+        }
+        catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;

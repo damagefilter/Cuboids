@@ -10,13 +10,13 @@ public class BlockUpdateEvent extends CuboidEvent implements Cancellable {
     private CBlock block;
     private CBlock targetBlock;
     private Location location;
-    
+
     public BlockUpdateEvent(CBlock block, CBlock targetBlock, Location location) {
         this.block = block;
         this.targetBlock = targetBlock;
         this.location = location;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return isCancelled;
@@ -29,6 +29,7 @@ public class BlockUpdateEvent extends CuboidEvent implements Cancellable {
 
     /**
      * The original block before the update
+     *
      * @return
      */
     public CBlock getBlock() {
@@ -41,6 +42,7 @@ public class BlockUpdateEvent extends CuboidEvent implements Cancellable {
 
     /**
      * This is what the original block will change into after the update
+     *
      * @return
      */
     public CBlock getTargetBlock() {

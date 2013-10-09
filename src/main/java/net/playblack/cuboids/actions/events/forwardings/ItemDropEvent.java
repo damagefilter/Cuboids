@@ -9,12 +9,12 @@ public class ItemDropEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled = false;
     private CItem item;
     private CPlayer player;
-    
+
     public ItemDropEvent(CItem item, CPlayer player) {
         this.item = item;
         this.player = player;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return isCancelled;

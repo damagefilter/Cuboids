@@ -14,18 +14,18 @@ public class MiscOperator implements ActionListener {
     @ActionHandler
     public void onItemDrop(ItemDropEvent event) {
         Region r = RegionManager.get().getActiveRegion(event.getPlayer().getLocation(), false);
-        if(r.getProperty("creative") == Status.ALLOW) {
+        if (r.getProperty("creative") == Status.ALLOW) {
             event.cancel();
         }
     }
 
     @ActionHandler
     public void onMobSpawn(EntitySpawnEvent event) {
-        if(!event.getEntity().isMob()) {
+        if (!event.getEntity().isMob()) {
             return;
         }
         Region r = RegionManager.get().getActiveRegion(event.getEntity().getLocation(), false);
-        if(r.getProperty("mob-spawn") == Status.DENY) {
+        if (r.getProperty("mob-spawn") == Status.DENY) {
             event.cancel();
         }
     }

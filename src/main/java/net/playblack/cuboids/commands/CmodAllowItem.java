@@ -1,16 +1,15 @@
 package net.playblack.cuboids.commands;
 
-import java.util.Arrays;
-
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.mcutils.ColorManager;
+
+import java.util.Arrays;
 
 /**
  * Allow item in a cuboid
  *
  * @author Chris
- *
  */
 public class CmodAllowItem extends CBaseCommand {
 

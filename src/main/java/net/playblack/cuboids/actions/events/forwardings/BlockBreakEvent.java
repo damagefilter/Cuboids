@@ -31,9 +31,11 @@ public class BlockBreakEvent extends CuboidEvent implements Cancellable {
     public CPlayer getPlayer() {
         return player;
     }
+
     public CBlock getBlock() {
         return block;
     }
+
     public Location getLocation() {
         return location;
     }

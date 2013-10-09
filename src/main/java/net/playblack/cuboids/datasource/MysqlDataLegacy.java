@@ -1,13 +1,5 @@
 package net.playblack.cuboids.datasource;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -16,12 +8,15 @@ import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * MysqlData extends BaseData and represents the data layer for retrieving
  * Regions from a MySQL database.
  *
  * @author Chris
- *
  */
 public class MysqlDataLegacy implements BaseData {
 
@@ -41,7 +36,7 @@ public class MysqlDataLegacy implements BaseData {
      */
     private Connection getConnection() {
         try {
-            if (connected == false) {
+            if (!connected) {
                 // log.logMessage("Logging with this info: "+cfg.get("url") +
                 // "?autoReconnect=true&user=" + cfg.get("user") + "&password="
                 // + cfg.get("passwd"), "INFO");
@@ -50,10 +45,12 @@ public class MysqlDataLegacy implements BaseData {
                         + "&password=" + cfg.get("passwd"));
                 connected = true;
                 return connection;
-            } else {
+            }
+            else {
                 return connection;
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             Debug.logWarning("Regions2: SQL Connection Problem: " + e.getMessage());
             // log.logMessage("URL: "+cfg.get("url"), "INFO");
             return null;
@@ -144,15 +141,18 @@ public class MysqlDataLegacy implements BaseData {
                 cube.setDimension(0);
                 cube.setWorld(CServer.getServer().getDefaultWorld().getName());
                 cube.hasChanged = true;
-            } else if (world.equalsIgnoreCase("NETHER")) {
+            }
+            else if (world.equalsIgnoreCase("NETHER")) {
                 cube.setDimension(-1);
                 cube.setWorld(CServer.getServer().getDefaultWorld().getName());
                 cube.hasChanged = true;
-            } else if (world.equalsIgnoreCase("END")) {
+            }
+            else if (world.equalsIgnoreCase("END")) {
                 cube.setDimension(1);
                 cube.setWorld(CServer.getServer().getDefaultWorld().getName());
                 cube.hasChanged = true;
-            } else {
+            }
+            else {
                 cube.setDimension(rs.getInt("dimension"));
                 cube.setWorld(world);
             }
@@ -174,7 +174,8 @@ public class MysqlDataLegacy implements BaseData {
                         Double.parseDouble(point2[1]),
                         Double.parseDouble(point2[2]));
                 cube.setBoundingBox(p1, p2);
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e) {
                 Debug.logWarning("Failed to parse points for Region "
                         + cube.getName() + ", stopping!");
                 e.printStackTrace();
@@ -195,7 +196,7 @@ public class MysqlDataLegacy implements BaseData {
             String parent = ToolBox.stringToNull(rs.getString("_parent"));
             //We have a prent
             if (parent != null) {
-                if(!regionList.containsKey(parent)) {
+                if (!regionList.containsKey(parent)) {
                     regionList.put(parent, new ArrayList<Region>());
                 }
                 regionList.get(parent).add(cube);
@@ -210,7 +211,7 @@ public class MysqlDataLegacy implements BaseData {
 
     @Override
     public void saveRegion(Region node) {
-       throw new UnsupportedOperationException("Cannot save files in legacy MySQL backend. Please use the new backend implementation.");
+        throw new UnsupportedOperationException("Cannot save files in legacy MySQL backend. Please use the new backend implementation.");
     }
 
     @Override
@@ -230,20 +231,21 @@ public class MysqlDataLegacy implements BaseData {
         try {
             PreparedStatement ps = getConnection().prepareStatement("SELECT * FROM nodes");
             loadedRegions = resultSetToRegion(ps.executeQuery());
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             Debug.logError("Failed to load Region Nodes (legacy). Reason: " + e.getMessage());
             e.printStackTrace();
             return 0;
         }
 
-      //Sort out parents and stuff.
+        //Sort out parents and stuff.
         int numRegions = 0;
-        for(String key : loadedRegions.keySet()) {
+        for (String key : loadedRegions.keySet()) {
             //Root has no parents to sort out
-            if(!key.equals("root")) {
+            if (!key.equals("root")) {
                 Region parent = findByName(key);
-                for(Region r : loadedRegions.get(key)) {
-                    if(parent == null) {
+                for (Region r : loadedRegions.get(key)) {
+                    if (parent == null) {
                         Debug.logWarning("Cannot find parent " + key + ". Dropping regions with this parent.");
                         break;
                     }
@@ -254,7 +256,7 @@ public class MysqlDataLegacy implements BaseData {
         }
 
         //Now that we have all the parents sorted out, we can just add all nodes under "root" to the regionmanager
-        for(Region root : loadedRegions.get("root")) {
+        for (Region root : loadedRegions.get("root")) {
             numRegions++;
             regionMan.addRoot(root);
         }
@@ -263,13 +265,14 @@ public class MysqlDataLegacy implements BaseData {
 
     /**
      * Get a region from the given list with the given name
+     *
      * @param name
      * @return
      */
     private Region findByName(String name) {
-        for(String key : loadedRegions.keySet()) {
-            for(Region r : loadedRegions.get(key)) {
-                if(r.getName().equals(name)) {
+        for (String key : loadedRegions.keySet()) {
+            for (Region r : loadedRegions.get(key)) {
+                if (r.getName().equals(name)) {
                     return r;
                 }
             }

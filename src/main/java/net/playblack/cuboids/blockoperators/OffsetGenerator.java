@@ -12,9 +12,8 @@ import net.playblack.mcutils.Vector;
 
 /**
  * Offset blocks in a direction by a distance
- * 
+ *
  * @author Chris
- * 
  */
 public class OffsetGenerator extends BaseGen {
 
@@ -23,7 +22,7 @@ public class OffsetGenerator extends BaseGen {
 
     /**
      * The selection you pass along here will be written into the world!
-     * 
+     *
      * @param selection
      * @param world
      */
@@ -34,33 +33,35 @@ public class OffsetGenerator extends BaseGen {
     /**
      * Set direction. This returns false if the cardinal direction is not
      * recognized!
-     * 
+     *
      * @param dir
      */
     public boolean setDirection(String dir) {
         direction = -1;
         if (dir.equalsIgnoreCase("SOUTH")) {
             direction = 0;
-        } else if (dir.equalsIgnoreCase("EAST")) {
+        }
+        else if (dir.equalsIgnoreCase("EAST")) {
             direction = 1;
-        } else if (dir.equalsIgnoreCase("NORTH")) {
+        }
+        else if (dir.equalsIgnoreCase("NORTH")) {
             direction = 2;
-        } else if (dir.equalsIgnoreCase("WEST")) {
+        }
+        else if (dir.equalsIgnoreCase("WEST")) {
             direction = 3;
-        } else if (dir.equalsIgnoreCase("UP")) {
+        }
+        else if (dir.equalsIgnoreCase("UP")) {
             direction = 4;
-        } else if (dir.equalsIgnoreCase("DOWN")) {
+        }
+        else if (dir.equalsIgnoreCase("DOWN")) {
             direction = 5;
         }
-        if (direction == -1) {
-            return false;
-        }
-        return true;
+        return direction != -1;
     }
 
     /**
      * Set the offset distance
-     * 
+     *
      * @param distance
      */
     public void setDistance(int distance) {
@@ -69,41 +70,41 @@ public class OffsetGenerator extends BaseGen {
 
     private CuboidSelection recalculateBoundingRectangle(CuboidSelection tmp) {
         switch (direction) {
-        case 0:
-            tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
-                    .getY(), tmp.getOrigin().getZ() - distance));
-            tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
-                    .getY(), tmp.getOffset().getZ() - distance));
-            break;
-        case 1:
-            tmp.setOrigin(new Vector(tmp.getOrigin().getX() - distance, tmp
-                    .getOrigin().getY(), tmp.getOrigin().getZ()));
-            tmp.setOffset(new Vector(tmp.getOffset().getX() - distance, tmp
-                    .getOffset().getY(), tmp.getOffset().getZ()));
-        case 2:
-            tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
-                    .getY(), tmp.getOrigin().getZ() + distance));
-            tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
-                    .getY(), tmp.getOffset().getZ() + distance));
-            break;
-        case 3:
-            tmp.setOrigin(new Vector(tmp.getOrigin().getX() + distance, tmp
-                    .getOrigin().getY(), tmp.getOrigin().getZ()));
-            tmp.setOffset(new Vector(tmp.getOffset().getX() + distance, tmp
-                    .getOffset().getY(), tmp.getOffset().getZ()));
-            break;
-        case 4:
-            tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
-                    .getY() + distance, tmp.getOrigin().getZ()));
-            tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
-                    .getY() + distance, tmp.getOffset().getZ()));
-            break;
-        case 5:
-            tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
-                    .getY() - distance, tmp.getOrigin().getZ()));
-            tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
-                    .getY() - distance, tmp.getOffset().getZ()));
-            break;
+            case 0:
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
+                        .getY(), tmp.getOrigin().getZ() - distance));
+                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
+                        .getY(), tmp.getOffset().getZ() - distance));
+                break;
+            case 1:
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX() - distance, tmp
+                        .getOrigin().getY(), tmp.getOrigin().getZ()));
+                tmp.setOffset(new Vector(tmp.getOffset().getX() - distance, tmp
+                        .getOffset().getY(), tmp.getOffset().getZ()));
+            case 2:
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
+                        .getY(), tmp.getOrigin().getZ() + distance));
+                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
+                        .getY(), tmp.getOffset().getZ() + distance));
+                break;
+            case 3:
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX() + distance, tmp
+                        .getOrigin().getY(), tmp.getOrigin().getZ()));
+                tmp.setOffset(new Vector(tmp.getOffset().getX() + distance, tmp
+                        .getOffset().getY(), tmp.getOffset().getZ()));
+                break;
+            case 4:
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
+                        .getY() + distance, tmp.getOrigin().getZ()));
+                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
+                        .getY() + distance, tmp.getOffset().getZ()));
+                break;
+            case 5:
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
+                        .getY() - distance, tmp.getOrigin().getZ()));
+                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
+                        .getY() - distance, tmp.getOffset().getZ()));
+                break;
         }
         return tmp;
     }
@@ -111,7 +112,7 @@ public class OffsetGenerator extends BaseGen {
     /**
      * This returns a CuboidSelection containing the _final_ move result. That
      * means it contains the empty space and the moved blocks.
-     * 
+     *
      * @param sel
      * @return
      */
@@ -124,30 +125,30 @@ public class OffsetGenerator extends BaseGen {
             CBlock original = selection.getBlock(key);
             Vector newPos = new Vector(0, 0, 0);
             switch (direction) {
-            case 0:
-                newPos = new Vector(key.getX(), key.getY(), key.getZ()
-                        - distance);
-                break;
-            case 1:
-                newPos = new Vector(key.getX() - distance, key.getY(),
-                        key.getZ());
-                break;
-            case 2:
-                newPos = new Vector(key.getX(), key.getY(), key.getZ()
-                        + distance);
-                break;
-            case 3:
-                newPos = new Vector(key.getX() + distance, key.getY(),
-                        key.getZ());
-                break;
-            case 4:
-                newPos = new Vector(key.getX(), key.getY() + distance,
-                        key.getZ());
-                break;
-            case 5:
-                newPos = new Vector(key.getX(), key.getY() - distance,
-                        key.getZ());
-                break;
+                case 0:
+                    newPos = new Vector(key.getX(), key.getY(), key.getZ()
+                            - distance);
+                    break;
+                case 1:
+                    newPos = new Vector(key.getX() - distance, key.getY(),
+                            key.getZ());
+                    break;
+                case 2:
+                    newPos = new Vector(key.getX(), key.getY(), key.getZ()
+                            + distance);
+                    break;
+                case 3:
+                    newPos = new Vector(key.getX() + distance, key.getY(),
+                            key.getZ());
+                    break;
+                case 4:
+                    newPos = new Vector(key.getX(), key.getY() + distance,
+                            key.getZ());
+                    break;
+                case 5:
+                    newPos = new Vector(key.getX(), key.getY() - distance,
+                            key.getZ());
+                    break;
             }
             tmp.setBlock(newPos, original);
             // Set the old position to be nothing

@@ -8,7 +8,6 @@ import net.playblack.mcutils.ColorManager;
  * Remove a new Cuboid
  *
  * @author Chris
- *
  */
 public class CmodRemove extends CBaseCommand {
 

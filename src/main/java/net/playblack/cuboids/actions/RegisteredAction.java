@@ -8,9 +8,10 @@ public class RegisteredAction {
     private ActionHandler.Priority priority;
     private ActionExecutor executor;
     private String owner;
-    
+
     /**
      * Construct a new Registered action.
+     *
      * @param listener
      * @param priority
      * @param executor
@@ -22,34 +23,37 @@ public class RegisteredAction {
         this.executor = executor;
         this.owner = owner;
     }
-    
+
     /**
      * Get this actions owner
+     *
      * @return
      */
     public String getOwner() {
         return owner;
     }
-    
+
     /**
      * get this actions priority for sorting purposes
+     *
      * @return
      */
     public ActionHandler.Priority getPriority() {
         return priority;
     }
-    
+
     /**
      * Call the given event on the registered executor
+     *
      * @param event
      */
     public void execute(CuboidEvent event) {
-        if(event instanceof Cancellable) {
-            if(((Cancellable)event).isCancelled()) {
+        if (event instanceof Cancellable) {
+            if (((Cancellable) event).isCancelled()) {
                 return;
             }
         }
         executor.execute(listener, event);
     }
-    
+
 }

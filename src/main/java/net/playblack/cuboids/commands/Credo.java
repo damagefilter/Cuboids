@@ -14,9 +14,8 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * Redo things
- * 
+ *
  * @author Chris
- * 
  */
 public class Credo extends CBaseCommand {
 
@@ -38,7 +37,7 @@ public class Credo extends CBaseCommand {
         if (!Config.get().isAllowUndo()) {
             MessageSystem.failMessage(player, "undoDisabled");
             return; // from a morality standpoint, this should never be disabled
-                    // but there you go.
+            // but there you go.
         }
         int steps = 1;
         String subject = player.getName();
@@ -49,7 +48,8 @@ public class Credo extends CBaseCommand {
             if (steps == -1) {
                 steps = 1;
             }
-        } else if (command.length == 2) {
+        }
+        else if (command.length == 2) {
             steps = ToolBox.parseInt(command[1]);
             if (steps < 1) {
                 steps = 1;
@@ -67,11 +67,13 @@ public class Credo extends CBaseCommand {
             GenericGenerator gen = new GenericGenerator(sel, player.getWorld());
             try {
                 gen.execute(player, false);
-            } catch (BlockEditLimitExceededException e) {
+            }
+            catch (BlockEditLimitExceededException e) {
                 Debug.logWarning(e.getMessage());
                 MessageSystem.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
-            } catch (SelectionIncompleteException e) {
+            }
+            catch (SelectionIncompleteException e) {
                 MessageSystem.failMessage(player, "selectionIncomplete");
             }
         }

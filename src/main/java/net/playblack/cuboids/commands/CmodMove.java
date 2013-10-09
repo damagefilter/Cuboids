@@ -6,9 +6,8 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Move a Cuboid
- * 
+ *
  * @author Chris
- * 
  */
 public class CmodMove extends CBaseCommand {
 

@@ -1,7 +1,5 @@
 package net.playblack.cuboids.blockoperators;
 
-import java.util.LinkedHashMap;
-
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
@@ -12,11 +10,12 @@ import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
 
+import java.util.LinkedHashMap;
+
 /**
  * Offset blocks in a direction by a distance
- * 
+ *
  * @author Chris
- * 
  */
 public class VectorOffsetGenerator extends BaseGen {
 
@@ -25,7 +24,7 @@ public class VectorOffsetGenerator extends BaseGen {
 
     /**
      * The selection you pass along here will be written into the world!
-     * 
+     *
      * @param selection
      * @param world
      */
@@ -36,7 +35,7 @@ public class VectorOffsetGenerator extends BaseGen {
     /**
      * The the offset vector we need to calculate the distance between clipbord
      * origin and current position
-     * 
+     *
      * @param offset
      */
     public void setOffsetVector(Vector offset) {
@@ -46,7 +45,7 @@ public class VectorOffsetGenerator extends BaseGen {
     /**
      * This returns a CuboidSelection containing the _final_ move result. That
      * means it contains the empty space and the moved blocks.
-     * 
+     *
      * @param sel
      * @return
      */

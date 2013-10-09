@@ -8,7 +8,6 @@ import net.playblack.mcutils.ColorManager;
  * Load a single cuboid
  *
  * @author Chris
- *
  */
 public class CmodLoad extends CBaseCommand {
     public CmodLoad() {

@@ -30,7 +30,7 @@ public class CuboidNode {
 
     /**
      * Construct a node element with the given CuboidE
-     * 
+     *
      * @param cube
      */
     public CuboidNode(Region cube) {
@@ -39,7 +39,7 @@ public class CuboidNode {
 
     /**
      * Get the CuboidE of this element.
-     * 
+     *
      * @return
      */
     public Region getCuboid() {
@@ -49,7 +49,7 @@ public class CuboidNode {
     /**
      * Override the contained CuboidE. If name changes, this will also update
      * the childs parent entries accordingly.
-     * 
+     *
      * @param cube
      */
     public void setCuboid(Region cube) {
@@ -62,7 +62,7 @@ public class CuboidNode {
 
     /**
      * Add a child to this node
-     * 
+     *
      * @param newNode
      */
     public void addChild(CuboidNode newNode) {
@@ -71,7 +71,7 @@ public class CuboidNode {
 
     /**
      * Get the entire child list
-     * 
+     *
      * @return
      */
     public ArrayList<CuboidNode> getChilds() {
@@ -80,7 +80,7 @@ public class CuboidNode {
 
     /**
      * Set new childs. This will override all childs that already exist
-     * 
+     *
      * @param newChilds
      */
     public void setChilds(ArrayList<CuboidNode> newChilds) {
@@ -89,19 +89,16 @@ public class CuboidNode {
 
     /**
      * Check if this node is a root node (has no parent)
-     * 
+     *
      * @return
      */
     public boolean isRoot() {
-        if (element.getParent() == null) {
-            return true;
-        }
-        return false;
+        return element.getParent() == null;
     }
 
     /**
      * Get the world for this node
-     * 
+     *
      * @return
      */
     public String getWorld() {
@@ -110,7 +107,7 @@ public class CuboidNode {
 
     /**
      * Get the dimension for this node
-     * 
+     *
      * @return
      */
     public int getDimension() {
@@ -119,7 +116,7 @@ public class CuboidNode {
 
     /**
      * Get name of wrapped cuboid
-     * 
+     *
      * @return
      */
     public String getName() {
@@ -128,7 +125,7 @@ public class CuboidNode {
 
     /**
      * get parent name of wrapped cuboid
-     * 
+     *
      * @return
      */
     public Region getParent() {
@@ -139,7 +136,7 @@ public class CuboidNode {
     /**
      * Traverse child nodes and return a list of all child nodes that are
      * attached in any way to this node
-     * 
+     *
      * @return
      */
     public ArrayList<CuboidNode> toList() {
@@ -150,7 +147,7 @@ public class CuboidNode {
 
     /**
      * pre-order traversal, yay :D
-     * 
+     *
      * @param element
      * @param list
      */
@@ -159,43 +156,5 @@ public class CuboidNode {
         for (CuboidNode data : element.getChilds()) {
             traverse(data, list);
         }
-    }
-
-    /**
-     * Check if the given cuboidNode is in the same world and dimension as this
-     * one
-     * 
-     * @param test
-     * @return true if dimension and world are the same, false otherwise
-     */
-    public boolean equalWorlds(CuboidNode test) {
-        if ((element.getDimension() == test.getDimension())
-                && (element.getWorld().equalsIgnoreCase(test.getWorld()))) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Check if the given cuboidE is in the same world and dimension as this
-     * CuboidNodes attached CuboidE
-     * 
-     * @param test
-     * @return
-     */
-    public boolean equalWorlds(Region test) {
-        return element.equalsWorld(test);
-    }
-
-    /**
-     * Check this node matches the gven world and dimension requirements (it's
-     * inside that)
-     * 
-     * @param world
-     * @param dimension
-     * @return
-     */
-    public boolean equalWorlds(String world, int dimension) {
-        return element.equalsWorld(world, dimension);
     }
 }

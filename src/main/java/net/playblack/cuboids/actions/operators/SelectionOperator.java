@@ -19,19 +19,20 @@ import net.playblack.mcutils.Vector;
 
 /**
  * Handles native selection operations
- * @author chris
  *
+ * @author chris
  */
 public class SelectionOperator implements ActionListener {
 
     /**
      * Explain the current region
+     *
      * @param player
      * @param p
      * @return
      */
     private boolean explainRegion(CPlayer player, Location p) {
-        if(player.getItemInHand().getId() != Config.get().getInspectorItem()) {
+        if (player.getItemInHand().getId() != Config.get().getInspectorItem()) {
             return false;
         }
 
@@ -41,30 +42,31 @@ public class SelectionOperator implements ActionListener {
 
     /**
      * Handle the selection of points of a selection.
+     *
      * @param player
      * @param location
      * @param rightclick this must be set=true on rightclick events for doubleAction mode.
-     * Has no effect on classic selection mode
+     *                   Has no effect on classic selection mode
      */
     private boolean setSelectionPoint(CPlayer player, Location location, boolean rightclick, boolean remote) {
-        if(remote) {
-            if(player.getItemInHand().getId() != Config.get().getRemoteRegionItem()) {
+        if (remote) {
+            if (player.getItemInHand().getId() != Config.get().getRemoteRegionItem()) {
                 return false;
             }
 //            System.out.println("Remote selection");
         }
         else {
-            if(player.getItemInHand().getId() != Config.get().getRegionItem()) {
+            if (player.getItemInHand().getId() != Config.get().getRegionItem()) {
                 return false;
             }
         }
 
-        if(!player.hasPermission("cuboids.super.admin")) {
-            if(!player.hasPermission("cselect")) {
+        if (!player.hasPermission("cuboids.super.admin")) {
+            if (!player.hasPermission("cselect")) {
                 return false;
             }
         }
-        if(Config.get().isUseDoubleAction()) {
+        if (Config.get().isUseDoubleAction()) {
 //            System.out.println("selection in normal mode");
             setPointNormalStyle(player, location, rightclick);
         }
@@ -77,20 +79,20 @@ public class SelectionOperator implements ActionListener {
 
     private void setPointClassicStyle(CPlayer player, Location point) {
         CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
-        if(selection.isComplete()) {
+        if (selection.isComplete()) {
             selection.reset();
         }
-        if(!selection.hasOrigin() && !selection.hasOffset()) {
+        if (!selection.hasOrigin() && !selection.hasOffset()) {
             selection.setOrigin(point);
             MessageSystem.successMessage(player, "originSet");
             MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
         }
-        else if(selection.hasOrigin() && !selection.hasOffset()) {
+        else if (selection.hasOrigin() && !selection.hasOffset()) {
             selection.setOffset(point);
             MessageSystem.successMessage(player, "offsetSet");
             MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
         }
-        else if(!selection.hasOrigin() && selection.hasOffset()) {
+        else if (!selection.hasOrigin() && selection.hasOffset()) {
             selection.reset();
             selection.setOrigin(point);
             MessageSystem.successMessage(player, "originSet");
@@ -108,7 +110,7 @@ public class SelectionOperator implements ActionListener {
 
     private void setPointNormalStyle(CPlayer player, Location point, boolean rightClick) {
         CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
-        if(rightClick) {
+        if (rightClick) {
             selection.setOffset(point);
             MessageSystem.successMessage(player, "offsetSet");
             MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
@@ -128,8 +130,8 @@ public class SelectionOperator implements ActionListener {
     public void onBlockRightClick(BlockRightClickEvent event) {
         //Set seletion?
 //        System.out.println("Rightclick selection");
-        if(event.getPlayer().getItemInHand().getId() == Config.get().getRegionItem()) {
-            if(setSelectionPoint(event.getPlayer(), event.getLocation(), true, false)) {
+        if (event.getPlayer().getItemInHand().getId() == Config.get().getRegionItem()) {
+            if (setSelectionPoint(event.getPlayer(), event.getLocation(), true, false)) {
                 event.cancel();
             }
         }
@@ -139,7 +141,7 @@ public class SelectionOperator implements ActionListener {
     @ActionHandler
     public void onArmSwing(ArmSwingEvent event) {
         Vector v = new LineBlockTracer(event.getPlayer()).getTargetVector();
-        if(v == null) {
+        if (v == null) {
             return;
         }
         Location loc = new Location(v);
@@ -150,7 +152,7 @@ public class SelectionOperator implements ActionListener {
     @ActionHandler
     public void onBlockLeftClick(BlockLeftClickEvent event) {
 //        System.out.println("onBlockLOeftClick selection");
-        if(setSelectionPoint(event.getPlayer(), event.getLocation(), false, false)) {
+        if (setSelectionPoint(event.getPlayer(), event.getLocation(), false, false)) {
             event.cancel();
         }
     }

@@ -11,7 +11,6 @@ import net.playblack.mcutils.ColorManager;
  * Backup an area
  *
  * @author Chris
- *
  */
 public class CmodSetFlag extends CBaseCommand {
 
@@ -25,25 +24,25 @@ public class CmodSetFlag extends CBaseCommand {
             return;
         }
         if (!player.hasPermission("cuboids.super.admin")) {
-            if (!player.hasPermission("cuboids.flags."+command[command.length-2])) {
+            if (!player.hasPermission("cuboids.flags." + command[command.length - 2])) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
 
-        if(command[1].equalsIgnoreCase("global")) {
+        if (command[1].equalsIgnoreCase("global")) {
             Config.get().setGlobalProperty(command[4], Region.Status.fromString(command[1]));
             MessageSystem.successMessage(player, "globalFlagSet");
             return;
         }
 
-        Region node = RegionManager.get().getRegionByName(command[command.length-3], player.getWorld().getName(), player.getWorld().getDimension());
-        if(node == null) {
+        Region node = RegionManager.get().getRegionByName(command[command.length - 3], player.getWorld().getName(), player.getWorld().getDimension());
+        if (node == null) {
             node = Config.get().getGlobalSettings();
         }
 
         if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
-            if(node.setProperty(command[command.length-2], Region.Status.fromString(command[command.length-1]))) {
+            if (node.setProperty(command[command.length - 2], Region.Status.fromString(command[command.length - 1]))) {
                 MessageSystem.successMessage(player, "regionFlagSet");
             }
             else {

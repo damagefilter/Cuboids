@@ -4,9 +4,8 @@ import java.util.HashMap;
 
 /**
  * Cuboid Selection Dispatcher.
- * 
+ *
  * @author Chris
- * 
  */
 public class SelectionManager {
     private HashMap<String, ISelection> selections;
@@ -27,6 +26,7 @@ public class SelectionManager {
     /**
      * Returns the current player selection data.
      * This will never return null
+     *
      * @param player
      * @return
      */

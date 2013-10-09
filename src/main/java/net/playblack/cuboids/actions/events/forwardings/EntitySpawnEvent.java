@@ -7,11 +7,11 @@ import net.playblack.cuboids.gameinterface.IBaseEntity;
 public class EntitySpawnEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled;
     private IBaseEntity entity;
-    
+
     public EntitySpawnEvent(IBaseEntity entity) {
         this.entity = entity;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return isCancelled;

@@ -9,12 +9,12 @@ public class BlockPhysicsEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled;
     private CBlock block;
     private Location location;
-    
+
     public BlockPhysicsEvent(CBlock block, Location location) {
         this.block = block;
         this.location = location;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return isCancelled;

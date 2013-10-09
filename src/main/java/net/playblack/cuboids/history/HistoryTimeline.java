@@ -1,16 +1,15 @@
 package net.playblack.cuboids.history;
 
-import java.util.LinkedList;
-
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.selections.CuboidSelection;
+
+import java.util.LinkedList;
 
 /**
  * Every player has a history timeline where blocks are stored that have been
  * modified into a linked list.
- * 
+ *
  * @author Chris
- * 
  */
 public class HistoryTimeline {
     private int maxListSize = Config.get().getUndoSteps();
@@ -53,7 +52,7 @@ public class HistoryTimeline {
 
     /**
      * Remember a bit of history
-     * 
+     *
      * @param rem
      */
     public void remember(HistoryObject rem) {
@@ -71,14 +70,15 @@ public class HistoryTimeline {
     /**
      * Go back one step in history and return the historyobject created back
      * then
-     * 
+     *
      * @return CuboidSelection to use in a world
      */
     public CuboidSelection undo() {
         pointer--;
         if (pointer >= 0) {
             return new CuboidSelection(history.get(pointer).getBlocksBefore());
-        } else {
+        }
+        else {
             pointer = 0;
             return null;
         }
@@ -86,7 +86,7 @@ public class HistoryTimeline {
 
     /**
      * Redo an undo step.
-     * 
+     *
      * @return CuboidSelection to use in a world
      */
     public CuboidSelection redo() {

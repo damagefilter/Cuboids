@@ -29,17 +29,19 @@ public class BrushOperator implements ActionListener {
             if ((player.hasPermission("cWorldMod") && player.hasPermission("cbrush")) || player.hasPermission("cuboids.super.admin")) {
                 PlayerSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
                 selection.setOrigin(point);
-                SphereGenerator gen = new SphereGenerator(selection,player.getWorld());
+                SphereGenerator gen = new SphereGenerator(selection, player.getWorld());
                 gen.setRadius(selection.getBrushRadius());
                 gen.setMaterial(new CBlock(selection.getBrushType(), selection.getBrushData()));
                 gen.setHollow(true);
                 try {
                     gen.execute(player, true);
-                } catch (BlockEditLimitExceededException e) {
+                }
+                catch (BlockEditLimitExceededException e) {
                     Debug.logWarning(e.getMessage());
                     MessageSystem.customFailMessage(player, e.getMessage());
                     e.printStackTrace();
-                } catch (SelectionIncompleteException e) {
+                }
+                catch (SelectionIncompleteException e) {
                     MessageSystem.failMessage(player, "selectionIncomplete");
                 }
             }
@@ -49,7 +51,7 @@ public class BrushOperator implements ActionListener {
     @ActionHandler
     public void onArmSwing(ArmSwingEvent event) {
         Vector v = new LineBlockTracer(event.getPlayer()).getTargetVector();
-        if(v != null) {
+        if (v != null) {
             handleBrush(event.getPlayer(), v);
         }
     }

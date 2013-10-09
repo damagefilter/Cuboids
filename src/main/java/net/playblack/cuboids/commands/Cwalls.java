@@ -13,9 +13,8 @@ import net.playblack.mcutils.Debug;
 
 /**
  * Create walls along a cuboid selection
- * 
+ *
  * @author Chris
- * 
  */
 public class Cwalls extends CBaseCommand {
 
@@ -23,11 +22,7 @@ public class Cwalls extends CBaseCommand {
 
     public Cwalls(String variant) {
         super("Create walls/faces: " + ColorManager.Yellow + variant + " <wall>:[data] [floor]:[data] [ceiling]:[data]", 2, 4);
-        if (variant.equalsIgnoreCase("/cwalls")) {
-            onlyWalls = true;
-        } else {
-            onlyWalls = false;
-        }
+        onlyWalls = variant.equalsIgnoreCase("/cwalls");
     }
 
     @Override
@@ -45,7 +40,7 @@ public class Cwalls extends CBaseCommand {
 
         // create a new template block
         CBlock walls = CBlock.parseBlock(command[1]);
-        CBlock floor = null;
+        CBlock floor;
         CBlock ceiling = null;
         if (walls == null) {
             MessageSystem.failMessage(player, "invalidBlock");
@@ -53,10 +48,12 @@ public class Cwalls extends CBaseCommand {
         }
         if (command.length == 3) {
             floor = CBlock.parseBlock(command[2]);
-        } else if (command.length == 4) {
+        }
+        else if (command.length == 4) {
             floor = CBlock.parseBlock(command[2]);
             ceiling = CBlock.parseBlock(command[3]);
-        } else {
+        }
+        else {
             floor = walls;
             ceiling = walls;
         }
@@ -79,18 +76,22 @@ public class Cwalls extends CBaseCommand {
             if (gen.execute(player, true)) {
                 if (onlyWalls) {
                     MessageSystem.successMessage(player, "wallsCreated");
-                } else {
+                }
+                else {
                     MessageSystem.successMessage(player, "facesCreated");
                 }
-            } else {
+            }
+            else {
                 MessageSystem.failMessage(player, "selectionIncomplete");
                 MessageSystem.failMessage(player, "wallsNotCreated");
             }
-        } catch (BlockEditLimitExceededException e) {
+        }
+        catch (BlockEditLimitExceededException e) {
             Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
-        } catch (SelectionIncompleteException e) {
+        }
+        catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;

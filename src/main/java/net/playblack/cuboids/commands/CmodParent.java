@@ -8,7 +8,6 @@ import net.playblack.mcutils.ColorManager;
  * Set the parent of a cuboid
  *
  * @author Chris
- *
  */
 public class CmodParent extends CBaseCommand {
 

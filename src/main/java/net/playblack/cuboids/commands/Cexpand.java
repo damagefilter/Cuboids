@@ -9,7 +9,6 @@ import net.playblack.mcutils.ColorManager;
  * Expand cuboid selection
  *
  * @author Chris
- *
  */
 public class Cexpand extends CBaseCommand {
 

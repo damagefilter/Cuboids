@@ -10,7 +10,6 @@ import net.playblack.mcutils.ColorManager;
  * Rename a Cuboid
  *
  * @author Chris
- *
  */
 public class CmodRename extends CBaseCommand {
 

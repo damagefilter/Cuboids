@@ -17,6 +17,7 @@ public class OperableItemsOperator implements ActionListener {
     /**
      * Checks if the player can use the item in his hand (right-mouse-use)
      * where ever he is currently standing in.
+     *
      * @param player
      * @return
      */
@@ -26,39 +27,34 @@ public class OperableItemsOperator implements ActionListener {
 
     /**
      * Check if player can use a block (switch, button, chests etc etc)
+     *
      * @param player
      * @param block
      * @return
      */
     public boolean canUseBlock(CPlayer player, CBlock block, Location point) {
-        if(player.hasPermission("cuboids.super.admin")) {
+        if (player.hasPermission("cuboids.super.admin")) {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);
-        if(r.playerIsAllowed(player.getName(), player.getGroups())) {
+        if (r.playerIsAllowed(player.getName(), player.getGroups())) {
             return true;
         }
         return !r.isItemRestricted(block.getType());
     }
 
     public boolean canUseBucket(CPlayer player, Location point, boolean lavaBucket) {
-        if(player.hasPermission("cuboids.super.admin")) {
+        if (player.hasPermission("cuboids.super.admin")) {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);
-        if(r.playerIsAllowed(player.getName(), player.getGroups())) {
+        if (r.playerIsAllowed(player.getName(), player.getGroups())) {
             return true;
         }
-        if(lavaBucket) {
-            if(r.getProperty("lava-bucket") == Status.DENY) {
-                return false;
-            }
-            return true;
+        if (lavaBucket) {
+            return r.getProperty("lava-bucket") != Status.DENY;
         }
-        if(r.getProperty("water-bucket") == Status.DENY) {
-            return false;
-        }
-        return true;
+        return r.getProperty("water-bucket") != Status.DENY;
     }
 
 
@@ -67,14 +63,14 @@ public class OperableItemsOperator implements ActionListener {
     // *******************************
     @ActionHandler
     public void onBlockRightClick(BlockRightClickEvent event) {
-        if(!canUseBlock(event.getPlayer(), event.getBlock(), event.getLocation())) {
+        if (!canUseBlock(event.getPlayer(), event.getBlock(), event.getLocation())) {
             event.cancel();
         }
     }
 
     @ActionHandler
     public void onBlockLeftClick(BlockLeftClickEvent event) {
-        if(!canUseBlock(event.getPlayer(), event.getBlock(), event.getLocation())) {
+        if (!canUseBlock(event.getPlayer(), event.getBlock(), event.getLocation())) {
             event.cancel();
         }
     }

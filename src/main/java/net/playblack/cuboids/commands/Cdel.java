@@ -13,9 +13,8 @@ import net.playblack.mcutils.Debug;
 
 /**
  * Remove blocks in a cuboid selection
- * 
+ *
  * @author Chris
- * 
  */
 public class Cdel extends CBaseCommand {
 
@@ -51,15 +50,18 @@ public class Cdel extends CBaseCommand {
         try {
             if (gen.execute(player, false)) {
                 MessageSystem.successMessage(player, "selectionDeleted");
-            } else {
+            }
+            else {
                 MessageSystem.failMessage(player, "selectionIncomplete");
                 MessageSystem.failMessage(player, "selectionNotDeleted");
             }
-        } catch (BlockEditLimitExceededException e) {
+        }
+        catch (BlockEditLimitExceededException e) {
             Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
-        } catch (SelectionIncompleteException e) {
+        }
+        catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;

@@ -1,10 +1,12 @@
 package net.playblack.cuboids;
-import java.util.ArrayList;
 
 import net.playblack.cuboids.converters.CuboidShell;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Vector;
 import net.visualillusionsent.utils.PropertiesFile;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class CuboidFShell implements CuboidShell {
 
@@ -116,9 +118,7 @@ public class CuboidFShell implements CuboidShell {
     public ArrayList<String> tabuCommands() {
         String[] cmds = file.getString("disallowedCommands", "").split(",");
         ArrayList<String> ret = new ArrayList<String>(cmds.length);
-        for (String name : cmds) {
-            ret.add(name);
-        }
+        Collections.addAll(ret, cmds);
         return ret;
     }
 

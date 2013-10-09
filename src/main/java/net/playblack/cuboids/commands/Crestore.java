@@ -1,7 +1,5 @@
 package net.playblack.cuboids.commands;
 
-import java.io.File;
-
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.GenericGenerator;
 import net.playblack.cuboids.datasource.CuboidDeserializer;
@@ -12,11 +10,12 @@ import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Debug;
 
+import java.io.File;
+
 /**
  * Re an area
  *
  * @author Chris
- *
  */
 public class Crestore extends CBaseCommand {
 
@@ -43,20 +42,24 @@ public class Crestore extends CBaseCommand {
                 if (success) {
                     MessageSystem.successMessage(player, "restoreSuccess");
                     return;
-                } else {
+                }
+                else {
                     MessageSystem.failMessage(player, "restoreFail");
                     return;
                 }
-            } catch (BlockEditLimitExceededException e) {
+            }
+            catch (BlockEditLimitExceededException e) {
                 Debug.logWarning(e.getMessage());
                 MessageSystem.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
-            } catch (SelectionIncompleteException e) {
+            }
+            catch (SelectionIncompleteException e) {
                 MessageSystem.failMessage(player,
                         "selectionIncomplete");
             }
 
-        } else {
+        }
+        else {
             MessageSystem.failMessage(player, "restoreFail");
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;

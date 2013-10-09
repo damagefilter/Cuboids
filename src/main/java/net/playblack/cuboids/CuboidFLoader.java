@@ -1,11 +1,12 @@
 package net.playblack.cuboids;
-import java.io.File;
-import java.util.ArrayList;
 
 import net.playblack.cuboids.converters.CuboidShell;
 import net.playblack.cuboids.converters.Loader;
 import net.playblack.mcutils.Debug;
 import net.visualillusionsent.utils.PropertiesFile;
+
+import java.io.File;
+import java.util.ArrayList;
 
 public class CuboidFLoader implements Loader {
 
@@ -36,7 +37,8 @@ public class CuboidFLoader implements Loader {
                     files.renameTo(b);
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Debug.logWarning("Exception while loading CuboidF: " + e.getMessage());
         }
         return shells;

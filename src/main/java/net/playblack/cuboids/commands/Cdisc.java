@@ -14,9 +14,8 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * Create discs or circles around a point
- * 
+ *
  * @author Chris
- * 
  */
 public class Cdisc extends CBaseCommand {
 
@@ -24,11 +23,7 @@ public class Cdisc extends CBaseCommand {
 
     public Cdisc(String variant) {
         super("Create disc/circle: " + ColorManager.Yellow + variant + " <radius> <block>:[data] [height]", 3, 4);
-        if (variant.equalsIgnoreCase("/ccircle")) {
-            fill = false;
-        } else {
-            fill = true;
-        }
+        fill = !variant.equalsIgnoreCase("/ccircle");
     }
 
     @Override
@@ -63,7 +58,8 @@ public class Cdisc extends CBaseCommand {
                 MessageSystem.failMessage(player, "invalidRadius");
                 return;
             }
-        } else {
+        }
+        else {
             height = 1;
             radius = ToolBox.parseInt(command[1]);
             if (radius == -1) {
@@ -93,18 +89,22 @@ public class Cdisc extends CBaseCommand {
             if (gen.execute(player, true)) {
                 if (fill) {
                     MessageSystem.successMessage(player, "discCreated");
-                } else {
+                }
+                else {
                     MessageSystem.successMessage(player, "circleCreated");
                 }
-            } else {
+            }
+            else {
                 MessageSystem.failMessage(player, "selectionIncomplete");
                 MessageSystem.failMessage(player, "discNotCreated");
             }
-        } catch (BlockEditLimitExceededException e) {
+        }
+        catch (BlockEditLimitExceededException e) {
             Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
-        } catch (SelectionIncompleteException e) {
+        }
+        catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;

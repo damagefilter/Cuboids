@@ -1,18 +1,17 @@
 package net.playblack.cuboids.regions;
 
-import java.util.ArrayList;
-
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.Location;
 
+import java.util.ArrayList;
+
 /**
  * This manages CuboidNodes and takes care of lookups etc
  *
  * @author Chris
- *
  */
 public class RegionManager {
     private ArrayList<Region> rootNodes = new ArrayList<Region>(15);
@@ -129,7 +128,7 @@ public class RegionManager {
         }
 
         Region parent = getPossibleParent(cube);
-        if(parent != null) {
+        if (parent != null) {
             cube.setParent(parent);
         }
         else {
@@ -147,7 +146,7 @@ public class RegionManager {
      * @param root
      */
     public void addRoot(Region root) {
-        if(root.isRoot()) {
+        if (root.isRoot()) {
             rootNodes.add(root);
         }
     }
@@ -155,12 +154,13 @@ public class RegionManager {
     /**
      * Remove a cuboid from the tree list
      * TODO: Make this a void and remove the force thing
+     *
      * @param cube
      * @return
      */
     public void removeRegion(Region cube) {
 
-        if(rootNodes.contains(cube)) {
+        if (rootNodes.contains(cube)) {
             rootNodes.remove(cube);
         }
         //Detach the childs of the region and re-sort them in
@@ -169,8 +169,8 @@ public class RegionManager {
         ArrayList<Region> cleanUpList = cube.detachAllChilds();
 
         //Put parent-less childs into the root list
-        for(Region child : cleanUpList) {
-            if(child.getParent() == null) {
+        for (Region child : cleanUpList) {
+            if (child.getParent() == null) {
                 addRoot(child);
             }
         }
@@ -205,7 +205,7 @@ public class RegionManager {
                 tree.hasChanged = true;
             }
 
-            if(parent == null) {
+            if (parent == null) {
                 tree.setParent(null);
                 rootList.add(tree);
             }
@@ -223,7 +223,7 @@ public class RegionManager {
             detachedRegions.addAll(tree.fixChilds());
         }
         //Put all detached into root
-        for(Region r : detachedRegions) {
+        for (Region r : detachedRegions) {
             addRoot(r);
         }
         //Re-sort root nodes
@@ -240,7 +240,7 @@ public class RegionManager {
     public boolean cuboidExists(String cube, String world, int dimension) {
         for (Region tree : rootNodes) {
             if (tree.equalsWorld(world, dimension)) {
-                if(tree.queryChilds(cube) != null) {
+                if (tree.queryChilds(cube) != null) {
                     return true;
                 }
             }
@@ -257,7 +257,8 @@ public class RegionManager {
 
     /**
      * Get the active region at the given location
-     * @param v the location - pass null to return the global settings (must also set ignoreGlobal)
+     *
+     * @param v            the location - pass null to return the global settings (must also set ignoreGlobal)
      * @param ignoreGlobal pass true to ignore the global settings
      * @return
      */
@@ -271,21 +272,22 @@ public class RegionManager {
                     continue;
                 }
                 Region r = tree.queryChilds(v, 0);
-                if(r != null) {
+                if (r != null) {
                     return r;
                 }
             }
         }
-       return ignoreGlobal ? null : global;
+        return ignoreGlobal ? null : global;
     }
 
     /**
      * Add a player to this region and all child regions it is within
+     *
      * @param player
      */
     public void addPlayerToRegions(CPlayer player, Location loc) {
-        for(Region tree : rootNodes) {
-            if(tree.isWithin(loc)) {
+        for (Region tree : rootNodes) {
+            if (tree.isWithin(loc)) {
                 tree.addPlayerWithin(player, loc);
             }
         }
@@ -293,8 +295,8 @@ public class RegionManager {
 
     public void removePlayerFromRegion(CPlayer player, Location loc) {
         Region r = player.getCurrentRegion();
-        if(r != null) {
-            if(!r.isWithin(loc)) {
+        if (r != null) {
+            if (!r.isWithin(loc)) {
                 player.setRegion(null);
             }
         }
@@ -347,7 +349,8 @@ public class RegionManager {
 
         if (list.size() > 0) {
             return list;
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -364,7 +367,7 @@ public class RegionManager {
         for (Region tree : rootNodes) {
             if (tree.equalsWorld(world, dimension)) {
                 Region tmp = tree.queryChilds(name);
-                if(tmp != null) {
+                if (tmp != null) {
                     return tmp;
                 }
             }
@@ -385,9 +388,9 @@ public class RegionManager {
         ArrayList<Region> matches = new ArrayList<Region>();
         for (Region tree : rootNodes) {
             if (tree.equalsWorld(cube)) {
-                if(cube.cuboidIsWithin(tree, true)) {
+                if (cube.cuboidIsWithin(tree, true)) {
                     Region tmp = tree.queryChilds(cube);
-                    if(tmp != null) {
+                    if (tmp != null) {
                         matches.add(tmp);
                     }
                 }
@@ -423,16 +426,17 @@ public class RegionManager {
      * This will sort the given cuboid into the root nodes list,
      * if it has no parent or removes it from the list if it is still there,
      * but suddenly has a parent attached
+     *
      * @param cube
      */
     public void updateRegion(Region cube) {
-        if(cube.getParent() == null) {
-            if(!rootNodes.contains(cube)) {
+        if (cube.getParent() == null) {
+            if (!rootNodes.contains(cube)) {
                 addRoot(cube);
             }
         }
         else {
-            if(rootNodes.contains(cube)) {
+            if (rootNodes.contains(cube)) {
                 //We have a prent but are filed unter rootNodes. must change ...
                 rootNodes.remove(cube);
                 //Parent is already set and updated, no need for more

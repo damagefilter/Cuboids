@@ -12,9 +12,8 @@ import net.playblack.mcutils.Vector;
 
 /**
  * Generate walls along the line of a cuboid selection
- * 
+ *
  * @author Chris
- * 
  */
 public class DiscGenerator extends BaseGen {
 
@@ -25,7 +24,7 @@ public class DiscGenerator extends BaseGen {
 
     /**
      * The selection you pass along here will be written into the world!
-     * 
+     *
      * @param selection
      * @param world
      */
@@ -35,7 +34,7 @@ public class DiscGenerator extends BaseGen {
 
     /**
      * Set the material of the sphere
-     * 
+     *
      * @param block
      */
     public void setMaterial(CBlock block) {
@@ -44,7 +43,7 @@ public class DiscGenerator extends BaseGen {
 
     /**
      * Set disc/circle radius
-     * 
+     *
      * @param radius
      */
     public void setRadius(int radius) {
@@ -53,7 +52,7 @@ public class DiscGenerator extends BaseGen {
 
     /**
      * Set disc/circle height
-     * 
+     *
      * @param height
      */
     public void setHeight(int height) {
@@ -62,7 +61,7 @@ public class DiscGenerator extends BaseGen {
 
     /**
      * Set fill true to make a filled sphere, false to make it hollow(rly...)
-     * 
+     *
      * @param wo
      */
     public void setHollow(boolean sleepy) {

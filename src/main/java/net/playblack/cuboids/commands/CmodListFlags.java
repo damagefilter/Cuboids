@@ -12,7 +12,6 @@ import net.playblack.mcutils.ColorManager;
  * Backup an area
  *
  * @author Chris
- *
  */
 public class CmodListFlags extends CBaseCommand {
 
@@ -26,12 +25,12 @@ public class CmodListFlags extends CBaseCommand {
             return;
         }
         //Just list all available flags
-        if(command.length == 1) {
+        if (command.length == 1) {
             String[] flags = RegionFlagRegister.getRegisteredFlags();
             StringBuilder out = new StringBuilder();
             int num = 0;
-            for(String fl : flags) {
-                if(num == 3) {
+            for (String fl : flags) {
+                if (num == 3) {
                     out.append(";");
                     num = 0;
                 }
@@ -41,18 +40,18 @@ public class CmodListFlags extends CBaseCommand {
                 }
             }
             String[] lines = out.toString().split(";");
-            for(String str : lines) {
+            for (String str : lines) {
                 player.sendMessage(ColorManager.Yellow + str);
             }
         }
         else {
             Region r = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
-            if(r == null) {
+            if (r == null) {
                 r = Config.get().getGlobalSettings();
             }
             player.sendMessage(ColorManager.LightGray + "---- " + r.getName() + " ----");
             String[] lines = r.getFlagList().split(";");
-            for(String str : lines) {
+            for (String str : lines) {
                 player.sendMessage(str);
             }
         }

@@ -17,7 +17,6 @@ import net.playblack.mcutils.Debug;
  * Backup an area
  *
  * @author Chris
- *
  */
 public class Cbackup extends CBaseCommand {
 
@@ -44,19 +43,22 @@ public class Cbackup extends CBaseCommand {
 
             try {
                 tmp = gen.getWorldContent(tmp);
-            } catch (BlockEditLimitExceededException e) {
+            }
+            catch (BlockEditLimitExceededException e) {
                 Debug.logWarning(e.getMessage());
                 MessageSystem.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
                 return;
-            } catch (SelectionIncompleteException e) {
+            }
+            catch (SelectionIncompleteException e) {
                 MessageSystem.failMessage(player, "selectionIncomplete");
                 return;
             }
             CuboidSerializer ser = new FlatFileSerializer(tmp);
             ser.save(command[1], player.getWorld().getFilePrefix());
             MessageSystem.successMessage(player, "backupSuccess");
-        } else {
+        }
+        else {
             MessageSystem.failMessage(player, "playerNotOwner");
         }
     }

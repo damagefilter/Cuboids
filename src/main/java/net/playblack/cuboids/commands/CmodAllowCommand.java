@@ -9,7 +9,6 @@ import net.visualillusionsent.utils.StringUtils;
  * Allow command in a cuboid
  *
  * @author Chris
- *
  */
 public class CmodAllowCommand extends CBaseCommand {
 

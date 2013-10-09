@@ -1,8 +1,5 @@
 package net.playblack.cuboids;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import net.playblack.cuboids.gameinterface.CMob;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
@@ -11,12 +8,14 @@ import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Vector;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * This mob-spawner is started at Cuboids2 startup and will constantly spawn
  * mobs in areas that are having players and have the hmob flag set.
- * 
+ *
  * @author Chris
- * 
  */
 public class HMobTask implements Runnable {
     ArrayList<Region> nodes;
@@ -29,21 +28,21 @@ public class HMobTask implements Runnable {
 
     private CMob getRandomhMob(CWorld world, int index) {
         switch (index) {
-        case 0:
+            case 0:
 
-            return CServer.getServer().getMob("CaveSpider", world);
-        case 1:
-            return CServer.getServer().getMob("Creeper", world);
-        case 2:
-            return CServer.getServer().getMob("Enderman", world);
-        case 3:
-            return CServer.getServer().getMob("Skeleton", world);
-        case 4:
-            return CServer.getServer().getMob("Spider", world);
-        case 5:
-            return CServer.getServer().getMob("Zombie", world);
-        default:
-            return CServer.getServer().getMob("Zombie", world);
+                return CServer.getServer().getMob("CaveSpider", world);
+            case 1:
+                return CServer.getServer().getMob("Creeper", world);
+            case 2:
+                return CServer.getServer().getMob("Enderman", world);
+            case 3:
+                return CServer.getServer().getMob("Skeleton", world);
+            case 4:
+                return CServer.getServer().getMob("Spider", world);
+            case 5:
+                return CServer.getServer().getMob("Zombie", world);
+            default:
+                return CServer.getServer().getMob("Zombie", world);
         }
     }
 

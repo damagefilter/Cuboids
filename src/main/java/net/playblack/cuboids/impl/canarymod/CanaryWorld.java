@@ -1,22 +1,18 @@
 package net.playblack.cuboids.impl.canarymod;
 
-import java.util.ArrayList;
-
 import net.canarymod.Canary;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.World;
-import net.canarymod.api.world.blocks.Block;
-import net.canarymod.api.world.blocks.BlockType;
-import net.canarymod.api.world.blocks.Chest;
-import net.canarymod.api.world.blocks.DoubleChest;
-import net.canarymod.api.world.blocks.Sign;
+import net.canarymod.api.world.blocks.*;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.blocks.ChestBlock;
 import net.playblack.cuboids.blocks.SignBlock;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.mcutils.Vector;
+
+import java.util.ArrayList;
 
 
 public class CanaryWorld extends CWorld {
@@ -60,14 +56,15 @@ public class CanaryWorld extends CWorld {
                     DoubleChest dchest = chest.getDoubleChest();
                     bc.putItemList(itemsToArrayList(dchest.getContents()));
                     bc.setData((byte) dchest.getBlock().getData());
-                } else {
+                }
+                else {
                     bc.putItemList(itemsToArrayList(chest.getContents()));
                     bc.setData((byte) chest.getBlock().getData());
                 }
                 return bc;
             }
             return recycleBlock((short) 54, (byte) 0);// new CBlock(54, 0);
-                                                      // //fallback, empty chest
+            // //fallback, empty chest
         }
 
         // Or maybe ... a sign?
@@ -152,19 +149,22 @@ public class CanaryWorld extends CWorld {
                         DoubleChest dchest = chest.getDoubleChest();
                         dchest.getBlock().setData(c.getData());
                         dchest.clearContents(); // aha! nifty trick to avoid
-                                                // item duping in chests while
-                                                // recovering :3
+                        // item duping in chests while
+                        // recovering :3
                         dchest.setContents(itemsToArray(c.getItemList()));
                         dchest.update();
-                    } catch (ArrayIndexOutOfBoundsException e) {
+                    }
+                    catch (ArrayIndexOutOfBoundsException e) {
 
                     }
-                } else {
+                }
+                else {
                     try {
                         chest.getBlock().setData(c.getData());
                         chest.setContents(itemsToArray(c.getItemList()));
                         chest.update();
-                    } catch (ArrayIndexOutOfBoundsException f) {
+                    }
+                    catch (ArrayIndexOutOfBoundsException f) {
 
                     }
                 }
@@ -180,7 +180,8 @@ public class CanaryWorld extends CWorld {
                 }
                 sign.getBlock().setData(c.getData());
                 sign.update();
-            } catch (ClassCastException e) {
+            }
+            catch (ClassCastException e) {
 
             }
         }
@@ -217,68 +218,68 @@ public class CanaryWorld extends CWorld {
     }
 
     /**
-    * Convert Canary Item list to Cuboids2 Item list
-    */
-   private ArrayList<CItem> itemsToArrayList(Item[] items) {
-       if (items == null || items.length == 0) {
-           return new ArrayList<CItem>(0);
-       }
+     * Convert Canary Item list to Cuboids2 Item list
+     */
+    private ArrayList<CItem> itemsToArrayList(Item[] items) {
+        if (items == null || items.length == 0) {
+            return new ArrayList<CItem>(0);
+        }
 
-       ArrayList<CItem> newItems = new ArrayList<CItem>(items.length);
-       for (Item i : items) {
-           if (i != null) {
-               newItems.add(new CItem(i.getId(), i.getDamage(), i.getAmount(), i.getSlot()));
-           }
-       }
-       return newItems;
-   }
+        ArrayList<CItem> newItems = new ArrayList<CItem>(items.length);
+        for (Item i : items) {
+            if (i != null) {
+                newItems.add(new CItem(i.getId(), i.getDamage(), i.getAmount(), i.getSlot()));
+            }
+        }
+        return newItems;
+    }
 
-   /**
-    * Turn items to array
-    *
-    * @param items
-    * @return
-    */
-   private Item[] itemsToArray(ArrayList<CItem> items) {
-       if (items.isEmpty() || items.size() == 0) {
-           return new Item[1];
-       }
-       Item[] nItem = new Item[items.size()];
-       for (int i = 0; i < nItem.length; i++) {
-           Item it = Canary.factory().getItemFactory().newItem(items.get(i).getId());
+    /**
+     * Turn items to array
+     *
+     * @param items
+     * @return
+     */
+    private Item[] itemsToArray(ArrayList<CItem> items) {
+        if (items.isEmpty() || items.size() == 0) {
+            return new Item[1];
+        }
+        Item[] nItem = new Item[items.size()];
+        for (int i = 0; i < nItem.length; i++) {
+            Item it = Canary.factory().getItemFactory().newItem(items.get(i).getId());
 
-           if (items.size() > i) {
-               it.setDamage(items.get(i).getData());
-               it.setAmount(items.get(i).getAmount());
-               it.setSlot(items.get(i).getSlot());
-               nItem[i] = it;
-           }
+            if (items.size() > i) {
+                it.setDamage(items.get(i).getData());
+                it.setAmount(items.get(i).getAmount());
+                it.setSlot(items.get(i).getSlot());
+                nItem[i] = it;
+            }
 
-       }
-       return nItem;
-   }
+        }
+        return nItem;
+    }
 
-   /**
-    * Recycle a block instance to reduce load on the GC
-    *
-    * @param type
-    * @param data
-    * @return
-    */
-   private CBlock recycleBlock(short type, byte data) {
-       for (CBlock block : blockCache) {
-           if (block.equals(type, data)) {
-               return block;
-           }
-       }
-       if (blockCache.size() > 50) {
-           while (blockCache.size() > 45) {
-               blockCache.remove(0);
-           }
-       }
-       CBlock toRet = new CBlock(type, data);
-       blockCache.add(toRet);
-       return toRet;
-   }
+    /**
+     * Recycle a block instance to reduce load on the GC
+     *
+     * @param type
+     * @param data
+     * @return
+     */
+    private CBlock recycleBlock(short type, byte data) {
+        for (CBlock block : blockCache) {
+            if (block.equals(type, data)) {
+                return block;
+            }
+        }
+        if (blockCache.size() > 50) {
+            while (blockCache.size() > 45) {
+                blockCache.remove(0);
+            }
+        }
+        CBlock toRet = new CBlock(type, data);
+        blockCache.add(toRet);
+        return toRet;
+    }
 
 }

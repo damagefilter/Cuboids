@@ -1,7 +1,6 @@
 package net.playblack.cuboids.impl.canarymod;
 
 import net.canarymod.api.entity.Entity;
-import net.canarymod.api.entity.living.EntityLiving;
 import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.gameinterface.IBaseEntity;
 import net.playblack.mcutils.Location;
@@ -84,7 +83,7 @@ public class CanaryBaseEntity implements IBaseEntity {
     @Override
     public boolean isPlayer() {
         if (entity.isLiving()) {
-            return ((EntityLiving) entity).isPlayer();
+            return entity.isPlayer();
         }
         return false;
     }
@@ -92,7 +91,7 @@ public class CanaryBaseEntity implements IBaseEntity {
     @Override
     public boolean isMob() {
         if (entity.isLiving()) {
-            return ((EntityLiving) entity).isMob();
+            return entity.isMob();
         }
         return false;
     }
@@ -100,7 +99,7 @@ public class CanaryBaseEntity implements IBaseEntity {
     @Override
     public boolean isAnimal() {
         if (entity.isLiving()) {
-            return ((EntityLiving) entity).isAnimal();
+            return entity.isAnimal();
         }
         return false;
     }

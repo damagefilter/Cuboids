@@ -12,19 +12,20 @@ import net.playblack.cuboids.actions.events.forwardings.EntitySpawnEvent;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidInterface;
+
 public class MiscListener implements PluginListener {
 
     @HookHandler
     public void onMobSpawn(EntitySpawnHook hook) {
-        EntitySpawnEvent event = null;
-        if(hook.getEntity() instanceof EntityMob) {
+        EntitySpawnEvent event;
+        if (hook.getEntity() instanceof EntityMob) {
             event = new EntitySpawnEvent(new CanaryMob(hook.getEntity()));
         }
         else {
             event = new EntitySpawnEvent(new CanaryBaseEntity(hook.getEntity()));
         }
         ActionManager.fireEvent(event);
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             hook.setCanceled();
         }
     }
@@ -38,7 +39,8 @@ public class MiscListener implements PluginListener {
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(hook.getPlayer().getName());
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             cplayer = new CanaryPlayer(hook.getPlayer());
         }
         if (CuboidInterface.get().commandIsRestricted(cplayer, split[0])) {

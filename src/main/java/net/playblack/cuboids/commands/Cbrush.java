@@ -10,9 +10,8 @@ import net.playblack.mcutils.ToolBox;
 
 /**
  * Set the brush properties
- * 
+ *
  * @author Chris
- * 
  */
 public class Cbrush extends CBaseCommand {
 

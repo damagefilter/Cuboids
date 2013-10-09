@@ -13,9 +13,8 @@ import net.playblack.mcutils.Debug;
 
 /**
  * Replace blocks in a cuboid selection
- * 
+ *
  * @author Chris
- * 
  */
 public class Creplace extends CBaseCommand {
 
@@ -59,15 +58,18 @@ public class Creplace extends CBaseCommand {
         try {
             if (gen.execute(player, true)) {
                 MessageSystem.successMessage(player, "selectionReplaced");
-            } else {
+            }
+            else {
                 MessageSystem.failMessage(player, "selectionIncomplete");
                 MessageSystem.failMessage(player, "selectionNotReplaced");
             }
-        } catch (BlockEditLimitExceededException e) {
+        }
+        catch (BlockEditLimitExceededException e) {
             Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
-        } catch (SelectionIncompleteException e) {
+        }
+        catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;

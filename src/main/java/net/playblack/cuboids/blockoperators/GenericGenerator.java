@@ -10,15 +10,14 @@ import net.playblack.cuboids.selections.CuboidSelection;
 
 /**
  * Process the given cuboidselection into the world
- * 
+ *
  * @author Chris
- * 
  */
 public class GenericGenerator extends BaseGen {
 
     /**
      * The selection you pass along here will be written into the world!
-     * 
+     *
      * @param selection
      * @param world
      */

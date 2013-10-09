@@ -9,7 +9,6 @@ import net.playblack.mcutils.ColorManager;
  * Set welcome and / or farewell messages
  *
  * @author Chris
- *
  */
 public class CmodMessages extends CBaseCommand {
 
@@ -42,7 +41,8 @@ public class CmodMessages extends CBaseCommand {
         if (setFarewell) {
             CuboidInterface.get().setFarewell(player, command[1], message);
             MessageSystem.successMessage(player, "farewellSet");
-        } else {
+        }
+        else {
             CuboidInterface.get().setWelcome(player, command[1], message);
             MessageSystem.successMessage(player, "welcomeSet");
         }

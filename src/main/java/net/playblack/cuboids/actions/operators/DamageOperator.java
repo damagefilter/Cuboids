@@ -13,18 +13,15 @@ public class DamageOperator implements ActionListener {
 
     public boolean mobCanDoDamage(Location l) {
         Region r = RegionManager.get().getActiveRegion(l, false);
-        if(r.getProperty("mob-damage") == Status.DENY) {
-            return false;
-        }
-        return true;
+        return r.getProperty("mob-damage") != Status.DENY;
     }
 
     public boolean playerCanDoDamage(Location l) {
         Region r = RegionManager.get().getActiveRegion(l, false);
-        if(r.getProperty("pvp-damage") == Status.DENY) {
+        if (r.getProperty("pvp-damage") == Status.DENY) {
             return false;
         }
-        else if(r.getProperty("animal-damage") == Status.DENY) {
+        else if (r.getProperty("animal-damage") == Status.DENY) {
             return false;
         }
         return true;
@@ -32,13 +29,13 @@ public class DamageOperator implements ActionListener {
 
     @ActionHandler
     public void onDamage(EntityDamageEvent event) {
-        if(event.getAttacker().isMob() || event.getAttacker().isAnimal()) {
-            if(!mobCanDoDamage(event.getDefender().getLocation())) {
+        if (event.getAttacker().isMob() || event.getAttacker().isAnimal()) {
+            if (!mobCanDoDamage(event.getDefender().getLocation())) {
                 event.cancel();
             }
         }
-        if(event.getAttacker().isPlayer()) {
-            if(!playerCanDoDamage(event.getDefender().getLocation())) {
+        if (event.getAttacker().isPlayer()) {
+            if (!playerCanDoDamage(event.getDefender().getLocation())) {
                 event.cancel();
             }
         }

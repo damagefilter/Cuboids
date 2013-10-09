@@ -16,7 +16,6 @@ import net.playblack.mcutils.ToolBox;
  * Undo things
  *
  * @author Chris
- *
  */
 public class Cundo extends CBaseCommand {
 
@@ -32,9 +31,9 @@ public class Cundo extends CBaseCommand {
         if (!Config.get().isAllowUndo()) {
             MessageSystem.failMessage(player, "undoDisabled");
             return; // from a morality standpoint, this should never be disabled
-                    // but there you go.
+            // but there you go.
         }
-        int steps = 1;
+        int steps;
         String subject = player.getName();
 
         if (command.length == 3) {
@@ -43,12 +42,14 @@ public class Cundo extends CBaseCommand {
             if (steps == -1) {
                 steps = 1;
             }
-        } else if (command.length == 2) {
+        }
+        else if (command.length == 2) {
             steps = ToolBox.parseInt(command[1]);
             if (steps < 1) {
                 steps = 1;
             }
-        } else {
+        }
+        else {
             steps = 1;
         }
 
@@ -62,11 +63,13 @@ public class Cundo extends CBaseCommand {
             GenericGenerator gen = new GenericGenerator(sel, player.getWorld());
             try {
                 gen.execute(player, false);
-            } catch (BlockEditLimitExceededException e) {
+            }
+            catch (BlockEditLimitExceededException e) {
                 Debug.logWarning(e.getMessage());
                 MessageSystem.customFailMessage(player, e.getMessage());
                 e.printStackTrace();
-            } catch (SelectionIncompleteException e) {
+            }
+            catch (SelectionIncompleteException e) {
                 MessageSystem.failMessage(player, "selectionIncomplete");
             }
         }

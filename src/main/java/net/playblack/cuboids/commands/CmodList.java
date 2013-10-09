@@ -9,7 +9,6 @@ import net.playblack.mcutils.ToolBox;
  * List all cuboids in the recent world
  *
  * @author Chris
- *
  */
 public class CmodList extends CBaseCommand {
 

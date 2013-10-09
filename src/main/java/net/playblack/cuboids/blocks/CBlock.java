@@ -6,9 +6,8 @@ import net.playblack.mcutils.ToolBox;
 /**
  * CBlock is a block that is somewhere in the world. It doesn't know which world
  * it is set in or where, it only knows what it is.
- * 
+ *
  * @author chris
- * 
  */
 public class CBlock {
     protected short type = 0;
@@ -24,7 +23,7 @@ public class CBlock {
 
     /**
      * Contruct Block with type and data
-     * 
+     *
      * @param type
      * @param data
      */
@@ -35,7 +34,7 @@ public class CBlock {
 
     /**
      * Construct a block with its type only
-     * 
+     *
      * @param type
      */
     public CBlock(int type) {
@@ -44,7 +43,7 @@ public class CBlock {
 
     /**
      * Set this blocks type
-     * 
+     *
      * @param type
      */
     public void setType(int type) {
@@ -53,7 +52,7 @@ public class CBlock {
 
     /**
      * get this blocks type
-     * 
+     *
      * @return
      */
     public short getType() {
@@ -62,7 +61,7 @@ public class CBlock {
 
     /**
      * set this blocks data
-     * 
+     *
      * @param data
      */
     public void setData(int data) {
@@ -71,7 +70,7 @@ public class CBlock {
 
     /**
      * get this blocks data
-     * 
+     *
      * @return
      */
     public byte getData() {
@@ -80,20 +79,17 @@ public class CBlock {
 
     /**
      * Check if type and data are equal
-     * 
+     *
      * @param b
      * @return
      */
     public boolean equals(CBlock b) {
-        if ((b.getType() == getType()) && (b.getData() == getData())) {
-            return true;
-        }
-        return false;
+        return (b.getType() == getType()) && (b.getData() == getData());
     }
 
     /**
      * Check if this block has those numbers
-     * 
+     *
      * @param type
      * @param data
      * @return
@@ -104,20 +100,17 @@ public class CBlock {
 
     /**
      * Only check if the type is equal
-     * 
+     *
      * @param b
      * @return
      */
     public boolean equalsSlack(CBlock b) {
-        if ((b.getType() == getType())) {
-            return true;
-        }
-        return false;
+        return (b.getType() == getType());
     }
 
     /**
      * Serialize this Block into a StringBuilder. This returns [type,data]
-     * 
+     *
      * @return
      */
     public StringBuilder serialize() {
@@ -128,7 +121,7 @@ public class CBlock {
     public static CBlock deserialize(String serialized)
             throws DeserializeException {
         serialized = serialized.replace("[", "").replace("]", "");
-        CBlock tr = null;
+        CBlock tr;
         String[] values = serialized.split(",");
         if (values.length != 2) {
             throw new DeserializeException(
@@ -140,10 +133,12 @@ public class CBlock {
         if (type == 54) {
             tr = new ChestBlock();
             tr.setData(data);
-        } else if (type == 63) {
+        }
+        else if (type == 63) {
             tr = new SignBlock();
             tr.setData(data);
-        } else {
+        }
+        else {
             tr = new CBlock(type, data);
         }
         return tr;
@@ -151,18 +146,19 @@ public class CBlock {
 
     /**
      * Parse a new block from a string. Syntax: BlockId:Data or only blockId
-     * 
+     *
      * @param input
      * @return
      */
     public static CBlock parseBlock(String input) {
         String[] split = input.split(":");
-        short type = 0;
+        short type;
         byte data = 0;
         if (split.length > 1) {
             type = ToolBox.convertType(split[0]);
             data = ToolBox.convertData(split[1]);
-        } else {
+        }
+        else {
             type = ToolBox.convertType(split[0]);
         }
         if ((type == -1) || (data == -1)) {
@@ -173,7 +169,7 @@ public class CBlock {
 
     /**
      * Explain this block
-     * 
+     *
      * @return
      */
     public String explain() {

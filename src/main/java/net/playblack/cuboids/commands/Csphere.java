@@ -16,7 +16,6 @@ import net.playblack.mcutils.ToolBox;
  * Create a sphere or ball around a center point
  *
  * @author Chris
- *
  */
 public class Csphere extends CBaseCommand {
 
@@ -65,15 +64,18 @@ public class Csphere extends CBaseCommand {
         try {
             if (gen.execute(player, true)) {
                 MessageSystem.successMessage(player, "sphereCreated");
-            } else {
+            }
+            else {
                 MessageSystem.failMessage(player, "sphereNotCreated");
                 MessageSystem.failMessage(player, "selectionIncomplete");
             }
-        } catch (BlockEditLimitExceededException e) {
+        }
+        catch (BlockEditLimitExceededException e) {
             Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
-        } catch (SelectionIncompleteException e) {
+        }
+        catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
         return;

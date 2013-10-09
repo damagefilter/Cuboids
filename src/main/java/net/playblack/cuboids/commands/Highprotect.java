@@ -13,7 +13,6 @@ import net.playblack.mcutils.ColorManager;
  * High-Protect an area
  *
  * @author Chris
- *
  */
 public class Highprotect extends CBaseCommand {
 
@@ -44,7 +43,8 @@ public class Highprotect extends CBaseCommand {
         cube.setProperty("protection", Status.ALLOW);
         if (CuboidInterface.get().addCuboid(cube)) {
             MessageSystem.successMessage(player, "cuboidCreated");
-        } else {
+        }
+        else {
             MessageSystem.failMessage(player, "cuboidNotCreated");
         }
     }

@@ -1,23 +1,19 @@
 package net.playblack.cuboids.actions;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-
 import net.playblack.cuboids.actions.events.CuboidEvent;
 import net.playblack.cuboids.exceptions.InvalidActionHandlerException;
 import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+
 /**
  * This class handles firing action events all over the place,
  * invoking listening actions if required. You may also register your thing here
- * @author chris
  *
+ * @author chris
  */
 public class ActionManager {
     HashMap<Class<? extends CuboidEvent>, List<RegisteredAction>> actions;
@@ -30,20 +26,21 @@ public class ActionManager {
 
     public static void fireEvent(CuboidEvent event) {
         List<RegisteredAction> receivers = ActionManager.instance.actions.get(event.getClass().asSubclass(CuboidEvent.class));
-        for(RegisteredAction action : receivers) {
+        for (RegisteredAction action : receivers) {
             action.execute(event);
         }
     }
 
     /**
      * Register your {@link ActionListener} here to make it available for Cuboid2's event system
+     *
      * @param listener
      * @return
      * @throws InvalidActionHandlerException if the signature of an actionhandler annotated method is incorrect
      */
     public static void registerActionListener(String owner, ActionListener listener) throws InvalidActionHandlerException {
         //Make a new instance if there is none
-        if(ActionManager.instance == null) {
+        if (ActionManager.instance == null) {
             ActionManager.instance = new ActionManager();
         }
         //Here comes fancy-pancy reflection magic
@@ -53,16 +50,18 @@ public class ActionManager {
 
         Method[] allMethods = ToolBox.safeMergeArrays(listener.getClass().getMethods(), listener.getClass().getDeclaredMethods(), new Method[1]);
         //First check the public methods for Actionhandler annotations
-        for(final Method m : allMethods) {
+        for (final Method m : allMethods) {
             final ActionHandler handler = m.getAnnotation(ActionHandler.class);
-            if(handler == null) { continue; } //not an action handling method, bye
+            if (handler == null) {
+                continue;
+            } //not an action handling method, bye
             //Check if the new method has correct number of parameters (1)
-            if(m.getParameterTypes().length != 1) {
+            if (m.getParameterTypes().length != 1) {
                 throw new InvalidActionHandlerException(owner + " tried to register action handler with invalid signature! Wrong num parameters for " + m.getName());
             }
             //If we have 1 parameter, check if it is of the correct type
             final Class<?> eventClass = m.getParameterTypes()[0];
-            if(!CuboidEvent.class.isAssignableFrom(eventClass)) {
+            if (!CuboidEvent.class.isAssignableFrom(eventClass)) {
                 throw new InvalidActionHandlerException(owner + " tried to register action handler with invalid signature! Wrong parameter type for " + m.getName());
             }
             //Okay, we're cool. Lets try to register that thing!
@@ -73,7 +72,7 @@ public class ActionManager {
 
                 @Override
                 public void execute(ActionListener action, CuboidEvent event) {
-                    if(eventClass.isAssignableFrom(event.getClass())) {
+                    if (eventClass.isAssignableFrom(event.getClass())) {
                         try {
                             m.invoke(action, event);
                         }
@@ -100,10 +99,11 @@ public class ActionManager {
 
     /**
      * Check if the event is already registered. If not, it will make a new entry in the HashMap.
+     *
      * @param cls
      */
     private void registerEventType(Class<? extends CuboidEvent> cls) {
-        if(!actions.containsKey(cls)) {
+        if (!actions.containsKey(cls)) {
             actions.put(cls, new ArrayList<RegisteredAction>());
         }
     }

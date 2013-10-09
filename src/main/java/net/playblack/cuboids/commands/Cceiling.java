@@ -12,7 +12,6 @@ import net.playblack.mcutils.Vector;
  * Set ceiling level of current selection
  *
  * @author Chris
- *
  */
 public class Cceiling extends CBaseCommand {
 
@@ -36,7 +35,8 @@ public class Cceiling extends CBaseCommand {
         Vector origin = sel.getOrigin();
         if ((command.length == 3) && command[2].equalsIgnoreCase("-r")) {
             origin.setY(player.getY() + height);
-        } else {
+        }
+        else {
             origin.setY(height);
         }
         sel.setOrigin(origin);

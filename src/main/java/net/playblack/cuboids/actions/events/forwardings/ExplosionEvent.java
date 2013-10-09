@@ -1,13 +1,13 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
-import java.util.HashMap;
-import java.util.List;
-
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.IBaseEntity;
 import net.playblack.mcutils.Location;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class ExplosionEvent extends CuboidEvent implements Cancellable {
 
@@ -16,17 +16,19 @@ public class ExplosionEvent extends CuboidEvent implements Cancellable {
         CREEPER(2),
         GHAST_FIREBALL(3),
         WITHER_SKULL(4);
-        
+
         private int myId;
+
         ExplosionType(int id) {
             myId = id;
         }
-        
+
         public int getId() {
             return myId;
         }
+
         public static ExplosionType fromId(int id) {
-            switch(id) {
+            switch (id) {
                 case 1:
                     return TNT;
                 case 2:
@@ -39,8 +41,9 @@ public class ExplosionEvent extends CuboidEvent implements Cancellable {
                     return TNT;
             }
         }
+
         public static int toId(ExplosionType t) {
-            switch(t) {
+            switch (t) {
                 case CREEPER:
                     return 2;
                 case GHAST_FIREBALL:
@@ -54,21 +57,21 @@ public class ExplosionEvent extends CuboidEvent implements Cancellable {
             }
         }
     }
-    
+
     private boolean isCancelled = false;
     private ExplosionType explosionType;
     private IBaseEntity entity;
     private Location location;
     private HashMap<Location, CBlock> affectedBlocks;
     private List<Location> protectedBlocks = null;
-    
+
     public ExplosionEvent(IBaseEntity entity, Location location, ExplosionType explosiontype, HashMap<Location, CBlock> affectedBlocks) {
         this.explosionType = explosiontype;
         this.entity = entity;
         this.location = location;
         this.affectedBlocks = affectedBlocks;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return isCancelled;

@@ -15,7 +15,6 @@ import net.playblack.mcutils.ToolBox;
  * Move the contents of a selection, leaving empty space.
  *
  * @author Chris
- *
  */
 public class Cmove extends CBaseCommand {
 
@@ -45,15 +44,18 @@ public class Cmove extends CBaseCommand {
             result = gen.execute(player, true);
             if (result) {
                 MessageSystem.successMessage(player, "selectionMoved");
-            } else {
+            }
+            else {
                 MessageSystem.failMessage(player, "selectionIncomplete");
                 MessageSystem.failMessage(player, "selectionNotMoved");
             }
-        } catch (BlockEditLimitExceededException e) {
+        }
+        catch (BlockEditLimitExceededException e) {
             Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
-        } catch (SelectionIncompleteException e) {
+        }
+        catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
 

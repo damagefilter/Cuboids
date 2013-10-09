@@ -18,7 +18,8 @@ public class SignBlock extends CBlock {
     public String getTextOnLine(int line) {
         if (line > signText.length) {
             return null;
-        } else {
+        }
+        else {
             return signText[line];
         }
     }

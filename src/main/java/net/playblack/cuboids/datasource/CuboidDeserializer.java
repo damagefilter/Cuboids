@@ -1,14 +1,5 @@
 package net.playblack.cuboids.datasource;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.blocks.ChestBlock;
@@ -17,11 +8,14 @@ import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * The deserializer. Reads from data source and creates CuboidSelection objects
  *
  * @author Chris
- *
  */
 public class CuboidDeserializer {
 
@@ -65,20 +59,24 @@ public class CuboidDeserializer {
 
                 while ((line = blockInput.readLine()) != null) {
                     blockData.add(line); // this will be converted after this
-                                         // crazy file loading is done
+                    // crazy file loading is done
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
-            } finally {
+            }
+            finally {
                 try {
                     extrasInput.close();
                     blockInput.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         // -----------------------------------------------
@@ -92,7 +90,8 @@ public class CuboidDeserializer {
         try {
             block = CBlock.deserialize(split[0]);
             key = Vector.deserialize(split[1]);
-        } catch (DeserializeException e) {
+        }
+        catch (DeserializeException e) {
             e.printStackTrace();
         }
 
@@ -104,7 +103,8 @@ public class CuboidDeserializer {
             if (block instanceof SignBlock) {
                 generateSignData(lineNumber, (SignBlock) block);
             }
-        } else {
+        }
+        else {
             throw new DeserializeException("Could not deserialize a Vector-Block pair!", line);
         }
 
@@ -131,7 +131,8 @@ public class CuboidDeserializer {
         for (int index = 0; index < blockData.size(); index++) {
             try {
                 generateFromLine(blockData.get(index), index, this.cuboid);
-            } catch (DeserializeException e) {
+            }
+            catch (DeserializeException e) {
                 e.printStackTrace();
             }
         }

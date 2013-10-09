@@ -12,9 +12,8 @@ import net.playblack.mcutils.Vector;
 
 /**
  * Generate Cuboids, fill selections, replace blocks inside selections
- * 
+ *
  * @author Chris
- * 
  */
 public class CuboidGenerator extends BaseGen {
 
@@ -28,7 +27,7 @@ public class CuboidGenerator extends BaseGen {
 
     /**
      * Set the block you want to set
-     * 
+     *
      * @param block
      */
     public void setBlock(CBlock block) {
@@ -38,7 +37,7 @@ public class CuboidGenerator extends BaseGen {
     /**
      * If you want to do a replace, this is the block that will be replaced with
      * the other block
-     * 
+     *
      * @param block
      */
     public void setBlockToReplace(CBlock block) {
@@ -48,7 +47,7 @@ public class CuboidGenerator extends BaseGen {
     /**
      * Set true if you want to do a replace action. By default this is false and
      * for a cfill it doesn't need to be set!
-     * 
+     *
      * @param r
      */
     public void setReplace(boolean r) {
@@ -66,7 +65,8 @@ public class CuboidGenerator extends BaseGen {
                     selection.setBlock(position, block);
                 }
             }
-        } else {
+        }
+        else {
             for (Vector position : selection.getBlockList().keySet()) {
                 selection.setBlock(position, block);
             }

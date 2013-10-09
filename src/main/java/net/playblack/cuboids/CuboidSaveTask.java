@@ -5,9 +5,8 @@ import net.playblack.mcutils.Debug;
 
 /**
  * Save cuboids.
- * 
+ *
  * @author Chris
- * 
  */
 public class CuboidSaveTask implements Runnable {
 

@@ -37,7 +37,7 @@ public class CItem {
 
     /**
      * set item id
-     * 
+     *
      * @param id
      */
     public void setId(int id) {
@@ -46,7 +46,7 @@ public class CItem {
 
     /**
      * get item id
-     * 
+     *
      * @return
      */
     public int getId() {
@@ -55,7 +55,7 @@ public class CItem {
 
     /**
      * set data/damage value
-     * 
+     *
      * @param data
      */
     public void setData(int data) {
@@ -64,7 +64,7 @@ public class CItem {
 
     /**
      * get data/damage value
-     * 
+     *
      * @return
      */
     public short getData() {
@@ -73,7 +73,7 @@ public class CItem {
 
     /**
      * set item slot in inventory
-     * 
+     *
      * @param slot
      */
     public void setSlot(int slot) {
@@ -82,7 +82,7 @@ public class CItem {
 
     /**
      * get item slot in inventory
-     * 
+     *
      * @return
      */
     public int getSlot() {
@@ -91,7 +91,7 @@ public class CItem {
 
     /**
      * Set quantity of this item
-     * 
+     *
      * @param a
      */
     public void setAmount(int a) {
@@ -100,7 +100,7 @@ public class CItem {
 
     /**
      * Get quantity of this item
-     * 
+     *
      * @return
      */
     public int getAmount() {
@@ -117,7 +117,7 @@ public class CItem {
     public static CItem deserialize(String serialized)
             throws DeserializeException {
         serialized = serialized.replace("[", "").replace("]", "");
-        CItem tr = null;
+        CItem tr;
         String[] values = serialized.split(",");
         if (values.length != 4) {
             throw new DeserializeException(

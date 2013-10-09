@@ -1,16 +1,15 @@
 package net.playblack.cuboids.history;
 
-import java.util.LinkedHashMap;
-
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
 
+import java.util.LinkedHashMap;
+
 /**
  * Represents a part of block editing history
- * 
+ *
  * @author Chris
- * 
  */
 public class HistoryObject {
     /**
@@ -34,7 +33,7 @@ public class HistoryObject {
 
     /**
      * Create a history object with a defined size for block lists.
-     * 
+     *
      * @param listSize
      */
     public HistoryObject(int listSize) {
@@ -45,12 +44,12 @@ public class HistoryObject {
 
     /**
      * Construct a new History object with full block lists
-     * 
+     *
      * @param original
      * @param modified
      */
     public HistoryObject(LinkedHashMap<Vector, CBlock> original,
-            LinkedHashMap<Vector, CBlock> modified) {
+                         LinkedHashMap<Vector, CBlock> modified) {
         blocksBefore = original;
         modifiedBlocks = modified;
     }
@@ -58,7 +57,7 @@ public class HistoryObject {
     /**
      * Create new HistoryObject by 2 CuboidSelections. Probably the most common
      * way of making history
-     * 
+     *
      * @param original
      * @param modified
      */
@@ -69,7 +68,7 @@ public class HistoryObject {
 
     /**
      * Set the blocks that are in the world before modifying
-     * 
+     *
      * @param b
      */
     public void setBlocksBefore(LinkedHashMap<Vector, CBlock> b) {
@@ -78,7 +77,7 @@ public class HistoryObject {
 
     /**
      * Get the blocks that are in the world before modifying
-     * 
+     *
      * @return
      */
     public LinkedHashMap<Vector, CBlock> getBlocksBefore() {
@@ -87,7 +86,7 @@ public class HistoryObject {
 
     /**
      * Set the blocks that are in the world before modifying
-     * 
+     *
      * @param b
      */
     public void setModifiedBlocks(LinkedHashMap<Vector, CBlock> b) {
@@ -96,7 +95,7 @@ public class HistoryObject {
 
     /**
      * Get the blocks that are in the world before modifying
-     * 
+     *
      * @return
      */
     public LinkedHashMap<Vector, CBlock> getModifiedBlocks() {
@@ -105,7 +104,7 @@ public class HistoryObject {
 
     /**
      * Add a block to modified blocks list
-     * 
+     *
      * @param v
      * @param block
      */
@@ -115,7 +114,7 @@ public class HistoryObject {
 
     /**
      * Get a block from the modifed blocks list
-     * 
+     *
      * @param v
      * @return
      */
@@ -125,7 +124,7 @@ public class HistoryObject {
 
     /**
      * Set a block in the "original blocks" list.
-     * 
+     *
      * @param v
      * @param block
      */
@@ -135,7 +134,7 @@ public class HistoryObject {
 
     /**
      * Get a block from the "original blocks" list.
-     * 
+     *
      * @param v
      * @return
      */

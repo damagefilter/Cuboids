@@ -15,7 +15,6 @@ import net.playblack.mcutils.Debug;
  * Copy a selection into the clipboard
  *
  * @author Chris
- *
  */
 public class Ccopy extends CBaseCommand {
 
@@ -34,11 +33,13 @@ public class Ccopy extends CBaseCommand {
         GenericGenerator gen = new GenericGenerator(sel, player.getWorld());
         try {
             sel = gen.getWorldContent(sel);
-        } catch (BlockEditLimitExceededException e) {
+        }
+        catch (BlockEditLimitExceededException e) {
             Debug.logWarning(e.getMessage());
             MessageSystem.customFailMessage(player, e.getMessage());
             e.printStackTrace();
-        } catch (SelectionIncompleteException e) {
+        }
+        catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
         sel.setOrigin(player.getPosition());

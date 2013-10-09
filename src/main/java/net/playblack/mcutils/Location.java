@@ -20,7 +20,7 @@ public class Location extends Vector {
         this.world = world;
 //        ToolBox.adjustWorldPosition(this);
     }
-    
+
     public Location(int x, int y, int z, int dimension, String world) {
         this.x = x;
         this.y = y;
@@ -29,7 +29,7 @@ public class Location extends Vector {
         this.world = world;
 //        ToolBox.adjustWorldPosition(this);
     }
-    
+
     public Location(Vector v) {
         this.x = v.x;
         this.y = v.y;
@@ -55,8 +55,7 @@ public class Location extends Vector {
     }
 
     /**
-     * @param world
-     *            the world to set
+     * @param world the world to set
      */
     public void setWorld(String world) {
         this.world = world;
@@ -70,8 +69,7 @@ public class Location extends Vector {
     }
 
     /**
-     * @param dimension
-     *            the dimension to set
+     * @param dimension the dimension to set
      */
     public void setDimension(int dimension) {
         this.dimension = dimension;

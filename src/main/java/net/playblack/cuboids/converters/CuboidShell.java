@@ -1,15 +1,14 @@
 package net.playblack.cuboids.converters;
 
-import java.util.ArrayList;
-
 import net.playblack.mcutils.Vector;
+
+import java.util.ArrayList;
 
 /**
  * This is a wrapper for foreign cuboid formats (D and F for example).
  * Implementations wrap around a specific cuboid class.
- * 
+ *
  * @author Chris
- * 
  */
 public interface CuboidShell {
     public boolean getProtection();

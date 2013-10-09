@@ -1,8 +1,5 @@
 package net.playblack.cuboids.impl.canarymod;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import net.canarymod.Canary;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.living.monster.EntityMob;
@@ -13,6 +10,9 @@ import net.playblack.cuboids.gameinterface.CMob;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.gameinterface.CWorld;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CanaryServer extends CServer {
 
@@ -57,11 +57,12 @@ public class CanaryServer extends CServer {
     @Override
     public ArrayList<CPlayer> getPlayers() {
         ArrayList<CPlayer> players = new ArrayList<CPlayer>(Canary.getServer().getPlayerList().size());
-        for(Player p : Canary.getServer().getPlayerList()) {
+        for (Player p : Canary.getServer().getPlayerList()) {
             //That is to make use of the player instance cache
             try {
                 players.add(getPlayer(p.getName()));
-            } catch (InvalidPlayerException e) {
+            }
+            catch (InvalidPlayerException e) {
                 e.printStackTrace();
             }
         }
@@ -105,14 +106,14 @@ public class CanaryServer extends CServer {
     @Override
     public CMob getMob(String name, CWorld world) {
         EntityMob mob = Canary.factory().getEntityFactory().newEntityMob(name);
-        mob.setDimension(((CanaryWorld)world).getHandle());
+        mob.setDimension(((CanaryWorld) world).getHandle());
         return new CanaryMob(mob);
     }
 
     @Override
     public int getItemId(String itemName) {
         ItemType t = ItemType.fromString(itemName);
-        if(t != null) {
+        if (t != null) {
             return t.getId();
         }
         return -1;
@@ -121,7 +122,7 @@ public class CanaryServer extends CServer {
     @Override
     public String getItemName(int id) {
         ItemType t = ItemType.fromId(id);
-        if(t != null) {
+        if (t != null) {
             return t.getMachineName();
         }
         return null;

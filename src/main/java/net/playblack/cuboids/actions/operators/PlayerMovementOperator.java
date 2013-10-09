@@ -11,7 +11,7 @@ public class PlayerMovementOperator implements ActionListener {
     @ActionHandler
     public void onPlayerMove(PlayerWalkEvent event) {
 
-        if(!event.getPlayer().canMoveTo(event.getTo())) {
+        if (!event.getPlayer().canMoveTo(event.getTo())) {
             event.getPlayer().teleportTo(event.getFrom());
         }
 

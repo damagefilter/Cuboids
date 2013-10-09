@@ -43,9 +43,10 @@ public class CanaryPlayer extends CPlayer {
     @Override
     public CWorld getWorld() {
         // Player has switched worlds
-        if (player.getWorld().getName() != player.getWorld().getName()) {
+        if (!player.getWorld().getName().equals(player.getWorld().getName())) {
             this.world = new CanaryWorld(player.getWorld());
-        } else if (world.getDimension() != player.getWorld().getType().getId()) {
+        }
+        else if (world.getDimension() != player.getWorld().getType().getId()) {
             this.world = new CanaryWorld(player.getWorld());
         }
         return world;
@@ -199,11 +200,13 @@ public class CanaryPlayer extends CPlayer {
         try {
             if (items.hasItems()) {
                 ((CanaryInventory) items).setThisContents();
-            } else {
+            }
+            else {
                 player.getInventory().clearContents();
             }
 
-        } catch (ArrayIndexOutOfBoundsException e) {
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
             Debug.logStack(e);
         }
     }

@@ -3,7 +3,8 @@ package net.playblack.cuboids.actions;
 
 /**
  * ActionListener interface to mark cuboid actions as such a thing
- * @author chris
  *
+ * @author chris
  */
-public interface ActionListener { }
+public interface ActionListener {
+}

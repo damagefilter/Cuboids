@@ -1,11 +1,5 @@
 package net.playblack.cuboids.datasource;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.cuboids.regions.Region;
@@ -15,7 +9,6 @@ import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 import net.visualillusionsent.utils.SystemUtils;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -23,20 +16,28 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * XmlData extends BaseData and represents the data layer for retrieving
  * Regions from xml files.
  *
  * @author Chris
- *
  */
 public class XmlData implements BaseData {
 
-    private Object lock = new Object();
-    /** Used to serialize the XML data into a bytestream */
+    private final Object lock = new Object();
+    /**
+     * Used to serialize the XML data into a bytestream
+     */
     private XMLOutputter xmlSerializer = new XMLOutputter(Format.getPrettyFormat().setExpandEmptyElements(true).setOmitDeclaration(true).setOmitEncoding(true).setLineSeparator(SystemUtils.LINE_SEP));
     private SAXBuilder regionBuilder = new SAXBuilder();
-    private HashMap<String,ArrayList<Region>> loadedRegions = new HashMap<String,ArrayList<Region>>();
+    private HashMap<String, ArrayList<Region>> loadedRegions = new HashMap<String, ArrayList<Region>>();
+
     public XmlData() {
     }
 
@@ -44,24 +45,24 @@ public class XmlData implements BaseData {
     public void saveRegion(Region node) {
         try {
             writeFile(regionToDom(node));
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Debug.log(e.getMessage());
         }
     }
 
     @Override
     public void saveAll(ArrayList<Region> treeList, boolean silent, boolean force) {
-        ArrayList<Document> regionFiles = new ArrayList<Document>();
-        synchronized(lock) {
+        synchronized (lock) {
             try {
-                for(Region r : treeList) {
-                    regionFiles.add(regionToDom(r));
-                    for(Region reg : r.getChildsDeep(new ArrayList<Region>())) {
+                for (Region r : treeList) {
+                    writeFile(regionToDom(r));
+                    for (Region reg : r.getChildsDeep(new ArrayList<Region>())) {
                         writeFile(regionToDom(reg));
                     }
                 }
             }
-            catch(IOException e) {
+            catch (IOException e) {
                 Debug.log(e.getMessage());
             }
 
@@ -74,25 +75,25 @@ public class XmlData implements BaseData {
         RegionManager regionMan = RegionManager.get();
         loadedRegions.put("root", new ArrayList<Region>());
         File regionFolder = new File(Config.get().getBasePath() + "regions/");
-        if(!regionFolder.exists()) {
+        if (!regionFolder.exists()) {
             regionFolder.mkdirs();
         }
         int numRegions = 0;
         //Load all files sorted by parents.
         //Parentless regions get sorted into "root"
-        for(File file : regionFolder.listFiles()) {
+        for (File file : regionFolder.listFiles()) {
             if (file.getName().toLowerCase().endsWith("xml")) {
                 try {
                     Document rdoc = regionBuilder.build(file);
                     Element meta = rdoc.getRootElement().getChild("meta");
                     String parentName = meta.getChildText("parent");
                     Region r = domToRegion(rdoc, false);
-                    if(r != null) {
-                        if(parentName == null || parentName.isEmpty()) {
+                    if (r != null) {
+                        if (parentName == null || parentName.isEmpty()) {
                             loadedRegions.get("root").add(r);
                         }
                         else {
-                            if(loadedRegions.get(parentName) == null) {
+                            if (loadedRegions.get(parentName) == null) {
                                 loadedRegions.put(parentName, new ArrayList<Region>());
                             }
                             loadedRegions.get(parentName).add(r);
@@ -110,12 +111,12 @@ public class XmlData implements BaseData {
         }
 
         //Sort out parents and stuff.
-        for(String key : loadedRegions.keySet()) {
+        for (String key : loadedRegions.keySet()) {
             //Root has no parents to sort out
-            if(!key.equals("root")) {
-                for(Region r : loadedRegions.get(key)) {
+            if (!key.equals("root")) {
+                for (Region r : loadedRegions.get(key)) {
                     Region parent = findByName(key);
-                    if(parent == null) {
+                    if (parent == null) {
                         Debug.logWarning("Cannot find parent " + key + ". Dropping regions with this parent!");
                         break;
                     }
@@ -125,7 +126,7 @@ public class XmlData implements BaseData {
         }
 
         //Now that we have all the parents sorted out, we can just add all nodes under "root" to the regionmanager
-        for(Region root : loadedRegions.get("root")) {
+        for (Region root : loadedRegions.get("root")) {
             regionMan.addRoot(root);
         }
         return numRegions;
@@ -133,13 +134,14 @@ public class XmlData implements BaseData {
 
     /**
      * Get a region from the given list with the given name
+     *
      * @param name
      * @return
      */
     private Region findByName(String name) {
-        for(String key : loadedRegions.keySet()) {
-            for(Region r : loadedRegions.get(key)) {
-                if(r.getName().equals(name)) {
+        for (String key : loadedRegions.keySet()) {
+            for (Region r : loadedRegions.get(key)) {
+                if (r.getName().equals(name)) {
                     return r;
                 }
             }
@@ -155,13 +157,15 @@ public class XmlData implements BaseData {
             Document rdoc = regionBuilder.build(f);
             Region r = domToRegion(rdoc, true);
             Region old = RegionManager.get().getRegionByName(name, world, dimension);
-            if(old != null) {
+            if (old != null) {
                 RegionManager.get().removeRegion(old);
             }
             RegionManager.get().addRegion(r);
-        } catch (JDOMException e) {
+        }
+        catch (JDOMException e) {
             Debug.logWarning(e.getMessage());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Debug.logWarning(e.getMessage());
         }
     }
@@ -188,31 +192,31 @@ public class XmlData implements BaseData {
         meta.addContent(new Element("welcome").setText(r.getWelcome()));
         meta.addContent(new Element("farewell").setText(r.getFarewell()));
         meta.addContent(new Element("name").setText(r.getName()));
-        if(r.hasParent()) {
+        if (r.hasParent()) {
             meta.addContent(new Element("parent").setText(r.getParent().getName()));
         }
 
-        if(r.getRestrictedCommands().size() > 0) {
+        if (r.getRestrictedCommands().size() > 0) {
             StringBuilder str = new StringBuilder();
-            for(String cmd : r.getRestrictedCommands()) {
+            for (String cmd : r.getRestrictedCommands()) {
                 str.append(cmd).append(",");
             }
             str.deleteCharAt(str.length() - 1);
             meta.addContent(new Element("restricted-commands").setText(str.toString()));
         }
 
-        if(r.getRestrictedItems().size() > 0) {
+        if (r.getRestrictedItems().size() > 0) {
             StringBuilder str = new StringBuilder();
-            for(Integer cmd : r.getRestrictedItems()) {
+            for (Integer cmd : r.getRestrictedItems()) {
                 str.append(cmd).append(",");
             }
             str.deleteCharAt(str.length() - 1);
             meta.addContent(new Element("restricted-items").setText(str.toString()));
         }
 
-        meta.addContent(new Element("priority").setText(""+r.getPriority()));
+        meta.addContent(new Element("priority").setText("" + r.getPriority()));
         meta.addContent(new Element("world").setText(r.getWorld()));
-        meta.addContent(new Element("dimension").setText(""+r.getDimension()));
+        meta.addContent(new Element("dimension").setText("" + r.getDimension()));
         meta.addContent(new Element("origin").setText(r.getOrigin().serialize().toString()));
         meta.addContent(new Element("offset").setText(r.getOffset().serialize().toString()));
         meta.addContent(new Element("players").setText(r.getPlayerList()));
@@ -221,7 +225,7 @@ public class XmlData implements BaseData {
         Element properties = new Element("properties");
         regionElement.addContent(properties);
         HashMap<String, Status> props = r.getAllProperties();
-        for(String key : props.keySet()) {
+        for (String key : props.keySet()) {
             properties.addContent(new Element(key).setText(props.get(key).name()));
         }
         return data;
@@ -244,24 +248,25 @@ public class XmlData implements BaseData {
         try {
             newRegion.setOrigin(Vector.deserialize(meta.getChildText("origin")));
             newRegion.setOffset(Vector.deserialize(meta.getChildText("offset")));
-        } catch (DeserializeException e) {
+        }
+        catch (DeserializeException e) {
             Debug.logWarning(e.getMessage() + " - dropping region!");
             return null;
         }
-        for(Element prop : properties.getChildren()) {
+        for (Element prop : properties.getChildren()) {
             newRegion.setProperty(prop.getName(), Status.fromString(prop.getText()));
         }
-        if(lookupParent) {
-            if(meta.getChildText("parent") != null) {
+        if (lookupParent) {
+            if (meta.getChildText("parent") != null) {
                 newRegion.setParent(RegionManager.get().getPossibleParent(newRegion));
             }
         }
 
-        if(meta.getChildText("restricted-commands") != null) {
+        if (meta.getChildText("restricted-commands") != null) {
             newRegion.addRestrictedCommand(meta.getChildText("restricted-commands"));
         }
 
-        if(meta.getChildText("restricted-items") != null) {
+        if (meta.getChildText("restricted-items") != null) {
             newRegion.addRestrictedItem(meta.getChildText("restricted-items"));
         }
 

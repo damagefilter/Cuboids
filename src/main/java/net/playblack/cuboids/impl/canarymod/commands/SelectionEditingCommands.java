@@ -12,54 +12,58 @@ import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Debug;
 
 public class SelectionEditingCommands implements CommandListener {
-    @Command(aliases = { "cceiling" },
+    @Command(aliases = {"cceiling"},
             description = "Set the ceiling level of a selection. Use -r to set relative from your current location (player + <height>)",
-            permissions = { "cuboids.selection.cceiling", "cuboids.super.admin" },
+            permissions = {"cuboids.selection.cceiling", "cuboids.super.admin"},
             toolTip = "/cceiling <height> [-r]",
             min = 2,
             max = 3)
     public void cceiling(MessageReceiver caller, String[] args) {
         try {
             new Cceiling().execute(CServer.getServer().getPlayer(caller.getName()), args);
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
         }
     }
 
-    @Command(aliases = { "cdiag" },
+    @Command(aliases = {"cdiag"},
             description = "Cuboid diagnostics tool",
-            permissions = { "cuboids.debug.cdiag", "cuboids.super.admin" },
+            permissions = {"cuboids.debug.cdiag", "cuboids.super.admin"},
             toolTip = "/cdiag")
     public void cdiag(MessageReceiver caller, String[] args) {
         try {
             new Cdiag().execute(CServer.getServer().getPlayer(caller.getName()), args);
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
         }
     }
 
-    @Command(aliases = { "cexpand" },
+    @Command(aliases = {"cexpand"},
             description = "vertically expand your selection so it stretches from top to bottom",
-            permissions = { "cuboids.selection.cexpand", "cuboids.super.admin" },
+            permissions = {"cuboids.selection.cexpand", "cuboids.super.admin"},
             toolTip = "/cexpand")
     public void cexpand(MessageReceiver caller, String[] args) {
         try {
             new Cexpand().execute(CServer.getServer().getPlayer(caller.getName()), args);
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
         }
     }
 
-    @Command(aliases = { "cfloor" },
+    @Command(aliases = {"cfloor"},
             description = "Set the floor level of a selection. Use -r to set relative from your current location (player - <height>)",
-            permissions = { "cuboids.selection.cceiling", "cuboids.super.admin" },
+            permissions = {"cuboids.selection.cceiling", "cuboids.super.admin"},
             toolTip = "/cceiling <height> [-r]",
             min = 2,
             max = 3)
     public void cfloor(MessageReceiver caller, String[] args) {
         try {
             new Cfloor().execute(CServer.getServer().getPlayer(caller.getName()), args);
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
         }
     }

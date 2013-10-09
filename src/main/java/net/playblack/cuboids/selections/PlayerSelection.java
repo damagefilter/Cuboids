@@ -1,15 +1,14 @@
 package net.playblack.cuboids.selections;
 
-import java.util.LinkedHashMap;
-
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.mcutils.Vector;
 
+import java.util.LinkedHashMap;
+
 /**
  * Player selection based on a CuboidSelection
- * 
+ *
  * @author Christoph Ksoll
- * 
  */
 public class PlayerSelection extends CuboidSelection {
     /*
@@ -28,7 +27,7 @@ public class PlayerSelection extends CuboidSelection {
 
     /**
      * Construct with vectors
-     * 
+     *
      * @param v1
      * @param v2
      */
@@ -38,13 +37,13 @@ public class PlayerSelection extends CuboidSelection {
 
     /**
      * Construct with vectors and a ready-to-use block list
-     * 
+     *
      * @param v1
      * @param v2
      * @param blocks
      */
     public PlayerSelection(Vector v1, Vector v2,
-            LinkedHashMap<Vector, CBlock> blocks) {
+                           LinkedHashMap<Vector, CBlock> blocks) {
         super(v1, v2, blocks);
     }
 

@@ -25,8 +25,9 @@ public class EntityDamageEvent extends CuboidEvent implements Cancellable {
         ENDERPEARL,
         FALLING_ANVIL, //So funny :D
         FALLING_BLOCK,
-        GENERIC;
+        GENERIC
     }
+
     private boolean isCancelled = false;
     private IBaseEntity attacker;
     private IBaseEntity defender;

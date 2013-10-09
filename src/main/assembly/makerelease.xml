@@ -1,19 +1,20 @@
 <project name="Cuboids2 Distribution Package Script" default="dist" basedir=".">
-<description>
-This script will build the Cuboids2 and zip appropriate files.
-</description>
-<property name="dist" location="dist"/>
-<target name="init" depends="clean" description="Create the output directories.">
-<mkdir dir="${dist}"/>
-<mkdir dir="${dist}/lib"/>
-</target>
-<target name="dist" depends="init">
-<copy file="${user.home}/.m2/repository/org/jdom/jdom2/2.0.4/jdom2-2.0.4.jar" tofile="${dist}/lib/jdom2.jar"/>
-<copy file="${user.home}/.m2/repository/net/visualillusionsent/viutils/1.0.1/viutils-1.0.1.jar" tofile="${dist}/lib/viutils.jar"/>
-<copy file="target/Cuboids2.jar" tofile="${dist}/plugins/Cuboids2.jar"/>
-<zip destfile="${dist}/Cuboids2.zip" basedir="${dist}"/>
-</target>
-<target name="clean" description="Remove the output directories">
-<delete dir="${dist}"/>
-</target>
+    <description>
+        This script will build the Cuboids2 and zip appropriate files.
+    </description>
+    <property name="dist" location="dist"/>
+    <target name="init" depends="clean" description="Create the output directories.">
+        <mkdir dir="${dist}"/>
+        <mkdir dir="${dist}/lib"/>
+    </target>
+    <target name="dist" depends="init">
+        <copy file="${user.home}/.m2/repository/org/jdom/jdom2/2.0.4/jdom2-2.0.4.jar" tofile="${dist}/lib/jdom2.jar"/>
+        <copy file="${user.home}/.m2/repository/net/visualillusionsent/viutils/1.0.1/viutils-1.0.1.jar"
+              tofile="${dist}/lib/viutils.jar"/>
+        <copy file="target/Cuboids2.jar" tofile="${dist}/plugins/Cuboids2.jar"/>
+        <zip destfile="${dist}/Cuboids2.zip" basedir="${dist}"/>
+    </target>
+    <target name="clean" description="Remove the output directories">
+        <delete dir="${dist}"/>
+    </target>
 </project>

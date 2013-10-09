@@ -11,7 +11,6 @@ import net.playblack.mcutils.ColorManager;
  * Backup an area
  *
  * @author Chris
- *
  */
 public class CmodRemoveFlag extends CBaseCommand {
 
@@ -25,20 +24,20 @@ public class CmodRemoveFlag extends CBaseCommand {
             return;
         }
 
-        if(command.length == 2) {
+        if (command.length == 2) {
             Config.get().removeGlobalProperty(command[1]);
             MessageSystem.successMessage(player, "globalFlagRemoved");
             return;
         }
 
         Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
-        if(node == null) {
+        if (node == null) {
             MessageSystem.failMessage(player, "noCuboidFound");
             return;
         }
 
         if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
-            if(node.removeProperty(command[2])) {
+            if (node.removeProperty(command[2])) {
                 MessageSystem.successMessage(player, "regionFlagRemoved");
             }
             else {

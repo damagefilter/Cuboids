@@ -6,9 +6,8 @@ import net.playblack.mcutils.ColorManager;
 
 /**
  * Print cuboid information
- * 
+ *
  * @author Chris
- * 
  */
 public class Cinfo extends CBaseCommand {
 

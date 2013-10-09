@@ -29,14 +29,14 @@ public interface CMob extends IBaseEntity {
 
     /**
      * Check if this mob is a hostile mob
-     * 
+     *
      * @return
      */
     public boolean isMob();
 
     /**
      * Check if this mob is an animal
-     * 
+     *
      * @return
      */
     public boolean isAnimal();

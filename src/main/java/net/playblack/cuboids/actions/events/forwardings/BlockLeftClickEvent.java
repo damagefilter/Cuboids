@@ -11,14 +11,14 @@ public class BlockLeftClickEvent extends CuboidEvent implements Cancellable {
     private CPlayer player;
     private CBlock block;
     private Location location;
-    
+
     public BlockLeftClickEvent(CPlayer player, CBlock block, Location location) {
         this.player = player;
         this.block = block;
         this.location = location;
-        
+
     }
-    
+
     @Override
     public boolean isCancelled() {
         return isCancelled;

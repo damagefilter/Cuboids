@@ -1,12 +1,5 @@
 package net.playblack.cuboids.datasource;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -15,12 +8,18 @@ import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * FlatFileData extends BaseData and represents the data layer for retrieving
  * Cuboids from text files.
  *
  * @author Chris
- *
  */
 
 public class FlatfileDataLegacy implements BaseData {
@@ -51,9 +50,8 @@ public class FlatfileDataLegacy implements BaseData {
 
     @Override
     public void loadRegion(String name, String world, int dimension) {
-       throw new IllegalStateException("Loading single CuboidE files is not supported anymore!");
+        throw new IllegalStateException("Loading single CuboidE files is not supported anymore!");
     }
-
 
 
     @Override
@@ -87,17 +85,19 @@ public class FlatfileDataLegacy implements BaseData {
                         c.setWorld(world);
                         c.setDimension(dimension);
                         c = csvToCuboid(c, props);
-                        if(c != null) {
+                        if (c != null) {
                             nodelist.add(csvToCuboid(c, props));
                         }
                         reader.close();
                     }
                 }
                 reader = null;
-            } catch (ArrayIndexOutOfBoundsException e) {
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
                 Debug.logWarning("Cuboids2: Failed to load Cuboid Data files!(AIOOBE) " + e.getMessage());
                 // e.printStackTrace();
-            } catch (IOException f) {
+            }
+            catch (IOException f) {
                 Debug.logWarning("Cuboids2: Failed to load Cuboid Data files!(IOE) " + f.getMessage());
                 // f.printStackTrace();
             }
@@ -105,14 +105,14 @@ public class FlatfileDataLegacy implements BaseData {
             loadedNodes = nodelist.size();
 
             //All nodes collected, lets fix up the parents
-            for(String parentName : parentUpdateList.keySet()) {
+            for (String parentName : parentUpdateList.keySet()) {
                 Region parent = findByNameFromNodeList(parentName);
-                if(parent == null) {
+                if (parent == null) {
                     continue;
                 }
-                for(String child : parentUpdateList.get(parentName)) {
+                for (String child : parentUpdateList.get(parentName)) {
                     Region cube = findByNameFromNodeList(child);
-                    if(cube != null) {
+                    if (cube != null) {
                         cube.setParent(parent);
 
                     }
@@ -122,7 +122,7 @@ public class FlatfileDataLegacy implements BaseData {
             // Create root nodes
             // System.out.println("Cuboids2: Processing Node Files ...");
             for (int i = 0; i < nodelist.size(); i++) {
-                if(!nodelist.get(i).hasParent()) {
+                if (!nodelist.get(i).hasParent()) {
                     handler.addRoot(nodelist.get(i));
                 }
             }
@@ -132,8 +132,8 @@ public class FlatfileDataLegacy implements BaseData {
     }
 
     private Region findByNameFromNodeList(String name) {
-        for(Region node : nodelist) {
-            if(node.getName().equals(name)) {
+        for (Region node : nodelist) {
+            if (node.getName().equals(name)) {
                 return node;
             }
         }
@@ -212,7 +212,7 @@ public class FlatfileDataLegacy implements BaseData {
                 cube.setProperty("more-mobs", Status.softFromBoolean(ToolBox.stringToBoolean(csv[28])));
             }
             if (ToolBox.stringToNull(csv[1]) != null) {
-                if(!parentUpdateList.containsKey(csv[1])) {
+                if (!parentUpdateList.containsKey(csv[1])) {
                     parentUpdateList.put(csv[1], new ArrayList<String>());
                 }
                 parentUpdateList.get(csv[1]).add(cube.getName());

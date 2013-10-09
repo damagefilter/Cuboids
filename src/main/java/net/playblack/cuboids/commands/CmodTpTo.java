@@ -11,12 +11,11 @@ import net.playblack.mcutils.Vector;
  * Set the parent of a cuboid
  *
  * @author Chris
- *
  */
 public class CmodTpTo extends CBaseCommand {
 
     public CmodTpTo() {
-        super("Set cuboid parent: " + ColorManager.Yellow+ "/cmod tpto <area>", 2);
+        super("Set cuboid parent: " + ColorManager.Yellow + "/cmod tpto <area>", 2);
     }
 
     @Override
@@ -24,7 +23,7 @@ public class CmodTpTo extends CBaseCommand {
         if (!parseCommand(player, command)) {
             return;
         }
-        Region targetCube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(),player.getWorld().getDimension());
+        Region targetCube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
         if (targetCube == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
@@ -35,11 +34,12 @@ public class CmodTpTo extends CBaseCommand {
             if (!player.getWorld().isChunkLoaded(target)) {
                 player.getWorld().loadChunk(target);
             }
-            int y = player.getWorld().getHighestBlock(target.getBlockX(),target.getBlockZ());
+            int y = player.getWorld().getHighestBlock(target.getBlockX(), target.getBlockZ());
             target.setY(y);
             player.teleportTo(target);
             MessageSystem.successMessage(player, "playerTeleported");
-        } else {
+        }
+        else {
             MessageSystem.failMessage(player, "permissionDenied");
             return;
         }

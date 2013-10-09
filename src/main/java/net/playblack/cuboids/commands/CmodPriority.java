@@ -10,7 +10,6 @@ import net.playblack.mcutils.ToolBox;
  * Set the priority of a cuboid
  *
  * @author Chris
- *
  */
 public class CmodPriority extends CBaseCommand {
 

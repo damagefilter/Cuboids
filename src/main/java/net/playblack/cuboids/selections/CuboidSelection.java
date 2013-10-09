@@ -1,18 +1,17 @@
 package net.playblack.cuboids.selections;
 
-import java.util.LinkedHashMap;
-
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.mcutils.Vector;
 
+import java.util.LinkedHashMap;
+
 /**
  * Cuboid shaped selection
- * 
+ *
  * @author Christoph Ksoll
- * 
  */
 public class CuboidSelection implements ISelection {
 
@@ -34,7 +33,7 @@ public class CuboidSelection implements ISelection {
 
     /**
      * Construct with vectors
-     * 
+     *
      * @param v1
      * @param v2
      */
@@ -46,7 +45,7 @@ public class CuboidSelection implements ISelection {
 
     /**
      * Construct with vectors and a ready-to-use block list
-     * 
+     *
      * @param v1
      * @param v2
      * @param blocks
@@ -75,7 +74,7 @@ public class CuboidSelection implements ISelection {
 
     /**
      * Set the current origin vector
-     * 
+     *
      * @param o
      */
     public void setOrigin(Vector o) {
@@ -84,7 +83,7 @@ public class CuboidSelection implements ISelection {
 
     /**
      * Get the current origin vector
-     * 
+     *
      * @return
      */
     public Vector getOrigin() {
@@ -93,7 +92,7 @@ public class CuboidSelection implements ISelection {
 
     /**
      * Set current offset Vector
-     * 
+     *
      * @param o
      */
     public void setOffset(Vector o) {
@@ -102,7 +101,7 @@ public class CuboidSelection implements ISelection {
 
     /**
      * Get current offset vector
-     * 
+     *
      * @return
      */
     public Vector getOffset() {
@@ -153,15 +152,15 @@ public class CuboidSelection implements ISelection {
 
     /**
      * Sort the selection points.
-     * 
-     * @param offsetFirst
-     *            true: offset has the greater components - false: origin has
-     *            the greater components
+     *
+     * @param offsetFirst true: offset has the greater components - false: origin has
+     *                    the greater components
      */
     public void sortEdges(boolean offsetFirst) {
         if (offsetFirst) {
             sortEdgesOffsetFirst();
-        } else {
+        }
+        else {
             Vector or_temp = Vector.getMaximum(origin, offset);
             Vector off_temp = Vector.getMinimum(origin, offset);
             origin = or_temp;
@@ -182,14 +181,11 @@ public class CuboidSelection implements ISelection {
 
     /**
      * Check if this selection is complete.
-     * 
+     *
      * @return
      */
     public boolean isComplete() {
-        if ((origin != null) && offset != null) {
-            return true;
-        }
-        return false;
+        return (origin != null) && offset != null;
     }
 
     @Override
@@ -210,7 +206,7 @@ public class CuboidSelection implements ISelection {
     /**
      * Turn this selection into a CuboidE. The result is a cuboid object with
      * the default settings.
-     * 
+     *
      * @return
      */
     public Region toRegion(CPlayer player, String[] playerlist) {
@@ -225,9 +221,11 @@ public class CuboidSelection implements ISelection {
             }
             if (playerlist[i].indexOf("o:") != -1) {
                 cube.addPlayer(playerlist[i]);
-            } else if (playerlist[i].indexOf("g:") != -1) {
+            }
+            else if (playerlist[i].indexOf("g:") != -1) {
                 cube.addGroup(playerlist[i]);
-            } else {
+            }
+            else {
                 cube.addPlayer(playerlist[i]);
             }
         }
@@ -238,7 +236,7 @@ public class CuboidSelection implements ISelection {
 
         return cube;
     }
-    
+
     /**
      * Resets selection points and emptys block list
      */
@@ -247,17 +245,19 @@ public class CuboidSelection implements ISelection {
         offset = null;
         clearBlocks();
     }
-    
+
     /**
      * Returns true if the origin point is set
+     *
      * @return
      */
     public boolean hasOrigin() {
         return origin != null;
     }
-    
+
     /**
      * Returns true if the offset point is set
+     *
      * @return
      */
     public boolean hasOffset() {

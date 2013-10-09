@@ -1,8 +1,5 @@
 package net.playblack.cuboids.impl.canarymod;
 
-import java.util.HashMap;
-import java.util.List;
-
 import net.canarymod.api.entity.Fireball;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.living.monster.Creeper;
@@ -11,39 +8,23 @@ import net.canarymod.api.world.blocks.Block;
 import net.canarymod.hook.HookHandler;
 import net.canarymod.hook.entity.EndermanPickupBlockHook;
 import net.canarymod.hook.entity.HangingEntityDestroyHook;
-import net.canarymod.hook.player.BlockDestroyHook;
-import net.canarymod.hook.player.BlockLeftClickHook;
-import net.canarymod.hook.player.BlockPlaceHook;
-import net.canarymod.hook.player.BlockRightClickHook;
-import net.canarymod.hook.player.PlayerArmSwingHook;
-import net.canarymod.hook.world.BlockPhysicsHook;
-import net.canarymod.hook.world.BlockUpdateHook;
-import net.canarymod.hook.world.ExplosionHook;
-import net.canarymod.hook.world.FlowHook;
-import net.canarymod.hook.world.IgnitionHook;
+import net.canarymod.hook.player.*;
+import net.canarymod.hook.world.*;
 import net.canarymod.plugin.PluginListener;
 import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockBreakEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
-import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
-import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEvent;
-import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
+import net.playblack.cuboids.actions.events.forwardings.*;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
-import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
-import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Location;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class BlockListener implements PluginListener {
 
@@ -56,7 +37,8 @@ public class BlockListener implements PluginListener {
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(hook.getPlayer().getName());
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(hook.getPlayer());
         }
@@ -80,7 +62,8 @@ public class BlockListener implements PluginListener {
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(hook.getPlayer().getName());
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(hook.getPlayer());
         }
@@ -100,7 +83,8 @@ public class BlockListener implements PluginListener {
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
@@ -120,7 +104,8 @@ public class BlockListener implements PluginListener {
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
@@ -140,7 +125,8 @@ public class BlockListener implements PluginListener {
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             // fallback to manually get a player
             cplayer = new CanaryPlayer(player);
         }
@@ -185,13 +171,14 @@ public class BlockListener implements PluginListener {
         List<Block> blocksaffected = hook.getAffectedBlocks();
         if (protectedBlocks != null) {
             for (Location m : protectedBlocks) {
-                for (int i = 0; i < blocksaffected.size();) {
+                for (int i = 0; i < blocksaffected.size(); ) {
                     Block x = blocksaffected.get(i);
                     Vector tmp = new Vector(x.getX(), x.getY(), x.getZ());
 //                    ToolBox.adjustWorldPosition(tmp);
                     if (m.samePosition2D(tmp)) {
                         blocksaffected.remove(i);
-                    } else {
+                    }
+                    else {
                         i++;
                     }
                 }
@@ -209,7 +196,8 @@ public class BlockListener implements PluginListener {
         if (player != null) {
             try {
                 cplayer = CServer.getServer().getPlayer(player.getName());
-            } catch (InvalidPlayerException e) {
+            }
+            catch (InvalidPlayerException e) {
                 // fallback to manually get a player
                 cplayer = new CanaryPlayer(player);
             }
@@ -281,7 +269,8 @@ public class BlockListener implements PluginListener {
                 hook.getPainting().getWorld().getType().getId(), hook.getPainting().getWorld().getName());
         try {
             player = CServer.getServer().getPlayer(hook.getPlayer().getName());
-        } catch (InvalidPlayerException e) {
+        }
+        catch (InvalidPlayerException e) {
             player = new CanaryPlayer(hook.getPlayer());
         }
         EntityHangingDestroyEvent event = new EntityHangingDestroyEvent(player, loc);

@@ -11,8 +11,8 @@ import net.playblack.mcutils.ColorManager;
 /**
  * Crossload cuboids from datasources
  * TODO: Put legacy loading into here!
- * @author Chris
  *
+ * @author Chris
  */
 public class CmodLoadFrom extends CBaseCommand {
     public CmodLoadFrom() {
@@ -30,7 +30,7 @@ public class CmodLoadFrom extends CBaseCommand {
             ds.loadAll();
         }
         //Flatfile now does legacy loading
-        else if(command[1].equalsIgnoreCase("flatfile")) {
+        else if (command[1].equalsIgnoreCase("flatfile")) {
             FlatfileDataLegacy ds = new FlatfileDataLegacy();
             ds.loadAll();
         }
