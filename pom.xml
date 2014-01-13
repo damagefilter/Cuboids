@@ -40,11 +40,11 @@
     </repositories>
     <dependencies>
 
-        <dependency>
-            <groupId>org.jdom</groupId>
-            <artifactId>jdom2</artifactId>
-            <version>2.0.4</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.jdom</groupId>-->
+            <!--<artifactId>jdom2</artifactId>-->
+            <!--<version>2.0.4</version>-->
+        <!--</dependency>-->
 
         <!-- CanaryMod isn't a Maven project so System Scope the dependencies -->
         <!--        <dependency>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>net.canarymod</groupId>
             <artifactId>CanaryLib</artifactId>
-            <version>1.0-RC-1</version>
+            <version>1.0-RC-4-SNAPSHOT</version>
         </dependency>
         <!-- End: CanaryMod -->
     </dependencies>
@@ -109,6 +109,8 @@
                             <exclude>mysql:*</exclude>
                             <exclude>net.visualillusionsent:*</exclude>
                             <exclude>org.jdom:*</exclude>
+                            <exclude>com.mchange:*</exclude>
+                            <exclude>org.apache.logging.log4j:*</exclude>
                         </excludes>
                     </artifactSet>
                     <filters>
