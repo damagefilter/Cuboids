@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.playblack.cuboids</groupId>
     <artifactId>cuboids</artifactId>
-    <version>3.4-SNAPSHOT</version>
+    <version>3.5-SNAPSHOT</version>
     <name>Cuboids</name>
     <description>Cuboid-based area protection and world editing</description>
     <url>http://playblack.net</url>
@@ -39,34 +39,11 @@
         </repository>
     </repositories>
     <dependencies>
-
-        <!--<dependency>-->
-            <!--<groupId>org.jdom</groupId>-->
-            <!--<artifactId>jdom2</artifactId>-->
-            <!--<version>2.0.4</version>-->
-        <!--</dependency>-->
-
-        <!-- CanaryMod isn't a Maven project so System Scope the dependencies -->
-        <!--        <dependency>
-                    <groupId>net.canarymod</groupId>
-                    <artifactId>CanaryMod</artifactId>
-                    <version>11.2</version>
-                    <scope>system</scope>
-                    <systemPath>${basedir}/lib/CanaryMod.jar</systemPath>
-                </dependency>
-
-                <dependency>
-                    <groupId>net.canarymod</groupId>
-                    <artifactId>servero</artifactId>
-                    <version>11.2</version>
-                    <scope>system</scope>
-                    <systemPath>${basedir}/lib/minecraft_servero.jar</systemPath>
-                </dependency>-->
         <!-- Recode -->
         <dependency>
             <groupId>net.canarymod</groupId>
             <artifactId>CanaryLib</artifactId>
-            <version>1.0-RC-4-SNAPSHOT</version>
+            <version>1.1.0-SNAPSHOT</version>
         </dependency>
         <!-- End: CanaryMod -->
     </dependencies>
@@ -86,46 +63,6 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-            <!-- Dependency shader -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <finalName>${project.artifactId}-${project.version}</finalName>
-                    <artifactSet>
-                        <excludes>
-                            <exclude>net.canarymod:*</exclude>
-                            <exclude>net.canarymod:servero</exclude>
-                            <exclude>org.xerial:*</exclude>
-                            <exclude>mysql:*</exclude>
-                            <exclude>net.visualillusionsent:*</exclude>
-                            <exclude>org.jdom:*</exclude>
-                            <exclude>com.mchange:*</exclude>
-                            <exclude>org.apache.logging.log4j:*</exclude>
-                        </excludes>
-                    </artifactSet>
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.SF</exclude>
-                                <exclude>META-INF/*.DSA</exclude>
-                                <exclude>META-INF/*.RSA</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
-                </configuration>
-            </plugin>
-
             <!-- JAR creation plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -1,6 +1,7 @@
 package net.playblack.cuboids.impl.canarymod;
 
 import net.canarymod.api.DamageType;
+import net.canarymod.api.PlayerReference;
 import net.canarymod.api.entity.EntityItem;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.position.Location;
@@ -28,7 +29,7 @@ public class PlayerListener implements PluginListener {
 
     @HookHandler
     public void onBan(BanHook hook) {
-        Player player = hook.getBannedPlayer();
+        PlayerReference player = hook.getBannedPlayer();
         if (player == null) {
             return;
         }

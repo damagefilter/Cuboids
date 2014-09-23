@@ -1,7 +1,9 @@
 package net.playblack.mcutils;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  * The static log manager.
@@ -9,14 +11,12 @@ import java.util.logging.Logger;
  * @author chris
  */
 public class Debug {
-    private static Logger log = Logger.getLogger("Minecraft");
+    private static Logger log = LogManager.getLogger("Cuboids");
     private static StringBuilder cacheMessage = new StringBuilder();
     private static boolean cacheRunning = false;
-    private static boolean loggerIsOverridden = false;
 
     public static void overrideLogger(Logger logger) {
         log = logger;
-        loggerIsOverridden = true;
     }
 
     /**
@@ -30,7 +30,7 @@ public class Debug {
             return;
         }
 
-        log.log(Level.INFO, (loggerIsOverridden ? "" : "[Cuboids2] ") + message);
+        log.info(message);
     }
 
     /**
@@ -43,7 +43,8 @@ public class Debug {
             cacheMessage(msg, true);
             return;
         }
-        log.log(Level.WARNING, (loggerIsOverridden ? "" : "[Cuboids2] ") + msg);
+        log.warn(msg);
+//        log.log(Level.WARNING, (loggerIsOverridden ? "" : "[Cuboids2] ") + msg);
     }
 
     /**
@@ -56,7 +57,8 @@ public class Debug {
             cacheMessage(msg, true);
             return;
         }
-        log.log(Level.SEVERE, (loggerIsOverridden ? "" : "[Cuboids2] ") + msg);
+        log.error(msg);
+//        log.log(Level.SEVERE, (loggerIsOverridden ? "" : "[Cuboids2] ") + msg);
     }
 
     /**
@@ -65,7 +67,8 @@ public class Debug {
      * @param t
      */
     public static void logStack(Throwable t) {
-        log.log(Level.WARNING, (loggerIsOverridden ? "" : "[Cuboids2] ") + t.getMessage(), t);
+        log.warn(t.getMessage(), t);
+//        log.log(Level.WARNING, (loggerIsOverridden ? "" : "[Cuboids2] ") + t.getMessage(), t);
     }
 
     public static void println(String msg) {

@@ -105,8 +105,7 @@ public class CanaryServer extends CServer {
 
     @Override
     public CMob getMob(String name, CWorld world) {
-        EntityMob mob = Canary.factory().getEntityFactory().newEntityMob(name);
-        mob.setDimension(((CanaryWorld) world).getHandle());
+        EntityMob mob = Canary.factory().getEntityFactory().newEntityMob(name, ((CanaryWorld) world).getHandle());
         return new CanaryMob(mob);
     }
 
