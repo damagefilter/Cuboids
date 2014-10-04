@@ -9,6 +9,8 @@ import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
 
+import java.util.Arrays;
+
 /**
  * High-Protect an area
  *
@@ -38,7 +40,7 @@ public class Highprotect extends CBaseCommand {
         }
         selection.expandVert();
         selection.setWorld(player.getWorld().getName());
-        Region cube = selection.toRegion(player, command);
+        Region cube = selection.toRegion(player, Arrays.copyOfRange(command, 1, command.length));
         cube.setDimension(player.getWorld().getDimension());
         cube.setProperty("protection", Status.ALLOW);
         if (CuboidInterface.get().addCuboid(cube)) {

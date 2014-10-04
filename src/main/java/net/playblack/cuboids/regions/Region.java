@@ -1077,11 +1077,29 @@ public class Region {
 //        ToolBox.adjustWorldPosition(offset);
     }
 
+    /**
+     * Get the center point of this region.
+     *
+     * @return the center point
+     */
+    public Vector getRegionCenter() {
+        return Vector.getCenterPoint(getOrigin(), getOffset());
+    }
+
+    /**
+     * Sets the bounding box of this region and manages re-sorting
+     * if the new size causes any inconsistency with parent relations
+     *
+     * @param origin the new origin
+     * @param offset the new offset
+     */
     public void setBoundingBox(Vector origin, Vector offset) {
         this.origin = origin;
         this.offset = offset;
-//        ToolBox.adjustWorldPosition(origin);
-//        ToolBox.adjustWorldPosition(offset);
+        if (hasParent() && !cuboidIsWithin(this.parent,true)) {
+            this.detach();
+        }
+        RegionManager.get().cleanParentRelations();
     }
 
     /**

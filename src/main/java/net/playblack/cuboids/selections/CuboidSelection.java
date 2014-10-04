@@ -174,8 +174,7 @@ public class CuboidSelection implements ISelection {
      */
     private void sortEdgesOffsetFirst() {
         Vector or_temp = Vector.getMaximum(origin, offset);
-        Vector off_temp = Vector.getMinimum(origin, offset);
-        origin = off_temp;
+        origin = Vector.getMinimum(origin, offset);
         offset = or_temp;
     }
 
@@ -213,16 +212,12 @@ public class CuboidSelection implements ISelection {
         Region cube = new Region();
         String name = null;
         cube.setBoundingBox(this.origin, this.offset);
-        // start at second element for the first would be /highprotect
-        for (int i = 1; i < playerlist.length; i++) {
+        for (int i = 0; i < playerlist.length; i++) {
             if (i == (playerlist.length - 1)) { // last element is name!
                 name = playerlist[i];
                 continue;
             }
-            if (playerlist[i].indexOf("o:") != -1) {
-                cube.addPlayer(playerlist[i]);
-            }
-            else if (playerlist[i].indexOf("g:") != -1) {
+            if (playerlist[i].startsWith("g:")) {
                 cube.addGroup(playerlist[i]);
             }
             else {
