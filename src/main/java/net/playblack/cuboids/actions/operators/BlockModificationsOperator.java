@@ -19,6 +19,7 @@ import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.Location;
 
 import java.util.ArrayList;
@@ -66,10 +67,7 @@ public class BlockModificationsOperator implements ActionListener {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);
-        if (r.playerIsAllowed(player.getName(), player.getGroups())) {
-            return true;
-        }
-        return r.getProperty("firespread") != Status.DENY;
+        return r.playerIsAllowed(player.getName(), player.getGroups()) || r.getProperty("firespread") != Status.DENY;
     }
 
     public boolean canDestroyPaintings(CPlayer player, Location point) {
@@ -77,10 +75,7 @@ public class BlockModificationsOperator implements ActionListener {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);
-        if (r.playerIsAllowed(player.getName(), player.getGroups())) {
-            return true;
-        }
-        return r.getProperty("protection") != Status.DENY;
+        return r.playerIsAllowed(player.getName(), player.getGroups()) || r.getProperty("protection") != Status.DENY;
     }
 
     public boolean canEndermanUseBlock(Location location) {
@@ -120,6 +115,7 @@ public class BlockModificationsOperator implements ActionListener {
     @ActionHandler
     public void onIgnite(IgniteEvent event) {
 
+//        Debug.log(event.getLocation().toString());
         if (event.getSource() == FireSource.LIGHTER) {
             if (!canUseLighter(event.getPlayer(), event.getLocation())) {
                 event.cancel();
@@ -160,18 +156,24 @@ public class BlockModificationsOperator implements ActionListener {
                 event.cancel();
             }
         }
+        if (event.getTargetBlock().getType() == 51) { // new block is fire
+            Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
+            if (r.getProperty("firespread") == Status.DENY) {
+                event.cancel();
+            }
+        }
     }
 
     @ActionHandler
     public void onEndermanPickup(EndermanPickupEvent event) {
-        if (canEndermanUseBlock(event.getLocation())) {
+        if (!canEndermanUseBlock(event.getLocation())) {
             event.cancel();
         }
     }
 
     @ActionHandler
     public void onEntityHangingDestroy(EntityHangingDestroyEvent event) {
-        if (canDestroyPaintings(event.getPlayer(), event.getLocation())) {
+        if (!canDestroyPaintings(event.getPlayer(), event.getLocation())) {
             event.cancel();
         }
     }

@@ -5,6 +5,7 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.living.monster.Creeper;
 import net.canarymod.api.entity.living.monster.Enderman;
 import net.canarymod.api.world.blocks.Block;
+import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.hook.HookHandler;
 import net.canarymod.hook.entity.EndermanPickupBlockHook;
 import net.canarymod.hook.entity.HangingEntityDestroyHook;
@@ -227,7 +228,7 @@ public class BlockListener implements PluginListener {
                 cplayer = new CanaryPlayer(player);
             }
         }
-        IgniteEvent event = new IgniteEvent(FireSource.fromInt(b.getStatus()), p, new CBlock(b.getTypeId(), b.getData()), cplayer);
+        IgniteEvent event = new IgniteEvent(FireSource.fromInt(hook.getCause().ordinal()), p, new CBlock(b.getTypeId(), b.getData()), cplayer);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();

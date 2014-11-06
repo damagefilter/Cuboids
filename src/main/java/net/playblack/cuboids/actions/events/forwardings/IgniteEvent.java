@@ -52,7 +52,9 @@ public class IgniteEvent extends CuboidEvent implements Cancellable {
         LIGHTER,
         SPREAD,
         FIRE_DAMAGE,
-        LIGHTING;
+        LIGHTING,
+        FIREBALL_CLICK,
+        FIREBALL_HIT;
 
         public static FireSource fromInt(int in) {
             switch (in) {
@@ -66,6 +68,10 @@ public class IgniteEvent extends CuboidEvent implements Cancellable {
                     return FIRE_DAMAGE;
                 case 5:
                     return LIGHTING;
+                case 6:
+                    return FIREBALL_CLICK;
+                case 7:
+                    return FIREBALL_HIT;
                 default:
                     return SPREAD;
             }

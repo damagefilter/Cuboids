@@ -1,5 +1,6 @@
 package net.playblack.mcutils;
 
+import net.canarymod.Canary;
 import net.playblack.cuboids.gameinterface.CServer;
 
 import java.util.Arrays;
@@ -41,6 +42,7 @@ public class ToolBox {
     }
 
     public static void adjustWorldPosition(Location loc) {
+//        Canary.log.info("Adjusting block: " + loc.toString());
         if (loc.getBlockX() < 0) {
             loc.setX(loc.getBlockX() - 1);
         }
@@ -121,7 +123,7 @@ public class ToolBox {
                 return -1;
             }
         }
-        if (CServer.getServer().getItemName(i).equalsIgnoreCase(String.valueOf(i))) {
+        if (String.valueOf(i).equalsIgnoreCase(CServer.getServer().getItemName(i))) {
             return -1;
         }
         return i;
