@@ -14,11 +14,10 @@ import java.util.ArrayList;
  * @author Chris
  */
 public class RegionManager {
+    private static RegionManager instance = null;
     private ArrayList<Region> rootNodes = new ArrayList<Region>(15);
     private BaseData dataSource;
     private Region global;
-
-    private static RegionManager instance = null;
 
     private RegionManager(BaseData dataSource) {
         this.dataSource = dataSource;
@@ -36,7 +35,6 @@ public class RegionManager {
 
     /**
      * This must be called after the global settings in Config have changed!!!
-     *
      */
     public void updateGlobalSettings() {
         global = Config.get().getGlobalSettings();
@@ -262,8 +260,8 @@ public class RegionManager {
      * @return
      */
     public Region getActiveRegion(Location v, boolean ignoreGlobal) {
-        if (v == null && !ignoreGlobal) {
-            return global;
+        if (v == null) {
+            return !ignoreGlobal ? global : null;
         }
         for (Region tree : rootNodes) {
             if (tree.equalsWorld(v.getWorld(), v.getDimension())) {

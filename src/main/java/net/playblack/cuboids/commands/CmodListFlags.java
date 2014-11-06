@@ -21,7 +21,7 @@ public class CmodListFlags extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         //Just list all available flags
@@ -45,7 +45,9 @@ public class CmodListFlags extends CBaseCommand {
             }
         }
         else {
-            Region r = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
+            Region r = RegionManager.get()
+                                    .getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
+                                                                                                    .getDimension());
             if (r == null) {
                 r = Config.get().getGlobalSettings();
             }

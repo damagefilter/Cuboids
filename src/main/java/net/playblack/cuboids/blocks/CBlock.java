@@ -41,13 +41,50 @@ public class CBlock {
         this.type = (short) type;
     }
 
+    public static CBlock deserialize(String serialized) throws DeserializeException {
+        serialized = serialized.replace("[", "").replace("]", "");
+        CBlock tr;
+        String[] values = serialized.split(",");
+        if (values.length != 2) {
+            throw new DeserializeException("Could not deserialize CBlock object. Invalid serialized data!", serialized);
+        }
+        short type = Short.parseShort(values[0]);
+        byte data = Byte.parseByte(values[1]);
+        if (type == 54) {
+            tr = new ChestBlock();
+            tr.setData(data);
+        }
+        else if (type == 63) {
+            tr = new SignBlock();
+            tr.setData(data);
+        }
+        else {
+            tr = new CBlock(type, data);
+        }
+        return tr;
+    }
+
     /**
-     * Set this blocks type
+     * Parse a new block from a string. Syntax: BlockId:Data or only blockId
      *
-     * @param type
+     * @param input
+     * @return
      */
-    public void setType(int type) {
-        this.type = (short) type;
+    public static CBlock parseBlock(String input) {
+        String[] split = input.split(":");
+        short type;
+        byte data = 0;
+        if (split.length > 1) {
+            type = ToolBox.convertType(split[0]);
+            data = ToolBox.convertData(split[1]);
+        }
+        else {
+            type = ToolBox.convertType(split[0]);
+        }
+        if ((type == -1) || (data == -1)) {
+            return null;
+        }
+        return new CBlock(type, data);
     }
 
     /**
@@ -60,12 +97,12 @@ public class CBlock {
     }
 
     /**
-     * set this blocks data
+     * Set this blocks type
      *
-     * @param data
+     * @param type
      */
-    public void setData(int data) {
-        this.data = (byte) data;
+    public void setType(int type) {
+        this.type = (short) type;
     }
 
     /**
@@ -75,6 +112,15 @@ public class CBlock {
      */
     public byte getData() {
         return data;
+    }
+
+    /**
+     * set this blocks data
+     *
+     * @param data
+     */
+    public void setData(int data) {
+        this.data = (byte) data;
     }
 
     /**
@@ -114,57 +160,11 @@ public class CBlock {
      * @return
      */
     public StringBuilder serialize() {
-        return new StringBuilder().append("[").append(Short.toString(type))
-                .append(",").append(Byte.toString(data)).append("]");
-    }
-
-    public static CBlock deserialize(String serialized)
-            throws DeserializeException {
-        serialized = serialized.replace("[", "").replace("]", "");
-        CBlock tr;
-        String[] values = serialized.split(",");
-        if (values.length != 2) {
-            throw new DeserializeException(
-                    "Could not deserialize CBlock object. Invalid serialized data!",
-                    serialized);
-        }
-        short type = Short.parseShort(values[0]);
-        byte data = Byte.parseByte(values[1]);
-        if (type == 54) {
-            tr = new ChestBlock();
-            tr.setData(data);
-        }
-        else if (type == 63) {
-            tr = new SignBlock();
-            tr.setData(data);
-        }
-        else {
-            tr = new CBlock(type, data);
-        }
-        return tr;
-    }
-
-    /**
-     * Parse a new block from a string. Syntax: BlockId:Data or only blockId
-     *
-     * @param input
-     * @return
-     */
-    public static CBlock parseBlock(String input) {
-        String[] split = input.split(":");
-        short type;
-        byte data = 0;
-        if (split.length > 1) {
-            type = ToolBox.convertType(split[0]);
-            data = ToolBox.convertData(split[1]);
-        }
-        else {
-            type = ToolBox.convertType(split[0]);
-        }
-        if ((type == -1) || (data == -1)) {
-            return null;
-        }
-        return new CBlock(type, data);
+        return new StringBuilder().append("[")
+                                  .append(Short.toString(type))
+                                  .append(",")
+                                  .append(Byte.toString(data))
+                                  .append("]");
     }
 
     /**

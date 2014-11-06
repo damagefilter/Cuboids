@@ -21,12 +21,11 @@ public class Cbrush extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         if (!player.hasPermission("cuboids.super.admin")) {
-            if (!(player.hasPermission("cWorldMod") && player
-                    .hasPermission("cbrush"))) {
+            if (!(player.hasPermission("cWorldMod") && player.hasPermission("cbrush"))) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
@@ -40,8 +39,7 @@ public class Cbrush extends CBaseCommand {
             return;
         }
         CBlock block = CBlock.parseBlock(command[2]);
-        PlayerSelection selection = selectionManager.getPlayerSelection(player
-                .getName());
+        PlayerSelection selection = selectionManager.getPlayerSelection(player.getName());
         selection.setBrushData(block.getData());
         selection.setBrushRadius(radius);
         selection.setBrushType(block.getType());

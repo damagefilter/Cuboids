@@ -6,28 +6,6 @@ import net.playblack.cuboids.gameinterface.IBaseEntity;
 
 public class EntityDamageEvent extends CuboidEvent implements Cancellable {
 
-    public enum DamageSource {
-
-        CREEPER_EXPLOSION,
-        ENTITY,
-        EXPLOSION,
-        FALL,
-        FIRE,
-        FIRE_TICK,
-        LAVA,
-        WATER,
-        CACTUS,
-        SUFFOCATION,
-        LIGHTING,
-        STARVATION,
-        POTION,
-        WITHER_SKULL,
-        ENDERPEARL,
-        FALLING_ANVIL, //So funny :D
-        FALLING_BLOCK,
-        GENERIC
-    }
-
     private boolean isCancelled = false;
     private IBaseEntity attacker;
     private IBaseEntity defender;
@@ -74,5 +52,27 @@ public class EntityDamageEvent extends CuboidEvent implements Cancellable {
      */
     public void setDamage(int newDamage) {
         this.damage = newDamage;
+    }
+
+    public enum DamageSource {
+
+        CREEPER_EXPLOSION,
+        ENTITY,
+        EXPLOSION,
+        FALL,
+        FIRE,
+        FIRE_TICK,
+        LAVA,
+        WATER,
+        CACTUS,
+        SUFFOCATION,
+        LIGHTING,
+        STARVATION,
+        POTION,
+        WITHER_SKULL,
+        ENDERPEARL,
+        FALLING_ANVIL, //So funny :D
+        FALLING_BLOCK,
+        GENERIC
     }
 }

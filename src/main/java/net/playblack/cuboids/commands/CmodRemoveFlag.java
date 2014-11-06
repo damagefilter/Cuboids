@@ -20,7 +20,7 @@ public class CmodRemoveFlag extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
 
@@ -30,7 +30,9 @@ public class CmodRemoveFlag extends CBaseCommand {
             return;
         }
 
-        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
+        Region node = RegionManager.get()
+                                   .getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
+                                                                                                   .getDimension());
         if (node == null) {
             MessageSystem.failMessage(player, "noCuboidFound");
             return;

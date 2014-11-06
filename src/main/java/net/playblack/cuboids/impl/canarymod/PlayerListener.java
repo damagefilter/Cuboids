@@ -7,7 +7,12 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.hook.HookHandler;
 import net.canarymod.hook.entity.DamageHook;
-import net.canarymod.hook.player.*;
+import net.canarymod.hook.player.BanHook;
+import net.canarymod.hook.player.DisconnectionHook;
+import net.canarymod.hook.player.ItemDropHook;
+import net.canarymod.hook.player.KickHook;
+import net.canarymod.hook.player.PlayerMoveHook;
+import net.canarymod.hook.player.TeleportHook;
 import net.canarymod.plugin.PluginListener;
 import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.ActionManager;
@@ -46,8 +51,12 @@ public class PlayerListener implements PluginListener {
         Location to = hook.getTo();
         Location from = hook.getFrom();
         Player player = hook.getPlayer();
-        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.getX(), to.getY(), to.getZ(), to.getType().getId(), to.getWorldName());
-        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location(from.getX(), from.getY(), from.getZ(), from.getType().getId(), from.getWorldName());
+        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.getX(), to.getY(), to.getZ(), to.getType()
+                                                                                                                   .getId(), to
+                .getWorldName());
+        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location(from.getX(), from.getY(), from.getZ(), from
+                .getType()
+                .getId(), from.getWorldName());
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(player.getName());
@@ -70,9 +79,13 @@ public class PlayerListener implements PluginListener {
         if (!player.getWorld().isChunkLoaded((int) to.getX(), (int) to.getZ())) {
             player.getWorld().loadChunk((int) to.getX(), (int) to.getZ());
         }
-        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.getX(), to.getY(), to.getZ(), to.getType().getId(), to.getWorldName());
+        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.getX(), to.getY(), to.getZ(), to.getType()
+                                                                                                                   .getId(), to
+                .getWorldName());
         ToolBox.adjustWorldPosition(vTo);
-        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location(from.getX(), from.getY(), from.getZ(), from.getType().getId(), from.getWorldName());
+        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location(from.getX(), from.getY(), from.getZ(), from
+                .getType()
+                .getId(), from.getWorldName());
         ToolBox.adjustWorldPosition(vFrom);
         CPlayer cplayer;
         try {
@@ -160,7 +173,11 @@ public class PlayerListener implements PluginListener {
             }
 
             EntityItem item = hook.getItem();
-            ItemDropEvent event = new ItemDropEvent(new CItem(item.getItem().getId(), item.getItem().getDamage(), item.getItem().getAmount(), item.getItem().getSlot()), cplayer, Cuboids.toLocalLocation(item.getLocation()));
+            ItemDropEvent event = new ItemDropEvent(new CItem(item.getItem().getId(), item.getItem()
+                                                                                          .getDamage(), item.getItem()
+                                                                                                            .getAmount(), item
+                    .getItem()
+                    .getSlot()), cplayer, Cuboids.toLocalLocation(item.getLocation()));
             ActionManager.fireEvent(event);
             if (event.isCancelled()) {
                 hook.setCanceled();

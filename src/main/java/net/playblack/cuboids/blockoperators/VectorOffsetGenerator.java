@@ -56,13 +56,11 @@ public class VectorOffsetGenerator extends BaseGen {
         double y_distance = position.getY() - selection.getOrigin().getY();
 
         double z_distance = position.getZ() - selection.getOrigin().getZ();
-        CuboidSelection tmp = new CuboidSelection(selection.getOrigin(),
-                selection.getOffset());
+        CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset());
         synchronized (lock) {
             for (Vector key : selection.getBlockList().keySet()) {
                 CBlock b = selection.getBlockList().get(key);
-                tmp.setBlock(new Vector(key.getX() + x_distance, key.getY()
-                        + y_distance, key.getZ() + z_distance), b);
+                tmp.setBlock(new Vector(key.getX() + x_distance, key.getY() + y_distance, key.getZ() + z_distance), b);
             }
             originalPositions = selection.getBlockList();
             selection.setBlockList(tmp.getBlockList());
@@ -73,9 +71,7 @@ public class VectorOffsetGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory)
-            throws BlockEditLimitExceededException,
-            SelectionIncompleteException {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         // selection.clearBlocks(); //<- do not clear here, we need the blocks
         // for pasting, idiot!
         // scanWorld(false, true); //don't fetch again!
@@ -85,8 +81,7 @@ public class VectorOffsetGenerator extends BaseGen {
             return false;
         }
         if (newHistory) {
-            SessionManager.get().getPlayerHistory(player.getName())
-                    .remember(new HistoryObject(world, selection));
+            SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
         boolean result = modifyWorld(true);
         // Reset positions for pasting the stuff again.

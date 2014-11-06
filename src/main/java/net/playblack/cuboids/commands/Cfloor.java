@@ -21,7 +21,7 @@ public class Cfloor extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
 
@@ -29,8 +29,7 @@ public class Cfloor extends CBaseCommand {
         if (height == -1) {
             MessageSystem.failMessage(player, "negativeNumber");
         }
-        CuboidSelection sel = SelectionManager.get()
-                .getPlayerSelection(player.getName());
+        CuboidSelection sel = SelectionManager.get().getPlayerSelection(player.getName());
         sel.sortEdges(false);
         Vector origin = sel.getOffset();
         if ((command.length == 3) && command[2].equalsIgnoreCase("-r")) {

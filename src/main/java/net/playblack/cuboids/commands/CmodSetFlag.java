@@ -20,7 +20,7 @@ public class CmodSetFlag extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         if (!player.hasPermission("cuboids.super.admin")) {
@@ -36,7 +36,10 @@ public class CmodSetFlag extends CBaseCommand {
             return;
         }
 
-        Region node = RegionManager.get().getRegionByName(command[command.length - 3], player.getWorld().getName(), player.getWorld().getDimension());
+        Region node = RegionManager.get()
+                                   .getRegionByName(command[command.length - 3], player.getWorld()
+                                                                                       .getName(), player.getWorld()
+                                                                                                         .getDimension());
         if (node == null) {
             node = Config.get().getGlobalSettings();
         }

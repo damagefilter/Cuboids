@@ -44,15 +44,15 @@ public class CanaryBaseEntity implements IBaseEntity {
     }
 
     @Override
-    public Location getLocation() {
-        return new Location(entity.getX(), entity.getY(), entity.getZ(), world.getDimension(), world.getName());
-    }
-
-    @Override
     public void setPosition(Vector v) {
         entity.setX(v.getX());
         entity.setY(v.getY());
         entity.setZ(v.getZ());
+    }
+
+    @Override
+    public Location getLocation() {
+        return new Location(entity.getX(), entity.getY(), entity.getZ(), world.getDimension(), world.getName());
     }
 
     @Override

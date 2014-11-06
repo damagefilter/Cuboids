@@ -20,9 +20,7 @@ public class HealThread implements Runnable {
     int healPower;
     long healDelay;
 
-    public HealThread(CPlayer player, Region cube,
-                      ScheduledExecutorService threadManager, int healPower,
-                      long healDelay) {
+    public HealThread(CPlayer player, Region cube, ScheduledExecutorService threadManager, int healPower, long healDelay) {
         this.player = player;
         this.healPower = healPower;
         this.healDelay = healDelay;

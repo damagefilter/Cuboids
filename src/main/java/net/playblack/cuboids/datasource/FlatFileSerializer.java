@@ -13,10 +13,8 @@ public class FlatFileSerializer extends CuboidSerializer {
 
     @Override
     public void save(String name, String world) {
-        String blockLocation = "plugins/cuboids2/backups/blocks_"
-                + world.toUpperCase() + "_" + name;
-        String extrasLocation = "plugins/cuboids2/backups/contents_"
-                + world.toUpperCase() + "_" + name;
+        String blockLocation = "plugins/cuboids2/backups/blocks_" + world.toUpperCase() + "_" + name;
+        String extrasLocation = "plugins/cuboids2/backups/contents_" + world.toUpperCase() + "_" + name;
         FileWriter blockWriter = null;
         FileWriter extraWriter = null;
         try {
@@ -26,8 +24,7 @@ public class FlatFileSerializer extends CuboidSerializer {
                 blockWriter.write(b + System.getProperty("line.separator"));
             }
             for (Integer index : this.contents.keySet()) {
-                extraWriter.write(index + "=" + this.contents.get(index)
-                        + System.getProperty("line.separator"));
+                extraWriter.write(index + "=" + this.contents.get(index) + System.getProperty("line.separator"));
             }
 
         }

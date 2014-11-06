@@ -58,18 +58,6 @@ public abstract class CPlayer implements IBaseEntity {
     public abstract String[] getGroups();
 
     /**
-     * Switch the players game mode.<br>
-     * <ul>
-     * <li>0 = survival</li> <li>1 = creative</li> <li>2 = adventure</li>
-     * </ul>
-     *
-     * @param creative
-     * @implementation Make sure to save and swap inventory accordingly and check if a mode was already set
-     * by non-cuboid circumstances and do not change mode if so!
-     */
-    public abstract void setGameMode(int mode);
-
-    /**
      * Check if a player is in creative mode
      *
      * @return
@@ -172,10 +160,7 @@ public abstract class CPlayer implements IBaseEntity {
         if (hasPermission("cuboids.super.admin") || cube.playerIsAllowed(getName(), getGroups())) {
             return true;
         }
-        if (cube.getProperty("enter-cuboid") == Status.DENY) {
-            return false;
-        }
-        return true;
+        return cube.getProperty("enter-cuboid") != Status.DENY;
     }
 
     /**
@@ -257,12 +242,12 @@ public abstract class CPlayer implements IBaseEntity {
 //                }
             }
             if (r.getProperty("healing") == Status.ALLOW) {
-                CuboidInterface.get().getThreadManager().schedule(new HealThread(
-                        this, r,
-                        CuboidInterface.get().getThreadManager(), Config.get().getHealPower(),
-                        Config.get().getHealDelay()),
-                        0,
-                        TimeUnit.SECONDS);
+                CuboidInterface.get()
+                               .getThreadManager()
+                               .schedule(new HealThread(this, r, CuboidInterface.get().getThreadManager(), Config.get()
+                                                                                                                 .getHealPower(), Config
+                                               .get()
+                                               .getHealDelay()), 0, TimeUnit.SECONDS);
             }
             if (currentRegion != null && !currentRegion.isChildOf(r)) {
                 currentRegion = r;
@@ -285,6 +270,18 @@ public abstract class CPlayer implements IBaseEntity {
      * @return
      */
     public abstract int getGameMode();
+
+    /**
+     * Switch the players game mode.<br>
+     * <ul>
+     * <li>0 = survival</li> <li>1 = creative</li> <li>2 = adventure</li>
+     * </ul>
+     *
+     * @param creative
+     * @implementation Make sure to save and swap inventory accordingly and check if a mode was already set
+     * by non-cuboid circumstances and do not change mode if so!
+     */
+    public abstract void setGameMode(int mode);
 
     /**
      * Return the Region that has last been set to this player

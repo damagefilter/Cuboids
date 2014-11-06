@@ -35,13 +35,19 @@ public class CItem {
         this.amount = amount;
     }
 
-    /**
-     * set item id
-     *
-     * @param id
-     */
-    public void setId(int id) {
-        this.id = id;
+    public static CItem deserialize(String serialized) throws DeserializeException {
+        serialized = serialized.replace("[", "").replace("]", "");
+        CItem tr;
+        String[] values = serialized.split(",");
+        if (values.length != 4) {
+            throw new DeserializeException("Could not deserialize CItem object. Invalid serialized data!", serialized);
+        }
+        int amount = Integer.parseInt(values[0]);
+        int itemId = Integer.parseInt(values[1]);
+        int itemData = Integer.parseInt(values[2]);
+        int slot = Integer.parseInt(values[3]);
+        tr = new CItem(itemId, itemData, amount, slot);
+        return tr;
     }
 
     /**
@@ -54,12 +60,12 @@ public class CItem {
     }
 
     /**
-     * set data/damage value
+     * set item id
      *
-     * @param data
+     * @param id
      */
-    public void setData(int data) {
-        this.data = (short) data;
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
@@ -72,12 +78,12 @@ public class CItem {
     }
 
     /**
-     * set item slot in inventory
+     * set data/damage value
      *
-     * @param slot
+     * @param data
      */
-    public void setSlot(int slot) {
-        this.slot = slot;
+    public void setData(int data) {
+        this.data = (short) data;
     }
 
     /**
@@ -90,12 +96,12 @@ public class CItem {
     }
 
     /**
-     * Set quantity of this item
+     * set item slot in inventory
      *
-     * @param a
+     * @param slot
      */
-    public void setAmount(int a) {
-        amount = a;
+    public void setSlot(int slot) {
+        this.slot = slot;
     }
 
     /**
@@ -107,29 +113,25 @@ public class CItem {
         return amount;
     }
 
-    public StringBuilder serialize() {
-        return new StringBuilder().append("[").append(Integer.valueOf(amount))
-                .append(",").append(Integer.valueOf(id)).append(",")
-                .append(Integer.valueOf(data)).append(",")
-                .append(Integer.valueOf(slot)).append("]");
+    /**
+     * Set quantity of this item
+     *
+     * @param a
+     */
+    public void setAmount(int a) {
+        amount = a;
     }
 
-    public static CItem deserialize(String serialized)
-            throws DeserializeException {
-        serialized = serialized.replace("[", "").replace("]", "");
-        CItem tr;
-        String[] values = serialized.split(",");
-        if (values.length != 4) {
-            throw new DeserializeException(
-                    "Could not deserialize CItem object. Invalid serialized data!",
-                    serialized);
-        }
-        int amount = Integer.parseInt(values[0]);
-        int itemId = Integer.parseInt(values[1]);
-        int itemData = Integer.parseInt(values[2]);
-        int slot = Integer.parseInt(values[3]);
-        tr = new CItem(itemId, itemData, amount, slot);
-        return tr;
+    public StringBuilder serialize() {
+        return new StringBuilder().append("[")
+                                  .append(Integer.valueOf(amount))
+                                  .append(",")
+                                  .append(Integer.valueOf(id))
+                                  .append(",")
+                                  .append(Integer.valueOf(data))
+                                  .append(",")
+                                  .append(Integer.valueOf(slot))
+                                  .append("]");
     }
 
 }

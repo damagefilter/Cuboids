@@ -20,17 +20,7 @@ import java.util.Iterator;
  */
 public class Config {
 
-    public enum Implementation {
-        CANARY,
-        CANARY_NEW,
-        NOT_SET
-    }
-
-    private Implementation impl = Implementation.NOT_SET;
-    private String basePath = "plugins/cuboids/";
-    // global settings go into this
-    private Region global = new Region();
-    private HashMap<String, String> sqlConfig = null;
+    private static Config instance = null;
     // Cuboids Default Settings
     HashMap<String, Region.Status> defaultSettings = new HashMap<String, Region.Status>();
     ArrayList<Integer> restrictedItems;
@@ -38,7 +28,11 @@ public class Config {
     PropsFile pluginSetting;
     PropsFile cuboidSetting;
     PropsFile dsSetting;
-    private static Config instance = null;
+    private Implementation impl = Implementation.NOT_SET;
+    private String basePath = "plugins/cuboids/";
+    // global settings go into this
+    private Region global = new Region();
+    private HashMap<String, String> sqlConfig = null;
 
     private Config() {
         pluginSetting = new PropsFile(basePath + "settings.properties");
@@ -288,8 +282,8 @@ public class Config {
      * @return the autoParent
      */
     public boolean isAutoParent() {
-        boolean autoParent = true;
-        return autoParent;
+        // NOTICE: Non-autoparenting mode is not supported anymore
+        return true;
     }
 
     /**
@@ -390,5 +384,11 @@ public class Config {
         if (this.impl == Implementation.NOT_SET) {
             this.impl = impl;
         }
+    }
+
+    public enum Implementation {
+        CANARY,
+        CANARY_NEW,
+        NOT_SET
     }
 }

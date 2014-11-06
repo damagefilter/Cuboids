@@ -42,8 +42,7 @@ public class PlayerSelection extends CuboidSelection {
      * @param v2
      * @param blocks
      */
-    public PlayerSelection(Vector v1, Vector v2,
-                           LinkedHashMap<Vector, CBlock> blocks) {
+    public PlayerSelection(Vector v1, Vector v2, LinkedHashMap<Vector, CBlock> blocks) {
         super(v1, v2, blocks);
     }
 

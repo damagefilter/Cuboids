@@ -26,7 +26,7 @@ public class Cbackup extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         if (!player.hasPermission("cuboids.super.admin")) {
@@ -35,14 +35,16 @@ public class Cbackup extends CBaseCommand {
                 return;
             }
         }
-        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
+        Region node = RegionManager.get()
+                                   .getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
+                                                                                                   .getDimension());
         if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod")) {
             GenericGenerator gen = new GenericGenerator(new CuboidSelection(node.getOrigin(), node.getOffset()), player.getWorld());
 
             CuboidSelection tmp = new CuboidSelection(node.getOrigin(), node.getOffset());
 
             try {
-                tmp = gen.getWorldContent(tmp);
+                tmp = gen.getWorldContent();
             }
             catch (BlockEditLimitExceededException e) {
                 Debug.logWarning(e.getMessage());

@@ -18,7 +18,7 @@ public class Cexpand extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         SelectionManager.get().getPlayerSelection(player.getName()).expandVert();

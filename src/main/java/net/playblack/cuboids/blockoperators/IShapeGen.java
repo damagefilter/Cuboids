@@ -10,10 +10,7 @@ public interface IShapeGen {
      *
      * @param simulate
      * @throws BlockEditLimitExceededException
-     *
      * @throws SelectionIncompleteException
      */
-    public boolean execute(CPlayer player, boolean newHistory)
-            throws BlockEditLimitExceededException,
-            SelectionIncompleteException;
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException;
 }

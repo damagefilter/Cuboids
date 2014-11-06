@@ -24,7 +24,7 @@ public class Highprotect extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         // Check for the proper permissions
@@ -32,8 +32,7 @@ public class Highprotect extends CBaseCommand {
             MessageSystem.failMessage(player, "permissionDenied");
             return;
         }
-        CuboidSelection selection = SelectionManager.get()
-                .getPlayerSelection(player.getName());
+        CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
         if (!selection.isComplete()) {
             MessageSystem.failMessage(player, "selectionIncomplete");
             return;

@@ -25,15 +25,11 @@ public class CuboidFLoader implements Loader {
                     test.mkdirs();
                 }
             }
-            for (File files : new File("plugins/config/CuboidPlugin/areas/")
-                    .listFiles()) {
+            for (File files : new File("plugins/config/CuboidPlugin/areas/").listFiles()) {
                 if (files.getName().toLowerCase().endsWith(".areaf")) {
-                    PropertiesFile file = new PropertiesFile(
-                            "plugins/config/CuboidPlugin/areas/"
-                                    + files.getName());
+                    PropertiesFile file = new PropertiesFile("plugins/config/CuboidPlugin/areas/" + files.getName());
                     shells.add(new CuboidFShell(file));
-                    File b = new File("plugins/cuboids2/backups_cuboidF/"
-                            + files.getName());
+                    File b = new File("plugins/cuboids2/backups_cuboidF/" + files.getName());
                     files.renameTo(b);
                 }
             }

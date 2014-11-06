@@ -8,9 +8,8 @@ import java.util.HashMap;
  * @author Chris
  */
 public class SelectionManager {
-    private HashMap<String, ISelection> selections;
-
     private static SelectionManager instance = null;
+    private HashMap<String, ISelection> selections;
 
     private SelectionManager() {
         selections = new HashMap<String, ISelection>();

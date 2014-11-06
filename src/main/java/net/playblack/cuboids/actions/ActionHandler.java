@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ActionHandler {
-    public enum Priority {LOW, MEDIUM, HIGH}
-
     Priority priority() default Priority.MEDIUM;
+
+    public enum Priority {LOW, MEDIUM, HIGH}
 }

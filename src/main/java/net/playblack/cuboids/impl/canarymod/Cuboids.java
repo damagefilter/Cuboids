@@ -17,11 +17,16 @@ import net.playblack.mcutils.Location;
 
 public class Cuboids extends Plugin {
 
+    public static Location toLocalLocation(net.canarymod.api.world.position.Location loc) {
+        return new Location(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), CServer.getServer()
+                                                                                      .getWorld(loc.getWorldName(), loc.getType()
+                                                                                                                       .getId()));
+    }
+
     @Override
     public boolean enable() {
         Debug.overrideLogger(getLogman());
-        new Bootstrapper(new CanaryServer(), new Loader[]{new CuboidFLoader()}, Implementation.CANARY)
-                .bootstrap();
+        new Bootstrapper(new CanaryServer(), new Loader[]{new CuboidFLoader()}, Implementation.CANARY).bootstrap();
         try {
             Canary.commands().registerCommands(new CmodCommands(), this, false);
             Canary.commands().registerCommands(new MiscCommands(), this, false);
@@ -41,10 +46,6 @@ public class Cuboids extends Plugin {
     @Override
     public void disable() {
         Canary.commands().unregisterCommands(this);
-    }
-
-    public static Location toLocalLocation(net.canarymod.api.world.position.Location loc) {
-        return new Location(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), CServer.getServer().getWorld(loc.getWorldName(), loc.getType().getId()));
     }
 
 }

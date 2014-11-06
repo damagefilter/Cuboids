@@ -25,7 +25,7 @@ public class Credo extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         if (!player.hasPermission("cuboids.super.admin")) {
@@ -57,8 +57,7 @@ public class Credo extends CBaseCommand {
         }
 
         for (int i = 0; i < steps; i++) {
-            CuboidSelection sel = SessionManager.get()
-                    .getPlayerHistory(subject).redo();
+            CuboidSelection sel = SessionManager.get().getPlayerHistory(subject).redo();
             if (sel == null) {
                 MessageSystem.yellowNote(player, "allRedone");
                 // ms.successMessage(player, "redoDone");

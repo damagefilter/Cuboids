@@ -48,8 +48,7 @@ public class HistoryObject {
      * @param original
      * @param modified
      */
-    public HistoryObject(LinkedHashMap<Vector, CBlock> original,
-                         LinkedHashMap<Vector, CBlock> modified) {
+    public HistoryObject(LinkedHashMap<Vector, CBlock> original, LinkedHashMap<Vector, CBlock> modified) {
         blocksBefore = original;
         modifiedBlocks = modified;
     }
@@ -67,15 +66,6 @@ public class HistoryObject {
     }
 
     /**
-     * Set the blocks that are in the world before modifying
-     *
-     * @param b
-     */
-    public void setBlocksBefore(LinkedHashMap<Vector, CBlock> b) {
-        blocksBefore = b;
-    }
-
-    /**
      * Get the blocks that are in the world before modifying
      *
      * @return
@@ -89,8 +79,8 @@ public class HistoryObject {
      *
      * @param b
      */
-    public void setModifiedBlocks(LinkedHashMap<Vector, CBlock> b) {
-        modifiedBlocks = b;
+    public void setBlocksBefore(LinkedHashMap<Vector, CBlock> b) {
+        blocksBefore = b;
     }
 
     /**
@@ -100,6 +90,15 @@ public class HistoryObject {
      */
     public LinkedHashMap<Vector, CBlock> getModifiedBlocks() {
         return modifiedBlocks;
+    }
+
+    /**
+     * Set the blocks that are in the world before modifying
+     *
+     * @param b
+     */
+    public void setModifiedBlocks(LinkedHashMap<Vector, CBlock> b) {
+        modifiedBlocks = b;
     }
 
     /**

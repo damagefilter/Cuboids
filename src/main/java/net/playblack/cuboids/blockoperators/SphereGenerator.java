@@ -73,12 +73,9 @@ public class SphereGenerator extends BaseGen {
                 for (int y = Ymin; y <= Ymax; y++) {
                     for (int z = Zmin; z <= Zmax; z++) {
 
-                        double diff = Math.sqrt(Math.pow(x - center.getX(),
-                                2.0D)
-                                + Math.pow(y - center.getY(), 2.0D)
-                                + Math.pow(z - center.getZ(), 2.0D));
-                        if (diff < radius + 0.5
-                                && (fill || (!fill && diff > radius - 0.5))) {
+                        double diff = Math.sqrt(Math.pow(x - center.getX(), 2.0D) + Math.pow(y - center.getY(), 2.0D) + Math
+                                .pow(z - center.getZ(), 2.0D));
+                        if (diff < radius + 0.5 && (fill || (!fill && diff > radius - 0.5))) {
                             selection.setBlock(new Vector(x, y, z), material);
                         }
                     }
@@ -88,16 +85,13 @@ public class SphereGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory)
-            throws BlockEditLimitExceededException,
-            SelectionIncompleteException {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         selection.clearBlocks();
         createSphere();
         CuboidSelection world = scanWorld(true, false);
 
         if (newHistory) {
-            SessionManager.get().getPlayerHistory(player.getName())
-                    .remember(new HistoryObject(world, selection));
+            SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
         boolean result = modifyWorld(false);
         return result;

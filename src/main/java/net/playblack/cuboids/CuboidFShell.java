@@ -150,14 +150,12 @@ public class CuboidFShell implements CuboidShell {
 
     @Override
     public Vector getOrigin() {
-        return new Vector(file.getInt("X1", 0), file.getInt("Y1", 0),
-                file.getInt("Z1", 0));
+        return new Vector(file.getInt("X1", 0), file.getInt("Y1", 0), file.getInt("Z1", 0));
     }
 
     @Override
     public Vector getOffset() {
-        return new Vector(file.getInt("X2", 0), file.getInt("Y2", 0),
-                file.getInt("Z2", 0));
+        return new Vector(file.getInt("X2", 0), file.getInt("Y2", 0), file.getInt("Z2", 0));
     }
 
     @Override

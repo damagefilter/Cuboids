@@ -17,7 +17,7 @@ public class CmodRemove extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         CuboidInterface.get().removeCuboid(player, command[1]);

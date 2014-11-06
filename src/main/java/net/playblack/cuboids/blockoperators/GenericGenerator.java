@@ -26,9 +26,7 @@ public class GenericGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory)
-            throws BlockEditLimitExceededException,
-            SelectionIncompleteException {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         if (newHistory) {
             CuboidSelection world = scanWorld(true, false);
             SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));

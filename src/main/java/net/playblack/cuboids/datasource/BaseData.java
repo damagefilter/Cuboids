@@ -26,8 +26,7 @@ public interface BaseData {
      * @param treeList list of CuboidTrees
      * @param silent
      */
-    public void saveAll(ArrayList<Region> treeList, boolean silent,
-                        boolean force);
+    public void saveAll(ArrayList<Region> treeList, boolean silent, boolean force);
 
     /**
      * Load all regions from datasource into memory.

@@ -24,7 +24,7 @@ public class Cfill extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         // Check for the proper permissions
@@ -42,8 +42,7 @@ public class Cfill extends CBaseCommand {
             return;
         }
         // prepare the selection
-        CuboidSelection template = SelectionManager.get()
-                .getPlayerSelection(player.getName());
+        CuboidSelection template = SelectionManager.get().getPlayerSelection(player.getName());
         if (!template.getBlockList().isEmpty()) {
             template.clearBlocks();
         }
@@ -68,6 +67,5 @@ public class Cfill extends CBaseCommand {
         catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
-        return;
     }
 }

@@ -12,16 +12,15 @@ import java.util.HashMap;
 
 public abstract class BaseGen implements IShapeGen {
 
+    protected final Object lock = new Object();
     protected CuboidSelection selection;
     protected CWorld world;
-    protected final Object lock = new Object();
+    // List of said blocks
+    HashMap<Vector, CBlock> placeLast = new HashMap<Vector, CBlock>();
     /**
      * List of block id's that need to be put last into the world
      */
     private ArrayList<Integer> queueables = new ArrayList<Integer>();
-
-    // List of said blocks
-    HashMap<Vector, CBlock> placeLast = new HashMap<Vector, CBlock>();
 
     public BaseGen(CuboidSelection selection, CWorld world) {
         this.selection = selection;
@@ -118,7 +117,6 @@ public abstract class BaseGen implements IShapeGen {
      * @param returnSelection true if you want to return the selection instead of
      *                        overwriting the blocks of the internal one
      * @throws BlockEditLimitExceededException
-     *
      * @throws SelectionIncompleteException
      */
     protected CuboidSelection scanWorld(boolean returnSelection, boolean requireCompleteSelection) throws BlockEditLimitExceededException, SelectionIncompleteException {
@@ -131,11 +129,15 @@ public abstract class BaseGen implements IShapeGen {
         if (selection.getBlockList().isEmpty() && selection.isComplete()) {
             double areaVolume = selection.getBoundarySize();
             if (areaVolume > 700000) {
-                throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass().getSimpleName() + " (" + areaVolume + " blocks)");
+                throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass()
+                                                                                                 .getSimpleName() + " (" + areaVolume + " blocks)");
             }
         }
         else if (selection.getBlockList().size() > 700000) {
-            throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass().getSimpleName() + " (" + selection.getBlockList().size() + " blocks)");
+            throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass()
+                                                                                             .getSimpleName() + " (" + selection
+                    .getBlockList()
+                    .size() + " blocks)");
         }
         CuboidSelection tmp = new CuboidSelection();
         if (selection.getBlockList().isEmpty()) {
@@ -184,13 +186,9 @@ public abstract class BaseGen implements IShapeGen {
      *
      * @return
      * @throws BlockEditLimitExceededException
-     *
      * @throws SelectionIncompleteException
      */
-    public CuboidSelection getWorldContent(CuboidSelection sel)
-            throws BlockEditLimitExceededException,
-            SelectionIncompleteException {
-        sel = scanWorld(true, true);
-        return sel;
+    public CuboidSelection getWorldContent() throws BlockEditLimitExceededException, SelectionIncompleteException {
+        return scanWorld(true, true);
     }
 }

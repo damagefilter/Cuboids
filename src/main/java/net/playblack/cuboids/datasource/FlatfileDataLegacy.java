@@ -38,6 +38,28 @@ public class FlatfileDataLegacy implements BaseData {
 
     }
 
+    public static void cleanupFiles() {
+        String path = "plugins/cuboids2/cuboids/";
+        String bpath = "plugins/cuboids2/cuboids/backup_e_you_may_delete_this/";
+        File folder = new File(path);
+        if (!folder.exists()) {
+            return;
+        }
+        File test = new File(bpath);
+        if (!test.exists()) {
+            test.mkdirs();
+        }
+        test = null;
+        for (File file : new File(path).listFiles()) {
+            // log.logMessage("Running "+i, "INFO");
+            if (file.getName().toLowerCase().endsWith("node")) {
+                File backup = new File(bpath + file.getName());
+                boolean del = file.renameTo(backup);
+                System.out.println("Moved node: " + del);
+            }
+        }
+    }
+
     @Override
     public void saveRegion(Region node) {
         throw new IllegalStateException("CuboidE is deprecated and must not be saved. Use a newer backend implementation!");
@@ -52,7 +74,6 @@ public class FlatfileDataLegacy implements BaseData {
     public void loadRegion(String name, String world, int dimension) {
         throw new IllegalStateException("Loading single CuboidE files is not supported anymore!");
     }
-
 
     @Override
     public int loadAll() {
@@ -75,8 +96,7 @@ public class FlatfileDataLegacy implements BaseData {
                 for (File files : new File(path).listFiles()) {
                     // log.logMessage("Running "+i, "INFO");
                     if (files.getName().toLowerCase().endsWith("node")) {
-                        reader = new BufferedReader(new FileReader(path
-                                + files.getName()));
+                        reader = new BufferedReader(new FileReader(path + files.getName()));
                         props = reader.readLine();
                         // log.logMessage("Processing", "INFO");
                         Region c = new Region();
@@ -140,28 +160,6 @@ public class FlatfileDataLegacy implements BaseData {
         return null;
     }
 
-    public static void cleanupFiles() {
-        String path = "plugins/cuboids2/cuboids/";
-        String bpath = "plugins/cuboids2/cuboids/backup_e_you_may_delete_this/";
-        File folder = new File(path);
-        if (!folder.exists()) {
-            return;
-        }
-        File test = new File(bpath);
-        if (!test.exists()) {
-            test.mkdirs();
-        }
-        test = null;
-        for (File file : new File(path).listFiles()) {
-            // log.logMessage("Running "+i, "INFO");
-            if (file.getName().toLowerCase().endsWith("node")) {
-                File backup = new File(bpath + file.getName());
-                boolean del = file.renameTo(backup);
-                System.out.println("Moved node: " + del);
-            }
-        }
-    }
-
     /**
      * Deserialize a string to a CuboidE object
      *
@@ -178,11 +176,9 @@ public class FlatfileDataLegacy implements BaseData {
 
             cube.setWorld(csv[3]);
 
-            Vector v1 = new Vector(Double.parseDouble(csv[4]),
-                    Double.parseDouble(csv[5]), Double.parseDouble(csv[6]));
+            Vector v1 = new Vector(Double.parseDouble(csv[4]), Double.parseDouble(csv[5]), Double.parseDouble(csv[6]));
 
-            Vector v2 = new Vector(Double.parseDouble(csv[7]),
-                    Double.parseDouble(csv[8]), Double.parseDouble(csv[9]));
+            Vector v2 = new Vector(Double.parseDouble(csv[7]), Double.parseDouble(csv[8]), Double.parseDouble(csv[9]));
             cube.setBoundingBox(v1, v2);
             cube.setProperty("creeper-explosion", Status.fromBoolean(!ToolBox.stringToBoolean(csv[10])));
             cube.setProperty("healing", Status.fromBoolean(ToolBox.stringToBoolean(csv[11])));

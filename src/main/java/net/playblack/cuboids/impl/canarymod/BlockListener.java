@@ -8,14 +8,33 @@ import net.canarymod.api.world.blocks.Block;
 import net.canarymod.hook.HookHandler;
 import net.canarymod.hook.entity.EndermanPickupBlockHook;
 import net.canarymod.hook.entity.HangingEntityDestroyHook;
-import net.canarymod.hook.player.*;
-import net.canarymod.hook.world.*;
+import net.canarymod.hook.player.BlockDestroyHook;
+import net.canarymod.hook.player.BlockLeftClickHook;
+import net.canarymod.hook.player.BlockPlaceHook;
+import net.canarymod.hook.player.BlockRightClickHook;
+import net.canarymod.hook.player.PlayerArmSwingHook;
+import net.canarymod.hook.world.BlockPhysicsHook;
+import net.canarymod.hook.world.BlockUpdateHook;
+import net.canarymod.hook.world.ExplosionHook;
+import net.canarymod.hook.world.FlowHook;
+import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.plugin.PluginListener;
 import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.events.forwardings.*;
+import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockBreakEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
+import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
+import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEvent;
+import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
+import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
+import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -33,7 +52,10 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void blockRightClick(BlockRightClickHook hook) {
         Block b = hook.getBlockClicked();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), hook.getPlayer().getWorld().getType().getId(), hook.getPlayer().getWorld().getName());
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), hook.getPlayer()
+                                                                    .getWorld()
+                                                                    .getType()
+                                                                    .getId(), hook.getPlayer().getWorld().getName());
         CPlayer cplayer;
         try {
             cplayer = CServer.getServer().getPlayer(hook.getPlayer().getName());
@@ -52,10 +74,10 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void leftClick(PlayerArmSwingHook hook) {
         if (!armSwingTimings.containsKey(hook.getPlayer().getName())) {
-            armSwingTimings.put(hook.getPlayer().getName(), new Long(0));
+            armSwingTimings.put(hook.getPlayer().getName(), 0L);
         }
         long theTime = armSwingTimings.get(hook.getPlayer().getName());
-        if (System.currentTimeMillis() <= theTime + 200) {
+        if (System.currentTimeMillis() <= theTime + 400) {
             return;
         }
 
@@ -68,7 +90,6 @@ public class BlockListener implements PluginListener {
             cplayer = new CanaryPlayer(hook.getPlayer());
         }
         ActionManager.fireEvent(new ArmSwingEvent(cplayer));
-        theTime = System.currentTimeMillis(); // Set time counter
     }
 
     @HookHandler
@@ -78,7 +99,8 @@ public class BlockListener implements PluginListener {
         }
         Block b = hook.getBlock();
         Player player = hook.getPlayer();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld()
+                                                                                                           .getName());
 //        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
@@ -99,7 +121,8 @@ public class BlockListener implements PluginListener {
     public void blockDestroy(BlockDestroyHook hook) {
         Block b = hook.getBlock();
         Player player = hook.getPlayer();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld()
+                                                                                                           .getName());
 //        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
@@ -120,7 +143,8 @@ public class BlockListener implements PluginListener {
     public void blockPlace(BlockPlaceHook hook) {
         Block b = hook.getBlockPlaced();
         Player player = hook.getPlayer();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld()
+                                                                                                           .getName());
 //        ToolBox.adjustWorldPosition(p);
         CPlayer cplayer;
         try {
@@ -144,7 +168,8 @@ public class BlockListener implements PluginListener {
         HashMap<Location, CBlock> blocks = new HashMap<Location, CBlock>();
 
         for (Block x : hook.getAffectedBlocks()) {
-            Location l = new Location(x.getX(), x.getY(), x.getZ(), x.getWorld().getType().getId(), x.getWorld().getName());
+            Location l = new Location(x.getX(), x.getY(), x.getZ(), x.getWorld().getType().getId(), x.getWorld()
+                                                                                                     .getName());
 //            ToolBox.adjustWorldPosition(l);
             blocks.put(l, new CBlock(x.getTypeId(), x.getData()));
         }
@@ -215,7 +240,8 @@ public class BlockListener implements PluginListener {
         Block to = hook.getBlockTo();
         Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         ToolBox.adjustWorldPosition(p);
-        LiquidFlowEvent event = new LiquidFlowEvent(new CBlock(b.getTypeId(), b.getData()), new CBlock(to.getTypeId(), to.getData()), p);
+        LiquidFlowEvent event = new LiquidFlowEvent(new CBlock(b.getTypeId(), b.getData()), new CBlock(to.getTypeId(), to
+                .getData()), p);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
@@ -250,7 +276,8 @@ public class BlockListener implements PluginListener {
     public void onEndermanPickup(EndermanPickupBlockHook hook) {
         Block b = hook.getBlock();
         Enderman entity = hook.getEnderman();
-        Location l = new Location(b.getX(), b.getY(), b.getZ(), entity.getWorld().getType().getId(), entity.getWorld().getName());
+        Location l = new Location(b.getX(), b.getY(), b.getZ(), entity.getWorld().getType().getId(), entity.getWorld()
+                                                                                                           .getName());
         ToolBox.adjustWorldPosition(l);
         EndermanPickupEvent event = new EndermanPickupEvent(l, new CBlock(b.getTypeId(), b.getData()));
         ActionManager.fireEvent(event);
@@ -261,12 +288,14 @@ public class BlockListener implements PluginListener {
 
     @HookHandler
     public void onHangingEntityDestroy(HangingEntityDestroyHook hook) {
-        CPlayer player = null;
+        CPlayer player;
 
-        Location loc = new Location(hook.getPainting().getX(),
+        Location loc = new Location(
+                hook.getPainting().getX(),
                 hook.getPainting().getY(),
                 hook.getPainting().getZ(),
-                hook.getPainting().getWorld().getType().getId(), hook.getPainting().getWorld().getName());
+                hook.getPainting().getWorld().getType().getId(),
+                hook.getPainting().getWorld().getName());
         try {
             player = CServer.getServer().getPlayer(hook.getPlayer().getName());
         }

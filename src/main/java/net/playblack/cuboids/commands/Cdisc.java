@@ -28,7 +28,7 @@ public class Cdisc extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         // Check for the proper permissions
@@ -107,6 +107,5 @@ public class Cdisc extends CBaseCommand {
         catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
-        return;
     }
 }

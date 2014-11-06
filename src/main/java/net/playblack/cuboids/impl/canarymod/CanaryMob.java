@@ -50,15 +50,15 @@ public class CanaryMob implements CMob {
     }
 
     @Override
-    public Location getLocation() {
-        return new Location(mob.getX(), mob.getY(), mob.getZ(), world.getDimension(), world.getName());
-    }
-
-    @Override
     public void setPosition(Vector v) {
         mob.setX(v.getX());
         mob.setY(v.getY());
         mob.setZ(v.getZ());
+    }
+
+    @Override
+    public Location getLocation() {
+        return new Location(mob.getX(), mob.getY(), mob.getZ(), world.getDimension(), world.getName());
     }
 
     @Override
@@ -67,13 +67,28 @@ public class CanaryMob implements CMob {
     }
 
     @Override
+    public void setX(double x) {
+        mob.setX(x);
+    }
+
+    @Override
     public double getY() {
         return mob.getY();
     }
 
     @Override
+    public void setY(double y) {
+        mob.setY(y);
+    }
+
+    @Override
     public double getZ() {
         return mob.getZ();
+    }
+
+    @Override
+    public void setZ(double z) {
+        mob.setZ(z);
     }
 
     @Override
@@ -99,21 +114,6 @@ public class CanaryMob implements CMob {
     @Override
     public void spawn() {
         mob.spawn();
-    }
-
-    @Override
-    public void setX(double x) {
-        mob.setX(x);
-    }
-
-    @Override
-    public void setY(double y) {
-        mob.setY(y);
-    }
-
-    @Override
-    public void setZ(double z) {
-        mob.setZ(z);
     }
 
     @Override

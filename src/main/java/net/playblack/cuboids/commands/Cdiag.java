@@ -21,15 +21,21 @@ public class Cdiag extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
-        ArrayList<Region> nodes = RegionManager.get().getCuboidsContaining(player.getLocation(), player.getWorld().getName(), player.getWorld().getDimension());
+        ArrayList<Region> nodes = RegionManager.get()
+                                               .getCuboidsContaining(player.getLocation(), player.getWorld()
+                                                                                                 .getName(), player.getWorld()
+                                                                                                                   .getDimension());
         MessageSystem.translateMessage(player, ColorManager.LightGreen, "cuboidContainingYou");
         for (Region cube : nodes) {
-            player.sendMessage(ColorManager.Yellow + "Name: " + ColorManager.LightGray + cube.getName() + " : " + (cube.hasParent() ? cube.getParent().getName() : "Global"));
+            player.sendMessage(ColorManager.Yellow + "Name: " + ColorManager.LightGray + cube.getName() + " : " + (cube.hasParent() ? cube
+                    .getParent()
+                    .getName() : "Global"));
         }
         player.sendMessage(ColorManager.DarkPurple + "------------------------------------------------");
-        player.sendMessage(ColorManager.Gold + "I think you are here: " + (player.getCurrentRegion() != null ? player.getCurrentRegion().getName() : "Global"));
+        player.sendMessage(ColorManager.Gold + "I think you are here: " + (player.getCurrentRegion() != null ? player.getCurrentRegion()
+                                                                                                                     .getName() : "Global"));
     }
 }

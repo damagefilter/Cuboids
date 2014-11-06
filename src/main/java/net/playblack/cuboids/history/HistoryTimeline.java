@@ -17,6 +17,13 @@ public class HistoryTimeline {
     private LinkedList<HistoryObject> history;
 
     /**
+     * Create a new history timeline
+     */
+    public HistoryTimeline() {
+        history = new LinkedList<HistoryObject>();
+    }
+
+    /**
      * Remove any future history has there shall be none!
      */
     private void purgeHistory() {
@@ -35,13 +42,6 @@ public class HistoryTimeline {
     }
 
     /**
-     * Create a new history timeline
-     */
-    public HistoryTimeline() {
-        history = new LinkedList<HistoryObject>();
-    }
-
-    /**
      * Clear the history, that will also free up some memory with the next GC
      * cycle
      */
@@ -56,8 +56,7 @@ public class HistoryTimeline {
      * @param rem
      */
     public void remember(HistoryObject rem) {
-        if ((rem.getModifiedBlocks().size() == 0)
-                || (!Config.get().isAllowUndo())) {
+        if ((rem.getModifiedBlocks().size() == 0) || (!Config.get().isAllowUndo())) {
             return;
         }
         purgeHistory();
@@ -91,8 +90,7 @@ public class HistoryTimeline {
      */
     public CuboidSelection redo() {
         if (pointer < history.size()) {
-            CuboidSelection ret = new CuboidSelection(history.get(pointer)
-                    .getModifiedBlocks());
+            CuboidSelection ret = new CuboidSelection(history.get(pointer).getModifiedBlocks());
             pointer++;
             return ret;
         }

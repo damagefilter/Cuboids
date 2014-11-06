@@ -121,8 +121,7 @@ public class ToolBox {
                 return -1;
             }
         }
-        if (CServer.getServer().getItemName(i)
-                .equalsIgnoreCase(String.valueOf(i))) {
+        if (CServer.getServer().getItemName(i).equalsIgnoreCase(String.valueOf(i))) {
             return -1;
         }
         return i;

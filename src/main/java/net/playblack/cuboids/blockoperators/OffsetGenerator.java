@@ -71,39 +71,39 @@ public class OffsetGenerator extends BaseGen {
     private CuboidSelection recalculateBoundingRectangle(CuboidSelection tmp) {
         switch (direction) {
             case 0:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
-                        .getY(), tmp.getOrigin().getZ() - distance));
-                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
-                        .getY(), tmp.getOffset().getZ() - distance));
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin().getY(), tmp.getOrigin()
+                                                                                            .getZ() - distance));
+                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset().getY(), tmp.getOffset()
+                                                                                            .getZ() - distance));
                 break;
             case 1:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX() - distance, tmp
-                        .getOrigin().getY(), tmp.getOrigin().getZ()));
-                tmp.setOffset(new Vector(tmp.getOffset().getX() - distance, tmp
-                        .getOffset().getY(), tmp.getOffset().getZ()));
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX() - distance, tmp.getOrigin().getY(), tmp.getOrigin()
+                                                                                                       .getZ()));
+                tmp.setOffset(new Vector(tmp.getOffset().getX() - distance, tmp.getOffset().getY(), tmp.getOffset()
+                                                                                                       .getZ()));
             case 2:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
-                        .getY(), tmp.getOrigin().getZ() + distance));
-                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
-                        .getY(), tmp.getOffset().getZ() + distance));
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin().getY(), tmp.getOrigin()
+                                                                                            .getZ() + distance));
+                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset().getY(), tmp.getOffset()
+                                                                                            .getZ() + distance));
                 break;
             case 3:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX() + distance, tmp
-                        .getOrigin().getY(), tmp.getOrigin().getZ()));
-                tmp.setOffset(new Vector(tmp.getOffset().getX() + distance, tmp
-                        .getOffset().getY(), tmp.getOffset().getZ()));
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX() + distance, tmp.getOrigin().getY(), tmp.getOrigin()
+                                                                                                       .getZ()));
+                tmp.setOffset(new Vector(tmp.getOffset().getX() + distance, tmp.getOffset().getY(), tmp.getOffset()
+                                                                                                       .getZ()));
                 break;
             case 4:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
-                        .getY() + distance, tmp.getOrigin().getZ()));
-                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
-                        .getY() + distance, tmp.getOffset().getZ()));
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin().getY() + distance, tmp.getOrigin()
+                                                                                                       .getZ()));
+                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset().getY() + distance, tmp.getOffset()
+                                                                                                       .getZ()));
                 break;
             case 5:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin()
-                        .getY() - distance, tmp.getOrigin().getZ()));
-                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset()
-                        .getY() - distance, tmp.getOffset().getZ()));
+                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin().getY() - distance, tmp.getOrigin()
+                                                                                                       .getZ()));
+                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset().getY() - distance, tmp.getOffset()
+                                                                                                       .getZ()));
                 break;
         }
         return tmp;
@@ -119,35 +119,28 @@ public class OffsetGenerator extends BaseGen {
     private void calculateOffset() {
         // CuboidSelection tmp = new CuboidSelection(selection);
         CBlock air = new CBlock(0, 0);
-        CuboidSelection tmp = new CuboidSelection(selection.getOrigin(),
-                selection.getOffset());
+        CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset());
         for (Vector key : selection.getBlockList().keySet()) {
             CBlock original = selection.getBlock(key);
             Vector newPos = new Vector(0, 0, 0);
             switch (direction) {
                 case 0:
-                    newPos = new Vector(key.getX(), key.getY(), key.getZ()
-                            - distance);
+                    newPos = new Vector(key.getX(), key.getY(), key.getZ() - distance);
                     break;
                 case 1:
-                    newPos = new Vector(key.getX() - distance, key.getY(),
-                            key.getZ());
+                    newPos = new Vector(key.getX() - distance, key.getY(), key.getZ());
                     break;
                 case 2:
-                    newPos = new Vector(key.getX(), key.getY(), key.getZ()
-                            + distance);
+                    newPos = new Vector(key.getX(), key.getY(), key.getZ() + distance);
                     break;
                 case 3:
-                    newPos = new Vector(key.getX() + distance, key.getY(),
-                            key.getZ());
+                    newPos = new Vector(key.getX() + distance, key.getY(), key.getZ());
                     break;
                 case 4:
-                    newPos = new Vector(key.getX(), key.getY() + distance,
-                            key.getZ());
+                    newPos = new Vector(key.getX(), key.getY() + distance, key.getZ());
                     break;
                 case 5:
-                    newPos = new Vector(key.getX(), key.getY() - distance,
-                            key.getZ());
+                    newPos = new Vector(key.getX(), key.getY() - distance, key.getZ());
                     break;
             }
             tmp.setBlock(newPos, original);
@@ -161,9 +154,7 @@ public class OffsetGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory)
-            throws BlockEditLimitExceededException,
-            SelectionIncompleteException {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         selection.clearBlocks();
         scanWorld(false, true);
         calculateOffset();
@@ -172,8 +163,7 @@ public class OffsetGenerator extends BaseGen {
             return false;
         }
         if (newHistory) {
-            SessionManager.get().getPlayerHistory(player.getName())
-                    .remember(new HistoryObject(world, selection));
+            SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
         boolean result = modifyWorld(true);
         return result;

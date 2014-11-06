@@ -3,9 +3,17 @@ package net.playblack.cuboids.actions.operators;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.events.forwardings.*;
+import net.playblack.cuboids.actions.events.forwardings.BlockBreakEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
+import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
+import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
+import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEvent;
+import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
+import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
+import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
 import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
@@ -37,8 +45,12 @@ public class BlockModificationsOperator implements ActionListener {
     }
 
     public boolean shouldCancelExplosion(Location loc, ExplosionType type) {
-        boolean creeperSecure = RegionManager.get().getActiveRegion(loc, false).getProperty("creeper-explosion") == Status.DENY && type == ExplosionType.CREEPER;
-        boolean tntSecure = RegionManager.get().getActiveRegion(loc, false).getProperty("tnt-explosion") == Status.DENY && type == ExplosionType.TNT;
+        boolean creeperSecure = RegionManager.get()
+                                             .getActiveRegion(loc, false)
+                                             .getProperty("creeper-explosion") == Status.DENY && type == ExplosionType.CREEPER;
+        boolean tntSecure = RegionManager.get()
+                                         .getActiveRegion(loc, false)
+                                         .getProperty("tnt-explosion") == Status.DENY && type == ExplosionType.TNT;
         return creeperSecure || tntSecure;
     }
 

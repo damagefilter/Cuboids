@@ -16,132 +16,59 @@ import java.util.List;
 public class Region {
 
     /**
+     * Flag as changed to make it available for the saving thread
+     */
+    public boolean hasChanged = false;
+    /**
      * List of all child nodes
      */
     protected ArrayList<Region> childs = new ArrayList<Region>(5);
-
     /**
      * Reference to this Cuboids parent
      */ //This'll get ugly when reading from datasource
     protected Region parent;
-
     /**
      * The name of this cuboid
      */
     protected String name;
-
     /**
      * The name of the world this cuboid sits in
      */
     protected String world;
-
     /**
      * The ID of the dimension for this cuboid. This may always be 0 in some implementations
      */
     protected int dimension;
-
     /**
      * Cuboids priority. Cuboids with higher priority will be considered when areas clash
      */
     protected int priority;
-
-
-    public enum Status {
-        ALLOW,
-        DENY,
-        INHERIT,
-        DEFAULT,
-        INVALID_PROPERTY;
-
-        public static Status fromString(String str) {
-            if (str.equalsIgnoreCase(ALLOW.name())) {
-                return ALLOW;
-            }
-            else if (str.equalsIgnoreCase(DENY.name())) {
-                return DENY;
-            }
-            else if (str.equalsIgnoreCase(INHERIT.name())) {
-                return INHERIT;
-            }
-            else if (str.equalsIgnoreCase(DEFAULT.name())) {
-                return DEFAULT;
-            }
-            else {
-                return INVALID_PROPERTY;
-            }
-        }
-
-        /**
-         * Returns allow or deny from a boolean value
-         *
-         * @param check
-         * @return
-         */
-        public static Status fromBoolean(boolean check) {
-            if (check) {
-                return ALLOW;
-            }
-            else {
-                return DENY;
-            }
-        }
-
-        /**
-         * Returns allow or default from boolean value
-         *
-         * @param check
-         * @return
-         */
-        public static Status softFromBoolean(boolean check) {
-            if (check) {
-                return ALLOW;
-            }
-            else {
-                return DEFAULT;
-            }
-        }
-    }
-
-
     /**
      * Map of all currently existing property
      */
     private HashMap<String, Status> properties;
-
-    /**
-     * Flag as changed to make it available for the saving thread
-     */
-    public boolean hasChanged = false;
-
-
     /**
      * List of allowed players
      */
     private ArrayList<String> players;
-
     /**
      * List of allowed groups
      */
     private ArrayList<String> groups;
-
     private Vector origin;
     private Vector offset;
-
     /**
      * Welcome / Farewell messages to display
      */
     private String welcome, farewell;
-
     /**
      * List of commands that should be denied in this area
      */
     private ArrayList<String> restrictedCommands = new ArrayList<String>();
-
     /**
      * List of restricted item IDs
      */
     private ArrayList<Integer> restrictedItems = new ArrayList<Integer>();
-
 
     public Region() {
         properties = new HashMap<String, Status>();
@@ -150,6 +77,7 @@ public class Region {
 
 
     }
+
 
     public Region(Region parent) {
         this.parent = parent;
@@ -204,6 +132,15 @@ public class Region {
     }
 
     /**
+     * Get the parent cuboid for this guy
+     *
+     * @return
+     */
+    public Region getParent() {
+        return parent;
+    }
+
+    /**
      * Set the parent region for the this region.
      * This will also update the parents child list and adjust priority levels
      *
@@ -218,15 +155,6 @@ public class Region {
                 this.priority = parent.priority + 1;
             }
         }
-    }
-
-    /**
-     * Get the parent cuboid for this guy
-     *
-     * @return
-     */
-    public Region getParent() {
-        return parent;
     }
 
     /**
@@ -430,16 +358,11 @@ public class Region {
         Region current = this;
         for (Region c : childs) {
             if (cube.cuboidIsWithin(c, true)) {
-                if (current == null) {
+                if (c.getPriority() > current.getPriority()) {
                     current = c;
                 }
-                else {
-                    if (c.getPriority() > current.getPriority()) {
-                        current = c;
-                    }
-                    else if (c.getPriority() == current.getPriority()) {
-                        current = current.getSize() > c.getSize() ? c : current;
-                    }
+                else if (c.getPriority() == current.getPriority()) {
+                    current = current.getSize() > c.getSize() ? c : current;
                 }
 
                 Region check = c.queryChilds(cube);
@@ -483,7 +406,6 @@ public class Region {
         return name.equals("__WORLD__");
     }
 
-
     /**
      * Check if this is a root cuboid, that means it has no parent
      *
@@ -508,7 +430,6 @@ public class Region {
         }
         return collection;
     }
-
 
     /**
      * Set a property and its status for this cuboid
@@ -625,8 +546,7 @@ public class Region {
             if (group.indexOf("g:") >= 0) {
                 if (!group.equalsIgnoreCase("no_groups")) {
                     if (!group.equalsIgnoreCase("g:")) {
-                        groups.add(group.substring(2).replace(" ", "")
-                                .toLowerCase());
+                        groups.add(group.substring(2).replace(" ", "").toLowerCase());
                         return true;
                     }
                 }
@@ -783,7 +703,6 @@ public class Region {
         }
     }
 
-
     /**
      * Check if this Region is within the given one
      *
@@ -793,10 +712,8 @@ public class Region {
      */
     public boolean cuboidIsWithin(Region cube, boolean complete) {
         if (this.equalsWorld(cube)) {
-            Vector min = Vector.getMinimum(cube.getOrigin(),
-                    cube.getOffset());
-            Vector max = Vector.getMaximum(cube.getOrigin(),
-                    cube.getOffset());
+            Vector min = Vector.getMinimum(cube.getOrigin(), cube.getOffset());
+            Vector max = Vector.getMaximum(cube.getOrigin(), cube.getOffset());
 
             if (complete) {
                 return origin.isWithin(min, max) && offset.isWithin(min, max);
@@ -831,11 +748,9 @@ public class Region {
      * @return
      */
     public int getSize() {
-        return (int) Vector.getDistance(origin.getBlockX(), offset.getBlockX())
-                * (int) Vector.getDistance(origin.getBlockY(), offset.getBlockY())
-                * (int) Vector.getDistance(origin.getBlockZ(), offset.getBlockZ());
+        return (int) Vector.getDistance(origin.getBlockX(), offset.getBlockX()) * (int) Vector.getDistance(origin.getBlockY(), offset
+                .getBlockY()) * (int) Vector.getDistance(origin.getBlockZ(), offset.getBlockZ());
     }
-
 
     /**
      * Check if a given player is the owner of this cuboid. That is to say, if
@@ -852,7 +767,6 @@ public class Region {
         }
         return false;
     }
-
 
     /**
      * Add a commands to the list of tabu commands.
@@ -1040,19 +954,19 @@ public class Region {
         return items.toString();
     }
 
-
-    /* ************************************************
-     *
-     * GETTER / SETTER STUFF
-     *
-     * ************************************************/
-
     /**
      * @return the origin
      */
     public Vector getOrigin() {
         return origin;
     }
+
+
+    /* ************************************************
+     *
+     * GETTER / SETTER STUFF
+     *
+     * ************************************************/
 
     /**
      * @param origin the origin to set
@@ -1096,7 +1010,7 @@ public class Region {
     public void setBoundingBox(Vector origin, Vector offset) {
         this.origin = origin;
         this.offset = offset;
-        if (hasParent() && !cuboidIsWithin(this.parent,true)) {
+        if (hasParent() && !cuboidIsWithin(this.parent, true)) {
             this.detach();
         }
         RegionManager.get().cleanParentRelations();
@@ -1157,10 +1071,12 @@ public class Region {
         int count = 0;
         for (String key : properties.keySet()) {
             if (count <= 3) {
-                builder.append(ColorManager.Rose).append(key).append(": ")
-                        .append(ColorManager.LightGreen)
-                        .append(properties.get(key).name())
-                        .append(", ");
+                builder.append(ColorManager.Rose)
+                       .append(key)
+                       .append(": ")
+                       .append(ColorManager.LightGreen)
+                       .append(properties.get(key).name())
+                       .append(", ");
             }
             else {
                 count = 0;
@@ -1196,5 +1112,61 @@ public class Region {
     @Override
     public int hashCode() {
         return getSize() + priority + dimension;
+    }
+
+    public enum Status {
+        ALLOW,
+        DENY,
+        INHERIT,
+        DEFAULT,
+        INVALID_PROPERTY;
+
+        public static Status fromString(String str) {
+            if (str.equalsIgnoreCase(ALLOW.name())) {
+                return ALLOW;
+            }
+            else if (str.equalsIgnoreCase(DENY.name())) {
+                return DENY;
+            }
+            else if (str.equalsIgnoreCase(INHERIT.name())) {
+                return INHERIT;
+            }
+            else if (str.equalsIgnoreCase(DEFAULT.name())) {
+                return DEFAULT;
+            }
+            else {
+                return INVALID_PROPERTY;
+            }
+        }
+
+        /**
+         * Returns allow or deny from a boolean value
+         *
+         * @param check
+         * @return
+         */
+        public static Status fromBoolean(boolean check) {
+            if (check) {
+                return ALLOW;
+            }
+            else {
+                return DENY;
+            }
+        }
+
+        /**
+         * Returns allow or default from boolean value
+         *
+         * @param check
+         * @return
+         */
+        public static Status softFromBoolean(boolean check) {
+            if (check) {
+                return ALLOW;
+            }
+            else {
+                return DEFAULT;
+            }
+        }
     }
 }

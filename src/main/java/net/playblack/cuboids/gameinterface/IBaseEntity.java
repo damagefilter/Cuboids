@@ -41,18 +41,18 @@ public interface IBaseEntity {
     public Vector getPosition();
 
     /**
-     * get this Entities world location
-     *
-     * @return
-     */
-    public Location getLocation();
-
-    /**
      * Set the position of this entity
      *
      * @param v
      */
     public void setPosition(Vector v);
+
+    /**
+     * get this Entities world location
+     *
+     * @return
+     */
+    public Location getLocation();
 
     /**
      * Get X position

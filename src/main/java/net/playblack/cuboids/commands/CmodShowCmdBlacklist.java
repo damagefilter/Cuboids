@@ -17,7 +17,7 @@ public class CmodShowCmdBlacklist extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         CuboidInterface.get().showCommandBlacklist(player, command[1]);

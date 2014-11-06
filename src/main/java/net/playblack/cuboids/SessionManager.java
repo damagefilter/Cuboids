@@ -14,11 +14,12 @@ import java.util.HashMap;
  * @author Chris
  */
 public class SessionManager {
-    private HashMap<String, HistoryTimeline> playerHistories = new HashMap<String, HistoryTimeline>(CServer.getServer().getMaxPlayers());
-    private HashMap<String, CuboidSelection> playerClipboard = new HashMap<String, CuboidSelection>(CServer.getServer().getMaxPlayers());
-    private HashMap<String, HashMap<Integer, CInventory>> inventories = new HashMap<String, HashMap<Integer, CInventory>>();
-
     private static SessionManager instance = null;
+    private HashMap<String, HistoryTimeline> playerHistories = new HashMap<String, HistoryTimeline>(CServer.getServer()
+                                                                                                           .getMaxPlayers());
+    private HashMap<String, CuboidSelection> playerClipboard = new HashMap<String, CuboidSelection>(CServer.getServer()
+                                                                                                           .getMaxPlayers());
+    private HashMap<String, HashMap<Integer, CInventory>> inventories = new HashMap<String, HashMap<Integer, CInventory>>();
 
     private SessionManager() {
 

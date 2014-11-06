@@ -19,7 +19,7 @@ public class CmodRestrictItem extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         CuboidInterface.get().disallowItem(player, Arrays.copyOfRange(command, 1, command.length));

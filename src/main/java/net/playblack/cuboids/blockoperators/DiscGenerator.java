@@ -73,10 +73,8 @@ public class DiscGenerator extends BaseGen {
         selection.clearBlocks();
         int Xmin = center.getBlockX() - radius;
         int Xmax = center.getBlockX() + radius;
-        int Ymin = (height + center.getBlockY() >= center.getBlockY()) ? center
-                .getBlockY() : height + center.getBlockY();
-        int Ymax = (height + center.getBlockY() <= center.getBlockY()) ? center
-                .getBlockY() : height + center.getBlockY();
+        int Ymin = (height + center.getBlockY() >= center.getBlockY()) ? center.getBlockY() : height + center.getBlockY();
+        int Ymax = (height + center.getBlockY() <= center.getBlockY()) ? center.getBlockY() : height + center.getBlockY();
         int Zmin = center.getBlockZ() - radius;
         int Zmax = center.getBlockZ() + radius;
 
@@ -84,11 +82,8 @@ public class DiscGenerator extends BaseGen {
             for (int x = Xmin; x <= Xmax; x++) {
                 for (int y = Ymin; y <= Ymax; y++) {
                     for (int z = Zmin; z <= Zmax; z++) {
-                        double diff = Math.sqrt(Math.pow(
-                                x - center.getBlockX(), 2.0D)
-                                + Math.pow(z - center.getBlockZ(), 2.0D));
-                        if (diff < radius + 0.5
-                                && (fill || (!fill && diff > radius - 0.5))) {
+                        double diff = Math.sqrt(Math.pow(x - center.getBlockX(), 2.0D) + Math.pow(z - center.getBlockZ(), 2.0D));
+                        if (diff < radius + 0.5 && (fill || (!fill && diff > radius - 0.5))) {
                             selection.setBlock(new Vector(x, y, z), material);
 
                         }
@@ -99,15 +94,12 @@ public class DiscGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory)
-            throws BlockEditLimitExceededException,
-            SelectionIncompleteException {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         createDisc();
         CuboidSelection world = scanWorld(true, false);
 
         if (newHistory) {
-            SessionManager.get().getPlayerHistory(player.getName())
-                    .remember(new HistoryObject(world, selection));
+            SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
         boolean result = modifyWorld(false);
         return result;

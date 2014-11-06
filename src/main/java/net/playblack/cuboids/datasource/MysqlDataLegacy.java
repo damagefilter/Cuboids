@@ -8,7 +8,11 @@ import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,8 +24,8 @@ import java.util.HashMap;
  */
 public class MysqlDataLegacy implements BaseData {
 
-    private HashMap<String, String> cfg;
     HashMap<String, ArrayList<Region>> loadedRegions = new HashMap<String, ArrayList<Region>>();
+    private HashMap<String, String> cfg;
     private boolean connected = false;
     private Connection connection;
 
@@ -40,9 +44,8 @@ public class MysqlDataLegacy implements BaseData {
                 // log.logMessage("Logging with this info: "+cfg.get("url") +
                 // "?autoReconnect=true&user=" + cfg.get("user") + "&password="
                 // + cfg.get("passwd"), "INFO");
-                connection = DriverManager.getConnection(cfg.get("url")
-                        + "?autoReconnect=true&user=" + cfg.get("user")
-                        + "&password=" + cfg.get("passwd"));
+                connection = DriverManager.getConnection(cfg.get("url") + "?autoReconnect=true&user=" + cfg.get("user") + "&password=" + cfg
+                        .get("passwd"));
                 connected = true;
                 return connection;
             }
@@ -66,17 +69,12 @@ public class MysqlDataLegacy implements BaseData {
      * @throws SQLException
      */
     public boolean mysqlCheckRegion(Region node) throws SQLException {
-        PreparedStatement ps = getConnection().prepareStatement(
-                "SELECT id FROM nodes"
-                        + " WHERE name=? AND world=? AND dimension=?");
+        PreparedStatement ps = getConnection().prepareStatement("SELECT id FROM nodes" + " WHERE name=? AND world=? AND dimension=?");
         ps.setString(1, node.getName());
         ps.setString(2, node.getWorld());
         ps.setInt(3, node.getDimension());
         ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return true;
-        }
-        return false;
+        return rs.next();
     }
 
     /**
@@ -167,17 +165,12 @@ public class MysqlDataLegacy implements BaseData {
             try {
                 String[] point1 = rs.getString("point1").trim().split(",");
                 String[] point2 = rs.getString("point2").trim().split(",");
-                Vector p1 = new Vector(Double.parseDouble(point1[0]),
-                        Double.parseDouble(point1[1]),
-                        Double.parseDouble(point1[2]));
-                Vector p2 = new Vector(Double.parseDouble(point2[0]),
-                        Double.parseDouble(point2[1]),
-                        Double.parseDouble(point2[2]));
+                Vector p1 = new Vector(Double.parseDouble(point1[0]), Double.parseDouble(point1[1]), Double.parseDouble(point1[2]));
+                Vector p2 = new Vector(Double.parseDouble(point2[0]), Double.parseDouble(point2[1]), Double.parseDouble(point2[2]));
                 cube.setBoundingBox(p1, p2);
             }
             catch (NumberFormatException e) {
-                Debug.logWarning("Failed to parse points for Region "
-                        + cube.getName() + ", stopping!");
+                Debug.logWarning("Failed to parse points for Region " + cube.getName() + ", stopping!");
                 e.printStackTrace();
                 return null;
             }

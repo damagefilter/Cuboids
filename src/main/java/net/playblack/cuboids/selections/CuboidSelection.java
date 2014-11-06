@@ -73,15 +73,6 @@ public class CuboidSelection implements ISelection {
     }
 
     /**
-     * Set the current origin vector
-     *
-     * @param o
-     */
-    public void setOrigin(Vector o) {
-        this.origin = new Vector(o.getBlockX(), o.getBlockY(), o.getBlockZ());
-    }
-
-    /**
      * Get the current origin vector
      *
      * @return
@@ -91,12 +82,12 @@ public class CuboidSelection implements ISelection {
     }
 
     /**
-     * Set current offset Vector
+     * Set the current origin vector
      *
      * @param o
      */
-    public void setOffset(Vector o) {
-        this.offset = new Vector(o.getBlockX(), o.getBlockY(), o.getBlockZ());
+    public void setOrigin(Vector o) {
+        this.origin = new Vector(o.getBlockX(), o.getBlockY(), o.getBlockZ());
     }
 
     /**
@@ -106,6 +97,15 @@ public class CuboidSelection implements ISelection {
      */
     public Vector getOffset() {
         return offset;
+    }
+
+    /**
+     * Set current offset Vector
+     *
+     * @param o
+     */
+    public void setOffset(Vector o) {
+        this.offset = new Vector(o.getBlockX(), o.getBlockY(), o.getBlockZ());
     }
 
     @Override
@@ -226,8 +226,7 @@ public class CuboidSelection implements ISelection {
         }
         cube.setWorld(world);
         cube.setName(name);
-        cube.putAll(Config.get().getDefaultCuboidSetting(
-                player).getAllProperties());
+        cube.putAll(Config.get().getDefaultCuboidSetting(player).getAllProperties());
 
         return cube;
     }

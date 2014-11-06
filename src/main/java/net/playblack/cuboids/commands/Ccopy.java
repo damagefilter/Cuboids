@@ -24,15 +24,14 @@ public class Ccopy extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         SelectionManager selectionManager = SelectionManager.get();
-        CuboidSelection sel = selectionManager.getPlayerSelection(player
-                .getName());
+        CuboidSelection sel = selectionManager.getPlayerSelection(player.getName());
         GenericGenerator gen = new GenericGenerator(sel, player.getWorld());
         try {
-            sel = gen.getWorldContent(sel);
+            sel = gen.getWorldContent();
         }
         catch (BlockEditLimitExceededException e) {
             Debug.logWarning(e.getMessage());

@@ -51,166 +51,14 @@ public class Vector {
     }
 
     /**
-     * Retrieve X component of Vector
-     *
-     * @return double x
-     */
-    public double getX() {
-        return x;
-    }
-
-    /**
-     * Set x component with native double
-     *
-     * @param x
-     */
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    /**
-     * Set x component with a int2double conversion
-     *
-     * @param x
-     */
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    /**
-     * Retrieve Y component of Vector
-     *
-     * @return double y
-     */
-    public double getY() {
-        return y;
-    }
-
-    /**
-     * Set y component with native double
-     *
-     * @param y
-     */
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    /**
-     * Set y component with a int2double conversion
-     *
-     * @param y
-     */
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    /**
-     * Retrieve Z component of Vector
-     *
-     * @return double z
-     */
-    public double getZ() {
-        return z;
-    }
-
-    /**
-     * Set y component with native double
-     *
-     * @param z
-     */
-    public void setZ(double z) {
-        this.z = z;
-    }
-
-    /**
-     * Set z component with a int2double conversion
-     *
-     * @param z
-     */
-    public void setZ(int z) {
-        this.z = z;
-    }
-
-    /*
-     * ******************************************************
-     * Math Operations for your convenience!
-     * ******************************************************
-     */
-
-    /**
-     * Check if the x and z coords are the same.
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @return
-     */
-    public boolean samePosition2D(double x, double y, double z) {
-        return x == this.x && z == this.z;
-    }
-
-    /**
-     * Check if the x and z coords are the same
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @return
-     */
-    public boolean samePosition2D(int x, int y, int z) {
-        return x == this.x && z == this.z;
-    }
-
-    /**
-     * Check if the x and z coords of this and the other vector are the same
-     *
-     * @param tmp
-     * @return
-     */
-    public boolean samePosition2D(Vector tmp) {
-        return getBlockX() == tmp.x && getBlockZ() == tmp.z;
-    }
-    /*
-     * ******************************************************
-     * VECTOR LENGHT, DISTANCE CALCS, NORMALIZATION
-     * ******************************************************
-     */
-
-    /**
-     * Retrieve the length of this vector
-     *
-     * @return
-     */
-    public double getVectorLength() {
-        double power = (Math.pow(getX(), 2) + Math.pow(getY(), 2) + Math.pow(
-                getZ(), 2));
-
-        return Math.sqrt(power);
-    }
-
-    /**
-     * Retrieve the distance between this vector and the given Vector v, rooted<br>
-     *
-     * @param v
-     * @return double The Distance
-     */
-    public double getDistance(Vector v) {
-        double distPower = (Math.pow(v.getX() - this.getX(), 2)
-                + Math.pow(v.getY() - this.getY(), 2) + Math.pow(v.getZ()
-                - this.getZ(), 2));
-        return Math.sqrt(distPower);
-    }
-
-    /**
      * Retrieve the distance between 2 given vectors<br>
      *
      * @param v
      * @return double The Distance
      */
     public static double getDistance(Vector v1, Vector v2) {
-        double distPower = (Math.pow(v1.getX() - v2.getX(), 2)
-                + Math.pow(v1.getY() - v2.getY(), 2) + Math.pow(
-                v1.getZ() - v2.getZ(), 2));
+        double distPower = (Math.pow(v1.getX() - v2.getX(), 2) + Math.pow(v1.getY() - v2.getY(), 2) + Math.pow(v1.getZ() - v2
+                .getZ(), 2));
         return Math.sqrt(distPower);
     }
 
@@ -224,27 +72,6 @@ public class Vector {
         double distPower = (Math.pow(p1 - p2, 2));
         return Math.sqrt(distPower);
     }
-
-    /**
-     * Retrieve the distance between this vector and the given Vector v,
-     * unrooted<br>
-     *
-     * @param v
-     * @return double The Distance
-     */
-    public double getSquareDistance(Vector v) {
-        double distPower = (Math.pow(v.getX() - this.getX(), 2)
-                + Math.pow(v.getY() - this.getY(), 2) + Math.pow(v.getZ()
-                - this.getZ(), 2));
-
-        return distPower;
-    }
-
-    /*
-     * ******************************************************
-     * AREA AND POINT CALCULATIONS
-     * ******************************************************
-     */
 
     /**
      * Calculates the number of Blocks in each direction and returns a new
@@ -279,22 +106,6 @@ public class Vector {
         double z = (Vector.getDistance(max.getZ(), min.getZ()));
 
         return x * y * z;
-    }
-
-    /**
-     * Check if this vector is contained within the range of the given two
-     *
-     * @param min
-     * @param max
-     * @return
-     */
-    public boolean isWithin(Vector min, Vector max) {
-        return this.getBlockX() >= min.getBlockX()
-                && this.getBlockX() <= max.getBlockX()
-                && this.getBlockY() >= min.getBlockY()
-                && this.getBlockY() <= max.getBlockY()
-                && this.getBlockZ() >= min.getBlockZ()
-                && this.getBlockZ() <= max.getBlockZ();
     }
 
     /**
@@ -342,23 +153,6 @@ public class Vector {
     }
 
     /**
-     * Checks if another object is equivalent.
-     *
-     * @param obj
-     * @return whether the other object is equivalent
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Vector)) {
-            return false;
-        }
-        Vector other = (Vector) obj;
-        return other.getX() == this.x && other.getY() == this.y
-                && other.getZ() == this.z;
-
-    }
-
-    /**
      * Gets the minimum components of two vectors.
      *
      * @param v1
@@ -366,8 +160,7 @@ public class Vector {
      * @return minimum
      */
     public static Vector getMinimum(Vector v1, Vector v2) {
-        return new Vector(Math.min(v1.getX(), v2.getX()), Math.min(v1.getY(),
-                v2.getY()), Math.min(v1.getZ(), v2.getZ()));
+        return new Vector(Math.min(v1.getX(), v2.getX()), Math.min(v1.getY(), v2.getY()), Math.min(v1.getZ(), v2.getZ()));
     }
 
     /**
@@ -378,8 +171,7 @@ public class Vector {
      * @return maximum
      */
     public static Vector getMaximum(Vector v1, Vector v2) {
-        return new Vector(Math.max(v1.getX(), v2.getX()), Math.max(v1.getY(),
-                v2.getY()), Math.max(v1.getZ(), v2.getZ()));
+        return new Vector(Math.max(v1.getX(), v2.getX()), Math.max(v1.getY(), v2.getY()), Math.max(v1.getZ(), v2.getZ()));
     }
 
     /**
@@ -405,7 +197,7 @@ public class Vector {
 
     /*
      * ******************************************************
-     * TYPE CONVERSIONS FOR NON-DOUBLE VECTORS
+     * Math Operations for your convenience!
      * ******************************************************
      */
 
@@ -416,8 +208,7 @@ public class Vector {
      * @return new Vector
      */
     public static Vector getBlockVector(Vector v) {
-        return new Vector((int) Math.floor(v.getX()),
-                (int) Math.floor(v.getY()), (int) Math.floor(v.getZ()));
+        return new Vector((int) Math.floor(v.getX()), (int) Math.floor(v.getY()), (int) Math.floor(v.getZ()));
     }
 
     /**
@@ -432,6 +223,222 @@ public class Vector {
         double y = (p1.getY() + p2.getY()) / 2;
         double z = (p1.getZ() + p2.getZ()) / 2;
         return new Vector(x, y, z);
+    }
+
+    public static Vector deserialize(String data) throws DeserializeException {
+        data = data.replace("[", "").replace("]", "");
+        String[] values = data.split(",");
+        if (values.length != 3) {
+            throw new DeserializeException("Could not deserialize Vector object. Invalid serialized data!", data);
+        }
+        Vector tr = new Vector(0, 0, 0);
+        tr.setX(Double.parseDouble(values[0]));
+        tr.setY(Double.parseDouble(values[1]));
+        tr.setZ(Double.parseDouble(values[2]));
+
+        return tr;
+    }
+    /*
+     * ******************************************************
+     * VECTOR LENGHT, DISTANCE CALCS, NORMALIZATION
+     * ******************************************************
+     */
+
+    public static Vector adjustToCanaryPosition(Vector v) {
+        ToolBox.adjustWorldPosition(v);
+        return v;
+    }
+
+    /**
+     * Retrieve X component of Vector
+     *
+     * @return double x
+     */
+    public double getX() {
+        return x;
+    }
+
+    /**
+     * Set x component with native double
+     *
+     * @param x
+     */
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    /**
+     * Set x component with a int2double conversion
+     *
+     * @param x
+     */
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    /**
+     * Retrieve Y component of Vector
+     *
+     * @return double y
+     */
+    public double getY() {
+        return y;
+    }
+
+    /*
+     * ******************************************************
+     * AREA AND POINT CALCULATIONS
+     * ******************************************************
+     */
+
+    /**
+     * Set y component with native double
+     *
+     * @param y
+     */
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    /**
+     * Set y component with a int2double conversion
+     *
+     * @param y
+     */
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    /**
+     * Retrieve Z component of Vector
+     *
+     * @return double z
+     */
+    public double getZ() {
+        return z;
+    }
+
+    /**
+     * Set y component with native double
+     *
+     * @param z
+     */
+    public void setZ(double z) {
+        this.z = z;
+    }
+
+    /**
+     * Set z component with a int2double conversion
+     *
+     * @param z
+     */
+    public void setZ(int z) {
+        this.z = z;
+    }
+
+    /**
+     * Check if the x and z coords are the same.
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    public boolean samePosition2D(double x, double y, double z) {
+        return x == this.x && z == this.z;
+    }
+
+    /**
+     * Check if the x and z coords are the same
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    public boolean samePosition2D(int x, int y, int z) {
+        return x == this.x && z == this.z;
+    }
+
+    /**
+     * Check if the x and z coords of this and the other vector are the same
+     *
+     * @param tmp
+     * @return
+     */
+    public boolean samePosition2D(Vector tmp) {
+        return getBlockX() == tmp.x && getBlockZ() == tmp.z;
+    }
+
+    /**
+     * Retrieve the length of this vector
+     *
+     * @return
+     */
+    public double getVectorLength() {
+        double power = (Math.pow(getX(), 2) + Math.pow(getY(), 2) + Math.pow(getZ(), 2));
+
+        return Math.sqrt(power);
+    }
+
+    /*
+     * ******************************************************
+     * TYPE CONVERSIONS FOR NON-DOUBLE VECTORS
+     * ******************************************************
+     */
+
+    /**
+     * Retrieve the distance between this vector and the given Vector v, rooted<br>
+     *
+     * @param v
+     * @return double The Distance
+     */
+    public double getDistance(Vector v) {
+        double distPower = (Math.pow(v.getX() - this.getX(), 2) + Math.pow(v.getY() - this.getY(), 2) + Math.pow(v.getZ() - this
+                .getZ(), 2));
+        return Math.sqrt(distPower);
+    }
+
+    /**
+     * Retrieve the distance between this vector and the given Vector v,
+     * unrooted<br>
+     *
+     * @param v
+     * @return double The Distance
+     */
+    public double getSquareDistance(Vector v) {
+        double distPower = (Math.pow(v.getX() - this.getX(), 2) + Math.pow(v.getY() - this.getY(), 2) + Math.pow(v.getZ() - this
+                .getZ(), 2));
+
+        return distPower;
+    }
+
+    /**
+     * Check if this vector is contained within the range of the given two
+     *
+     * @param min
+     * @param max
+     * @return
+     */
+    public boolean isWithin(Vector min, Vector max) {
+        return this.getBlockX() >= min.getBlockX() && this.getBlockX() <= max.getBlockX() && this.getBlockY() >= min.getBlockY() && this
+                .getBlockY() <= max.getBlockY() && this.getBlockZ() >= min.getBlockZ() && this.getBlockZ() <= max.getBlockZ();
+    }
+
+    /**
+     * Checks if another object is equivalent.
+     *
+     * @param obj
+     * @return whether the other object is equivalent
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Vector)) {
+            return false;
+        }
+        Vector other = (Vector) obj;
+        return other.getX() == this.x && other.getY() == this.y && other.getZ() == this.z;
+
     }
 
     /**
@@ -485,29 +492,12 @@ public class Vector {
      * @return
      */
     public StringBuilder serialize() {
-        return new StringBuilder().append("[").append(Double.valueOf(x))
-                .append(",").append(Double.valueOf(y)).append(",")
-                .append(Double.valueOf(z)).append("]");
-    }
-
-    public static Vector deserialize(String data) throws DeserializeException {
-        data = data.replace("[", "").replace("]", "");
-        String[] values = data.split(",");
-        if (values.length != 3) {
-            throw new DeserializeException(
-                    "Could not deserialize Vector object. Invalid serialized data!",
-                    data);
-        }
-        Vector tr = new Vector(0, 0, 0);
-        tr.setX(Double.parseDouble(values[0]));
-        tr.setY(Double.parseDouble(values[1]));
-        tr.setZ(Double.parseDouble(values[2]));
-
-        return tr;
-    }
-
-    public static Vector adjustToCanaryPosition(Vector v) {
-        ToolBox.adjustWorldPosition(v);
-        return v;
+        return new StringBuilder().append("[")
+                                  .append(Double.valueOf(x))
+                                  .append(",")
+                                  .append(Double.valueOf(y))
+                                  .append(",")
+                                  .append(Double.valueOf(z))
+                                  .append("]");
     }
 }

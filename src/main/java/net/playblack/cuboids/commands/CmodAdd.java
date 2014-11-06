@@ -22,7 +22,7 @@ public class CmodAdd extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         if (command[1].matches("[,:]")) {
@@ -31,8 +31,7 @@ public class CmodAdd extends CBaseCommand {
             return;
         }
         Region defaultC = Config.get().getDefaultCuboidSetting(player);
-        CuboidSelection selection = SelectionManager.get()
-                .getPlayerSelection(player.getName());
+        CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
         if (!selection.isComplete()) {
             MessageSystem.failMessage(player, "selectionIncomplete");
             return;

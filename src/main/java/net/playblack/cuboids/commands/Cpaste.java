@@ -23,7 +23,7 @@ public class Cpaste extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         if (!player.hasPermission("cuboids.super.admin")) {
@@ -38,8 +38,7 @@ public class Cpaste extends CBaseCommand {
             MessageSystem.failMessage(player, "clipboardEmpty");
             return;
         }
-        VectorOffsetGenerator gen = new VectorOffsetGenerator(sel,
-                player.getWorld());
+        VectorOffsetGenerator gen = new VectorOffsetGenerator(sel, player.getWorld());
         gen.setOffsetVector(player.getPosition());
         try {
             try {

@@ -12,9 +12,9 @@ import net.visualillusionsent.utils.UtilityException;
  * @author Chris
  */
 public class PropsFile {
+    public int startingHashCode;
     PropertiesFile propsFile;
     String path;
-    public int startingHashCode;
 
     /**
      * Load the properties file

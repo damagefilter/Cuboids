@@ -24,7 +24,7 @@ public class Creplace extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         // Check for the proper permissions
@@ -44,8 +44,7 @@ public class Creplace extends CBaseCommand {
         }
 
         // prepare the selection
-        CuboidSelection template = SelectionManager.get()
-                .getPlayerSelection(player.getName());
+        CuboidSelection template = SelectionManager.get().getPlayerSelection(player.getName());
         if (!template.getBlockList().isEmpty()) {
             template.clearBlocks();
         }
@@ -72,6 +71,5 @@ public class Creplace extends CBaseCommand {
         catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
-        return;
     }
 }

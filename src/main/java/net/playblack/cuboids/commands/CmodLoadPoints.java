@@ -21,17 +21,17 @@ public class CmodLoadPoints extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
-        Region cube = RegionManager.get().getRegionByName(command[1],
-                player.getWorld().getName(), player.getWorld().getDimension());
+        Region cube = RegionManager.get()
+                                   .getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
+                                                                                                   .getDimension());
         if (!player.hasPermission("cselect")) {
             MessageSystem.failMessage(player, "permissionDenied");
             return;
         }
-        CuboidSelection selection = SelectionManager.get()
-                .getPlayerSelection(player.getName());
+        CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
         selection.setOrigin(cube.getOrigin());
         selection.setOffset(cube.getOffset());
         MessageSystem.successMessage(player, "pointsLoaded");

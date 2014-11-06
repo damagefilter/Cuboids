@@ -58,15 +58,17 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public Location getLocation() {
-        return new Location(player.getX(), player.getY(), player.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
-    }
-
-    @Override
     public void setPosition(Vector v) {
         player.setX(v.getX());
         player.setY(v.getY());
         player.setZ(v.getZ());
+    }
+
+    @Override
+    public Location getLocation() {
+        return new Location(player.getX(), player.getY(), player.getZ(), player.getWorld()
+                                                                               .getType()
+                                                                               .getId(), player.getWorld().getName());
     }
 
     @Override
@@ -142,36 +144,6 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public void setGameMode(int mode) {
-        if (adminCreative && !isInCreativeMode()) {
-            adminCreative = false;
-        }
-
-        if (currentRegion == null && isInCreativeMode()) {
-            adminCreative = true;
-        }
-
-        if (currentRegion != null) {
-            if (currentRegion.getProperty("creative") != Status.ALLOW && isInCreativeMode()) {
-                adminCreative = true;
-            }
-        }
-
-        if (mode == 0) {
-            if (!adminCreative) {
-                setInventoryForMode(getCurrentInventory(), getGameMode());
-                player.setMode(GameMode.fromId(mode));
-                setInventory(getInventory(mode));
-            }
-        }
-        if (mode == 1 && !adminCreative) {
-            setInventoryForMode(getCurrentInventory(), getGameMode());
-            player.setMode(GameMode.fromId(mode));
-            setInventory(getInventory(mode));
-        }
-    }
-
-    @Override
     public boolean isInCreativeMode() {
         return player.getMode().getId() == 1;
     }
@@ -229,5 +201,35 @@ public class CanaryPlayer extends CPlayer {
     @Override
     public int getGameMode() {
         return player.getMode().getId();
+    }
+
+    @Override
+    public void setGameMode(int mode) {
+        if (adminCreative && !isInCreativeMode()) {
+            adminCreative = false;
+        }
+
+        if (currentRegion == null && isInCreativeMode()) {
+            adminCreative = true;
+        }
+
+        if (currentRegion != null) {
+            if (currentRegion.getProperty("creative") != Status.ALLOW && isInCreativeMode()) {
+                adminCreative = true;
+            }
+        }
+
+        if (mode == 0) {
+            if (!adminCreative) {
+                setInventoryForMode(getCurrentInventory(), getGameMode());
+                player.setMode(GameMode.fromId(mode));
+                setInventory(getInventory(mode));
+            }
+        }
+        if (mode == 1 && !adminCreative) {
+            setInventoryForMode(getCurrentInventory(), getGameMode());
+            player.setMode(GameMode.fromId(mode));
+            setInventory(getInventory(mode));
+        }
     }
 }

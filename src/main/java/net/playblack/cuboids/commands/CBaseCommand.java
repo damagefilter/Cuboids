@@ -39,13 +39,12 @@ public abstract class CBaseCommand {
     }
 
     protected boolean parseCommand(CPlayer player, String[] command) {
-        if ((command.length < minParams)
-                && ((command.length > maxParams) || (maxParams != -1))) {
+        if ((command.length < minParams) && ((command.length > maxParams) || (maxParams != -1))) {
             player.notify(toolTip);
-            return false;
+            return true;
         }
         else {
-            return true;
+            return false;
         }
     }
 

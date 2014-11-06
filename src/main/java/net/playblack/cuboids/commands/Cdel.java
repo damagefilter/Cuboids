@@ -24,7 +24,7 @@ public class Cdel extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         // Check for the proper permissions
@@ -38,8 +38,7 @@ public class Cdel extends CBaseCommand {
         // create a new template block
         CBlock b = new CBlock(0, 0);
         // prepare the selection
-        CuboidSelection template = SelectionManager.get()
-                .getPlayerSelection(player.getName());
+        CuboidSelection template = SelectionManager.get().getPlayerSelection(player.getName());
         if (!template.getBlockList().isEmpty()) {
             template.clearBlocks();
         }
@@ -64,6 +63,5 @@ public class Cdel extends CBaseCommand {
         catch (SelectionIncompleteException e) {
             MessageSystem.failMessage(player, "selectionIncomplete");
         }
-        return;
     }
 }

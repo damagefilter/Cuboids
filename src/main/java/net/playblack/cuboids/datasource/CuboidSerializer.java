@@ -81,19 +81,16 @@ public abstract class CuboidSerializer {
         for (Vector key : cuboid.getBlockList().keySet()) {
             CBlock b = cuboid.getBlock(key);
             // System.out.println(b.toString());
-            baseData.add(b.serialize().append("|").append(key.serialize())
-                    .toString());
+            baseData.add(b.serialize().append("|").append(key.serialize()).toString());
 
             // Do chest block serializing
             if (b.getType() == 54) {
-                contents.put(baseData.size() - 1,
-                        serializeItemList(((ChestBlock) b).getItemList()));
+                contents.put(baseData.size() - 1, serializeItemList(((ChestBlock) b).getItemList()));
 
             }
             // Do SignBlock serializing
             else if (b.getType() == 63) {
-                contents.put(baseData.size() - 1,
-                        serializeSignText(((SignBlock) b).getSignTextArray()));
+                contents.put(baseData.size() - 1, serializeSignText(((SignBlock) b).getSignTextArray()));
             }
         }
     }

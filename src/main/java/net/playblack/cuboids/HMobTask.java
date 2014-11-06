@@ -66,8 +66,7 @@ public class HMobTask implements Runnable {
                     for (int i = 0; i < maxMobs; i++) {
                         CMob mob = getRandomhMob(w, mobIndex);
                         mob.setX(random.getX());
-                        mob.setY(w.getHighestBlock(random.getBlockX(),
-                                random.getBlockZ()));
+                        mob.setY(w.getHighestBlock(random.getBlockX(), random.getBlockZ()));
                         mob.setZ(random.getBlockZ());
                         mob.spawn();
                     }

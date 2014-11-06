@@ -19,7 +19,7 @@ public class CmodDisallowEntity extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         CuboidInterface.get().disallowEntity(player, Arrays.copyOfRange(command, 2, command.length));

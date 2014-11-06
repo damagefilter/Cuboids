@@ -13,9 +13,7 @@ public class CmodCommands implements CommandListener {
     @Command(aliases = {"cmod"},
             description = "Manage Cuboids and Cuboid properties",
             permissions = {"cuboids.cmod.add", "cuboids.super.admin"},
-            toolTip = "/cmod <add | remove | rename | allowcommand | restrictcommand | allowentity | allowitem "
-                    + "| restrictitem | disallowentity | info | list | listflags | load | loadpoints | welcome | farewell "
-                    + "| parent | priority | setflag | removefalg | tpto",
+            toolTip = "/cmod <add | remove | rename | allowcommand | restrictcommand | allowentity | allowitem " + "| restrictitem | disallowentity | info | list | listflags | load | loadpoints | welcome | farewell " + "| parent | priority | setflag | removefalg | tpto",
             max = 1)
     public void cmodBase(MessageReceiver caller, String[] args) {
         Canary.help().getHelp(caller, "cmod");
@@ -46,7 +44,8 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodAllowCommand(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodAllowCommand().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodAllowCommand().execute(CServer.getServer()
+                                                                                 .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -62,7 +61,8 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodAllowEntity(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodAllowEntity().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodAllowEntity().execute(CServer.getServer()
+                                                                                .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -78,7 +78,8 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodAllowItem(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodAllowItem().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodAllowItem().execute(CServer.getServer()
+                                                                              .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -94,7 +95,8 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodDisallowEntity(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodDisallowEntity().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodDisallowEntity().execute(CServer.getServer()
+                                                                                   .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -110,7 +112,8 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodInfo(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodInfo().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodInfo().execute(CServer.getServer()
+                                                                         .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -126,7 +129,8 @@ public class CmodCommands implements CommandListener {
             max = 2)
     public void cmodList(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodList().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodList().execute(CServer.getServer()
+                                                                         .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -142,7 +146,8 @@ public class CmodCommands implements CommandListener {
             max = 2)
     public void cmodFlags(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodListFlags().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodListFlags().execute(CServer.getServer()
+                                                                              .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -158,7 +163,8 @@ public class CmodCommands implements CommandListener {
             max = 2)
     public void cmodListFlags(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodListFlags().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodListFlags().execute(CServer.getServer()
+                                                                              .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -174,7 +180,8 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodRemoveFlags(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodRemoveFlag().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodRemoveFlag().execute(CServer.getServer()
+                                                                               .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -191,7 +198,8 @@ public class CmodCommands implements CommandListener {
             max = 4)
     public void cmodSetFlags(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodSetFlag().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodSetFlag().execute(CServer.getServer()
+                                                                            .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -207,7 +215,8 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodLoadPoints(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodLoadPoints().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodLoadPoints().execute(CServer.getServer()
+                                                                               .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -223,7 +232,8 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodLoad(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodLoad().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodLoad().execute(CServer.getServer()
+                                                                         .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -239,7 +249,8 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodLoadFrom(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodLoadFrom().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodLoadFrom().execute(CServer.getServer()
+                                                                             .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -256,7 +267,8 @@ public class CmodCommands implements CommandListener {
             max = 2)
     public void cmodSave(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodSave().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodSave().execute(CServer.getServer()
+                                                                         .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -272,7 +284,8 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodWelcome(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodMessages("welcome").execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodMessages("welcome").execute(CServer.getServer()
+                                                                                      .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -288,7 +301,8 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodFarewell(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodMessages("farewell").execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodMessages("farewell").execute(CServer.getServer()
+                                                                                       .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -304,7 +318,8 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodMove(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodMove().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodMove().execute(CServer.getServer()
+                                                                         .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -320,7 +335,8 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodParent(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodParent().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodParent().execute(CServer.getServer()
+                                                                           .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -336,7 +352,8 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodPriority(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodPriority().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodPriority().execute(CServer.getServer()
+                                                                             .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -352,7 +369,8 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodRemove(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodRemove().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodRemove().execute(CServer.getServer()
+                                                                           .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -368,7 +386,8 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodRemoveFlag(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodRename().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodRename().execute(CServer.getServer()
+                                                                           .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -384,7 +403,8 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodRestrictCommand(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodRestrictCommand().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodRestrictCommand().execute(CServer.getServer()
+                                                                                    .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -400,7 +420,8 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodRestrictItem(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodRestrictItem().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodRestrictItem().execute(CServer.getServer()
+                                                                                 .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
@@ -416,7 +437,8 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodTpTo(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodTpTo().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodTpTo().execute(CServer.getServer()
+                                                                         .getPlayer(caller.getName()), args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());

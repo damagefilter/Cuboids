@@ -24,7 +24,7 @@ public class Cmove extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         CuboidSelection origin = SelectionManager.get().getPlayerSelection(player.getName());

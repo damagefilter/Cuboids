@@ -20,17 +20,20 @@ public class CmodTpTo extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
-        Region targetCube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getDimension());
+        Region targetCube = RegionManager.get()
+                                         .getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
+                                                                                                         .getDimension());
         if (targetCube == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
         Vector target = Vector.getCenterPoint(targetCube.getOrigin(), targetCube.getOffset());
 
-        if (player.hasPermission("cuboids.super.admin") || (player.hasPermission("cteleport") && targetCube.playerIsAllowed(player.getName(), player.getGroups()))) {
+        if (player.hasPermission("cuboids.super.admin") || (player.hasPermission("cteleport") && targetCube.playerIsAllowed(player
+                .getName(), player.getGroups()))) {
             if (!player.getWorld().isChunkLoaded(target)) {
                 player.getWorld().loadChunk(target);
             }
@@ -41,7 +44,6 @@ public class CmodTpTo extends CBaseCommand {
         }
         else {
             MessageSystem.failMessage(player, "permissionDenied");
-            return;
         }
     }
 }

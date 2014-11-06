@@ -37,10 +37,7 @@ public class OperableItemsOperator implements ActionListener {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);
-        if (r.playerIsAllowed(player.getName(), player.getGroups())) {
-            return true;
-        }
-        return !r.isItemRestricted(block.getType());
+        return r.playerIsAllowed(player.getName(), player.getGroups()) || !r.isItemRestricted(block.getType());
     }
 
     public boolean canUseBucket(CPlayer player, Location point, boolean lavaBucket) {

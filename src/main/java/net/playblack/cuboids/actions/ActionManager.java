@@ -7,7 +7,11 @@ import net.playblack.mcutils.ToolBox;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class handles firing action events all over the place,
@@ -16,16 +20,16 @@ import java.util.*;
  * @author chris
  */
 public class ActionManager {
-    HashMap<Class<? extends CuboidEvent>, List<RegisteredAction>> actions;
-
     private static ActionManager instance;
+    HashMap<Class<? extends CuboidEvent>, List<RegisteredAction>> actions;
 
     private ActionManager() {
         actions = new HashMap<Class<? extends CuboidEvent>, List<RegisteredAction>>();
     }
 
     public static void fireEvent(CuboidEvent event) {
-        List<RegisteredAction> receivers = ActionManager.instance.actions.get(event.getClass().asSubclass(CuboidEvent.class));
+        List<RegisteredAction> receivers = ActionManager.instance.actions.get(event.getClass()
+                                                                                   .asSubclass(CuboidEvent.class));
         for (RegisteredAction action : receivers) {
             action.execute(event);
         }
@@ -48,7 +52,8 @@ public class ActionManager {
         //in the inline declaration for ActionExecutor.
         //Props and thx and Kudos to the Bukkit folks for I took some pages out of their book (JavaPluginLoader)
 
-        Method[] allMethods = ToolBox.safeMergeArrays(listener.getClass().getMethods(), listener.getClass().getDeclaredMethods(), new Method[1]);
+        Method[] allMethods = ToolBox.safeMergeArrays(listener.getClass().getMethods(), listener.getClass()
+                                                                                                .getDeclaredMethods(), new Method[1]);
         //First check the public methods for Actionhandler annotations
         for (final Method m : allMethods) {
             final ActionHandler handler = m.getAnnotation(ActionHandler.class);
@@ -57,12 +62,14 @@ public class ActionManager {
             } //not an action handling method, bye
             //Check if the new method has correct number of parameters (1)
             if (m.getParameterTypes().length != 1) {
-                throw new InvalidActionHandlerException(owner + " tried to register action handler with invalid signature! Wrong num parameters for " + m.getName());
+                throw new InvalidActionHandlerException(owner + " tried to register action handler with invalid signature! Wrong num parameters for " + m
+                        .getName());
             }
             //If we have 1 parameter, check if it is of the correct type
             final Class<?> eventClass = m.getParameterTypes()[0];
             if (!CuboidEvent.class.isAssignableFrom(eventClass)) {
-                throw new InvalidActionHandlerException(owner + " tried to register action handler with invalid signature! Wrong parameter type for " + m.getName());
+                throw new InvalidActionHandlerException(owner + " tried to register action handler with invalid signature! Wrong parameter type for " + m
+                        .getName());
             }
             //Okay, we're cool. Lets try to register that thing!
             //Make sure we have a working set for registered actions before adding it.
@@ -88,7 +95,8 @@ public class ActionManager {
                     }
                 }
             };
-            instance.addRegisteredAction(eventClass.asSubclass(CuboidEvent.class), new RegisteredAction(listener, handler.priority(), executor, owner));
+            instance.addRegisteredAction(eventClass.asSubclass(CuboidEvent.class), new RegisteredAction(listener, handler
+                    .priority(), executor, owner));
         }
     }
 

@@ -106,16 +106,13 @@ public class PyramidGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory)
-            throws BlockEditLimitExceededException,
-            SelectionIncompleteException {
+    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         selection.clearBlocks();
         createPyramid();
         CuboidSelection world = scanWorld(true, false);
 
         if (newHistory) {
-            SessionManager.get().getPlayerHistory(player.getName())
-                    .remember(new HistoryObject(world, selection));
+            SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
         boolean result = modifyWorld(false);
         return result;

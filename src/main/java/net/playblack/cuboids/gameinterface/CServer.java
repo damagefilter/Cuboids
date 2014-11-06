@@ -10,6 +10,24 @@ public abstract class CServer {
     private static CServer instance = null;
 
     /**
+     * Return the current server instance
+     *
+     * @return
+     */
+    public static CServer getServer() {
+        return instance;
+    }
+
+    /**
+     * Give me an instance of your server implementation!
+     *
+     * @param server
+     */
+    public static void setServer(CServer server) {
+        instance = server;
+    }
+
+    /**
      * Get a world by its name
      *
      * @param name
@@ -92,24 +110,6 @@ public abstract class CServer {
      * @return
      */
     public abstract CMob getMob(String name, CWorld world);
-
-    /**
-     * Give me an instance of your server implementation!
-     *
-     * @param server
-     */
-    public static void setServer(CServer server) {
-        instance = server;
-    }
-
-    /**
-     * Return the current server instance
-     *
-     * @return
-     */
-    public static CServer getServer() {
-        return instance;
-    }
 
     /**
      * Retrieve the id of an item by its name

@@ -25,7 +25,7 @@ public class Crestore extends CBaseCommand {
 
     @Override
     public void execute(CPlayer player, String[] command) {
-        if (!parseCommand(player, command)) {
+        if (parseCommand(player, command)) {
             return;
         }
         String world = player.getWorld().getFilePrefix();
@@ -33,19 +33,16 @@ public class Crestore extends CBaseCommand {
         if (f.exists()) {
             CuboidDeserializer des = new CuboidDeserializer(command[1], world);
             CuboidSelection restore = des.convert();
-            GenericGenerator gen = new GenericGenerator(restore,
-                    player.getWorld());
+            GenericGenerator gen = new GenericGenerator(restore, player.getWorld());
 
             boolean success;
             try {
                 success = gen.execute(player, true);
                 if (success) {
                     MessageSystem.successMessage(player, "restoreSuccess");
-                    return;
                 }
                 else {
                     MessageSystem.failMessage(player, "restoreFail");
-                    return;
                 }
             }
             catch (BlockEditLimitExceededException e) {
@@ -54,15 +51,13 @@ public class Crestore extends CBaseCommand {
                 e.printStackTrace();
             }
             catch (SelectionIncompleteException e) {
-                MessageSystem.failMessage(player,
-                        "selectionIncomplete");
+                MessageSystem.failMessage(player, "selectionIncomplete");
             }
 
         }
         else {
             MessageSystem.failMessage(player, "restoreFail");
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
-            return;
         }
     }
 }
