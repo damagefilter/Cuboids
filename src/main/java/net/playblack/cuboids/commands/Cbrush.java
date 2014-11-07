@@ -1,8 +1,8 @@
 package net.playblack.cuboids.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.blocks.CBlock;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.PlayerSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
@@ -20,12 +20,12 @@ public class Cbrush extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
         if (!player.hasPermission("cuboids.super.admin")) {
-            if (!(player.hasPermission("cWorldMod") && player.hasPermission("cbrush"))) {
+            if (!(player.hasPermission("WorldMod") && player.hasPermission("cbrush"))) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
@@ -38,11 +38,10 @@ public class Cbrush extends CBaseCommand {
             MessageSystem.failMessage(player, "invalidRadius");
             return;
         }
-        CBlock block = CBlock.parseBlock(command[2]);
+        BlockType block = ToolBox.parseBlock(command[2]);
         PlayerSelection selection = selectionManager.getPlayerSelection(player.getName());
-        selection.setBrushData(block.getData());
         selection.setBrushRadius(radius);
-        selection.setBrushType(block.getType());
+        selection.setBrushType(block);
         MessageSystem.successMessage(player, "brushSet");
     }
 }

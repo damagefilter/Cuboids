@@ -1,6 +1,6 @@
 package net.playblack.cuboids.selections;
 
-import net.playblack.cuboids.blocks.CBlock;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.mcutils.Vector;
 
 import java.util.LinkedHashMap;
@@ -14,8 +14,7 @@ public class PlayerSelection extends CuboidSelection {
     /*
      * Those are properties for working with "brushes"
      */
-    private int brushData = 0;
-    private int brushType = 0;
+    private BlockType brushType = BlockType.Air;
     private int brushRadius = 3;
 
     /**
@@ -42,23 +41,15 @@ public class PlayerSelection extends CuboidSelection {
      * @param v2
      * @param blocks
      */
-    public PlayerSelection(Vector v1, Vector v2, LinkedHashMap<Vector, CBlock> blocks) {
+    public PlayerSelection(Vector v1, Vector v2, LinkedHashMap<Vector, BlockType> blocks) {
         super(v1, v2, blocks);
     }
 
-    public int getBrushData() {
-        return brushData;
-    }
-
-    public void setBrushData(int brushData) {
-        this.brushData = brushData;
-    }
-
-    public int getBrushType() {
+    public BlockType getBrushType() {
         return brushType;
     }
 
-    public void setBrushType(int brushType) {
+    public void setBrushType(BlockType brushType) {
         this.brushType = brushType;
     }
 

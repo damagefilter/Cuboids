@@ -7,16 +7,16 @@ import net.playblack.cuboids.actions.events.forwardings.EntityDamageEvent;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 
 public class DamageOperator implements ActionListener {
 
-    public boolean mobCanDoDamage(Location l) {
+    public boolean mobCanDoDamage(CLocation l) {
         Region r = RegionManager.get().getActiveRegion(l, false);
         return r.getProperty("mob-damage") != Status.DENY;
     }
 
-    public boolean playerCanDoDamage(Location l) {
+    public boolean playerCanDoDamage(CLocation l) {
         Region r = RegionManager.get().getActiveRegion(l, false);
         if (r.getProperty("pvp-damage") == Status.DENY) {
             return false;
@@ -30,12 +30,12 @@ public class DamageOperator implements ActionListener {
     @ActionHandler
     public void onDamage(EntityDamageEvent event) {
         if (event.getAttacker().isMob() || event.getAttacker().isAnimal()) {
-            if (!mobCanDoDamage(event.getDefender().getLocation())) {
+            if (!mobCanDoDamage(new CLocation(event.getDefender().getLocation()))) {
                 event.cancel();
             }
         }
         if (event.getAttacker().isPlayer()) {
-            if (!playerCanDoDamage(event.getDefender().getLocation())) {
+            if (!playerCanDoDamage(new CLocation(event.getDefender().getLocation()))) {
                 event.cancel();
             }
         }

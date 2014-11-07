@@ -1,12 +1,12 @@
 package net.playblack.cuboids.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blockoperators.GenericGenerator;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Debug;
@@ -24,12 +24,12 @@ public class Credo extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
         if (!player.hasPermission("cuboids.super.admin")) {
-            if (!player.hasPermission("cWorldMod")) {
+            if (!player.hasPermission("WorldMod")) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }

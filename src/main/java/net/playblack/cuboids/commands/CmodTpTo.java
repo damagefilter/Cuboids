@@ -1,7 +1,9 @@
 package net.playblack.cuboids.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
+import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.ColorManager;
@@ -19,27 +21,25 @@ public class CmodTpTo extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
-        Region targetCube = RegionManager.get()
-                                         .getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
-                                                                                                         .getDimension());
+        Region targetCube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
         if (targetCube == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
         Vector target = Vector.getCenterPoint(targetCube.getOrigin(), targetCube.getOffset());
 
-        if (player.hasPermission("cuboids.super.admin") || (player.hasPermission("cteleport") && targetCube.playerIsAllowed(player
-                .getName(), player.getGroups()))) {
-            if (!player.getWorld().isChunkLoaded(target)) {
-                player.getWorld().loadChunk(target);
+        CPlayer p = CServer.getServer().getPlayer(player.getName());
+        if (player.hasPermission("cuboids.super.admin") || (player.hasPermission("cteleport") && targetCube.playerIsAllowed(player.getName(), p.getGroups()))) {
+            if (!player.getWorld().isChunkLoaded(target.getBlockX(), target.getBlockZ())) {
+                player.getWorld().loadChunk(target.getBlockX(), target.getBlockZ());
             }
-            int y = player.getWorld().getHighestBlock(target.getBlockX(), target.getBlockZ());
+            int y = player.getWorld().getHighestBlockAt(target.getBlockX(), target.getBlockZ());
             target.setY(y);
-            player.teleportTo(target);
+            player.teleportTo(target.toNative());
             MessageSystem.successMessage(player, "playerTeleported");
         }
         else {

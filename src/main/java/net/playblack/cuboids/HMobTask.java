@@ -1,8 +1,8 @@
 package net.playblack.cuboids;
 
-import net.playblack.cuboids.gameinterface.CMob;
+import net.canarymod.api.entity.living.monster.EntityMob;
+import net.canarymod.api.world.World;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
@@ -26,7 +26,7 @@ public class HMobTask implements Runnable {
         rnd = new Random();
     }
 
-    private CMob getRandomhMob(CWorld world, int index) {
+    private EntityMob getRandomhMob(World world, int index) {
         switch (index) {
             case 0:
 
@@ -54,8 +54,8 @@ public class HMobTask implements Runnable {
                     continue;
                 }
                 if ((node.getProperty("more-mobs") == Status.ALLOW) && (CServer.getServer().isPlayerInRegion(node))) {
-                    CWorld w = CServer.getServer().getWorld(node.getWorld(), node.getDimension());
-                    if (w.getTime() < 13000) {
+                    World w = CServer.getServer().getWorld(node.getWorld(), node.getDimension());
+                    if (w.getRawTime() < 13000) {
                         // It's not night, don't bother spawning things
                         continue;
                     }
@@ -64,9 +64,9 @@ public class HMobTask implements Runnable {
                     int mobIndex = rnd.nextInt(6);
                     Vector random = Vector.randomVector(node.getOrigin(), node.getOffset());
                     for (int i = 0; i < maxMobs; i++) {
-                        CMob mob = getRandomhMob(w, mobIndex);
+                        EntityMob mob = getRandomhMob(w, mobIndex);
                         mob.setX(random.getX());
-                        mob.setY(w.getHighestBlock(random.getBlockX(), random.getBlockZ()));
+                        mob.setY(w.getHighestBlockAt(random.getBlockX(), random.getBlockZ()));
                         mob.setZ(random.getBlockZ());
                         mob.spawn();
                     }

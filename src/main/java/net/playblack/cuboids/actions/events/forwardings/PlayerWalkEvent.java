@@ -1,18 +1,18 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.Vector;
 
 public class PlayerWalkEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled = false;
 
-    private Location from, to;
-    private CPlayer player;
+    private CLocation from, to;
+    private Player player;
 
-    public PlayerWalkEvent(CPlayer player, Location from, Location to) {
+    public PlayerWalkEvent(Player player, CLocation from, CLocation to) {
         this.from = from;
         this.to = to;
         this.player = player;
@@ -23,7 +23,7 @@ public class PlayerWalkEvent extends CuboidEvent implements Cancellable {
      *
      * @return
      */
-    public CPlayer getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -32,7 +32,7 @@ public class PlayerWalkEvent extends CuboidEvent implements Cancellable {
      *
      * @return
      */
-    public Location getFrom() {
+    public CLocation getFrom() {
         return from;
     }
 
@@ -41,7 +41,7 @@ public class PlayerWalkEvent extends CuboidEvent implements Cancellable {
      *
      * @return
      */
-    public Location getTo() {
+    public CLocation getTo() {
         return to;
     }
 

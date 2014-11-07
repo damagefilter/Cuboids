@@ -1,5 +1,9 @@
 package net.playblack.cuboids.actions.operators;
 
+import net.canarymod.LineTracer;
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.inventory.Item;
+import net.canarymod.api.world.blocks.Block;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.actions.ActionHandler;
@@ -7,14 +11,11 @@ import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
 import net.playblack.cuboids.blockoperators.SphereGenerator;
-import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.PlayerSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.Debug;
-import net.playblack.mcutils.LineBlockTracer;
 import net.playblack.mcutils.Vector;
 
 public class BrushOperator implements ActionListener {
@@ -24,14 +25,19 @@ public class BrushOperator implements ActionListener {
      * @param player
      * @param point
      */
-    public void handleBrush(CPlayer player, Vector point) {
-        if (player.getItemInHand().getId() == Config.get().getSculptItem()) {
-            if ((player.hasPermission("cWorldMod") && player.hasPermission("cbrush")) || player.hasPermission("cuboids.super.admin")) {
+    public void handleBrush(Player player, Vector point) {
+        Item i = player.getItemHeld();
+        if (i == null) {
+            return;
+        }
+
+        if (Config.get().getSculptItem().equals(i.getType().getMachineName())) {
+            if ((player.hasPermission("cuboids.worldmod") && player.hasPermission("cuboids.cbrush")) || player.hasPermission("cuboids.super.admin")) {
                 PlayerSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
                 selection.setOrigin(point);
                 SphereGenerator gen = new SphereGenerator(selection, player.getWorld());
                 gen.setRadius(selection.getBrushRadius());
-                gen.setMaterial(new CBlock(selection.getBrushType(), selection.getBrushData()));
+                gen.setMaterial(selection.getBrushType());
                 gen.setHollow(true);
                 try {
                     gen.execute(player, true);
@@ -50,8 +56,9 @@ public class BrushOperator implements ActionListener {
 
     @ActionHandler
     public void onArmSwing(ArmSwingEvent event) {
-        Vector v = new LineBlockTracer(event.getPlayer()).getTargetVector();
-        if (v != null) {
+        Block target = new LineTracer(event.getPlayer()).getTargetBlock();
+        if (target != null) {
+            Vector v = new Vector(target.getPosition());
             handleBrush(event.getPlayer(), v);
         }
     }

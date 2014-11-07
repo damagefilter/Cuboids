@@ -1,13 +1,13 @@
 package net.playblack.cuboids.exceptions;
 
-public class BlockEditLimitExceededException extends RuntimeException {
+public class InvalidInputException extends RuntimeException {
 
     /**
      *
      */
     private static final long serialVersionUID = 675738104071097945L;
 
-    public BlockEditLimitExceededException(String message) {
+    public InvalidInputException(String message) {
         super(message);
     }
 }

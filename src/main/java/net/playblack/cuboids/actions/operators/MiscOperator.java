@@ -8,13 +8,14 @@ import net.playblack.cuboids.actions.events.forwardings.ItemDropEvent;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.mcutils.CLocation;
 
 public class MiscOperator implements ActionListener {
 
     @ActionHandler
     public void onItemDrop(ItemDropEvent event) {
-        Region itemRegion = RegionManager.get().getActiveRegion(event.getItemDropLocation(), false);
-        Region playerRegion = RegionManager.get().getActiveRegion(event.getPlayer().getLocation(), false);
+        Region itemRegion = RegionManager.get().getActiveRegion(new CLocation(event.getItemDropLocation()), false);
+        Region playerRegion = RegionManager.get().getActiveRegion(new CLocation(event.getPlayer().getLocation()), false);
         if (itemRegion.getProperty("creative") == Status.ALLOW || playerRegion.getProperty("creative") == Status.ALLOW) {
             event.cancel();
         }
@@ -25,7 +26,7 @@ public class MiscOperator implements ActionListener {
         if (!event.getEntity().isMob()) {
             return;
         }
-        Region r = RegionManager.get().getActiveRegion(event.getEntity().getLocation(), false);
+        Region r = RegionManager.get().getActiveRegion(new CLocation(event.getEntity().getLocation()), false);
         if (r.getProperty("mob-spawn") == Status.DENY) {
             event.cancel();
         }

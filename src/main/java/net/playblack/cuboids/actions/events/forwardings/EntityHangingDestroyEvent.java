@@ -1,18 +1,18 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 
 public class EntityHangingDestroyEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled = false;
-    private CPlayer player;
-    private Location location;
+    private Player player;
+    private CLocation CLocation;
 
-    public EntityHangingDestroyEvent(CPlayer player, Location location) {
+    public EntityHangingDestroyEvent(Player player, CLocation CLocation) {
         this.player = player;
-        this.location = location;
+        this.CLocation = CLocation;
     }
 
     @Override
@@ -25,11 +25,11 @@ public class EntityHangingDestroyEvent extends CuboidEvent implements Cancellabl
         isCancelled = true;
     }
 
-    public CPlayer getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    public Location getLocation() {
-        return location;
+    public CLocation getLocation() {
+        return CLocation;
     }
 }

@@ -1,18 +1,21 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.entity.living.monster.Enderman;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.blocks.CBlock;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 
 public class EndermanPickupEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled;
-    private CBlock block;
-    private Location location;
+    private BlockType block;
+    private Enderman enderman;
+    private CLocation CLocation;
 
-    public EndermanPickupEvent(Location location, CBlock block) {
+    public EndermanPickupEvent(CLocation CLocation, BlockType block, Enderman enderman) {
         this.block = block;
-        this.location = location;
+        this.CLocation = CLocation;
+        this.enderman = enderman;
     }
 
     @Override
@@ -25,11 +28,15 @@ public class EndermanPickupEvent extends CuboidEvent implements Cancellable {
         isCancelled = true;
     }
 
-    public CBlock getBlock() {
+    public BlockType getBlock() {
         return block;
     }
 
-    public Location getLocation() {
-        return location;
+    public CLocation getLocation() {
+        return CLocation;
+    }
+
+    public Enderman getEnderman() {
+        return enderman;
     }
 }

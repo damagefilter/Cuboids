@@ -1,5 +1,6 @@
 package net.playblack.mcutils;
 
+import net.canarymod.api.world.position.Position;
 import net.playblack.cuboids.exceptions.DeserializeException;
 
 import java.util.Random;
@@ -39,6 +40,12 @@ public class Vector {
         this.z = 0;
     }
 
+    public Vector(Position key) {
+        this.x = key.getX();
+        this.y = key.getY();
+        this.z = key.getZ();
+    }
+
     /**
      * Copy constructor copies the primitives
      *
@@ -53,19 +60,16 @@ public class Vector {
     /**
      * Retrieve the distance between 2 given vectors<br>
      *
-     * @param v
      * @return double The Distance
      */
     public static double getDistance(Vector v1, Vector v2) {
-        double distPower = (Math.pow(v1.getX() - v2.getX(), 2) + Math.pow(v1.getY() - v2.getY(), 2) + Math.pow(v1.getZ() - v2
-                .getZ(), 2));
+        double distPower = (Math.pow(v1.getX() - v2.getX(), 2) + Math.pow(v1.getY() - v2.getY(), 2) + Math.pow(v1.getZ() - v2.getZ(), 2));
         return Math.sqrt(distPower);
     }
 
     /**
      * Retrieve the distance between 2 given doubles<br>
      *
-     * @param v
      * @return double The Distance
      */
     public static double getDistance(double p1, double p2) {
@@ -106,6 +110,10 @@ public class Vector {
         double z = (Vector.getDistance(max.getZ(), min.getZ()));
 
         return x * y * z;
+    }
+
+    public static double getAreaVolume(Position v1, Position v2) {
+        return getAreaVolume(new Vector(v1), new Vector(v2));
     }
 
     /**
@@ -163,6 +171,10 @@ public class Vector {
         return new Vector(Math.min(v1.getX(), v2.getX()), Math.min(v1.getY(), v2.getY()), Math.min(v1.getZ(), v2.getZ()));
     }
 
+    public static Vector getMinimum(Position v1, Position v2) {
+        return new Vector(Math.min(v1.getX(), v2.getX()), Math.min(v1.getY(), v2.getY()), Math.min(v1.getZ(), v2.getZ()));
+    }
+
     /**
      * Gets the maximum components of two vectors.
      *
@@ -171,6 +183,10 @@ public class Vector {
      * @return maximum
      */
     public static Vector getMaximum(Vector v1, Vector v2) {
+        return new Vector(Math.max(v1.getX(), v2.getX()), Math.max(v1.getY(), v2.getY()), Math.max(v1.getZ(), v2.getZ()));
+    }
+
+    public static Vector getMaximum(Position v1, Position v2) {
         return new Vector(Math.max(v1.getX(), v2.getX()), Math.max(v1.getY(), v2.getY()), Math.max(v1.getZ(), v2.getZ()));
     }
 
@@ -259,20 +275,20 @@ public class Vector {
     }
 
     /**
-     * Set x component with native double
-     *
-     * @param x
-     */
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    /**
      * Set x component with a int2double conversion
      *
      * @param x
      */
     public void setX(int x) {
+        this.x = x;
+    }
+
+    /**
+     * Set x component with native double
+     *
+     * @param x
+     */
+    public void setX(double x) {
         this.x = x;
     }
 
@@ -292,20 +308,20 @@ public class Vector {
      */
 
     /**
-     * Set y component with native double
-     *
-     * @param y
-     */
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    /**
      * Set y component with a int2double conversion
      *
      * @param y
      */
     public void setY(int y) {
+        this.y = y;
+    }
+
+    /**
+     * Set y component with native double
+     *
+     * @param y
+     */
+    public void setY(double y) {
         this.y = y;
     }
 
@@ -319,20 +335,20 @@ public class Vector {
     }
 
     /**
-     * Set y component with native double
-     *
-     * @param z
-     */
-    public void setZ(double z) {
-        this.z = z;
-    }
-
-    /**
      * Set z component with a int2double conversion
      *
      * @param z
      */
     public void setZ(int z) {
+        this.z = z;
+    }
+
+    /**
+     * Set y component with native double
+     *
+     * @param z
+     */
+    public void setZ(double z) {
         this.z = z;
     }
 
@@ -394,8 +410,7 @@ public class Vector {
      * @return double The Distance
      */
     public double getDistance(Vector v) {
-        double distPower = (Math.pow(v.getX() - this.getX(), 2) + Math.pow(v.getY() - this.getY(), 2) + Math.pow(v.getZ() - this
-                .getZ(), 2));
+        double distPower = (Math.pow(v.getX() - this.getX(), 2) + Math.pow(v.getY() - this.getY(), 2) + Math.pow(v.getZ() - this.getZ(), 2));
         return Math.sqrt(distPower);
     }
 
@@ -407,8 +422,7 @@ public class Vector {
      * @return double The Distance
      */
     public double getSquareDistance(Vector v) {
-        double distPower = (Math.pow(v.getX() - this.getX(), 2) + Math.pow(v.getY() - this.getY(), 2) + Math.pow(v.getZ() - this
-                .getZ(), 2));
+        double distPower = (Math.pow(v.getX() - this.getX(), 2) + Math.pow(v.getY() - this.getY(), 2) + Math.pow(v.getZ() - this.getZ(), 2));
 
         return distPower;
     }
@@ -421,8 +435,7 @@ public class Vector {
      * @return
      */
     public boolean isWithin(Vector min, Vector max) {
-        return this.getBlockX() >= min.getBlockX() && this.getBlockX() <= max.getBlockX() && this.getBlockY() >= min.getBlockY() && this
-                .getBlockY() <= max.getBlockY() && this.getBlockZ() >= min.getBlockZ() && this.getBlockZ() <= max.getBlockZ();
+        return this.getBlockX() >= min.getBlockX() && this.getBlockX() <= max.getBlockX() && this.getBlockY() >= min.getBlockY() && this.getBlockY() <= max.getBlockY() && this.getBlockZ() >= min.getBlockZ() && this.getBlockZ() <= max.getBlockZ();
     }
 
     /**
@@ -487,17 +500,20 @@ public class Vector {
     }
 
     /**
+     * Migration helper. If migration is done, find instances and remove with canatry positions
+     *
+     * @return
+     */
+    public Position toNative() {
+        return new Position(this.x, this.y, this.z);
+    }
+
+    /**
      * Serialize this Vector into a Stringbuilder. This returns [x,y,z]
      *
      * @return
      */
     public StringBuilder serialize() {
-        return new StringBuilder().append("[")
-                                  .append(Double.valueOf(x))
-                                  .append(",")
-                                  .append(Double.valueOf(y))
-                                  .append(",")
-                                  .append(Double.valueOf(z))
-                                  .append("]");
+        return new StringBuilder().append("[").append(Double.valueOf(x)).append(",").append(Double.valueOf(y)).append(",").append(Double.valueOf(z)).append("]");
     }
 }

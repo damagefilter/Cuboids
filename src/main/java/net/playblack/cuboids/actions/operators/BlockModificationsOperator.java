@@ -1,5 +1,8 @@
 package net.playblack.cuboids.actions.operators;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.hook.world.IgnitionHook;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
@@ -12,19 +15,18 @@ import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEven
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
-import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
 import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
-import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
+import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.Debug;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class BlockModificationsOperator implements ActionListener {
@@ -35,9 +37,9 @@ public class BlockModificationsOperator implements ActionListener {
      * @param positions
      * @return
      */
-    public List<Location> checkExplosionBlocks(Set<Location> positions, ExplosionType t) {
-        ArrayList<Location> toRemove = new ArrayList<Location>();
-        for (Location l : positions) {
+    public List<CLocation> checkExplosionBlocks(Set<CLocation> positions, ExplosionType t) {
+        ArrayList<CLocation> toRemove = new ArrayList<CLocation>();
+        for (CLocation l : positions) {
             if (shouldCancelExplosion(l, t)) {
                 toRemove.add(l);
             }
@@ -45,13 +47,9 @@ public class BlockModificationsOperator implements ActionListener {
         return toRemove;
     }
 
-    public boolean shouldCancelExplosion(Location loc, ExplosionType type) {
-        boolean creeperSecure = RegionManager.get()
-                                             .getActiveRegion(loc, false)
-                                             .getProperty("creeper-explosion") == Status.DENY && type == ExplosionType.CREEPER;
-        boolean tntSecure = RegionManager.get()
-                                         .getActiveRegion(loc, false)
-                                         .getProperty("tnt-explosion") == Status.DENY && type == ExplosionType.TNT;
+    public boolean shouldCancelExplosion(CLocation loc, ExplosionType type) {
+        boolean creeperSecure = RegionManager.get().getActiveRegion(loc, false).getProperty("creeper-explosion") == Status.DENY && type == ExplosionType.CREEPER;
+        boolean tntSecure = RegionManager.get().getActiveRegion(loc, false).getProperty("tnt-explosion") == Status.DENY && type == ExplosionType.TNT;
         return creeperSecure || tntSecure;
     }
 
@@ -62,24 +60,26 @@ public class BlockModificationsOperator implements ActionListener {
      * @param point
      * @return
      */
-    public boolean canUseLighter(CPlayer player, Location point) {
+    public boolean canUseLighter(Player player, CLocation point) {
         if (player.hasPermission("cuboids.super.admin")) {
             return true;
         }
+        CPlayer p = CServer.getServer().getPlayer(player.getName());
         Region r = RegionManager.get().getActiveRegion(point, false);
-        return r.playerIsAllowed(player.getName(), player.getGroups()) || r.getProperty("firespread") != Status.DENY;
+        return r.playerIsAllowed(player.getName(), p.getGroups()) || r.getProperty("firespread") != Status.DENY;
     }
 
-    public boolean canDestroyPaintings(CPlayer player, Location point) {
+    public boolean canDestroyPaintings(Player player, CLocation point) {
         if (player.hasPermission("cuboids.super.admin")) {
             return true;
         }
+        CPlayer p = CServer.getServer().getPlayer(player.getName());
         Region r = RegionManager.get().getActiveRegion(point, false);
-        return r.playerIsAllowed(player.getName(), player.getGroups()) || r.getProperty("protection") != Status.DENY;
+        return r.playerIsAllowed(player.getName(), p.getGroups()) || r.getProperty("protection") != Status.DENY;
     }
 
-    public boolean canEndermanUseBlock(Location location) {
-        Region r = RegionManager.get().getActiveRegion(location, false);
+    public boolean canEndermanUseBlock(CLocation CLocation) {
+        Region r = RegionManager.get().getActiveRegion(CLocation, false);
         return r.getProperty("enderman-pickup") != Status.DENY;
     }
 
@@ -88,14 +88,14 @@ public class BlockModificationsOperator implements ActionListener {
     // *******************************
     @ActionHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!event.getPlayer().canModifyBlock(event.getLocation())) {
+        if (!CuboidInterface.get().canModifyBlock(event.getPlayer(), event.getLocation())) {
             event.cancel();
         }
     }
 
     @ActionHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!event.getPlayer().canModifyBlock(event.getLocation())) {
+        if (!CuboidInterface.get().canModifyBlock(event.getPlayer(), event.getLocation())) {
             event.cancel();
         }
     }
@@ -107,7 +107,7 @@ public class BlockModificationsOperator implements ActionListener {
             return;
         }
         //Remove blocks from protected regions but do the rest of the explosion
-        HashMap<Location, CBlock> markedBlocks = event.getAffectedBlocks();
+        Map<CLocation, BlockType> markedBlocks = event.getAffectedBlocks();
         //List of blocks that need to be removed
         event.setProtectedBlocks(checkExplosionBlocks(markedBlocks.keySet(), event.getExplosionType()));
     }
@@ -116,7 +116,7 @@ public class BlockModificationsOperator implements ActionListener {
     public void onIgnite(IgniteEvent event) {
 
 //        Debug.log(event.getLocation().toString());
-        if (event.getSource() == FireSource.LIGHTER) {
+        if (event.getSource() == IgnitionHook.IgnitionCause.FLINT_AND_STEEL) {
             if (!canUseLighter(event.getPlayer(), event.getLocation())) {
                 event.cancel();
             }
@@ -150,13 +150,16 @@ public class BlockModificationsOperator implements ActionListener {
 
     @ActionHandler
     public void onBlockUpdate(BlockUpdateEvent event) {
-        if (event.getBlock().getType() == 60 && event.getTargetBlock().getType() != 60) {
+        boolean updatesFarmland = event.getBlock().getMachineName().equals("minecraft:farmland") && !event.getTargetBlock().getMachineName().equals("minecraft:farmland");
+        boolean updatesCrop = event.getBlock().getMachineName().equals("minecraft:wheat") && !event.getTargetBlock().getMachineName().equals("minecraft:wheat");
+        // TODO: Checking against wheat might prevent people from harvesting
+        if (updatesCrop || updatesFarmland) {
             Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
             if (r.getProperty("crops-trampling") == Status.DENY) {
                 event.cancel();
             }
         }
-        if (event.getTargetBlock().getType() == 51) { // new block is fire
+        if (event.getTargetBlock().getMachineName().equals("minecraft:fire")) { // new block is fire
             Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
             if (r.getProperty("firespread") == Status.DENY) {
                 event.cancel();

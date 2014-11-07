@@ -1,11 +1,11 @@
 package net.playblack.cuboids.blockoperators;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.SessionManager;
-import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 public class VectorOffsetGenerator extends BaseGen {
 
     private Vector position;
-    private LinkedHashMap<Vector, CBlock> originalPositions;
+    private LinkedHashMap<Vector, BlockType> originalPositions;
 
     /**
      * The selection you pass along here will be written into the world!
@@ -28,7 +28,7 @@ public class VectorOffsetGenerator extends BaseGen {
      * @param selection
      * @param world
      */
-    public VectorOffsetGenerator(CuboidSelection selection, CWorld world) {
+    public VectorOffsetGenerator(CuboidSelection selection, World world) {
         super(selection, world);
     }
 
@@ -46,7 +46,6 @@ public class VectorOffsetGenerator extends BaseGen {
      * This returns a CuboidSelection containing the _final_ move result. That
      * means it contains the empty space and the moved blocks.
      *
-     * @param sel
      * @return
      */
     private void calculateOffset() {
@@ -59,7 +58,7 @@ public class VectorOffsetGenerator extends BaseGen {
         CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset());
         synchronized (lock) {
             for (Vector key : selection.getBlockList().keySet()) {
-                CBlock b = selection.getBlockList().get(key);
+                BlockType b = selection.getBlockList().get(key);
                 tmp.setBlock(new Vector(key.getX() + x_distance, key.getY() + y_distance, key.getZ() + z_distance), b);
             }
             originalPositions = selection.getBlockList();
@@ -71,7 +70,7 @@ public class VectorOffsetGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
+    public boolean execute(Player player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         // selection.clearBlocks(); //<- do not clear here, we need the blocks
         // for pasting, idiot!
         // scanWorld(false, true); //don't fetch again!

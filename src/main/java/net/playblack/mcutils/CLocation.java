@@ -1,12 +1,12 @@
 package net.playblack.mcutils;
 
-import net.playblack.cuboids.gameinterface.CWorld;
+import net.canarymod.api.world.World;
 
-public class Location extends Vector {
+public class CLocation extends Vector {
     private String world;
     private int dimension;
 
-    public Location(int x, int y, int z, String world) {
+    public CLocation(int x, int y, int z, String world) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -14,7 +14,7 @@ public class Location extends Vector {
 //        ToolBox.adjustWorldPosition(this);
     }
 
-    public Location(double x, double y, double z, int dimension, String world) {
+    public CLocation(double x, double y, double z, int dimension, String world) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -23,7 +23,7 @@ public class Location extends Vector {
 //        ToolBox.adjustWorldPosition(this);
     }
 
-    public Location(int x, int y, int z, int dimension, String world) {
+    public CLocation(int x, int y, int z, int dimension, String world) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -32,16 +32,16 @@ public class Location extends Vector {
 //        ToolBox.adjustWorldPosition(this);
     }
 
-    public Location(int x, int y, int z, CWorld world) {
+    public CLocation(int x, int y, int z, World world) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.dimension = world.getDimension();
+        this.dimension = world.getType().getId();
         this.world = world.getName();
 //        ToolBox.adjustWorldPosition(this);
     }
 
-    public Location(Vector v) {
+    public CLocation(Vector v) {
         this.x = v.x;
         this.y = v.y;
         this.z = v.z;
@@ -50,7 +50,15 @@ public class Location extends Vector {
 //        ToolBox.adjustWorldPosition(this);
     }
 
-    public Location(double x, double y, double z, String name, int dim) {
+    public CLocation(net.canarymod.api.world.position.Location v) {
+        this.x = v.getX();
+        this.y = v.getY();
+        this.z = v.getZ();
+        world = v.getWorld().getName();
+        dimension = v.getType().getId();
+    }
+
+    public CLocation(double x, double y, double z, String name, int dim) {
         this.x = x;
         this.y = y;
         this.z = z;

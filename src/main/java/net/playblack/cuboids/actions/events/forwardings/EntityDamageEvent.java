@@ -1,18 +1,18 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.entity.Entity;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.gameinterface.IBaseEntity;
 
 public class EntityDamageEvent extends CuboidEvent implements Cancellable {
 
     private boolean isCancelled = false;
-    private IBaseEntity attacker;
-    private IBaseEntity defender;
+    private Entity attacker;
+    private Entity defender;
     private DamageSource damageSource;
     private float damage;
 
-    public EntityDamageEvent(IBaseEntity attacker, IBaseEntity defender, DamageSource damageSource, float damage) {
+    public EntityDamageEvent(Entity attacker, Entity defender, DamageSource damageSource, float damage) {
         this.attacker = attacker;
         this.defender = defender;
         this.damageSource = damageSource;
@@ -29,11 +29,11 @@ public class EntityDamageEvent extends CuboidEvent implements Cancellable {
         isCancelled = true;
     }
 
-    public IBaseEntity getAttacker() {
+    public Entity getAttacker() {
         return attacker;
     }
 
-    public IBaseEntity getDefender() {
+    public Entity getDefender() {
         return defender;
     }
 

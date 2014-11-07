@@ -1,10 +1,10 @@
 package net.playblack.cuboids.blockoperators;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.World;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
 
@@ -21,12 +21,12 @@ public class GenericGenerator extends BaseGen {
      * @param selection
      * @param world
      */
-    public GenericGenerator(CuboidSelection selection, CWorld world) {
+    public GenericGenerator(CuboidSelection selection, World world) {
         super(selection, world);
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
+    public boolean execute(Player player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         if (newHistory) {
             CuboidSelection world = scanWorld(true, false);
             SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));

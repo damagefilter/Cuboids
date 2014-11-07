@@ -1,11 +1,11 @@
 package net.playblack.cuboids.blockoperators;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.SessionManager;
-import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
@@ -18,9 +18,9 @@ import net.playblack.mcutils.Vector;
 public class WallsGenerator extends BaseGen {
 
     private boolean onlyWalls;
-    private CBlock wallMaterial;
-    private CBlock floorMaterial;
-    private CBlock ceilingMaterial;
+    private BlockType wallMaterial;
+    private BlockType floorMaterial;
+    private BlockType ceilingMaterial;
 
     /**
      * The selection you pass along here will be written into the world!
@@ -28,7 +28,7 @@ public class WallsGenerator extends BaseGen {
      * @param selection
      * @param world
      */
-    public WallsGenerator(CuboidSelection selection, CWorld world) {
+    public WallsGenerator(CuboidSelection selection, World world) {
         super(selection, world);
     }
 
@@ -46,7 +46,7 @@ public class WallsGenerator extends BaseGen {
      *
      * @param block
      */
-    public void setWallMaterial(CBlock block) {
+    public void setWallMaterial(BlockType block) {
         wallMaterial = block;
     }
 
@@ -55,7 +55,7 @@ public class WallsGenerator extends BaseGen {
      *
      * @param block
      */
-    public void setFloorMaterial(CBlock block) {
+    public void setFloorMaterial(BlockType block) {
         floorMaterial = block;
     }
 
@@ -64,7 +64,7 @@ public class WallsGenerator extends BaseGen {
      *
      * @param block
      */
-    public void setCeilingMaterial(CBlock block) {
+    public void setCeilingMaterial(BlockType block) {
         ceilingMaterial = block;
     }
 
@@ -105,7 +105,7 @@ public class WallsGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
+    public boolean execute(Player player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         selection.clearBlocks();
         selection = createWalls();
         if (selection == null) {

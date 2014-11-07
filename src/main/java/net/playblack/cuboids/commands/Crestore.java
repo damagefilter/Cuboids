@@ -1,11 +1,11 @@
 package net.playblack.cuboids.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.GenericGenerator;
 import net.playblack.cuboids.datasource.CuboidDeserializer;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Debug;
@@ -24,11 +24,11 @@ public class Crestore extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
-        String world = player.getWorld().getFilePrefix();
+        String world = player.getWorld().getFqName();
         File f = new File("plugins/cuboids2/backups/blocks_" + world + "_" + command[1]);
         if (f.exists()) {
             CuboidDeserializer des = new CuboidDeserializer(command[1], world);

@@ -1,16 +1,17 @@
 package net.playblack.cuboids.actions.operators;
 
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
-import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
+import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 
 public class OperableItemsOperator implements ActionListener {
 
@@ -32,15 +33,15 @@ public class OperableItemsOperator implements ActionListener {
      * @param block
      * @return
      */
-    public boolean canUseBlock(CPlayer player, CBlock block, Location point) {
+    public boolean canUseBlock(CPlayer player, BlockType block, CLocation point) {
         if (player.hasPermission("cuboids.super.admin")) {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);
-        return r.playerIsAllowed(player.getName(), player.getGroups()) || !r.isItemRestricted(block.getType());
+        return r.playerIsAllowed(player.getName(), player.getGroups()) || !r.isItemRestricted(block.getId());
     }
 
-    public boolean canUseBucket(CPlayer player, Location point, boolean lavaBucket) {
+    public boolean canUseBucket(CPlayer player, CLocation point, boolean lavaBucket) {
         if (player.hasPermission("cuboids.super.admin")) {
             return true;
         }
@@ -60,14 +61,14 @@ public class OperableItemsOperator implements ActionListener {
     // *******************************
     @ActionHandler
     public void onBlockRightClick(BlockRightClickEvent event) {
-        if (!canUseBlock(event.getPlayer(), event.getBlock(), event.getLocation())) {
+        if (!canUseBlock(CServer.getServer().getPlayer(event.getPlayer().getName()), event.getBlock(), event.getLocation())) {
             event.cancel();
         }
     }
 
     @ActionHandler
     public void onBlockLeftClick(BlockLeftClickEvent event) {
-        if (!canUseBlock(event.getPlayer(), event.getBlock(), event.getLocation())) {
+        if (!canUseBlock(CServer.getServer().getPlayer(event.getPlayer().getName()), event.getBlock(), event.getLocation())) {
             event.cancel();
         }
     }

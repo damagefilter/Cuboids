@@ -1,7 +1,7 @@
 package net.playblack.cuboids;
 
 
-import net.playblack.cuboids.gameinterface.CPlayer;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.mcutils.ColorManager;
 import net.visualillusionsent.utils.LocaleHelper;
 
@@ -28,8 +28,8 @@ public class MessageSystem extends LocaleHelper {
      * @param player
      * @param messageKey
      */
-    public static void failMessage(CPlayer player, String messageKey) {
-        player.notify(ms.localeTranslate(messageKey, locale));
+    public static void failMessage(Player player, String messageKey) {
+        player.notice(ms.localeTranslate(messageKey, locale));
     }
 
     /**
@@ -38,8 +38,8 @@ public class MessageSystem extends LocaleHelper {
      * @param player
      * @param messageKey
      */
-    public static void successMessage(CPlayer player, String messageKey) {
-        player.sendMessage(ColorManager.LightGreen.concat(ms.localeTranslate(messageKey, locale)));
+    public static void successMessage(Player player, String messageKey) {
+        player.message(ColorManager.LightGreen.concat(ms.localeTranslate(messageKey, locale)));
     }
 
     /**
@@ -48,8 +48,8 @@ public class MessageSystem extends LocaleHelper {
      * @param player
      * @param messageKey
      */
-    public static void yellowNote(CPlayer player, String messageKey) {
-        player.sendMessage(ColorManager.Yellow.concat(ms.localeTranslate(messageKey, locale)));
+    public static void yellowNote(Player player, String messageKey) {
+        player.message(ColorManager.Yellow.concat(ms.localeTranslate(messageKey, locale)));
     }
 
     /**
@@ -58,19 +58,19 @@ public class MessageSystem extends LocaleHelper {
      * @param player
      * @param message
      */
-    public static void customFailMessage(CPlayer player, String message) {
-        player.notify(message);
+    public static void customFailMessage(Player player, String message) {
+        player.notice(message);
     }
 
-    public static void customMessage(CPlayer player, String color, String message) {
-        player.sendMessage(color.concat(message));
+    public static void customMessage(Player player, String color, String message) {
+        player.message(color.concat(message));
     }
 
-    public static void translateMessage(CPlayer player, String color, String message) {
-        player.sendMessage(color.concat(ms.localeTranslate(message, locale)));
+    public static void translateMessage(Player player, String color, String message) {
+        player.message(color.concat(ms.localeTranslate(message, locale)));
     }
 
-    public static void translateMessage(CPlayer player, String color, String message, String... args) {
-        player.sendMessage(color.concat(ms.localeTranslate(message, locale, args)));
+    public static void translateMessage(Player player, String color, String message, String... args) {
+        player.message(color.concat(ms.localeTranslate(message, locale, args)));
     }
 }

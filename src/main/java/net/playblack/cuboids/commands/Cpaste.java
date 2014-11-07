@@ -1,14 +1,15 @@
 package net.playblack.cuboids.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.blockoperators.VectorOffsetGenerator;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Debug;
+import net.playblack.mcutils.Vector;
 
 /**
  * Paste a selection from clipboard into the world
@@ -22,12 +23,12 @@ public class Cpaste extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
         if (!player.hasPermission("cuboids.super.admin")) {
-            if (!player.hasPermission("cWorldMod")) {
+            if (!player.hasPermission("WorldMod")) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
@@ -39,7 +40,7 @@ public class Cpaste extends CBaseCommand {
             return;
         }
         VectorOffsetGenerator gen = new VectorOffsetGenerator(sel, player.getWorld());
-        gen.setOffsetVector(player.getPosition());
+        gen.setOffsetVector(new Vector(player.getPosition()));
         try {
             try {
                 if (gen.execute(player, true)) {

@@ -1,6 +1,7 @@
 package net.playblack.mcutils;
 
-import net.canarymod.Canary;
+import net.canarymod.api.world.blocks.BlockType;
+import net.playblack.cuboids.exceptions.InvalidInputException;
 import net.playblack.cuboids.gameinterface.CServer;
 
 import java.util.Arrays;
@@ -41,7 +42,7 @@ public class ToolBox {
         // EDIT 2013: It came back again, lol
     }
 
-    public static void adjustWorldPosition(Location loc) {
+    public static void adjustWorldPosition(CLocation loc) {
 //        Canary.log.info("Adjusting block: " + loc.toString());
         if (loc.getBlockX() < 0) {
             loc.setX(loc.getBlockX() - 1);
@@ -103,6 +104,25 @@ public class ToolBox {
         else {
             return str;
         }
+    }
+
+    public static BlockType parseBlock(String input) throws InvalidInputException {
+        String[] split = input.split(":");
+
+        if (split.length > 1) {
+            // we have a namespace, check if input wasn't legacy
+            if (isNumeric(split[0]) || isNumeric(split[1])) {
+                throw new InvalidInputException("Given block data were numbers. Use minecraft names instead!");
+            }
+            return BlockType.fromString(input);
+        }
+        else {
+            return BlockType.fromString("minecraft:" + input);
+        }
+    }
+
+    public static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
     }
 
     public static short convertType(String data) {

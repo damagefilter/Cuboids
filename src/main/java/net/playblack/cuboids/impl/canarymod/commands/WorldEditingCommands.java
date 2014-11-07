@@ -1,5 +1,6 @@
 package net.playblack.cuboids.impl.canarymod.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.chat.MessageReceiver;
 import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandListener;
@@ -19,7 +20,6 @@ import net.playblack.cuboids.commands.Crestore;
 import net.playblack.cuboids.commands.Csphere;
 import net.playblack.cuboids.commands.Cundo;
 import net.playblack.cuboids.commands.Cwalls;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Debug;
 
 public class WorldEditingCommands implements CommandListener {
@@ -31,10 +31,13 @@ public class WorldEditingCommands implements CommandListener {
             min = 2)
     public void cbackup(MessageReceiver caller, String[] args) {
         try {
-            new Cbackup().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cbackup().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -45,10 +48,13 @@ public class WorldEditingCommands implements CommandListener {
             min = 3)
     public void cbrush(MessageReceiver caller, String[] args) {
         try {
-            new Cbrush().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cbrush().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -58,10 +64,13 @@ public class WorldEditingCommands implements CommandListener {
             toolTip = "/cceopy")
     public void ccopy(MessageReceiver caller, String[] args) {
         try {
-            new Ccopy().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Ccopy().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -71,10 +80,13 @@ public class WorldEditingCommands implements CommandListener {
             toolTip = "/cdel")
     public void cdel(MessageReceiver caller, String[] args) {
         try {
-            new Cdel().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cdel().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -86,10 +98,13 @@ public class WorldEditingCommands implements CommandListener {
             max = 4)
     public void cdisc(MessageReceiver caller, String[] args) {
         try {
-            new Cdisc("/cdisc").execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cdisc("/cdisc").execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -101,10 +116,13 @@ public class WorldEditingCommands implements CommandListener {
             max = 4)
     public void ccircle(MessageReceiver caller, String[] args) {
         try {
-            new Cdisc("/ccircle").execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cdisc("/ccircle").execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -116,10 +134,13 @@ public class WorldEditingCommands implements CommandListener {
             max = 3)
     public void cfill(MessageReceiver caller, String[] args) {
         try {
-            new Cfill().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cfill().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -130,10 +151,13 @@ public class WorldEditingCommands implements CommandListener {
             min = 3)
     public void cmove(MessageReceiver caller, String[] args) {
         try {
-            new Cmove().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cmove().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -143,10 +167,13 @@ public class WorldEditingCommands implements CommandListener {
             toolTip = "/cpaste")
     public void cpaste(MessageReceiver caller, String[] args) {
         try {
-            new Cpaste().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cpaste().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -158,10 +185,13 @@ public class WorldEditingCommands implements CommandListener {
             max = 4)
     public void cpyramid(MessageReceiver caller, String[] args) {
         try {
-            new Cpyramid().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cpyramid().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -173,10 +203,13 @@ public class WorldEditingCommands implements CommandListener {
             max = 3)
     public void credo(MessageReceiver caller, String[] args) {
         try {
-            new Credo().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Credo().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -187,10 +220,13 @@ public class WorldEditingCommands implements CommandListener {
             min = 3)
     public void creplace(MessageReceiver caller, String[] args) {
         try {
-            new Creplace().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Creplace().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -201,10 +237,13 @@ public class WorldEditingCommands implements CommandListener {
             min = 2)
     public void crestore(MessageReceiver caller, String[] args) {
         try {
-            new Crestore().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Crestore().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -216,10 +255,13 @@ public class WorldEditingCommands implements CommandListener {
             max = 4)
     public void csphere(MessageReceiver caller, String[] args) {
         try {
-            new Csphere().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Csphere().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -231,10 +273,13 @@ public class WorldEditingCommands implements CommandListener {
             max = 3)
     public void cundo(MessageReceiver caller, String[] args) {
         try {
-            new Cundo().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cundo().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -246,10 +291,13 @@ public class WorldEditingCommands implements CommandListener {
             max = 4)
     public void cwalls(MessageReceiver caller, String[] args) {
         try {
-            new Cwalls("/cwalls").execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cwalls("/cwalls").execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -261,10 +309,13 @@ public class WorldEditingCommands implements CommandListener {
             max = 4)
     public void cfaces(MessageReceiver caller, String[] args) {
         try {
-            new Cwalls("/cfaces").execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cwalls("/cfaces").execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 }

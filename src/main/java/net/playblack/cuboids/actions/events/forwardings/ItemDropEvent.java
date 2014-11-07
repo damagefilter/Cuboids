@@ -1,18 +1,18 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.inventory.Item;
+import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.blocks.CItem;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.mcutils.Location;
 
 public class ItemDropEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled = false;
-    private CItem item;
-    private CPlayer player;
+    private Item item;
+    private Player player;
     private Location itemDropLocation;
 
-    public ItemDropEvent(CItem item, CPlayer player, Location itemDropLocation) {
+    public ItemDropEvent(Item item, Player player, Location itemDropLocation) {
         this.item = item;
         this.player = player;
         this.itemDropLocation = itemDropLocation;
@@ -28,11 +28,11 @@ public class ItemDropEvent extends CuboidEvent implements Cancellable {
         isCancelled = true;
     }
 
-    public CItem getItem() {
+    public Item getItem() {
         return item;
     }
 
-    public CPlayer getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 

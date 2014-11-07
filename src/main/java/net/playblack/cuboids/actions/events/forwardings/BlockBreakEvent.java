@@ -1,21 +1,21 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.blocks.CBlock;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 
 public class BlockBreakEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled = false;
-    private CPlayer player;
-    private CBlock block;
-    private Location location;
+    private Player player;
+    private BlockType block;
+    private CLocation CLocation;
 
-    public BlockBreakEvent(CPlayer player, CBlock block, Location location) {
+    public BlockBreakEvent(Player player, BlockType block, CLocation CLocation) {
         this.player = player;
         this.block = block;
-        this.location = location;
+        this.CLocation = CLocation;
     }
 
     @Override
@@ -28,15 +28,15 @@ public class BlockBreakEvent extends CuboidEvent implements Cancellable {
         isCancelled = true;
     }
 
-    public CPlayer getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    public CBlock getBlock() {
+    public BlockType getBlock() {
         return block;
     }
 
-    public Location getLocation() {
-        return location;
+    public CLocation getLocation() {
+        return CLocation;
     }
 }

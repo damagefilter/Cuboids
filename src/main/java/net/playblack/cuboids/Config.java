@@ -1,8 +1,8 @@
 package net.playblack.cuboids;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.XmlData;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -218,29 +218,29 @@ public class Config {
     /**
      * @return the regionItem
      */
-    public int getRegionItem() {
-        return pluginSetting.getInt("selection-item", 294);
+    public String getRegionItem() {
+        return pluginSetting.getString("selection-item", "minecraft:golden_hoe");
     }
 
     /**
      * @return the remoteRegionItem
      */
-    public int getRemoteRegionItem() {
-        return pluginSetting.getInt("remote-selection-item", 268);
+    public String getRemoteRegionItem() {
+        return pluginSetting.getString("remote-selection-item", "minecraft:wooden_sword");
     }
 
     /**
      * @return the inspectorItem
      */
-    public int getInspectorItem() {
-        return pluginSetting.getInt("inspector-item", 283);
+    public String getInspectorItem() {
+        return pluginSetting.getString("inspector-item", "minecraft:golden_hoe");
     }
 
     /**
      * @return the sculptItem
      */
-    public int getSculptItem() {
-        return pluginSetting.getInt("sculpt-tool-item", 352);
+    public String getSculptItem() {
+        return pluginSetting.getString("sculpt-tool-item", "minecraft:bone");
     }
 
     /**
@@ -300,7 +300,7 @@ public class Config {
         return pluginSetting.getBoolean("allow-undo", true);
     }
 
-    public Region getDefaultCuboidSetting(CPlayer player) {
+    public Region getDefaultCuboidSetting(Player player) {
         Region flags = new Region();
         HashMap<String, Region.Status> temp = new HashMap<String, Region.Status>(defaultSettings);
         Iterator<String> it = temp.keySet().iterator();

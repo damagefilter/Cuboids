@@ -6,11 +6,8 @@ import net.canarymod.hook.HookHandler;
 import net.canarymod.hook.command.PlayerCommandHook;
 import net.canarymod.hook.entity.EntitySpawnHook;
 import net.canarymod.plugin.PluginListener;
-import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.events.forwardings.EntitySpawnEvent;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidInterface;
 
 public class MiscListener implements PluginListener {
@@ -19,14 +16,11 @@ public class MiscListener implements PluginListener {
     public void onMobSpawn(EntitySpawnHook hook) {
         EntitySpawnEvent event;
         if (hook.getEntity() instanceof EntityMob) {
-            event = new EntitySpawnEvent(new CanaryMob(hook.getEntity()));
-        }
-        else {
-            event = new EntitySpawnEvent(new CanaryBaseEntity(hook.getEntity()));
-        }
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
-            hook.setCanceled();
+            event = new EntitySpawnEvent((EntityMob) hook.getEntity());
+            ActionManager.fireEvent(event);
+            if (event.isCancelled()) {
+                hook.setCanceled();
+            }
         }
     }
 
@@ -36,14 +30,7 @@ public class MiscListener implements PluginListener {
             return;
         }
         String[] split = hook.getCommand();
-        CPlayer cplayer;
-        try {
-            cplayer = CServer.getServer().getPlayer(hook.getPlayer().getName());
-        }
-        catch (InvalidPlayerException e) {
-            cplayer = new CanaryPlayer(hook.getPlayer());
-        }
-        if (CuboidInterface.get().commandIsRestricted(cplayer, split[0])) {
+        if (CuboidInterface.get().commandIsRestricted(hook.getPlayer(), split[0])) {
             hook.setCanceled();
         }
     }

@@ -34,12 +34,10 @@ import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEven
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
-import net.playblack.cuboids.actions.events.forwardings.IgniteEvent.FireSource;
 import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
-import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
@@ -53,19 +51,9 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void blockRightClick(BlockRightClickHook hook) {
         Block b = hook.getBlockClicked();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), hook.getPlayer()
-                                                                    .getWorld()
-                                                                    .getType()
-                                                                    .getId(), hook.getPlayer().getWorld().getName());
-        CPlayer cplayer;
-        try {
-            cplayer = CServer.getServer().getPlayer(hook.getPlayer().getName());
-        }
-        catch (InvalidPlayerException e) {
-            // fallback to manually get a player
-            cplayer = new CanaryPlayer(hook.getPlayer());
-        }
-        BlockRightClickEvent event = new BlockRightClickEvent(cplayer, new CBlock(b.getTypeId(), b.getData()), p);
+        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), hook.getPlayer().getWorld().getType().getId(), hook.getPlayer().getWorld().getName());
+
+        BlockRightClickEvent event = new BlockRightClickEvent(hook.getPlayer(), b.getType(), p);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
@@ -82,15 +70,7 @@ public class BlockListener implements PluginListener {
             return;
         }
 
-        CPlayer cplayer;
-        try {
-            cplayer = CServer.getServer().getPlayer(hook.getPlayer().getName());
-        }
-        catch (InvalidPlayerException e) {
-            // fallback to manually get a player
-            cplayer = new CanaryPlayer(hook.getPlayer());
-        }
-        ActionManager.fireEvent(new ArmSwingEvent(cplayer));
+        ActionManager.fireEvent(new ArmSwingEvent(hook.getPlayer()));
     }
 
     @HookHandler
@@ -100,18 +80,9 @@ public class BlockListener implements PluginListener {
         }
         Block b = hook.getBlock();
         Player player = hook.getPlayer();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld()
-                                                                                                           .getName());
-//        ToolBox.adjustWorldPosition(p);
-        CPlayer cplayer;
-        try {
-            cplayer = CServer.getServer().getPlayer(player.getName());
-        }
-        catch (InvalidPlayerException e) {
-            // fallback to manually get a player
-            cplayer = new CanaryPlayer(player);
-        }
-        BlockLeftClickEvent event = new BlockLeftClickEvent(cplayer, new CBlock(b.getTypeId(), b.getData()), p);
+        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+
+        BlockLeftClickEvent event = new BlockLeftClickEvent(player, b.getType(), p);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
@@ -122,18 +93,10 @@ public class BlockListener implements PluginListener {
     public void blockDestroy(BlockDestroyHook hook) {
         Block b = hook.getBlock();
         Player player = hook.getPlayer();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld()
-                                                                                                           .getName());
+        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
 //        ToolBox.adjustWorldPosition(p);
-        CPlayer cplayer;
-        try {
-            cplayer = CServer.getServer().getPlayer(player.getName());
-        }
-        catch (InvalidPlayerException e) {
-            // fallback to manually get a player
-            cplayer = new CanaryPlayer(player);
-        }
-        BlockBreakEvent event = new BlockBreakEvent(cplayer, new CBlock(b.getTypeId(), b.getData()), p);
+
+        BlockBreakEvent event = new BlockBreakEvent(player, b.getType(), p);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
@@ -144,18 +107,9 @@ public class BlockListener implements PluginListener {
     public void blockPlace(BlockPlaceHook hook) {
         Block b = hook.getBlockPlaced();
         Player player = hook.getPlayer();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld()
-                                                                                                           .getName());
-//        ToolBox.adjustWorldPosition(p);
-        CPlayer cplayer;
-        try {
-            cplayer = CServer.getServer().getPlayer(player.getName());
-        }
-        catch (InvalidPlayerException e) {
-            // fallback to manually get a player
-            cplayer = new CanaryPlayer(player);
-        }
-        BlockPlaceEvent event = new BlockPlaceEvent(cplayer, new CBlock(b.getTypeId(), b.getData()), p);
+        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+
+        BlockPlaceEvent event = new BlockPlaceEvent(player, b.getType(), p);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
 //            Logman.println("place was canceled");
@@ -166,14 +120,12 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void onExplosion(ExplosionHook hook) {
         //Assemble the list of blocks ...
-        HashMap<Location, CBlock> blocks = new HashMap<Location, CBlock>();
+        HashMap<CLocation, BlockType> blocks = new HashMap<CLocation, BlockType>();
 
         for (Block x : hook.getAffectedBlocks()) {
-            Location l = new Location(x.getX(), x.getY(), x.getZ(), x.getWorld().getType().getId(), x.getWorld()
-                                                                                                     .getName());
-//            ToolBox.adjustWorldPosition(l);
-            blocks.put(l, new CBlock(x.getTypeId(), x.getData()));
+            blocks.put(new CLocation(x.getLocation()), x.getType());
         }
+
         Block b = hook.getBlock();
         ExplosionType type = ExplosionType.TNT;
         if (hook.getEntity() != null) {
@@ -185,18 +137,18 @@ public class BlockListener implements PluginListener {
             }
         }
 
-        Location l = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
-        ExplosionEvent event = new ExplosionEvent(new CanaryBaseEntity(hook.getEntity()), l, type, blocks);
+        CLocation l = new CLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        ExplosionEvent event = new ExplosionEvent(hook.getEntity(), l, type, blocks);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
             return;
         }
         //Not cancelled, process the list of blocks and remove those that should stay
-        List<Location> protectedBlocks = event.getProtectedBlocks();
+        List<CLocation> protectedBlocks = event.getProtectedBlocks();
         List<Block> blocksaffected = hook.getAffectedBlocks();
         if (protectedBlocks != null) {
-            for (Location m : protectedBlocks) {
+            for (CLocation m : protectedBlocks) {
                 for (int i = 0; i < blocksaffected.size(); ) {
                     Block x = blocksaffected.get(i);
                     Vector tmp = new Vector(x.getX(), x.getY(), x.getZ());
@@ -216,19 +168,10 @@ public class BlockListener implements PluginListener {
     public void onIgnite(IgnitionHook hook) {
         Block b = hook.getBlock();
         Player player = hook.getPlayer();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         ToolBox.adjustWorldPosition(p);
-        CPlayer cplayer = null;
-        if (player != null) {
-            try {
-                cplayer = CServer.getServer().getPlayer(player.getName());
-            }
-            catch (InvalidPlayerException e) {
-                // fallback to manually get a player
-                cplayer = new CanaryPlayer(player);
-            }
-        }
-        IgniteEvent event = new IgniteEvent(FireSource.fromInt(hook.getCause().ordinal()), p, new CBlock(b.getTypeId(), b.getData()), cplayer);
+
+        IgniteEvent event = new IgniteEvent(hook.getCause(), p, b.getType(), player);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
@@ -239,10 +182,9 @@ public class BlockListener implements PluginListener {
     public void onFlow(FlowHook hook) {
         Block b = hook.getBlockFrom();
         Block to = hook.getBlockTo();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         ToolBox.adjustWorldPosition(p);
-        LiquidFlowEvent event = new LiquidFlowEvent(new CBlock(b.getTypeId(), b.getData()), new CBlock(to.getTypeId(), to
-                .getData()), p);
+        LiquidFlowEvent event = new LiquidFlowEvent(b.getType(), to.getType(), p);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
@@ -252,9 +194,9 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void onBlockPhysics(BlockPhysicsHook hook) {
         Block b = hook.getBlock();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         ToolBox.adjustWorldPosition(p);
-        BlockPhysicsEvent event = new BlockPhysicsEvent(new CBlock(b.getTypeId(), b.getData()), p);
+        BlockPhysicsEvent event = new BlockPhysicsEvent(b.getType(), p);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
@@ -264,9 +206,9 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void onBlockUpdate(BlockUpdateHook hook) {
         Block b = hook.getBlock();
-        Location p = new Location(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
         ToolBox.adjustWorldPosition(p);
-        BlockUpdateEvent event = new BlockUpdateEvent(new CBlock(b.getTypeId(), b.getData()), new CBlock(hook.getNewBlockId()), p);
+        BlockUpdateEvent event = new BlockUpdateEvent(b.getType(), hook.getNewBlockType(), p);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
@@ -277,10 +219,9 @@ public class BlockListener implements PluginListener {
     public void onEndermanPickup(EndermanPickupBlockHook hook) {
         Block b = hook.getBlock();
         Enderman entity = hook.getEnderman();
-        Location l = new Location(b.getX(), b.getY(), b.getZ(), entity.getWorld().getType().getId(), entity.getWorld()
-                                                                                                           .getName());
+        CLocation l = new CLocation(b.getX(), b.getY(), b.getZ(), entity.getWorld().getType().getId(), entity.getWorld().getName());
         ToolBox.adjustWorldPosition(l);
-        EndermanPickupEvent event = new EndermanPickupEvent(l, new CBlock(b.getTypeId(), b.getData()));
+        EndermanPickupEvent event = new EndermanPickupEvent(l, b.getType(), hook.getEnderman());
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
@@ -289,21 +230,9 @@ public class BlockListener implements PluginListener {
 
     @HookHandler
     public void onHangingEntityDestroy(HangingEntityDestroyHook hook) {
-        CPlayer player;
+        CLocation loc = new CLocation(hook.getPainting().getX(), hook.getPainting().getY(), hook.getPainting().getZ(), hook.getPainting().getWorld().getType().getId(), hook.getPainting().getWorld().getName());
 
-        Location loc = new Location(
-                hook.getPainting().getX(),
-                hook.getPainting().getY(),
-                hook.getPainting().getZ(),
-                hook.getPainting().getWorld().getType().getId(),
-                hook.getPainting().getWorld().getName());
-        try {
-            player = CServer.getServer().getPlayer(hook.getPlayer().getName());
-        }
-        catch (InvalidPlayerException e) {
-            player = new CanaryPlayer(hook.getPlayer());
-        }
-        EntityHangingDestroyEvent event = new EntityHangingDestroyEvent(player, loc);
+        EntityHangingDestroyEvent event = new EntityHangingDestroyEvent(hook.getPlayer(), loc);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();

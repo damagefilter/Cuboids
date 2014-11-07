@@ -5,18 +5,17 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.living.monster.EntityMob;
 import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.world.DimensionType;
+import net.canarymod.api.world.World;
 import net.playblack.cuboids.InvalidPlayerException;
-import net.playblack.cuboids.gameinterface.CMob;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.cuboids.gameinterface.CWorld;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CanaryServer extends CServer {
 
-    protected HashMap<String, CWorld> worlds = new HashMap<String, CWorld>(3);
+    protected HashMap<String, World> worlds = new HashMap<String, World>(3);
     private HashMap<String, CPlayer> playerList;
 
     /**
@@ -28,24 +27,18 @@ public class CanaryServer extends CServer {
     }
 
     @Override
-    public CWorld getWorld(String name, int dimension) {
-        if (worlds.containsKey(name + dimension)) {
-            return worlds.get(name + dimension);
-        }
+    public World getWorld(String name, int dimension) {
         DimensionType dim = DimensionType.fromId(dimension);
-
-        CanaryWorld world = new CanaryWorld(Canary.getServer().getWorldManager().getWorld(name, dim, false));
-        worlds.put(name + dimension, world);
-        return world;
+        return Canary.getServer().getWorldManager().getWorld(name, dim, false);
     }
 
     @Override
-    public CWorld getWorld(int id) {
+    public World getWorld(int id) {
         return getWorld(getDefaultWorld().getName(), id);
     }
 
     @Override
-    public CWorld getDefaultWorld() {
+    public World getDefaultWorld() {
         return getWorld(Canary.getServer().getDefaultWorldName(), 0);
     }
 
@@ -104,9 +97,8 @@ public class CanaryServer extends CServer {
     public void scheduleTask(long delay, long intervall, Runnable task) {/* This is unused */}
 
     @Override
-    public CMob getMob(String name, CWorld world) {
-        EntityMob mob = Canary.factory().getEntityFactory().newEntityMob(name, ((CanaryWorld) world).getHandle());
-        return new CanaryMob(mob);
+    public EntityMob getMob(String name, World world) {
+        return Canary.factory().getEntityFactory().newEntityMob(name, world);
     }
 
     @Override

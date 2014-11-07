@@ -3,8 +3,8 @@ package net.playblack.cuboids.regions;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.gameinterface.CPlayer;
+import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.Debug;
-import net.playblack.mcutils.Location;
 
 import java.util.ArrayList;
 
@@ -259,7 +259,7 @@ public class RegionManager {
      * @param ignoreGlobal pass true to ignore the global settings
      * @return
      */
-    public Region getActiveRegion(Location v, boolean ignoreGlobal) {
+    public Region getActiveRegion(CLocation v, boolean ignoreGlobal) {
         if (v == null) {
             return !ignoreGlobal ? global : null;
         }
@@ -282,7 +282,7 @@ public class RegionManager {
      *
      * @param player
      */
-    public void addPlayerToRegions(CPlayer player, Location loc) {
+    public void addPlayerToRegions(CPlayer player, CLocation loc) {
         for (Region tree : rootNodes) {
             if (tree.isWithin(loc)) {
                 tree.addPlayerWithin(player, loc);
@@ -290,7 +290,7 @@ public class RegionManager {
         }
     }
 
-    public void removePlayerFromRegion(CPlayer player, Location loc) {
+    public void removePlayerFromRegion(CPlayer player, CLocation loc) {
         Region r = player.getCurrentRegion();
         if (r != null) {
             if (!r.isWithin(loc)) {
@@ -307,7 +307,7 @@ public class RegionManager {
      * @param world
      * @return
      */
-    public ArrayList<Region> getCuboidsContaining(Location v, String world, int dimension) {
+    public ArrayList<Region> getCuboidsContaining(CLocation v, String world, int dimension) {
         ArrayList<Region> list = new ArrayList<Region>();
         if (v == null) {
             return list;

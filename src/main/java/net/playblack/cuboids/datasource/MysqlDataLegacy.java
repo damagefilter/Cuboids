@@ -44,8 +44,7 @@ public class MysqlDataLegacy implements BaseData {
                 // log.logMessage("Logging with this info: "+cfg.get("url") +
                 // "?autoReconnect=true&user=" + cfg.get("user") + "&password="
                 // + cfg.get("passwd"), "INFO");
-                connection = DriverManager.getConnection(cfg.get("url") + "?autoReconnect=true&user=" + cfg.get("user") + "&password=" + cfg
-                        .get("passwd"));
+                connection = DriverManager.getConnection(cfg.get("url") + "?autoReconnect=true&user=" + cfg.get("user") + "&password=" + cfg.get("passwd"));
                 connected = true;
                 return connection;
             }

@@ -1,11 +1,11 @@
 package net.playblack.cuboids.impl.canarymod.commands;
 
 import net.canarymod.Canary;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.chat.MessageReceiver;
 import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandListener;
 import net.playblack.cuboids.InvalidPlayerException;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Debug;
 
 public class CmodCommands implements CommandListener {
@@ -28,10 +28,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodAdd(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodAdd().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodAdd().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -44,11 +47,13 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodAllowCommand(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodAllowCommand().execute(CServer.getServer()
-                                                                                 .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodAllowCommand().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -61,11 +66,13 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodAllowEntity(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodAllowEntity().execute(CServer.getServer()
-                                                                                .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodAllowEntity().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -78,11 +85,13 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodAllowItem(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodAllowItem().execute(CServer.getServer()
-                                                                              .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodAllowItem().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -95,11 +104,13 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodDisallowEntity(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodDisallowEntity().execute(CServer.getServer()
-                                                                                   .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodDisallowEntity().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -112,11 +123,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodInfo(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodInfo().execute(CServer.getServer()
-                                                                         .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodInfo().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -129,11 +142,13 @@ public class CmodCommands implements CommandListener {
             max = 2)
     public void cmodList(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodList().execute(CServer.getServer()
-                                                                         .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodList().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -146,11 +161,13 @@ public class CmodCommands implements CommandListener {
             max = 2)
     public void cmodFlags(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodListFlags().execute(CServer.getServer()
-                                                                              .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodListFlags().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -163,11 +180,13 @@ public class CmodCommands implements CommandListener {
             max = 2)
     public void cmodListFlags(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodListFlags().execute(CServer.getServer()
-                                                                              .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodListFlags().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -180,11 +199,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodRemoveFlags(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodRemoveFlag().execute(CServer.getServer()
-                                                                               .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodRemoveFlag().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -198,11 +219,13 @@ public class CmodCommands implements CommandListener {
             max = 4)
     public void cmodSetFlags(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodSetFlag().execute(CServer.getServer()
-                                                                            .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodSetFlag().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -215,11 +238,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodLoadPoints(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodLoadPoints().execute(CServer.getServer()
-                                                                               .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodLoadPoints().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -232,11 +257,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodLoad(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodLoad().execute(CServer.getServer()
-                                                                         .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodLoad().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -249,11 +276,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodLoadFrom(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodLoadFrom().execute(CServer.getServer()
-                                                                             .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodLoadFrom().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -267,11 +296,13 @@ public class CmodCommands implements CommandListener {
             max = 2)
     public void cmodSave(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodSave().execute(CServer.getServer()
-                                                                         .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodSave().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -284,11 +315,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodWelcome(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodMessages("welcome").execute(CServer.getServer()
-                                                                                      .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodMessages("welcome").execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -301,11 +334,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodFarewell(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodMessages("farewell").execute(CServer.getServer()
-                                                                                       .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodMessages("farewell").execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -318,11 +353,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodMove(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodMove().execute(CServer.getServer()
-                                                                         .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodMove().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -335,11 +372,13 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodParent(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodParent().execute(CServer.getServer()
-                                                                           .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodParent().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -352,11 +391,13 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodPriority(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodPriority().execute(CServer.getServer()
-                                                                             .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodPriority().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -369,11 +410,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodRemove(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodRemove().execute(CServer.getServer()
-                                                                           .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodRemove().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -386,11 +429,13 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodRemoveFlag(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodRename().execute(CServer.getServer()
-                                                                           .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodRename().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -403,11 +448,13 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodRestrictCommand(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodRestrictCommand().execute(CServer.getServer()
-                                                                                    .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodRestrictCommand().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -420,11 +467,13 @@ public class CmodCommands implements CommandListener {
             min = 3)
     public void cmodRestrictItem(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodRestrictItem().execute(CServer.getServer()
-                                                                                 .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodRestrictItem().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 
@@ -437,11 +486,13 @@ public class CmodCommands implements CommandListener {
             min = 2)
     public void cmodTpTo(MessageReceiver caller, String[] args) {
         try {
-            new net.playblack.cuboids.commands.CmodTpTo().execute(CServer.getServer()
-                                                                         .getPlayer(caller.getName()), args);
+            new net.playblack.cuboids.commands.CmodTpTo().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
         }
     }
 }

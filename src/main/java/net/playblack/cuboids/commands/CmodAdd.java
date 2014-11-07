@@ -1,8 +1,8 @@
 package net.playblack.cuboids.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.selections.CuboidSelection;
@@ -21,7 +21,7 @@ public class CmodAdd extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
@@ -39,7 +39,7 @@ public class CmodAdd extends CBaseCommand {
         defaultC.setBoundingBox(selection.getOrigin(), selection.getOffset());
         defaultC.setName(command[1]);
         defaultC.setWorld(player.getWorld().getName());
-        defaultC.setDimension(player.getWorld().getDimension());
+        defaultC.setDimension(player.getWorld().getType().getId());
         defaultC.addPlayer("o:" + player.getName());
         if (CuboidInterface.get().addCuboid(defaultC)) {
             MessageSystem.successMessage(player, "cuboidCreated");

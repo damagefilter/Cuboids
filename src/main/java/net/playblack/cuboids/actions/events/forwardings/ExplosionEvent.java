@@ -1,27 +1,27 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.entity.Entity;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.blocks.CBlock;
-import net.playblack.cuboids.gameinterface.IBaseEntity;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ExplosionEvent extends CuboidEvent implements Cancellable {
 
     private boolean isCancelled = false;
     private ExplosionType explosionType;
-    private IBaseEntity entity;
-    private Location location;
-    private HashMap<Location, CBlock> affectedBlocks;
-    private List<Location> protectedBlocks = null;
+    private Entity entity;
+    private CLocation CLocation;
+    private Map<CLocation, BlockType> affectedBlocks;
+    private List<CLocation> protectedBlocks = null;
 
-    public ExplosionEvent(IBaseEntity entity, Location location, ExplosionType explosiontype, HashMap<Location, CBlock> affectedBlocks) {
+    public ExplosionEvent(Entity entity, CLocation CLocation, ExplosionType explosiontype, Map<CLocation, BlockType> affectedBlocks) {
         this.explosionType = explosiontype;
         this.entity = entity;
-        this.location = location;
+        this.CLocation = CLocation;
         this.affectedBlocks = affectedBlocks;
     }
 
@@ -39,23 +39,23 @@ public class ExplosionEvent extends CuboidEvent implements Cancellable {
         return explosionType;
     }
 
-    public IBaseEntity getEntity() {
+    public Entity getEntity() {
         return entity;
     }
 
-    public Location getLocation() {
-        return location;
+    public CLocation getLocation() {
+        return CLocation;
     }
 
-    public HashMap<Location, CBlock> getAffectedBlocks() {
+    public Map<CLocation, BlockType> getAffectedBlocks() {
         return affectedBlocks;
     }
 
-    public List<Location> getProtectedBlocks() {
+    public List<CLocation> getProtectedBlocks() {
         return protectedBlocks;
     }
 
-    public void setProtectedBlocks(List<Location> list) {
+    public void setProtectedBlocks(List<CLocation> list) {
         this.protectedBlocks = list;
     }
 

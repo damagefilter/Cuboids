@@ -1,20 +1,20 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.blocks.CBlock;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 
 public class LiquidFlowEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled;
-    private CBlock sourceBlock;
-    private CBlock targetBlock;
-    private Location location;
+    private BlockType sourceBlock;
+    private BlockType targetBlock;
+    private CLocation CLocation;
 
-    public LiquidFlowEvent(CBlock sourceBlock, CBlock targetBlock, Location location) {
+    public LiquidFlowEvent(BlockType sourceBlock, BlockType targetBlock, CLocation CLocation) {
         this.sourceBlock = sourceBlock;
         this.targetBlock = targetBlock;
-        this.location = location;
+        this.CLocation = CLocation;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class LiquidFlowEvent extends CuboidEvent implements Cancellable {
      * @return
      */
     public boolean isLavaFlow() {
-        return sourceBlock.getType() == 10 || sourceBlock.getType() == 11;
+        return sourceBlock.getMachineName().endsWith("lava");
     }
 
     /**
@@ -42,18 +42,18 @@ public class LiquidFlowEvent extends CuboidEvent implements Cancellable {
      * @return
      */
     public boolean isWaterFlow() {
-        return sourceBlock.getType() == 8 || sourceBlock.getType() == 9;
+        return sourceBlock.getMachineName().endsWith("water");
     }
 
-    public CBlock getSourceBlock() {
+    public BlockType getSourceBlock() {
         return sourceBlock;
     }
 
-    public CBlock getTargetBlock() {
+    public BlockType getTargetBlock() {
         return targetBlock;
     }
 
-    public Location getLocation() {
-        return location;
+    public CLocation getLocation() {
+        return CLocation;
     }
 }

@@ -1,6 +1,6 @@
 package net.playblack.cuboids.commands;
 
-import net.playblack.cuboids.gameinterface.CPlayer;
+import net.canarymod.api.entity.living.humanoid.Player;
 
 /**
  * A base command. Totally not took the idea from CanaryMods BaseCommand :P
@@ -38,9 +38,9 @@ public abstract class CBaseCommand {
         this.maxParams = -1;
     }
 
-    protected boolean parseCommand(CPlayer player, String[] command) {
+    protected boolean parseCommand(Player player, String[] command) {
         if ((command.length < minParams) && ((command.length > maxParams) || (maxParams != -1))) {
-            player.notify(toolTip);
+            player.message(toolTip);
             return true;
         }
         else {
@@ -60,6 +60,6 @@ public abstract class CBaseCommand {
         return maxParams;
     }
 
-    public abstract void execute(CPlayer player, String[] command);
+    public abstract void execute(Player player, String[] command);
 
 }

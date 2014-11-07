@@ -2,26 +2,23 @@ package net.playblack.cuboids.impl.canarymod;
 
 import net.canarymod.api.GameMode;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.inventory.Item;
+import net.canarymod.api.world.World;
 import net.playblack.cuboids.SessionManager;
-import net.playblack.cuboids.blocks.CItem;
-import net.playblack.cuboids.gameinterface.CInventory;
 import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.regions.Region.Status;
+import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.Debug;
-import net.playblack.mcutils.Location;
 import net.playblack.mcutils.Vector;
 
 public class CanaryPlayer extends CPlayer {
 
     Player player;
-    CanaryWorld world;
     String[] groups;
 
     public CanaryPlayer(Player player) {
         this.player = player;
-        this.world = new CanaryWorld(player.getWorld());
         groups = new String[]{player.getGroup().getName()};
     }
 
@@ -41,15 +38,8 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public CWorld getWorld() {
-        // Player has switched worlds
-        if (!player.getWorld().getName().equals(player.getWorld().getName())) {
-            this.world = new CanaryWorld(player.getWorld());
-        }
-        else if (world.getDimension() != player.getWorld().getType().getId()) {
-            this.world = new CanaryWorld(player.getWorld());
-        }
-        return world;
+    public World getWorld() {
+        return player.getWorld();
     }
 
     @Override
@@ -65,10 +55,8 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public Location getLocation() {
-        return new Location(player.getX(), player.getY(), player.getZ(), player.getWorld()
-                                                                               .getType()
-                                                                               .getId(), player.getWorld().getName());
+    public CLocation getLocation() {
+        return new CLocation(player.getX(), player.getY(), player.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
     }
 
     @Override
@@ -97,21 +85,6 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public boolean isPlayer() {
-        return true;
-    }
-
-    @Override
-    public boolean isMob() {
-        return false;
-    }
-
-    @Override
-    public boolean isAnimal() {
-        return false;
-    }
-
-    @Override
     public void sendMessage(String message) {
         player.message(message);
     }
@@ -127,12 +100,8 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public CItem getItemInHand() {
-        Item i = player.getItemHeld();
-        if (i == null) {
-            return new CItem(0, (short) 0, 0);
-        }
-        return new CItem(i.getId(), (short) i.getDamage(), i.getSlot());
+    public Item getItemInHand() {
+        return player.getItemHeld();
     }
 
     @Override
@@ -154,24 +123,24 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public CInventory getInventory(int mode) {
+    public Inventory getInventory(int mode) {
         return SessionManager.get().getPlayerInventory(getName(), mode);
     }
 
     @Override
-    public CInventory getCurrentInventory() {
-        return new CanaryInventory(player.getInventory());
+    public Inventory getCurrentInventory() {
+        return player.getInventory();
     }
 
     @Override
-    public void setInventory(CInventory items) {
+    public void setInventory(Inventory items) {
         if (items == null) {
             player.getInventory().clearContents();
             return;
         }
         try {
-            if (items.hasItems()) {
-                ((CanaryInventory) items).setThisContents();
+            if (items.getContents().length > 0) {
+                player.getInventory().setContents(items.getContents());
             }
             else {
                 player.getInventory().clearContents();
@@ -184,7 +153,7 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public void setInventoryForMode(CInventory inv, int mode) {
+    public void setInventoryForMode(Inventory inv, int mode) {
         SessionManager.get().setPlayerInventory(getName(), mode, inv);
     }
 

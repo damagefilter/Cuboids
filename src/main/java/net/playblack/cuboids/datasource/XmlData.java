@@ -34,11 +34,7 @@ public class XmlData implements BaseData {
     /**
      * Used to serialize the XML data into a bytestream
      */
-    private XMLOutputter xmlSerializer = new XMLOutputter(Format.getPrettyFormat()
-                                                                .setExpandEmptyElements(true)
-                                                                .setOmitDeclaration(true)
-                                                                .setOmitEncoding(true)
-                                                                .setLineSeparator(SystemUtils.LINE_SEP));
+    private XMLOutputter xmlSerializer = new XMLOutputter(Format.getPrettyFormat().setExpandEmptyElements(true).setOmitDeclaration(true).setOmitEncoding(true).setLineSeparator(SystemUtils.LINE_SEP));
     private SAXBuilder regionBuilder = new SAXBuilder();
     private HashMap<String, ArrayList<Region>> loadedRegions = new HashMap<String, ArrayList<Region>>();
 
@@ -176,17 +172,14 @@ public class XmlData implements BaseData {
 
     @Override
     public void deleteRegion(Region node) {
-        String path = Config.get()
-                            .getBasePath() + "regions/" + node.getWorld() + "_" + node.getName() + "_" + node.getDimension() + ".xml";
+        String path = Config.get().getBasePath() + "regions/" + node.getWorld() + "_" + node.getName() + "_" + node.getDimension() + ".xml";
         File file = new File(path);
         file.delete();
     }
 
     private void writeFile(Document xmlDoc) throws IOException {
         Element meta = xmlDoc.getRootElement().getChild("meta");
-        FileWriter writer = new FileWriter(Config.get()
-                                                 .getBasePath() + "regions/" + meta.getChildText("world") + "_" + meta.getChildText("name") + "_" + meta
-                .getChildText("dimension") + ".xml");
+        FileWriter writer = new FileWriter(Config.get().getBasePath() + "regions/" + meta.getChildText("world") + "_" + meta.getChildText("name") + "_" + meta.getChildText("dimension") + ".xml");
         xmlSerializer.output(xmlDoc, writer);
         writer.close();
     }

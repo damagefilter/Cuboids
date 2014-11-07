@@ -1,5 +1,7 @@
 package net.playblack.cuboids.gameinterface;
 
+import net.canarymod.api.entity.living.monster.EntityMob;
+import net.canarymod.api.world.World;
 import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.regions.Region;
 
@@ -33,7 +35,7 @@ public abstract class CServer {
      * @param name
      * @return
      */
-    public abstract CWorld getWorld(String name, int dimension);
+    public abstract World getWorld(String name, int dimension);
 
     /**
      * Get a world by its id
@@ -41,9 +43,9 @@ public abstract class CServer {
      * @param id
      * @return
      */
-    public abstract CWorld getWorld(int id);
+    public abstract World getWorld(int id);
 
-    public abstract CWorld getDefaultWorld();
+    public abstract World getDefaultWorld();
 
     /**
      * Get the id of a dimension by its name
@@ -109,7 +111,7 @@ public abstract class CServer {
      * @param world
      * @return
      */
-    public abstract CMob getMob(String name, CWorld world);
+    public abstract EntityMob getMob(String name, World world);
 
     /**
      * Retrieve the id of an item by its name

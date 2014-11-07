@@ -1,8 +1,8 @@
 package net.playblack.cuboids.selections;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.Config;
-import net.playblack.cuboids.blocks.CBlock;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.mcutils.Vector;
 
@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
  */
 public class CuboidSelection implements ISelection {
 
-    protected LinkedHashMap<Vector, CBlock> blockList;
+    protected LinkedHashMap<Vector, BlockType> blockList;
 
     protected String world = "__NOWORLD__";
 
@@ -28,7 +28,7 @@ public class CuboidSelection implements ISelection {
     public CuboidSelection() {
         origin = null;
         offset = null;
-        blockList = new LinkedHashMap<Vector, CBlock>();
+        blockList = new LinkedHashMap<Vector, BlockType>();
     }
 
     /**
@@ -40,7 +40,7 @@ public class CuboidSelection implements ISelection {
     public CuboidSelection(Vector v1, Vector v2) {
         origin = new Vector(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
         offset = new Vector(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
-        blockList = new LinkedHashMap<Vector, CBlock>((int) Vector.getAreaVolume(origin, offset));
+        blockList = new LinkedHashMap<Vector, BlockType>((int) Vector.getAreaVolume(origin, offset));
     }
 
     /**
@@ -50,13 +50,13 @@ public class CuboidSelection implements ISelection {
      * @param v2
      * @param blocks
      */
-    public CuboidSelection(Vector v1, Vector v2, LinkedHashMap<Vector, CBlock> blocks) {
+    public CuboidSelection(Vector v1, Vector v2, LinkedHashMap<Vector, BlockType> blocks) {
         origin = new Vector(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
         offset = new Vector(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
         blockList = blocks;
     }
 
-    public CuboidSelection(LinkedHashMap<Vector, CBlock> blocks) {
+    public CuboidSelection(LinkedHashMap<Vector, BlockType> blocks) {
         blockList = blocks;
     }
 
@@ -69,7 +69,7 @@ public class CuboidSelection implements ISelection {
     public CuboidSelection(Vector v1, Vector v2, int size) {
         origin = new Vector(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
         offset = new Vector(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
-        blockList = new LinkedHashMap<Vector, CBlock>(size);
+        blockList = new LinkedHashMap<Vector, BlockType>(size);
     }
 
     /**
@@ -109,22 +109,22 @@ public class CuboidSelection implements ISelection {
     }
 
     @Override
-    public void setBlock(Vector v, CBlock b) {
+    public void setBlock(Vector v, BlockType b) {
         blockList.put(v, b);
     }
 
     @Override
-    public CBlock getBlock(Vector v) {
+    public BlockType getBlock(Vector v) {
         return blockList.get(v);
     }
 
     @Override
-    public LinkedHashMap<Vector, CBlock> getBlockList() {
+    public LinkedHashMap<Vector, BlockType> getBlockList() {
         return blockList;
     }
 
     @Override
-    public void setBlockList(LinkedHashMap<Vector, CBlock> newList) {
+    public void setBlockList(LinkedHashMap<Vector, BlockType> newList) {
         this.blockList = newList;
 
     }
@@ -208,7 +208,7 @@ public class CuboidSelection implements ISelection {
      *
      * @return
      */
-    public Region toRegion(CPlayer player, String[] playerlist) {
+    public Region toRegion(Player player, String[] playerlist) {
         Region cube = new Region();
         String name = null;
         cube.setBoundingBox(this.origin, this.offset);

@@ -1,7 +1,7 @@
 package net.playblack.cuboids.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -21,7 +21,7 @@ public class Protect extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
@@ -37,7 +37,7 @@ public class Protect extends CBaseCommand {
         }
         selection.setWorld(player.getWorld().getName());
         Region cube = selection.toRegion(player, command);
-        cube.setDimension(player.getWorld().getDimension());
+        cube.setDimension(player.getWorld().getType().getId());
         cube.setProperty("protection", Status.ALLOW); // force protection if is allowed
         if (CuboidInterface.get().addCuboid(cube)) {
             MessageSystem.successMessage(player, "cuboidCreated");

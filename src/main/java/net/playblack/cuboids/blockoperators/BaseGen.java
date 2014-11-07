@@ -1,9 +1,9 @@
 package net.playblack.cuboids.blockoperators;
 
-import net.playblack.cuboids.blocks.CBlock;
+import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
 
@@ -14,15 +14,15 @@ public abstract class BaseGen implements IShapeGen {
 
     protected final Object lock = new Object();
     protected CuboidSelection selection;
-    protected CWorld world;
+    protected World world;
     // List of said blocks
-    HashMap<Vector, CBlock> placeLast = new HashMap<Vector, CBlock>();
+    HashMap<Vector, BlockType> placeLast = new HashMap<Vector, BlockType>();
     /**
      * List of block id's that need to be put last into the world
      */
     private ArrayList<Integer> queueables = new ArrayList<Integer>();
 
-    public BaseGen(CuboidSelection selection, CWorld world) {
+    public BaseGen(CuboidSelection selection, World world) {
         this.selection = selection;
         this.world = world;
         queueables.add(6);
@@ -79,9 +79,9 @@ public abstract class BaseGen implements IShapeGen {
      * @param v
      * @param world
      */
-    protected void preloadChunk(Vector v, CWorld world) {
+    protected void preloadChunk(Vector v, World world) {
         if (!world.isChunkLoaded(v.getBlockX(), v.getBlockY(), v.getBlockZ())) {
-            world.loadChunk(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+            world.loadChunk(v.getBlockX(), v.getBlockZ());
         }
     }
 
@@ -94,21 +94,21 @@ public abstract class BaseGen implements IShapeGen {
      * @param coords
      * @param world
      */
-    protected void changeBlock(CBlock block, Vector coords, CWorld world, boolean queuedRun) {
+    protected void changeBlock(BlockType block, Vector coords, World world, boolean queuedRun) {
         preloadChunk(coords, world);
-        CBlock testBlock = world.getBlockAt(coords);
+        BlockType testBlock = world.getBlockAt(coords.toNative()).getType();
 
         // If the block in the world is the same as the one we want to set, we
         // don't need to set - return
-        if ((testBlock.getType() == block.getType()) && (testBlock.getData() == block.getData())) {
+        if (testBlock == block) {
             return;
         }
-        if ((queueables.contains(Integer.valueOf(block.getType()))) && (!queuedRun)) {
+        if (queueables.contains((int) block.getId()) && !queuedRun) {
             // queue for later placement if we're not in the queued run already
             placeLast.put(coords, block);
             return;
         }
-        world.setBlockAt(coords, block);
+        world.setBlockAt(coords.toNative(), block);
     }
 
     /**
@@ -129,15 +129,11 @@ public abstract class BaseGen implements IShapeGen {
         if (selection.getBlockList().isEmpty() && selection.isComplete()) {
             double areaVolume = selection.getBoundarySize();
             if (areaVolume > 700000) {
-                throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass()
-                                                                                                 .getSimpleName() + " (" + areaVolume + " blocks)");
+                throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass().getSimpleName() + " (" + areaVolume + " blocks)");
             }
         }
         else if (selection.getBlockList().size() > 700000) {
-            throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass()
-                                                                                             .getSimpleName() + " (" + selection
-                    .getBlockList()
-                    .size() + " blocks)");
+            throw new BlockEditLimitExceededException("Too many blocks to process in " + this.getClass().getSimpleName() + " (" + selection.getBlockList().size() + " blocks)");
         }
         CuboidSelection tmp = new CuboidSelection();
         if (selection.getBlockList().isEmpty()) {
@@ -159,7 +155,7 @@ public abstract class BaseGen implements IShapeGen {
                     for (int y = 0; y < length_y; ++y) {
                         for (int z = 0; z < length_z; ++z) {
                             Vector current = new Vector(min.getX() + x, min.getY() + y, min.getZ() + z);
-                            tmp.setBlock(current, world.getBlockAt(current));
+                            tmp.setBlock(current, world.getBlockAt(min.getBlockX() + x, min.getBlockY() + y, min.getBlockZ() + z).getType());
                         }
                     }
                 }
@@ -169,7 +165,7 @@ public abstract class BaseGen implements IShapeGen {
         else {
             synchronized (lock) {
                 for (Vector key : selection.getBlockList().keySet()) {
-                    tmp.setBlock(key, world.getBlockAt(key));
+                    tmp.setBlock(key, world.getBlockAt(key.getBlockX(), key.getBlockY(), key.getBlockZ()).getType());
                 }
             }
         }

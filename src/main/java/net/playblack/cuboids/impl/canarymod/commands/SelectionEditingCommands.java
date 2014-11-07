@@ -1,5 +1,6 @@
 package net.playblack.cuboids.impl.canarymod.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.chat.MessageReceiver;
 import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandListener;
@@ -8,7 +9,6 @@ import net.playblack.cuboids.commands.Cceiling;
 import net.playblack.cuboids.commands.Cdiag;
 import net.playblack.cuboids.commands.Cexpand;
 import net.playblack.cuboids.commands.Cfloor;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Debug;
 
 public class SelectionEditingCommands implements CommandListener {
@@ -20,10 +20,13 @@ public class SelectionEditingCommands implements CommandListener {
             max = 3)
     public void cceiling(MessageReceiver caller, String[] args) {
         try {
-            new Cceiling().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cceiling().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This is not a console command.");
         }
     }
 
@@ -33,10 +36,13 @@ public class SelectionEditingCommands implements CommandListener {
             toolTip = "/cdiag")
     public void cdiag(MessageReceiver caller, String[] args) {
         try {
-            new Cdiag().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cdiag().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This is not a console command.");
         }
     }
 
@@ -46,10 +52,13 @@ public class SelectionEditingCommands implements CommandListener {
             toolTip = "/cexpand")
     public void cexpand(MessageReceiver caller, String[] args) {
         try {
-            new Cexpand().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cexpand().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This is not a console command.");
         }
     }
 
@@ -61,10 +70,13 @@ public class SelectionEditingCommands implements CommandListener {
             max = 3)
     public void cfloor(MessageReceiver caller, String[] args) {
         try {
-            new Cfloor().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cfloor().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This is not a console command.");
         }
     }
 }

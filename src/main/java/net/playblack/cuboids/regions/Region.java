@@ -1,11 +1,11 @@
 package net.playblack.cuboids.regions;
 
+import net.canarymod.api.world.World;
 import net.playblack.cuboids.RegionFlagRegister;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.cuboids.gameinterface.CWorld;
+import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.ColorManager;
-import net.playblack.mcutils.Location;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
@@ -94,7 +94,7 @@ public class Region {
      * @param player
      * @param loc
      */
-    public void addPlayerWithin(CPlayer player, Location loc) {
+    public void addPlayerWithin(CPlayer player, CLocation loc) {
         if (!player.getName().equalsIgnoreCase("no_players")) {
             //Add into this cuboid
             if (!player.getName().substring(2).isEmpty()) {
@@ -116,7 +116,7 @@ public class Region {
      * @param player
      * @param toCheck
      */
-    public void removePlayerWithin(CPlayer player, Location toCheck) {
+    public void removePlayerWithin(CPlayer player, CLocation toCheck) {
         if (!isWithin(toCheck)) {
             if (parent != null && parent.isWithin(toCheck)) {
                 player.setRegion(parent);
@@ -227,8 +227,8 @@ public class Region {
 
     }
 
-    public boolean equalsWorld(CWorld world) {
-        return (world.getDimension() == dimension) && (this.world.equals(world.getName()));
+    public boolean equalsWorld(World world) {
+        return (world.getType().getId() == dimension) && (this.world.equals(world.getName()));
     }
 
     public boolean equalsWorld(Region other) {
@@ -321,7 +321,7 @@ public class Region {
      * @param priority You should set this to 0 it's for internal stuffs
      * @return
      */
-    public Region queryChilds(Location loc, int priority) {
+    public Region queryChilds(CLocation loc, int priority) {
         if (!isWithin(loc)) {
             return null;
         }
@@ -733,7 +733,7 @@ public class Region {
      * @param v
      * @return
      */
-    public boolean isWithin(Location v) {
+    public boolean isWithin(CLocation v) {
         if (!equalsWorld(v.getWorld(), v.getDimension())) {
             return false;
         }
@@ -748,8 +748,7 @@ public class Region {
      * @return
      */
     public int getSize() {
-        return (int) Vector.getDistance(origin.getBlockX(), offset.getBlockX()) * (int) Vector.getDistance(origin.getBlockY(), offset
-                .getBlockY()) * (int) Vector.getDistance(origin.getBlockZ(), offset.getBlockZ());
+        return (int) Vector.getDistance(origin.getBlockX(), offset.getBlockX()) * (int) Vector.getDistance(origin.getBlockY(), offset.getBlockY()) * (int) Vector.getDistance(origin.getBlockZ(), offset.getBlockZ());
     }
 
     /**
@@ -1071,12 +1070,7 @@ public class Region {
         int count = 0;
         for (String key : properties.keySet()) {
             if (count <= 3) {
-                builder.append(ColorManager.Rose)
-                       .append(key)
-                       .append(": ")
-                       .append(ColorManager.LightGreen)
-                       .append(properties.get(key).name())
-                       .append(", ");
+                builder.append(ColorManager.Rose).append(key).append(": ").append(ColorManager.LightGreen).append(properties.get(key).name()).append(", ");
             }
             else {
                 count = 0;

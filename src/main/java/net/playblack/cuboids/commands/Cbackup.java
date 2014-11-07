@@ -1,12 +1,12 @@
 package net.playblack.cuboids.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.GenericGenerator;
 import net.playblack.cuboids.datasource.CuboidSerializer;
 import net.playblack.cuboids.datasource.FlatFileSerializer;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.selections.CuboidSelection;
@@ -25,7 +25,7 @@ public class Cbackup extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
@@ -35,9 +35,7 @@ public class Cbackup extends CBaseCommand {
                 return;
             }
         }
-        Region node = RegionManager.get()
-                                   .getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
-                                                                                                   .getDimension());
+        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
         if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod")) {
             GenericGenerator gen = new GenericGenerator(new CuboidSelection(node.getOrigin(), node.getOffset()), player.getWorld());
 
@@ -57,7 +55,7 @@ public class Cbackup extends CBaseCommand {
                 return;
             }
             CuboidSerializer ser = new FlatFileSerializer(tmp);
-            ser.save(command[1], player.getWorld().getFilePrefix());
+            ser.save(command[1], player.getWorld().getFqName());
             MessageSystem.successMessage(player, "backupSuccess");
         }
         else {

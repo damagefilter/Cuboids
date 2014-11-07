@@ -1,20 +1,19 @@
 package net.playblack.cuboids.regions;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.blocks.Block;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.CuboidSaveTask;
 import net.playblack.cuboids.HMobTask;
 import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.blocks.CBlock;
-import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
+import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.ColorManager;
-import net.playblack.mcutils.Location;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -26,10 +25,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class CuboidInterface {
     private static CuboidInterface instance = null;
-    public HashMap<String, CItem[]> playerInventories = new HashMap<String, CItem[]>();
     private RegionManager regions;
-    private ScheduledExecutorService threadManager = Executors.newScheduledThreadPool(Runtime.getRuntime()
-                                                                                             .availableProcessors());
+    private ScheduledExecutorService threadManager = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
 
     /**
      * Construct a new CuboidInterface
@@ -68,8 +65,8 @@ public class CuboidInterface {
      * @param cuboid
      * @param message
      */
-    public void setWelcome(CPlayer player, String cuboid, String message) {
-        Region cube = regions.getRegionByName(cuboid, player.getWorld().getName(), player.getWorld().getDimension());
+    public void setWelcome(Player player, String cuboid, String message) {
+        Region cube = regions.getRegionByName(cuboid, player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
@@ -78,6 +75,12 @@ public class CuboidInterface {
         cube.hasChanged = true;
     }
 
+    public boolean canModifyBlock(Player p, CLocation location) {
+        Region cube = RegionManager.get().getActiveRegion(location, false);
+        CPlayer player = CServer.getServer().getPlayer(p.getName());
+        return p.hasPermission("cuboids.super.admin") || cube.playerIsAllowed(p.getName(), player.getGroups()) || cube.getProperty("protection") != Region.Status.DENY;
+
+    }
     /**
      * Set the farewell message. Insert null for message to remove the farewell
      * message
@@ -86,8 +89,8 @@ public class CuboidInterface {
      * @param cuboid
      * @param message
      */
-    public void setFarewell(CPlayer player, String cuboid, String message) {
-        Region cube = regions.getRegionByName(cuboid, player.getWorld().getName(), player.getWorld().getDimension());
+    public void setFarewell(Player player, String cuboid, String message) {
+        Region cube = regions.getRegionByName(cuboid, player.getWorld().getName(), player.getWorld().getType().getId());
         cube.setFarewell(message);
         cube.hasChanged = true;
 
@@ -104,13 +107,13 @@ public class CuboidInterface {
      * @param player
      * @param cube
      */
-    public void loadCuboid(CPlayer player, String cube) {
+    public void loadCuboid(Player player, String cube) {
         if ((player.hasPermission("cuboids.super.admin")) || (player.hasPermission("cuboids.super.areamod"))) {
-            if (!regions.cuboidExists(cube, player.getWorld().getName(), player.getWorld().getDimension())) {
+            if (!regions.cuboidExists(cube, player.getWorld().getName(), player.getWorld().getType().getId())) {
                 MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
                 return;
             }
-            regions.loadSingle(cube, player.getWorld().getName(), player.getWorld().getDimension());
+            regions.loadSingle(cube, player.getWorld().getName(), player.getWorld().getType().getId());
             MessageSystem.successMessage(player, "cuboidLoaded");
         }
         else {
@@ -124,16 +127,16 @@ public class CuboidInterface {
      * @param player
      * @param cube
      */
-    public void saveCuboid(CPlayer player, String cube) {
+    public void saveCuboid(Player player, String cube) {
         // getCuboidByName(cube, player.getWorld().getName(),
         // player.getWorld().getDimension())
-        Region cubeNode = regions.getRegionByName(cube, player.getWorld().getName(), player.getWorld().getDimension());
+        Region cubeNode = regions.getRegionByName(cube, player.getWorld().getName(), player.getWorld().getType().getId());
         if (cubeNode == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
         if ((cubeNode.playerIsOwner(player.getName())) || ((player.hasPermission("cuboids.super.admin")) || (player.hasPermission("cuboids.super.areamod")))) {
-            if (regions.saveSingle(cube, player.getWorld().getName(), player.getWorld().getDimension())) {
+            if (regions.saveSingle(cube, player.getWorld().getName(), player.getWorld().getType().getId())) {
                 MessageSystem.successMessage(player, "cuboidSaved");
             }
             else {
@@ -150,7 +153,7 @@ public class CuboidInterface {
      *
      * @param player
      */
-    public void saveAll(CPlayer player) {
+    public void saveAll(Player player) {
         regions.save(false, true);
         MessageSystem.successMessage(player, "cuboidSavedAll");
     }
@@ -165,15 +168,15 @@ public class CuboidInterface {
      * @param from
      * @param to
      */
-    public void handleRegionsForPlayer(CPlayer player, Location from, Location to) {
-        if (player.getCurrentRegion() != null) {
-            if (!player.getCurrentRegion().isWithin(player.getLocation()) && !player.getCurrentRegion()
-                                                                                    .isWithin(from)) {
-                player.setRegion(null);
+    public void handleRegionsForPlayer(Player player, CLocation from, CLocation to) {
+        CPlayer p = CServer.getServer().getPlayer(player.getName());
+        if (p.getCurrentRegion() != null) {
+            if (!p.getCurrentRegion().isWithin(p.getLocation()) && !p.getCurrentRegion().isWithin(from)) {
+                p.setRegion(null);
             }
         }
         if (to != null) {
-            player.setRegion(RegionManager.get().getActiveRegion(to, true));
+            p.setRegion(RegionManager.get().getActiveRegion(to, true));
         }
     }
 
@@ -195,7 +198,7 @@ public class CuboidInterface {
      * @param itemId
      * @return true if restricted, false otherwise
      */
-    public boolean itemIsRestricted(Location position, int itemId) {
+    public boolean itemIsRestricted(CLocation position, int itemId) {
         Region cube = regions.getActiveRegion(position, true);
         if (cube == null) {
             return false;
@@ -210,14 +213,15 @@ public class CuboidInterface {
      * @param command
      * @return
      */
-    public boolean commandIsRestricted(CPlayer player, String command) {
+    public boolean commandIsRestricted(Player player, String command) {
         // !!!! NOTE: this MUST NOT check for permissions!!!
         // Check that in the implementation!
         // This is to avoid stack overflows!
         // if(player.hasPermission("cuboids.super.admin")) {
         // return false;
         // }
-        Region cube = regions.getActiveRegion(player.getLocation(), true);
+        CPlayer p = CServer.getServer().getPlayer(player.getName());
+        Region cube = regions.getActiveRegion(p.getLocation(), true);
         if (cube == null) {
             return false;
         }
@@ -248,12 +252,12 @@ public class CuboidInterface {
     /**
      * Remove a cuboid from tree
      *
-     * @param player
      * @param cubeName
      * @return
      */
-    public boolean removeCuboid(CPlayer player, String cubeName) {
-        Region cube = regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getDimension());
+    public boolean removeCuboid(Player player, String cubeName) {
+//        CPlayer player = CServer.getServer().getPlayer(p.getName());
+        Region cube = regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
@@ -278,9 +282,8 @@ public class CuboidInterface {
      * @param command
      * @return
      */
-    public boolean disallowEntity(CPlayer player, String[] command) {
-        Region cube = regions.getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
-                                                                                             .getDimension());
+    public boolean disallowEntity(Player player, String[] command) {
+        Region cube = regions.getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
@@ -313,9 +316,8 @@ public class CuboidInterface {
      * @param command
      * @return
      */
-    public boolean allowEntity(CPlayer player, String[] command) {
-        Region cube = regions.getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
-                                                                                             .getDimension());
+    public boolean allowEntity(Player player, String[] command) {
+        Region cube = regions.getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
 
@@ -349,9 +351,8 @@ public class CuboidInterface {
      * @param command
      * @return
      */
-    public boolean allowItem(CPlayer player, String[] command) {
-        Region cube = regions.getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
-                                                                                             .getDimension());
+    public boolean allowItem(Player player, String[] command) {
+        Region cube = regions.getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
 
@@ -373,9 +374,8 @@ public class CuboidInterface {
         }
     }
 
-    public boolean disallowItem(CPlayer player, String[] command) {
-        Region cube = regions.getRegionByName(command[0], player.getWorld().getName(), player.getWorld()
-                                                                                             .getDimension());
+    public boolean disallowItem(Player player, String[] command) {
+        Region cube = regions.getRegionByName(command[0], player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
 
@@ -405,8 +405,8 @@ public class CuboidInterface {
      * @param cubeName
      * @return
      */
-    public boolean restrictCommand(CPlayer player, String[] command, String cubeName) {
-        Region cube = regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getDimension());
+    public boolean restrictCommand(Player player, String[] command, String cubeName) {
+        Region cube = regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
                 for (int i = 3; i < command.length; i++) {
@@ -428,8 +428,8 @@ public class CuboidInterface {
      * @param cubeName
      * @return
      */
-    public boolean allowCommand(CPlayer player, String[] command, String cubeName) {
-        Region cube = regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getDimension());
+    public boolean allowCommand(Player player, String[] command, String cubeName) {
+        Region cube = regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
                 for (int i = 3; i < command.length; i++) {
@@ -450,9 +450,8 @@ public class CuboidInterface {
      * @param cuboidName
      * @return
      */
-    public boolean resize(CPlayer player, String cuboidName) {
-        Region cube = regions.getRegionByName(cuboidName, player.getWorld().getName(), player.getWorld()
-                                                                                             .getDimension());
+    public boolean resize(Player player, String cuboidName) {
+        Region cube = regions.getRegionByName(cuboidName, player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
                 CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
@@ -480,11 +479,6 @@ public class CuboidInterface {
         }
     }
 
-    public boolean canModifyBlock(CPlayer player, Location position) {
-        return false;
-
-    }
-
     /**
      * Set the priority of a cuboid
      *
@@ -492,8 +486,8 @@ public class CuboidInterface {
      * @param cubeName
      * @param prio
      */
-    public void setPriority(CPlayer player, String cubeName, int prio) {
-        Region cube = regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getDimension());
+    public void setPriority(Player player, String cubeName, int prio) {
+        Region cube = regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
                 cube.setPriority(prio);
@@ -510,12 +504,11 @@ public class CuboidInterface {
         MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
     }
 
-    public void setParent(CPlayer player, String subject, String parent) {
-        Region cube = regions.getRegionByName(subject, player.getWorld().getName(), player.getWorld().getDimension());
+    public void setParent(Player player, String subject, String parent) {
+        Region cube = regions.getRegionByName(subject, player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
-                Region parentCube = regions.getRegionByName(parent, player.getWorld().getName(), player.getWorld()
-                                                                                                       .getDimension());
+                Region parentCube = regions.getRegionByName(parent, player.getWorld().getName(), player.getWorld().getType().getId());
                 if (parentCube == null) {
                     MessageSystem.failMessage(player, "parentNotSet");
                     MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
@@ -560,14 +553,14 @@ public class CuboidInterface {
      * @param position
      * @param showBlockInfo
      */
-    public void explainRegion(CPlayer player, Location position, boolean showBlockInfo) {
+    public void explainRegion(Player player, CLocation position, boolean showBlockInfo) {
         Region node = regions.getActiveRegion(position, true);
 
         if (node != null) {
-            Region cube = node;
-            player.sendMessage(ColorManager.LightGray + "---- " + cube.getName() + " ----");
-            if (cube.playerIsAllowed(player.getName(), player.getGroups())) {
-                if (cube.playerIsOwner(player.getName())) {
+            player.message(ColorManager.LightGray + "---- " + node.getName() + " ----");
+            CPlayer ref = CServer.getServer().getPlayer(player.getName());
+            if (node.playerIsAllowed(player.getName(), ref.getGroups())) {
+                if (node.playerIsOwner(player.getName())) {
                     MessageSystem.translateMessage(player, ColorManager.LightGreen, "youOwnThisArea");
                 }
                 else {
@@ -581,51 +574,48 @@ public class CuboidInterface {
                 MessageSystem.translateMessage(player, ColorManager.Rose, "youCanNotBuildHere");
             }
             MessageSystem.translateMessage(player, ColorManager.LightGray, "players");
-            player.sendMessage(ColorManager.Yellow + cube.getPlayerList());
+            player.message(ColorManager.Yellow + node.getPlayerList());
 
             MessageSystem.translateMessage(player, ColorManager.LightGray, "groups");
-            player.sendMessage(ColorManager.Yellow + cube.getGroupList());
+            player.message(ColorManager.Yellow + node.getGroupList());
 
-            String commands = cube.getRestrictedCommands().toString();
-            String items = cube.getItemListAsNames();
+            String commands = node.getRestrictedCommands().toString();
+            String items = node.getItemListAsNames();
             if (!commands.isEmpty()) {
                 MessageSystem.translateMessage(player, ColorManager.LightGray, "disallowedCommands");
-                player.sendMessage(ColorManager.Yellow + commands);
+                player.message(ColorManager.Yellow + commands);
             }
 
             if (!items.isEmpty()) {
                 MessageSystem.translateMessage(player, ColorManager.LightGray, "disallowedItems");
-                player.sendMessage(ColorManager.Yellow + items);
+                player.message(ColorManager.Yellow + items);
             }
 
-            if (cube.getParent() == null) {
+            if (node.getParent() == null) {
                 //TODO: Translate parent? hmmm
-                player.sendMessage(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + "none");
+                player.message(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + "none");
             }
             else {
-                player.sendMessage(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + cube.getParent()
-                                                                                                   .getName());
+                player.message(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + node.getParent().getName());
             }
         }
         else {
             MessageSystem.yellowNote(player, "noCuboidFound");
         }
         if (showBlockInfo) {
-            CBlock current = player.getWorld().getBlockAt(position);
-            MessageSystem.customMessage(player, ColorManager.Blue, "Block: " + CServer.getServer()
-                                                                                      .getItemName(current.getType()) + "(" + current
-                    .getType() + ") : " + current.getData());
+            Block current = player.getWorld().getBlockAt(position.getBlockX(), position.getBlockZ(), position.getBlockZ());
+            MessageSystem.customMessage(player, ColorManager.Blue, "Block: " + current.getType().getMachineName());
         }
     }
 
-    public void explainRegion(CPlayer player, String name) {
-        Region node = regions.getRegionByName(name, player.getWorld().getName(), player.getWorld().getDimension());
+    public void explainRegion(Player player, String name) {
+        Region node = regions.getRegionByName(name, player.getWorld().getName(), player.getWorld().getType().getId());
 
         if (node != null) {
-            Region cube = node;
-            player.sendMessage(ColorManager.LightGray + "---- " + cube.getName() + " ----");
-            if (cube.playerIsAllowed(player.getName(), player.getGroups())) {
-                if (cube.playerIsOwner(player.getName())) {
+            CPlayer ref = CServer.getServer().getPlayer(player.getName());
+            player.message(ColorManager.LightGray + "---- " + node.getName() + " ----");
+            if (node.playerIsAllowed(player.getName(), ref.getGroups())) {
+                if (node.playerIsOwner(player.getName())) {
                     MessageSystem.translateMessage(player, ColorManager.LightGreen, "youOwnThisArea");
                 }
                 else {
@@ -638,36 +628,31 @@ public class CuboidInterface {
             else {
                 MessageSystem.translateMessage(player, ColorManager.Rose, "youCanNotBuildHere");
             }
-//            String[] flags = cube.getFlagList().split(";");
-//            MessageSystem.translateMessage(player, ColorManager.LightGray, "flags");
-//
-//            for(String line : flags) {
-//                player.sendMessage(line);
-//            }
+
             MessageSystem.translateMessage(player, ColorManager.LightGray, "players");
-            player.sendMessage(ColorManager.Yellow + cube.getPlayerList());
+            player.message(ColorManager.Yellow + node.getPlayerList());
 
             MessageSystem.translateMessage(player, ColorManager.LightGray, "groups");
-            player.sendMessage(ColorManager.Yellow + cube.getGroupList());
+            player.message(ColorManager.Yellow + node.getGroupList());
 
-            String commands = cube.getRestrictedCommands().toString();
-            String items = cube.getItemListAsNames();
+            String commands = node.getRestrictedCommands().toString();
+            String items = node.getItemListAsNames();
             if (!commands.isEmpty()) {
                 MessageSystem.translateMessage(player, ColorManager.LightGray, "disallowedCommands");
-                player.sendMessage(ColorManager.Yellow + commands);
+                player.message(ColorManager.Yellow + commands);
             }
 
             if (!items.isEmpty()) {
                 MessageSystem.translateMessage(player, ColorManager.LightGray, "disallowedItems");
-                player.sendMessage(ColorManager.Yellow + items);
+                player.message(ColorManager.Yellow + items);
             }
 
-            if (cube.getParent() == null) {
+            if (node.getParent() == null) {
                 //TODO: Translate parent? hmmm
-                player.sendMessage(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + "none");
+                player.message(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + "none");
             }
             else {
-                player.sendMessage(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + cube.getParent());
+                player.message(ColorManager.LightGray + "Parent: " + ColorManager.Yellow + node.getParent());
             }
         }
         else {
@@ -681,10 +666,10 @@ public class CuboidInterface {
      * @param player
      * @param page
      */
-    public void displayCuboidList(CPlayer player, int page) {
+    public void displayCuboidList(Player player, int page) {
         String world = player.getWorld().getName();
-        int dimension = player.getWorld().getDimension();
-        String dimName = player.getWorld().dimensionFromId(dimension);
+        int dimension = player.getWorld().getType().getId();
+        String dimName = player.getWorld().getType().getName();
 
         int perPage = 10, maxPages, amount;
         ArrayList<Region> cuboids = regions.getAllInDimension(world, dimension);
@@ -704,8 +689,7 @@ public class CuboidInterface {
         }
         amount = (page - 1) * perPage;
 
-        MessageSystem.translateMessage(player, ColorManager.Yellow, "cuboidsInWorld", dimName, world, Integer.toString(page), Integer
-                .toString(maxPages));
+        MessageSystem.translateMessage(player, ColorManager.Yellow, "cuboidsInWorld", dimName, world, Integer.toString(page), Integer.toString(maxPages));
         for (int i = amount; i < (amount + perPage); i++) {
             if (cuboids.size() <= i) {
                 break;
@@ -715,8 +699,8 @@ public class CuboidInterface {
         }
     }
 
-    public void showCommandBlacklist(CPlayer player, String cubeName) {
-        Region cube = regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getDimension());
+    public void showCommandBlacklist(Player player, String cubeName) {
+        Region cube = regions.getRegionByName(cubeName, player.getWorld().getName(), player.getWorld().getType().getId());
         if (cube == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
@@ -728,7 +712,7 @@ public class CuboidInterface {
             }
         }
         MessageSystem.translateMessage(player, ColorManager.LightGray, "restrictedCommandsForCuboid", cube.getName());
-        player.sendMessage(ColorManager.Rose + cube.getRestrictedCommands().toString());
+        player.message(ColorManager.Rose + cube.getRestrictedCommands().toString());
     }
 
     public void killTasks() {

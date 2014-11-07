@@ -1,6 +1,6 @@
 package net.playblack.cuboids;
 
-import net.playblack.cuboids.gameinterface.CInventory;
+import net.canarymod.api.inventory.Inventory;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.history.HistoryTimeline;
 import net.playblack.cuboids.selections.CuboidSelection;
@@ -15,11 +15,9 @@ import java.util.HashMap;
  */
 public class SessionManager {
     private static SessionManager instance = null;
-    private HashMap<String, HistoryTimeline> playerHistories = new HashMap<String, HistoryTimeline>(CServer.getServer()
-                                                                                                           .getMaxPlayers());
-    private HashMap<String, CuboidSelection> playerClipboard = new HashMap<String, CuboidSelection>(CServer.getServer()
-                                                                                                           .getMaxPlayers());
-    private HashMap<String, HashMap<Integer, CInventory>> inventories = new HashMap<String, HashMap<Integer, CInventory>>();
+    private HashMap<String, HistoryTimeline> playerHistories = new HashMap<String, HistoryTimeline>(CServer.getServer().getMaxPlayers());
+    private HashMap<String, CuboidSelection> playerClipboard = new HashMap<String, CuboidSelection>(CServer.getServer().getMaxPlayers());
+    private HashMap<String, HashMap<Integer, Inventory>> inventories = new HashMap<String, HashMap<Integer, Inventory>>();
 
     private SessionManager() {
 
@@ -32,27 +30,24 @@ public class SessionManager {
         return instance;
     }
 
-    public CInventory getPlayerInventory(String player, int mode) {
-        HashMap<Integer, CInventory> inv = inventories.get(player);
+    public Inventory getPlayerInventory(String player, int mode) {
+        HashMap<Integer, Inventory> inv = inventories.get(player);
         if (inv != null) {
             return inv.get(Integer.valueOf(mode));
         }
         return null;
     }
 
-    public void setPlayerInventory(String player, int mode, CInventory inventory) {
+    public void setPlayerInventory(String player, int mode, Inventory inventory) {
         if (!inventories.containsKey(player)) {
-            inventories.put(player, new HashMap<Integer, CInventory>());
+            inventories.put(player, new HashMap<Integer, Inventory>());
         }
-        inventories.get(player).put(Integer.valueOf(mode), inventory);
+        inventories.get(player).put(mode, inventory);
     }
 
     public boolean inventoryExists(String player, int mode) {
-        HashMap<Integer, CInventory> inv = inventories.get(player);
-        if (inv != null) {
-            return inv.containsKey(mode);
-        }
-        return false;
+        HashMap<Integer, Inventory> inv = inventories.get(player);
+        return inv != null && inv.containsKey(mode);
     }
 
     /**

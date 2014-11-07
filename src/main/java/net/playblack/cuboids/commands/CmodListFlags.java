@@ -1,9 +1,9 @@
 package net.playblack.cuboids.commands;
 
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.RegionFlagRegister;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.ColorManager;
@@ -20,7 +20,7 @@ public class CmodListFlags extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
@@ -41,20 +41,18 @@ public class CmodListFlags extends CBaseCommand {
             }
             String[] lines = out.toString().split(";");
             for (String str : lines) {
-                player.sendMessage(ColorManager.Yellow + str);
+                player.message(ColorManager.Yellow + str);
             }
         }
         else {
-            Region r = RegionManager.get()
-                                    .getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
-                                                                                                    .getDimension());
+            Region r = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
             if (r == null) {
                 r = Config.get().getGlobalSettings();
             }
-            player.sendMessage(ColorManager.LightGray + "---- " + r.getName() + " ----");
+            player.message(ColorManager.LightGray + "---- " + r.getName() + " ----");
             String[] lines = r.getFlagList().split(";");
             for (String str : lines) {
-                player.sendMessage(str);
+                player.message(str);
             }
         }
     }

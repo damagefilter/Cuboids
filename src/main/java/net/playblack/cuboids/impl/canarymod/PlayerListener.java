@@ -2,7 +2,6 @@ package net.playblack.cuboids.impl.canarymod;
 
 import net.canarymod.api.DamageType;
 import net.canarymod.api.PlayerReference;
-import net.canarymod.api.entity.EntityItem;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.hook.HookHandler;
@@ -20,9 +19,9 @@ import net.playblack.cuboids.actions.events.forwardings.EntityDamageEvent;
 import net.playblack.cuboids.actions.events.forwardings.EntityDamageEvent.DamageSource;
 import net.playblack.cuboids.actions.events.forwardings.ItemDropEvent;
 import net.playblack.cuboids.actions.events.forwardings.PlayerWalkEvent;
-import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.ToolBox;
 
 public class PlayerListener implements PluginListener {
@@ -51,22 +50,10 @@ public class PlayerListener implements PluginListener {
         Location to = hook.getTo();
         Location from = hook.getFrom();
         Player player = hook.getPlayer();
-        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.getX(), to.getY(), to.getZ(), to.getType()
-                                                                                                                   .getId(), to
-                .getWorldName());
-        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location(from.getX(), from.getY(), from.getZ(), from
-                .getType()
-                .getId(), from.getWorldName());
-        CPlayer cplayer;
-        try {
-            cplayer = CServer.getServer().getPlayer(player.getName());
-        }
-        catch (InvalidPlayerException e) {
-            // Fallback
-            cplayer = new CanaryPlayer(player);
-        }
+        CLocation vTo = new CLocation(to.getX(), to.getY(), to.getZ(), to.getType().getId(), to.getWorldName());
+        CLocation vFrom = new CLocation(from.getX(), from.getY(), from.getZ(), from.getType().getId(), from.getWorldName());
 
-        PlayerWalkEvent event = new PlayerWalkEvent(cplayer, vFrom, vTo);
+        PlayerWalkEvent event = new PlayerWalkEvent(player, vFrom, vTo);
         ActionManager.fireEvent(event);
         //event.isCancelled() has no effect here
     }
@@ -79,23 +66,12 @@ public class PlayerListener implements PluginListener {
         if (!player.getWorld().isChunkLoaded((int) to.getX(), (int) to.getZ())) {
             player.getWorld().loadChunk((int) to.getX(), (int) to.getZ());
         }
-        net.playblack.mcutils.Location vTo = new net.playblack.mcutils.Location(to.getX(), to.getY(), to.getZ(), to.getType()
-                                                                                                                   .getId(), to
-                .getWorldName());
+        CLocation vTo = new CLocation(to.getX(), to.getY(), to.getZ(), to.getType().getId(), to.getWorldName());
         ToolBox.adjustWorldPosition(vTo);
-        net.playblack.mcutils.Location vFrom = new net.playblack.mcutils.Location(from.getX(), from.getY(), from.getZ(), from
-                .getType()
-                .getId(), from.getWorldName());
+        CLocation vFrom = new CLocation(from.getX(), from.getY(), from.getZ(), from.getType().getId(), from.getWorldName());
         ToolBox.adjustWorldPosition(vFrom);
-        CPlayer cplayer;
-        try {
-            cplayer = CServer.getServer().refreshPlayer(player.getName());
-        }
-        catch (InvalidPlayerException e) {
-            // Fallback
-            cplayer = new CanaryPlayer(player);
-        }
-        PlayerWalkEvent event = new PlayerWalkEvent(cplayer, vFrom, vTo);
+
+        PlayerWalkEvent event = new PlayerWalkEvent(player, vFrom, vTo);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
@@ -108,10 +84,8 @@ public class PlayerListener implements PluginListener {
             return;
         }
 
-        CanaryBaseEntity a = new CanaryBaseEntity(hook.getAttacker());
-        CanaryBaseEntity d = new CanaryBaseEntity(hook.getDefender());
         DamageSource ds = damageSourceFromCanary(hook.getDamageSource().getDamagetype(), true);
-        EntityDamageEvent event = new EntityDamageEvent(a, d, ds, hook.getDamageDealt());
+        EntityDamageEvent event = new EntityDamageEvent(hook.getAttacker(), hook.getDefender(), ds, hook.getDamageDealt());
         ActionManager.fireEvent(event);
 
         if (event.isCancelled()) {
@@ -163,21 +137,7 @@ public class PlayerListener implements PluginListener {
     @HookHandler
     public void onItemDrop(ItemDropHook hook) {
         if (!(hook.getPlayer() == null)) {
-            CPlayer cplayer;
-            try {
-                cplayer = CServer.getServer().getPlayer(hook.getPlayer().getName());
-            }
-            catch (InvalidPlayerException e) {
-                // Fallback
-                cplayer = new CanaryPlayer(hook.getPlayer());
-            }
-
-            EntityItem item = hook.getItem();
-            ItemDropEvent event = new ItemDropEvent(new CItem(item.getItem().getId(), item.getItem()
-                                                                                          .getDamage(), item.getItem()
-                                                                                                            .getAmount(), item
-                    .getItem()
-                    .getSlot()), cplayer, Cuboids.toLocalLocation(item.getLocation()));
+            ItemDropEvent event = new ItemDropEvent(hook.getItem().getItem(), hook.getPlayer(), hook.getItem().getLocation());
             ActionManager.fireEvent(event);
             if (event.isCancelled()) {
                 hook.setCanceled();

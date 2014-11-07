@@ -1,8 +1,8 @@
 package net.playblack.cuboids.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.ColorManager;
@@ -19,7 +19,7 @@ public class CmodRemoveFlag extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
@@ -30,9 +30,7 @@ public class CmodRemoveFlag extends CBaseCommand {
             return;
         }
 
-        Region node = RegionManager.get()
-                                   .getRegionByName(command[1], player.getWorld().getName(), player.getWorld()
-                                                                                                   .getDimension());
+        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
         if (node == null) {
             MessageSystem.failMessage(player, "noCuboidFound");
             return;

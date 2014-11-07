@@ -1,14 +1,14 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.entity.living.monster.EntityMob;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.gameinterface.IBaseEntity;
 
 public class EntitySpawnEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled;
-    private IBaseEntity entity;
+    private EntityMob entity;
 
-    public EntitySpawnEvent(IBaseEntity entity) {
+    public EntitySpawnEvent(EntityMob entity) {
         this.entity = entity;
     }
 
@@ -22,7 +22,7 @@ public class EntitySpawnEvent extends CuboidEvent implements Cancellable {
         isCancelled = true;
     }
 
-    public IBaseEntity getEntity() {
+    public EntityMob getEntity() {
         return entity;
     }
 }

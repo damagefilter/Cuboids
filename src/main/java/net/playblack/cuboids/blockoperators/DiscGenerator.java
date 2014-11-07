@@ -1,11 +1,11 @@
 package net.playblack.cuboids.blockoperators;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.SessionManager;
-import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
@@ -20,7 +20,7 @@ public class DiscGenerator extends BaseGen {
     private boolean fill;
     private int radius;
     private int height;
-    private CBlock material;
+    private BlockType material;
 
     /**
      * The selection you pass along here will be written into the world!
@@ -28,7 +28,7 @@ public class DiscGenerator extends BaseGen {
      * @param selection
      * @param world
      */
-    public DiscGenerator(CuboidSelection selection, CWorld world) {
+    public DiscGenerator(CuboidSelection selection, World world) {
         super(selection, world);
     }
 
@@ -37,7 +37,7 @@ public class DiscGenerator extends BaseGen {
      *
      * @param block
      */
-    public void setMaterial(CBlock block) {
+    public void setMaterial(BlockType block) {
         this.material = block;
     }
 
@@ -61,8 +61,6 @@ public class DiscGenerator extends BaseGen {
 
     /**
      * Set fill true to make a filled sphere, false to make it hollow(rly...)
-     *
-     * @param wo
      */
     public void setHollow(boolean sleepy) {
         fill = sleepy;
@@ -94,7 +92,7 @@ public class DiscGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
+    public boolean execute(Player player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         createDisc();
         CuboidSelection world = scanWorld(true, false);
 

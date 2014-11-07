@@ -1,5 +1,6 @@
 package net.playblack.cuboids.impl.canarymod.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.chat.MessageReceiver;
 import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandListener;
@@ -7,7 +8,6 @@ import net.playblack.cuboids.InvalidPlayerException;
 import net.playblack.cuboids.commands.Cinfo;
 import net.playblack.cuboids.commands.Highprotect;
 import net.playblack.cuboids.commands.Protect;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Debug;
 
 public class MiscCommands implements CommandListener {
@@ -18,10 +18,13 @@ public class MiscCommands implements CommandListener {
             toolTip = "/cinfo")
     public void cinfo(MessageReceiver caller, String[] args) {
         try {
-            new Cinfo().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Cinfo().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This is not a console command");
         }
     }
 
@@ -32,10 +35,13 @@ public class MiscCommands implements CommandListener {
             min = 3)
     public void highprotect(MessageReceiver caller, String[] args) {
         try {
-            new Highprotect().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Highprotect().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This is not a console command");
         }
     }
 
@@ -46,10 +52,13 @@ public class MiscCommands implements CommandListener {
             min = 3)
     public void protect(MessageReceiver caller, String[] args) {
         try {
-            new Protect().execute(CServer.getServer().getPlayer(caller.getName()), args);
+            new Protect().execute((Player) caller, args);
         }
         catch (InvalidPlayerException e) {
             Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This is not a console command");
         }
     }
 

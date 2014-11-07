@@ -1,11 +1,11 @@
 package net.playblack.cuboids.blockoperators;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.SessionManager;
-import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
@@ -17,11 +17,11 @@ import net.playblack.mcutils.Vector;
  */
 public class CuboidGenerator extends BaseGen {
 
-    private CBlock block;
-    private CBlock toReplace;
+    private BlockType block;
+    private BlockType toReplace;
     private boolean replace = false;
 
-    public CuboidGenerator(CuboidSelection selection, CWorld world) {
+    public CuboidGenerator(CuboidSelection selection, World world) {
         super(selection, world);
     }
 
@@ -30,7 +30,7 @@ public class CuboidGenerator extends BaseGen {
      *
      * @param block
      */
-    public void setBlock(CBlock block) {
+    public void setBlock(BlockType block) {
         this.block = block;
     }
 
@@ -40,7 +40,7 @@ public class CuboidGenerator extends BaseGen {
      *
      * @param block
      */
-    public void setBlockToReplace(CBlock block) {
+    public void setBlockToReplace(BlockType block) {
         toReplace = block;
     }
 
@@ -55,13 +55,13 @@ public class CuboidGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
+    public boolean execute(Player player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         selection.clearBlocks();
         scanWorld(false, true);
 
         if (replace) {
             for (Vector position : selection.getBlockList().keySet()) {
-                if (selection.getBlock(position).equalsSlack(toReplace)) {
+                if (selection.getBlock(position) == toReplace) {
                     selection.setBlock(position, block);
                 }
             }
@@ -75,7 +75,6 @@ public class CuboidGenerator extends BaseGen {
             CuboidSelection world = scanWorld(true, true);
             SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
-        boolean result = modifyWorld(true);
-        return result;
+        return modifyWorld(true);
     }
 }

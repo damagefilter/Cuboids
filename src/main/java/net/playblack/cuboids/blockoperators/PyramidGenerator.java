@@ -1,11 +1,11 @@
 package net.playblack.cuboids.blockoperators;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.SessionManager;
-import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.gameinterface.CWorld;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
@@ -19,7 +19,7 @@ public class PyramidGenerator extends BaseGen {
 
     private boolean fill;
     private int radius;
-    private CBlock material;
+    private BlockType material;
 
     /**
      * The selection you pass along here will be written into the world!
@@ -27,7 +27,7 @@ public class PyramidGenerator extends BaseGen {
      * @param selection
      * @param world
      */
-    public PyramidGenerator(CuboidSelection selection, CWorld world) {
+    public PyramidGenerator(CuboidSelection selection, World world) {
         super(selection, world);
     }
 
@@ -36,7 +36,7 @@ public class PyramidGenerator extends BaseGen {
      *
      * @param block
      */
-    public void setMaterial(CBlock block) {
+    public void setMaterial(BlockType block) {
         this.material = block;
     }
 
@@ -46,8 +46,6 @@ public class PyramidGenerator extends BaseGen {
 
     /**
      * Set fill true to make a filled sphere, false to make it hollow(rly...)
-     *
-     * @param wo
      */
     public void setHollow(boolean sleepy) {
         fill = sleepy;
@@ -89,7 +87,7 @@ public class PyramidGenerator extends BaseGen {
                 Zmax = center.getBlockZ() + radius - 2;
                 Ymin = center.getBlockY() + 1;
                 Ymax = center.getBlockY() + radius - 1;
-                CBlock air = new CBlock(0, 0);
+                BlockType air = BlockType.Air;
                 for (int y = Ymin; y <= Ymax; y++) {
                     for (int x = Xmin; x <= Xmax; x++) {
                         for (int z = Zmin; z <= Zmax; z++) {
@@ -106,7 +104,7 @@ public class PyramidGenerator extends BaseGen {
     }
 
     @Override
-    public boolean execute(CPlayer player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
+    public boolean execute(Player player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         selection.clearBlocks();
         createPyramid();
         CuboidSelection world = scanWorld(true, false);
@@ -114,7 +112,6 @@ public class PyramidGenerator extends BaseGen {
         if (newHistory) {
             SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
-        boolean result = modifyWorld(false);
-        return result;
+        return modifyWorld(false);
     }
 }

@@ -1,10 +1,10 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.blocks.CBlock;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 
 /**
  * Fired when Cuboids catched a rightclick-on-block event
@@ -13,22 +13,21 @@ import net.playblack.mcutils.Location;
  */
 public class BlockRightClickEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled = false;
-    private CPlayer player;
-    private CBlock clickedBlock;
-    private Location clickedLocation;
+    private Player player;
+    private BlockType clickedBlock;
+    private CLocation clickedCLocation;
 
     /**
      * Constructs a new RightClickEvent. Pass null for arguments that don't apply in the given situation!
      *
      * @param player
      * @param block
-     * @param location
-     * @param ent
+     * @param CLocation
      */
-    public BlockRightClickEvent(CPlayer player, CBlock block, Location location) {
+    public BlockRightClickEvent(Player player, BlockType block, CLocation CLocation) {
         this.player = player;
         this.clickedBlock = block;
-        this.clickedLocation = location;
+        this.clickedCLocation = CLocation;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class BlockRightClickEvent extends CuboidEvent implements Cancellable {
      *
      * @return
      */
-    public CPlayer getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -55,7 +54,7 @@ public class BlockRightClickEvent extends CuboidEvent implements Cancellable {
      *
      * @return
      */
-    public CBlock getBlock() {
+    public BlockType getBlock() {
         return clickedBlock;
     }
 
@@ -64,7 +63,7 @@ public class BlockRightClickEvent extends CuboidEvent implements Cancellable {
      *
      * @return
      */
-    public Location getLocation() {
-        return clickedLocation;
+    public CLocation getLocation() {
+        return clickedCLocation;
     }
 }

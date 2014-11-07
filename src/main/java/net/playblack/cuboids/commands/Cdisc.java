@@ -1,11 +1,11 @@
 package net.playblack.cuboids.commands;
 
+import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.DiscGenerator;
-import net.playblack.cuboids.blocks.CBlock;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
@@ -27,20 +27,20 @@ public class Cdisc extends CBaseCommand {
     }
 
     @Override
-    public void execute(CPlayer player, String[] command) {
+    public void execute(Player player, String[] command) {
         if (parseCommand(player, command)) {
             return;
         }
         // Check for the proper permissions
         if (!player.hasPermission("cuboids.super.admin")) {
-            if (!player.hasPermission("cWorldMod")) {
+            if (!player.hasPermission("WorldMod")) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
 
         // create a new template block
-        CBlock material = CBlock.parseBlock(command[2]);
+        BlockType material = ToolBox.parseBlock(command[2]);
         int height;
         int radius;
         if (material == null) {

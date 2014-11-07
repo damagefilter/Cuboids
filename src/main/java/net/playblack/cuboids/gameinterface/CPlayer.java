@@ -1,18 +1,20 @@
 package net.playblack.cuboids.gameinterface;
 
+import net.canarymod.api.inventory.Inventory;
+import net.canarymod.api.inventory.Item;
+import net.canarymod.api.world.World;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.HealThread;
-import net.playblack.cuboids.blocks.CItem;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.Location;
+import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.Vector;
 
 import java.util.concurrent.TimeUnit;
 
-public abstract class CPlayer implements IBaseEntity {
+public abstract class CPlayer {
 
     protected boolean wasCreativeWhenEnteringRegion = false;
 
@@ -46,7 +48,7 @@ public abstract class CPlayer implements IBaseEntity {
      *
      * @return
      */
-    public abstract CItem getItemInHand();
+    public abstract Item getItemInHand();
 
     /**
      * Get an array with all groups this player is in. This might not work with
@@ -75,21 +77,20 @@ public abstract class CPlayer implements IBaseEntity {
      *
      * @param mode the inventory for what mode?
      * @return CItem[] representing the inventory
-     * @see CPlayer.setGameMode()
      */
-    public abstract CInventory getInventory(int mode);
+    public abstract Inventory getInventory(int mode);
 
     /**
      * Returns the inventory for this player right as it currently is
      */
-    public abstract CInventory getCurrentInventory();
+    public abstract Inventory getCurrentInventory();
 
     /**
      * Set player inventory
      *
      * @param items
      */
-    public abstract void setInventory(CInventory items);
+    public abstract void setInventory(Inventory items);
 
     /**
      * Set the inventory for a specified mode.
@@ -99,13 +100,12 @@ public abstract class CPlayer implements IBaseEntity {
      * @param inv
      * @param mode
      */
-    public abstract void setInventoryForMode(CInventory inv, int mode);
+    public abstract void setInventoryForMode(Inventory inv, int mode);
 
     /**
      * Teleport a player to the position v in world world
      *
      * @param v
-     * @param world
      */
     public abstract void teleportTo(Vector v);
 
@@ -117,13 +117,42 @@ public abstract class CPlayer implements IBaseEntity {
     public abstract boolean isAdmin();
 
     /**
+     * Get the name of this player
+     *
+     * @return the name
+     */
+    public abstract String getName();
+
+    public abstract World getWorld();
+
+    public abstract Vector getPosition();
+
+    public abstract void setPosition(Vector v);
+
+    public abstract CLocation getLocation();
+
+    public abstract double getX();
+
+    public abstract double getY();
+
+    public abstract double getZ();
+
+    public abstract double getPitch();
+
+    public abstract double getRotation();
+
+    public abstract float getHealth();
+
+    public abstract void setHealth(float health);
+
+    /**
      * Check if this player is allowed to modify a block at a given location
      *
-     * @param location
+     * @param CLocation
      * @return
      */
-    public boolean canModifyBlock(Location location) {
-        Region cube = RegionManager.get().getActiveRegion(location, false);
+    public boolean canModifyBlock(CLocation CLocation) {
+        Region cube = RegionManager.get().getActiveRegion(CLocation, false);
         if (hasPermission("cuboids.super.admin") || cube.playerIsAllowed(getName(), getGroups())) {
             return true;
         }
@@ -134,11 +163,10 @@ public abstract class CPlayer implements IBaseEntity {
     /**
      * Check if this player is allowed to use an item in his hand
      *
-     * @param location
      * @param item
      * @return
      */
-    public boolean canUseItem(CItem item) {
+    public boolean canUseItem(Item item) {
         if (hasPermission("cuboids.super.admin") || currentRegion == null) {
             return true;
         }
@@ -152,11 +180,11 @@ public abstract class CPlayer implements IBaseEntity {
     /**
      * Check if this player can go wherever it's about to go
      *
-     * @param location
+     * @param CLocation
      * @return
      */
-    public boolean canMoveTo(Location location) {
-        Region cube = RegionManager.get().getActiveRegion(location, false);
+    public boolean canMoveTo(CLocation CLocation) {
+        Region cube = RegionManager.get().getActiveRegion(CLocation, false);
         if (hasPermission("cuboids.super.admin") || cube.playerIsAllowed(getName(), getGroups())) {
             return true;
         }
@@ -205,14 +233,7 @@ public abstract class CPlayer implements IBaseEntity {
     public void setRegion(Region r) {
         if (r == null) {
             sendFarewell();
-//            if((currentRegion == null || (currentRegion != null && currentRegion.getProperty("creative") != Status.ALLOW)) && isInCreativeMode()) {
-//                adminCreative = true;
-//            }
-
-//            if(isInCreativeMode() && !adminCreative) {
             setGameMode(0);
-//            }
-
             currentRegion = null;
             return;
         }
@@ -220,34 +241,16 @@ public abstract class CPlayer implements IBaseEntity {
         if (!r.equals(currentRegion)) {
             if (currentRegion != null && !currentRegion.isParentOf(r)) {
                 sendFarewell();
-//                if(currentRegion.getProperty("creative") != Status.ALLOW && isInCreativeMode()) {
-//                    adminCreative = true;
-//                }
             }
-//            if(currentRegion == null && isInCreativeMode()) {
-//                adminCreative = true;
-//            }
             if (r.getProperty("creative") != Status.ALLOW) {
-//                if(!adminCreative) {
                 setGameMode(0);
-//                }
             }
             else if (r.getProperty("creative") == Status.ALLOW) {
-//                if(isInCreativeMode()) {
-//                    adminCreative = true;
-//                }
-//                else {
                 adminCreative = false;
                 setGameMode(1);
-//                }
             }
             if (r.getProperty("healing") == Status.ALLOW) {
-                CuboidInterface.get()
-                               .getThreadManager()
-                               .schedule(new HealThread(this, r, CuboidInterface.get().getThreadManager(), Config.get()
-                                                                                                                 .getHealPower(), Config
-                                               .get()
-                                               .getHealDelay()), 0, TimeUnit.SECONDS);
+                CuboidInterface.get().getThreadManager().schedule(new HealThread(this, r, CuboidInterface.get().getThreadManager(), Config.get().getHealPower(), Config.get().getHealDelay()), 0, TimeUnit.SECONDS);
             }
             if (currentRegion != null && !currentRegion.isChildOf(r)) {
                 currentRegion = r;
@@ -277,7 +280,6 @@ public abstract class CPlayer implements IBaseEntity {
      * <li>0 = survival</li> <li>1 = creative</li> <li>2 = adventure</li>
      * </ul>
      *
-     * @param creative
      * @implementation Make sure to save and swap inventory accordingly and check if a mode was already set
      * by non-cuboid circumstances and do not change mode if so!
      */

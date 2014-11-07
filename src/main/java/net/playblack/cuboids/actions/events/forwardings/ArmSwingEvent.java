@@ -1,7 +1,7 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.cuboids.gameinterface.CPlayer;
 
 /**
  * Fired when cuboids catches an arm-swing event
@@ -9,13 +9,13 @@ import net.playblack.cuboids.gameinterface.CPlayer;
  * @author chris
  */
 public class ArmSwingEvent extends CuboidEvent {
-    private CPlayer player;
+    private Player player;
 
-    public ArmSwingEvent(CPlayer player) {
+    public ArmSwingEvent(Player player) {
         this.player = player;
     }
 
-    public CPlayer getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }
