@@ -1,4 +1,4 @@
-package net.playblack.cuboids.converters;
+package net.playblack.cuboids.loaders;
 
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;

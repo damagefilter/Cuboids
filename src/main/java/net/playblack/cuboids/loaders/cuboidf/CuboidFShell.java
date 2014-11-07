@@ -1,6 +1,6 @@
-package net.playblack.cuboids;
+package net.playblack.cuboids.loaders.cuboidf;
 
-import net.playblack.cuboids.converters.CuboidShell;
+import net.playblack.cuboids.loaders.CuboidShell;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.mcutils.Vector;
 import net.visualillusionsent.utils.PropertiesFile;

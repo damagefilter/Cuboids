@@ -1,7 +1,7 @@
-package net.playblack.cuboids;
+package net.playblack.cuboids.loaders.cuboidf;
 
-import net.playblack.cuboids.converters.CuboidShell;
-import net.playblack.cuboids.converters.Loader;
+import net.playblack.cuboids.loaders.CuboidShell;
+import net.playblack.cuboids.loaders.Loader;
 import net.playblack.mcutils.Debug;
 import net.visualillusionsent.utils.PropertiesFile;
 
