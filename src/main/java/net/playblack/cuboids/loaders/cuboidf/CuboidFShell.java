@@ -115,7 +115,7 @@ public class CuboidFShell implements CuboidShell {
     }
 
     @Override
-    public ArrayList<String> tabuCommands() {
+    public java.util.List<String> tabuCommands() {
         String[] cmds = file.getString("disallowedCommands", "").split(",");
         ArrayList<String> ret = new ArrayList<String>(cmds.length);
         Collections.addAll(ret, cmds);
@@ -123,7 +123,7 @@ public class CuboidFShell implements CuboidShell {
     }
 
     @Override
-    public ArrayList<String> getPlayerlist() {
+    public java.util.List<String> getPlayerlist() {
         ArrayList<String> players = new ArrayList<String>(2);
         String[] a = file.getString("allowedPlayers", "").split(",");
         for (String name : a) {
@@ -136,7 +136,7 @@ public class CuboidFShell implements CuboidShell {
     }
 
     @Override
-    public ArrayList<String> getGrouplist() {
+    public java.util.List<String> getGrouplist() {
         ArrayList<String> groups = new ArrayList<String>(2);
         String[] a = file.getString("allowedPlayers", "").split(",");
         for (String name : a) {

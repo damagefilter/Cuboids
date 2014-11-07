@@ -3,6 +3,7 @@ package net.playblack.cuboids.commands;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.GenericGenerator;
+import net.playblack.cuboids.blockoperators.RestoreRegionGenerator;
 import net.playblack.cuboids.datasource.CuboidDeserializer;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
@@ -28,36 +29,26 @@ public class Crestore extends CBaseCommand {
         if (parseCommand(player, command)) {
             return;
         }
-        String world = player.getWorld().getFqName();
-        File f = new File("plugins/cuboids2/backups/blocks_" + world + "_" + command[1]);
-        if (f.exists()) {
-            CuboidDeserializer des = new CuboidDeserializer(command[1], world);
-            CuboidSelection restore = des.convert();
-            GenericGenerator gen = new GenericGenerator(restore, player.getWorld());
+        CuboidDeserializer des = new CuboidDeserializer(command[1], player.getWorld());
+        RestoreRegionGenerator gen = new RestoreRegionGenerator(des.getSelection(), des.getSignContents(), des.getChestContents(), player.getWorld());
 
-            boolean success;
-            try {
-                success = gen.execute(player, true);
-                if (success) {
-                    MessageSystem.successMessage(player, "restoreSuccess");
-                }
-                else {
-                    MessageSystem.failMessage(player, "restoreFail");
-                }
+        boolean success;
+        try {
+            success = gen.execute(player, true);
+            if (success) {
+                MessageSystem.successMessage(player, "restoreSuccess");
             }
-            catch (BlockEditLimitExceededException e) {
-                Debug.logWarning(e.getMessage());
-                MessageSystem.customFailMessage(player, e.getMessage());
-                e.printStackTrace();
+            else {
+                MessageSystem.failMessage(player, "restoreFail");
             }
-            catch (SelectionIncompleteException e) {
-                MessageSystem.failMessage(player, "selectionIncomplete");
-            }
-
         }
-        else {
-            MessageSystem.failMessage(player, "restoreFail");
-            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
+        catch (BlockEditLimitExceededException e) {
+            Debug.logWarning(e.getMessage());
+            MessageSystem.customFailMessage(player, e.getMessage());
+            e.printStackTrace();
+        }
+        catch (SelectionIncompleteException e) {
+            MessageSystem.failMessage(player, "selectionIncomplete");
         }
     }
 }

@@ -47,11 +47,11 @@ public interface CuboidShell {
 
     public String getWelcome();
 
-    public ArrayList<String> tabuCommands();
+    public java.util.List<String> tabuCommands();
 
-    public ArrayList<String> getPlayerlist();
+    public java.util.List<String> getPlayerlist();
 
-    public ArrayList<String> getGrouplist();
+    public java.util.List<String> getGrouplist();
 
     public Vector getOrigin();
 

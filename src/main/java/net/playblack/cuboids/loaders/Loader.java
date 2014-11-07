@@ -20,5 +20,5 @@ public interface Loader {
      *
      * @return
      */
-    public ArrayList<CuboidShell> load();
+    public java.util.List<CuboidShell> load();
 }

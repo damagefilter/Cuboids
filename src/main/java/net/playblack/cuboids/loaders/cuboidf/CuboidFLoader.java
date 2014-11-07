@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class CuboidFLoader implements Loader {
 
     @Override
-    public ArrayList<CuboidShell> load() {
+    public java.util.List<CuboidShell> load() {
         ArrayList<CuboidShell> shells = new ArrayList<CuboidShell>(20);
         try {
             File cuboidFPath = new File("plugins/config/CuboidPlugin/areas/");

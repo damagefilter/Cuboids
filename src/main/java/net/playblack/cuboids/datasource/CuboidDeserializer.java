@@ -1,21 +1,21 @@
 package net.playblack.cuboids.datasource;
 
-import net.playblack.cuboids.blocks.CBlock;
-import net.playblack.cuboids.blocks.CItem;
-import net.playblack.cuboids.blocks.ChestBlock;
-import net.playblack.cuboids.blocks.SignBlock;
+import net.canarymod.Canary;
+import net.canarymod.api.inventory.Item;
+import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.database.DataAccess;
+import net.canarymod.database.exceptions.DatabaseReadException;
+import net.playblack.cuboids.datasource.da.RegionDataAccess;
+import net.playblack.cuboids.datasource.da.RegionExtraDataAccess;
 import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The deserializer. Reads from data source and creates CuboidSelection objects
@@ -24,9 +24,14 @@ import java.util.HashMap;
  */
 public class CuboidDeserializer {
 
-    protected ArrayList<String> blockData = new ArrayList<String>();
-    protected HashMap<Integer, String> extraData = new HashMap<Integer, String>();
+    protected RegionDataAccess blocks;
+    protected List<DataAccess> extraData;
     protected CuboidSelection cuboid;
+    protected World world;
+    protected String regionName;
+
+    private Map<Vector, Item[]> chestContents;
+    private Map<Vector, String[]> signContents;
 
     /**
      * Prepared stuff for deserializing. Please check for file_exists before
@@ -35,78 +40,58 @@ public class CuboidDeserializer {
      * @param name
      * @param world
      */
-    public CuboidDeserializer(String name, String world) {
-        String blockLocation = "plugins/cuboids2/backups/blocks_" + world.toUpperCase() + "_" + name;
-        String extrasLocation = "plugins/cuboids2/backups/contents_" + world.toUpperCase() + "_" + name;
+    public CuboidDeserializer(String name, World world) {
         cuboid = new CuboidSelection();
+        this.world = world;
+        this.blocks = new RegionDataAccess(name);
+        this.regionName = name;
+        chestContents = new HashMap<Vector, Item[]>();
+        signContents = new HashMap<Vector, String[]>();
+
         try {
-            // get file input streams
-            FileInputStream fstreamBlocks = new FileInputStream(blockLocation);
-            FileInputStream fstreamExtras = new FileInputStream(extrasLocation);
-            // Get data input streams
-            DataInputStream inBlocks = new DataInputStream(fstreamBlocks);
-            DataInputStream inExtras = new DataInputStream(fstreamExtras);
-            // Finally get the damn readers!
+            // Load data from database
+            Canary.db().load(this.blocks, new HashMap<String, Object>());
+            extraData = new ArrayList<DataAccess>();
+            HashMap<String, Object> filter = new HashMap<String, Object>();
+            filter.put("region", name);
+            Canary.db().loadAll(new RegionExtraDataAccess(), extraData, filter);
 
-            BufferedReader blockInput = new BufferedReader(new InputStreamReader(inBlocks));
-            BufferedReader extrasInput = new BufferedReader(new InputStreamReader(inExtras));
-
-            // Now read
-            String line;
-            try {
-                // First off, get the data from extras so we can already close
-                // the extrasInput
-                while ((line = extrasInput.readLine()) != null) {
-                    String[] split = line.split("=");
-                    //This will be converted to useful stuff later
-                    extraData.put(Integer.parseInt(split[0]), split[1]);
-                }
-
-                while ((line = blockInput.readLine()) != null) {
-                    blockData.add(line); // this will be converted after this
-                    // crazy file loading is done
-                }
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            finally {
-                try {
-                    extrasInput.close();
-                    blockInput.close();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
+            // Apply
+            for (int i = 0; i < blocks.blockData.size(); ++i) {
+                generateFromLine(blocks.blockData.get(i), i);
             }
 
         }
-        catch (FileNotFoundException e) {
+        catch (DatabaseReadException e) {
             e.printStackTrace();
         }
+        catch (DeserializeException f) {
+            f.printStackTrace();
+        }
+
         // -----------------------------------------------
 
     }
 
-    private void generateFromLine(String line, int lineNumber, CuboidSelection selection) throws DeserializeException {
+    private void generateFromLine(String line, int lineNumber) throws DeserializeException {
         String[] split = line.split("\\|"); // results in 0=block,1=vector
-        CBlock block = null;
-        Vector key = null;
+        BlockType block;
+        Vector key;
         try {
-            block = CBlock.deserialize(split[0]);
+            block = BlockType.fromString(split[0]);
             key = Vector.deserialize(split[1]);
         }
-        catch (DeserializeException e) {
-            e.printStackTrace();
+        catch (ArrayIndexOutOfBoundsException f) {
+            throw new DeserializeException("Bad line format for region " + regionName + "Line:\n", line);
         }
 
         if ((key != null) && (block != null)) {
-            selection.setBlock(key, block);
-            if (block instanceof ChestBlock) {
-                generateChestContents(lineNumber, (ChestBlock) block);
+            cuboid.setBlock(key, block);
+            if (BlockType.Chest.equals(block)) {
+                generateChestContents(lineNumber, key);
             }
-            if (block instanceof SignBlock) {
-                generateSignData(lineNumber, (SignBlock) block);
+            if (block.getMachineName().endsWith("sign")) {
+                generateSignData(lineNumber, key);
             }
         }
         else {
@@ -115,33 +100,35 @@ public class CuboidDeserializer {
 
     }
 
-    private void generateSignData(int index, SignBlock sign) {
-        String signText = extraData.get(Integer.valueOf(index));
+    private void generateSignData(int index, Vector key) {
+        String signText = ((RegionExtraDataAccess)extraData.get(index)).data;
         if (signText != null) {
-            sign.setText(signText.split("\\|"));
+            signContents.put(key, signText.split("\\|"));
         }
     }
 
-    private void generateChestContents(int index, ChestBlock block) throws DeserializeException {
-        String chestContents = extraData.get(Integer.valueOf(index));
+    private void generateChestContents(int index, Vector key) throws DeserializeException {
+        String chestContents = ((RegionExtraDataAccess)extraData.get(index)).data;
         if (chestContents != null) {
             String[] itemSplit = chestContents.split("\\|");
-            for (String item : itemSplit) {
-                block.putItem(CItem.deserialize(item));
+            Item[] parsedItems = new Item[itemSplit.length];
+            for (int i = 0; i < itemSplit.length; ++i) {
+                parsedItems[i] = Canary.deserialize(itemSplit[i], Item.class);
             }
+            this.chestContents.put(key, parsedItems);
         }
     }
 
-    public CuboidSelection convert() {
-        for (int index = 0; index < blockData.size(); index++) {
-            try {
-                generateFromLine(blockData.get(index), index, this.cuboid);
-            }
-            catch (DeserializeException e) {
-                e.printStackTrace();
-            }
-        }
-        return this.cuboid;
+    public CuboidSelection getSelection() {
+        return cuboid;
+    }
+
+    public Map<Vector, String[]> getSignContents() {
+        return this.signContents;
+    }
+
+    public Map<Vector, Item[]> getChestContents() {
+        return this.chestContents;
     }
 
 }

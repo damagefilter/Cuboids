@@ -58,7 +58,7 @@ public class Converter {
     /**
      * This will execute a load with the given cuboid loader and then write the
      * results to the CuboidSehll arraylist. Returns false if there were no
-     * files to convert
+     * files to getSelection
      *
      * @param loader
      */
