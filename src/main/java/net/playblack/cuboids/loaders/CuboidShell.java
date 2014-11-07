@@ -1,5 +1,6 @@
 package net.playblack.cuboids.loaders;
 
+import net.playblack.cuboids.regions.Region;
 import net.playblack.mcutils.Vector;
 
 import java.util.ArrayList;
@@ -64,4 +65,17 @@ public interface CuboidShell {
     public boolean getEnderControl();
 
     public boolean getPhysics();
+
+    /**
+     * Denotes if getRegion can be called directly on it or if you need to create one manually.
+     * @return
+     */
+    public boolean canConvertDirectly();
+
+    /**
+     * Gets the region object if it is possible,
+     * otherwise returns null.
+     * @return
+     */
+    public Region getRegion();
 }

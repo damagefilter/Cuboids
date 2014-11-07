@@ -68,7 +68,9 @@ public class Debug {
      */
     public static void logStack(Throwable t) {
         log.warn(t.getMessage(), t);
-//        log.log(Level.WARNING, (loggerIsOverridden ? "" : "[Cuboids2] ") + t.getMessage(), t);
+    }
+    public static void logStack(String message, Throwable t) {
+        log.warn(message, t);
     }
 
     public static void println(String msg) {

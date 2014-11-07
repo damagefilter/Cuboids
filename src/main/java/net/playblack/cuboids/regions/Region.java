@@ -1,5 +1,6 @@
 package net.playblack.cuboids.regions;
 
+import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.world.World;
 import net.playblack.cuboids.RegionFlagRegister;
 import net.playblack.cuboids.gameinterface.CPlayer;
@@ -12,6 +13,7 @@ import net.playblack.mcutils.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Region {
 
@@ -68,7 +70,7 @@ public class Region {
     /**
      * List of restricted item IDs
      */
-    private ArrayList<Integer> restrictedItems = new ArrayList<Integer>();
+    private ArrayList<String> restrictedItems = new ArrayList<String>();
 
     public Region() {
         properties = new HashMap<String, Status>();
@@ -485,11 +487,11 @@ public class Region {
      *
      * @param map
      */
-    public void putAll(HashMap<String, Status> map) {
+    public void putAll(Map<String, Status> map) {
         properties.putAll(map);
     }
 
-    public HashMap<String, Status> getAllProperties() {
+    public Map<String, Status> getAllProperties() {
         return new HashMap<String, Region.Status>(properties);
     }
 
@@ -825,12 +827,11 @@ public class Region {
      * Add items to regions restricted items list
      *
      * @param id
+     * @deprecated Use addRestrictedItem with string argument(s) instead.
      */
+    @Deprecated
     public void addRestrictedItem(int id) {
-        if (id < 0) {
-            return;
-        }
-        restrictedItems.add(Integer.valueOf(id));
+        throw new UnsupportedOperationException("Deprecated. Use strings instead of ints!");
     }
 
     /**
@@ -846,10 +847,19 @@ public class Region {
         if (items.contains(",")) {
             String[] itemList = items.split(",");
             for (String item : itemList) {
-                addRestrictedItem(ToolBox.parseInt(item));
+                restrictedItems.add(item);
             }
         }
-        addRestrictedItem(ToolBox.parseInt(items));
+        restrictedItems.add(items);
+    }
+
+    public void addRestrictedItem(String[] items) {
+        if (items == null) {
+            return;
+        }
+        for (String item : items) {
+            restrictedItems.add(item);
+        }
     }
 
     /**
@@ -867,11 +877,16 @@ public class Region {
      * @param id
      * @return true if item is restricted, false otherwise
      */
+    @Deprecated
     public boolean isItemRestricted(int id) {
-        return restrictedItems.contains(Integer.valueOf(id));
+        throw new UnsupportedOperationException("Deprecated. Use strings instead of ints!");
     }
 
-    public ArrayList<Integer> getRestrictedItems() {
+    public boolean isItemRestricted(String id) {
+        return restrictedItems.contains(id);
+    }
+
+    public List<String> getRestrictedItems() {
         return restrictedItems;
     }
 
@@ -925,6 +940,10 @@ public class Region {
         }
     }
 
+    public List<String> getPlayers() {
+        return new ArrayList<String>(this.players);
+    }
+
     public String getGroupList() {
         StringBuilder groups = new StringBuilder();
         for (int i = 0; i < this.groups.size(); i++) {
@@ -942,10 +961,15 @@ public class Region {
         }
     }
 
+    public List<String> getGroups() {
+       return new ArrayList<String>(this.groups);
+    }
+
     public String getItemListAsNames() {
         StringBuilder items = new StringBuilder();
-        for (Integer i : restrictedItems) {
-            items.append(CServer.getServer().getItemName(i.intValue())).append(",");
+        for (String i : restrictedItems) {
+            ItemType type = ItemType.fromString(i);
+            items.append(type.getMachineName()).append(",");
         }
         if (items.length() == 0) {
             return "";
@@ -1131,6 +1155,22 @@ public class Region {
             else {
                 return INVALID_PROPERTY;
             }
+        }
+
+        public static String toString(Status status) {
+            switch (status) {
+                case ALLOW:
+                    return "ALLOW";
+                case DENY:
+                    return "DENY";
+                case INHERIT:
+                    return "INHERIT";
+                case DEFAULT:
+                    return "DEFAULT";
+                case INVALID_PROPERTY:
+                    return "INVALID_PROPERTY";
+            }
+            return "INVALID_PROPERTY";
         }
 
         /**

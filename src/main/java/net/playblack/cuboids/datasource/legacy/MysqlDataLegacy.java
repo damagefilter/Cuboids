@@ -1,5 +1,6 @@
-package net.playblack.cuboids.datasource;
+package net.playblack.cuboids.datasource.legacy;
 
+import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -15,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * MysqlData extends BaseData and represents the data layer for retrieving
@@ -53,7 +55,7 @@ public class MysqlDataLegacy implements BaseData {
             }
         }
         catch (SQLException e) {
-            Debug.logWarning("Regions2: SQL Connection Problem: " + e.getMessage());
+            Debug.logWarning("SQL Connection Problem: " + e.getMessage());
             // log.logMessage("URL: "+cfg.get("url"), "INFO");
             return null;
         }
@@ -253,6 +255,50 @@ public class MysqlDataLegacy implements BaseData {
             regionMan.addRoot(root);
         }
         return numRegions;
+    }
+
+    /**
+     * Loads all regions but doesn't add them to the region manager.
+     * Returned list contains root regions all others are parented down
+     * @return
+     */
+    public List<Region> loadAllRaw() {
+        ArrayList<Region> regions = new ArrayList<Region>();
+        if (getConnection() == null) {
+            Debug.logError("Failed to establish Database Connection, cannot load Region data! (legacy)");
+            return regions; // uh oh ...
+        }
+
+        try {
+            PreparedStatement ps = getConnection().prepareStatement("SELECT * FROM nodes");
+            loadedRegions = resultSetToRegion(ps.executeQuery());
+        }
+        catch (SQLException e) {
+            Debug.logError("Failed to load Region Nodes (legacy). Reason: " + e.getMessage());
+            e.printStackTrace();
+            return regions;
+        }
+
+        //Sort out parents and stuff.
+        for (String key : loadedRegions.keySet()) {
+            //Root has no parents to sort out
+            if (!key.equals("root")) {
+                Region parent = findByName(key);
+                for (Region r : loadedRegions.get(key)) {
+                    if (parent == null) {
+                        Debug.logWarning("Cannot find parent " + key + ". Dropping regions with this parent.");
+                        break;
+                    }
+                    r.setParent(parent);
+                }
+            }
+        }
+
+        //Now that we have all the parents sorted out, we can just add all nodes under "root" to the regionmanager
+        for (Region root : loadedRegions.get("root")) {
+            regions.add(root);
+        }
+        return regions;
     }
 
     /**

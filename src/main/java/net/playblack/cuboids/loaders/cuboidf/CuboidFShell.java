@@ -2,6 +2,7 @@ package net.playblack.cuboids.loaders.cuboidf;
 
 import net.playblack.cuboids.loaders.CuboidShell;
 import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.mcutils.Vector;
 import net.visualillusionsent.utils.PropertiesFile;
 
@@ -176,6 +177,16 @@ public class CuboidFShell implements CuboidShell {
     @Override
     public boolean getPhysics() {
         return file.getBoolean("physics", false);
+    }
+
+    @Override
+    public boolean canConvertDirectly() {
+        return false;
+    }
+
+    @Override
+    public Region getRegion() {
+        return null;
     }
 
 }

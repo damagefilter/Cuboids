@@ -11,7 +11,6 @@ import net.playblack.cuboids.actions.operators.PlayerMovementOperator;
 import net.playblack.cuboids.actions.operators.SelectionOperator;
 import net.playblack.cuboids.loaders.Converter;
 import net.playblack.cuboids.loaders.Loader;
-import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.impl.canarymod.Cuboids;
 import net.playblack.cuboids.regions.RegionManager;
@@ -69,7 +68,6 @@ public class Bootstrapper {
         int loaded = RegionManager.get().load();
         Debug.cacheMessage("Loaded " + loaded + " regions.", true);
         Debug.logCachedMessage();
-        FlatfileDataLegacy.cleanupFiles();
 
         new BlockModificationsOperator();
         new DamageOperator();

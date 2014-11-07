@@ -3,9 +3,9 @@ package net.playblack.cuboids.commands;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.datasource.FlatfileDataLegacy;
-import net.playblack.cuboids.datasource.MysqlDataLegacy;
-import net.playblack.cuboids.datasource.XmlData;
+import net.playblack.cuboids.datasource.CanaryDbData;
+import net.playblack.cuboids.datasource.legacy.MysqlDataLegacy;
+import net.playblack.cuboids.datasource.legacy.XmlDataLegacy;
 import net.playblack.mcutils.ColorManager;
 
 /**
@@ -16,7 +16,7 @@ import net.playblack.mcutils.ColorManager;
  */
 public class CmodLoadFrom extends CBaseCommand {
     public CmodLoadFrom() {
-        super("Load cuboids: " + ColorManager.Yellow + "/cmod loadfrom <mysql|flatfile|xml>", 2);
+        super("Load cuboids: " + ColorManager.Yellow + "/cmod loadfrom <mysql|xml>", 2);
     }
 
     @Override
@@ -30,12 +30,12 @@ public class CmodLoadFrom extends CBaseCommand {
             ds.loadAll();
         }
         //Flatfile now does legacy loading
-        else if (command[1].equalsIgnoreCase("flatfile")) {
-            FlatfileDataLegacy ds = new FlatfileDataLegacy();
+        else if (command[1].equalsIgnoreCase("xml")) {
+            XmlDataLegacy ds = new XmlDataLegacy();
             ds.loadAll();
         }
         else {
-            XmlData ds = new XmlData();
+            CanaryDbData ds = new CanaryDbData();
             ds.loadAll();
         }
         MessageSystem.successMessage(player, "cuboidLoadedAll");

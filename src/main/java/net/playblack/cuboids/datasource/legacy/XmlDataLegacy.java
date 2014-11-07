@@ -1,6 +1,7 @@
-package net.playblack.cuboids.datasource;
+package net.playblack.cuboids.datasource.legacy;
 
 import net.playblack.cuboids.Config;
+import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -21,6 +22,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * XmlData extends BaseData and represents the data layer for retrieving
@@ -28,7 +31,7 @@ import java.util.HashMap;
  *
  * @author Chris
  */
-public class XmlData implements BaseData {
+public class XmlDataLegacy implements BaseData {
 
     private final Object lock = new Object();
     /**
@@ -38,7 +41,7 @@ public class XmlData implements BaseData {
     private SAXBuilder regionBuilder = new SAXBuilder();
     private HashMap<String, ArrayList<Region>> loadedRegions = new HashMap<String, ArrayList<Region>>();
 
-    public XmlData() {
+    public XmlDataLegacy() {
     }
 
     @Override
@@ -71,7 +74,6 @@ public class XmlData implements BaseData {
 
     @Override
     public int loadAll() {
-
         RegionManager regionMan = RegionManager.get();
         loadedRegions.put("root", new ArrayList<Region>());
         File regionFolder = new File(Config.get().getBasePath() + "regions/");
@@ -130,6 +132,65 @@ public class XmlData implements BaseData {
             regionMan.addRoot(root);
         }
         return numRegions;
+    }
+
+    public List<Region> loadAllRaw() {
+        ArrayList<Region> rootRegions = new ArrayList<Region>();
+        loadedRegions.put("root", new ArrayList<Region>());
+        File regionFolder = new File(Config.get().getBasePath() + "regions/");
+        if (!regionFolder.exists()) {
+            regionFolder.mkdirs();
+        }
+        //Load all files sorted by parents.
+        //Parentless regions get sorted into "root"
+        for (File file : regionFolder.listFiles()) {
+            if (file.getName().toLowerCase().endsWith("xml")) {
+                try {
+                    Document rdoc = regionBuilder.build(file);
+                    Element meta = rdoc.getRootElement().getChild("meta");
+                    String parentName = meta.getChildText("parent");
+                    Region r = domToRegion(rdoc, false);
+                    if (r != null) {
+                        if (parentName == null || parentName.isEmpty()) {
+                            loadedRegions.get("root").add(r);
+                        }
+                        else {
+                            if (loadedRegions.get(parentName) == null) {
+                                loadedRegions.put(parentName, new ArrayList<Region>());
+                            }
+                            loadedRegions.get(parentName).add(r);
+                        }
+                    }
+                }
+                catch (JDOMException e) {
+                    Debug.logWarning(e.getMessage());
+                }
+                catch (IOException e) {
+                    Debug.logWarning(e.getMessage());
+                }
+            }
+        }
+
+        //Sort out parents and stuff.
+        for (String key : loadedRegions.keySet()) {
+            //Root has no parents to sort out
+            if (!key.equals("root")) {
+                for (Region r : loadedRegions.get(key)) {
+                    Region parent = findByName(key);
+                    if (parent == null) {
+                        Debug.logWarning("Cannot find parent " + key + ". Dropping regions with this parent!");
+                        break;
+                    }
+                    r.setParent(parent);
+                }
+            }
+        }
+
+        //Now that we have all the parents sorted out, we can just add all nodes under "root" to the regionmanager
+        for (Region root : loadedRegions.get("root")) {
+            rootRegions.add(root);
+        }
+        return rootRegions;
     }
 
     /**
@@ -207,7 +268,7 @@ public class XmlData implements BaseData {
 
         if (r.getRestrictedItems().size() > 0) {
             StringBuilder str = new StringBuilder();
-            for (Integer cmd : r.getRestrictedItems()) {
+            for (String cmd : r.getRestrictedItems()) {
                 str.append(cmd).append(",");
             }
             str.deleteCharAt(str.length() - 1);
@@ -224,7 +285,7 @@ public class XmlData implements BaseData {
         regionElement.addContent(meta);
         Element properties = new Element("properties");
         regionElement.addContent(properties);
-        HashMap<String, Status> props = r.getAllProperties();
+        Map<String, Status> props = r.getAllProperties();
         for (String key : props.keySet()) {
             properties.addContent(new Element(key).setText(props.get(key).name()));
         }

@@ -4,13 +4,13 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.config.Configuration;
 import net.canarymod.plugin.PluginException;
 import net.playblack.cuboids.datasource.BaseData;
-import net.playblack.cuboids.datasource.XmlData;
+import net.playblack.cuboids.datasource.CanaryDbData;
+import net.playblack.cuboids.datasource.legacy.XmlDataLegacy;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.impl.canarymod.Cuboids;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.PropsFile;
 import net.visualillusionsent.utils.PropertiesFile;
 
 import java.util.ArrayList;
@@ -340,14 +340,8 @@ public class Config {
         return global;
     }
 
-    //TODO: More datasource stuff
     public BaseData getDataSource() {
-//        if (sqlConfig == null) {
-//            return new XmlData();
-//        } else {
-//            return new MysqlDataLegacy(sqlConfig);
-//        }
-        return new XmlData();
+        return new CanaryDbData();
     }
 
     /**

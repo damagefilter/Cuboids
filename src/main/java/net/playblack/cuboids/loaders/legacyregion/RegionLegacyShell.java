@@ -155,6 +155,12 @@ public class RegionLegacyShell implements CuboidShell {
         return true;
     }
 
+    @Override
+    public boolean canConvertDirectly() {
+        return true;
+    }
+
+    @Override
     public Region getRegion() {
         return this.file;
     }

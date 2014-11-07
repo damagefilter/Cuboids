@@ -3,7 +3,6 @@ package net.playblack.cuboids.commands;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.blockoperators.GenericGenerator;
-import net.playblack.cuboids.datasource.CanaryDatabaseSerializer;
 import net.playblack.cuboids.datasource.CuboidSerializer;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
@@ -54,8 +53,8 @@ public class Cbackup extends CBaseCommand {
                 MessageSystem.failMessage(player, "selectionIncomplete");
                 return;
             }
-            CuboidSerializer ser = new CanaryDatabaseSerializer(tmp);
-            ser.save(command[1], player.getWorld().getFqName());
+            CuboidSerializer ser = new CuboidSerializer(tmp, player.getWorld(), node.getName());
+            ser.save();
             MessageSystem.successMessage(player, "backupSuccess");
         }
         else {

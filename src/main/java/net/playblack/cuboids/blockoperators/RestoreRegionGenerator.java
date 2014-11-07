@@ -18,7 +18,7 @@ import net.playblack.mcutils.Vector;
 import java.util.Map;
 
 /**
- * Process the given cuboidselection into the world
+ * Takes information about a previously stored region content and puts it back into the world
  *
  * @author Chris
  */

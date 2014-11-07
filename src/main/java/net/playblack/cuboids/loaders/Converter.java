@@ -5,6 +5,7 @@ import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Convert foreign Cuboid file formats to native Cuboid.
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * @author Chris
  */
 public class Converter {
-    protected ArrayList<CuboidShell> shells;
+    protected List<CuboidShell> shells;
 
     protected Region toCuboid(CuboidShell shell) {
         Region cube = new Region();
@@ -48,7 +49,12 @@ public class Converter {
     private void convert() {
         RegionManager regions = RegionManager.get();
         for (CuboidShell shell : shells) {
-            regions.addRoot(toCuboid(shell));
+            if (shell.canConvertDirectly()) {
+                regions.addRoot(shell.getRegion());
+            }
+            else {
+                regions.addRoot(toCuboid(shell));
+            }
         }
         // now that we have all the fancy and unsorted roots added, lets sort
         // them.
