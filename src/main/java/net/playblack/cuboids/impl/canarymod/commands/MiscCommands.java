@@ -4,7 +4,7 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.chat.MessageReceiver;
 import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandListener;
-import net.playblack.cuboids.InvalidPlayerException;
+import net.playblack.cuboids.exceptions.InvalidPlayerException;
 import net.playblack.cuboids.commands.Cinfo;
 import net.playblack.cuboids.commands.Highprotect;
 import net.playblack.cuboids.commands.Protect;

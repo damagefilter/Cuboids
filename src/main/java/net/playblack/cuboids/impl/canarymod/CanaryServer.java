@@ -6,7 +6,7 @@ import net.canarymod.api.entity.living.monster.EntityMob;
 import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.world.DimensionType;
 import net.canarymod.api.world.World;
-import net.playblack.cuboids.InvalidPlayerException;
+import net.playblack.cuboids.exceptions.InvalidPlayerException;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 

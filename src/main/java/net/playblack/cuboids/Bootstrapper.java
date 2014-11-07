@@ -13,6 +13,7 @@ import net.playblack.cuboids.converters.Converter;
 import net.playblack.cuboids.converters.Loader;
 import net.playblack.cuboids.datasource.FlatfileDataLegacy;
 import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.cuboids.impl.canarymod.Cuboids;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Debug;
 //import net.playblack.cuboids.regions.CuboidInterface;
@@ -44,9 +45,9 @@ public class Bootstrapper {
 
     }
 
-    @SuppressWarnings("unused")
-    public void bootstrap() {
+    public void bootstrap(Cuboids plugin) {
         // ------------------------------------------------------
+        Config.setConfig(new Config(plugin));
         CServer.setServer(server);
         Config.get().setImplementation(impl); // init this thing for a first time
         // ------------------------------------------------------
@@ -62,7 +63,7 @@ public class Bootstrapper {
             }
         }
         if (hasConverted) {
-            Debug.cacheMessage("Loaded CuboidPlugin files", false);
+            Debug.cacheMessage("Loaded Cuboids files", false);
         }
         // ------------------------------------------------------
         int loaded = RegionManager.get().load();
