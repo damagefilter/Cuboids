@@ -35,7 +35,7 @@
         <repository>
             <id>vi-repo</id>
             <name>Visual Illusions Repository</name>
-            <url>http://repo.visualillusionsent.net</url>
+            <url>http://repo.visualillusionsent.net/repository/public/</url>
         </repository>
     </repositories>
     <dependencies>

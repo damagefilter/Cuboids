@@ -387,7 +387,7 @@ public class RegionManager {
             if (tree.equalsWorld(cube)) {
                 if (cube.cuboidIsWithin(tree, true)) {
                     Region tmp = tree.queryChilds(cube);
-                    if (tmp != null) {
+                    if (tmp != null && tmp != cube) {
                         matches.add(tmp);
                     }
                 }
