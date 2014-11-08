@@ -3,6 +3,7 @@ package net.playblack.cuboids.commands;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.RegionFlagRegister;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.ColorManager;
@@ -30,27 +31,29 @@ public class CmodSetFlag extends CBaseCommand {
             }
         }
 
-        if (command[1].equalsIgnoreCase("global")) {
-            Config.get().setGlobalProperty(command[4], Region.Status.fromString(command[1]));
-            MessageSystem.successMessage(player, "globalFlagSet");
-            return;
-        }
-
         Region node = RegionManager.get().getRegionByName(command[command.length - 3], player.getWorld().getName(), player.getWorld().getType().getId());
-        if (node == null) {
-            node = Config.get().getGlobalSettings();
+        String flagName = command[command.length - 2];
+        Region.Status status = Region.Status.fromString(command[command.length - 1]);
+
+        if (RegionFlagRegister.isFlagValid(flagName)) {
+            if (node == null && player.hasPermission("cuboids.super.admin")) {
+                Config.get().setGlobalProperty(flagName, status);
+                MessageSystem.successMessage(player, "globalFlagSet");
+            }
+            else if (node != null) {
+                if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+                    if (node.setProperty(flagName, status)) {
+                        MessageSystem.successMessage(player, "regionFlagSet");
+                    }
+                    else {
+                        MessageSystem.failMessage(player, "invalidRegionFlagValue");
+                    }
+                }
+                else {
+                    MessageSystem.failMessage(player, "playerNotOwner");
+                }
+            }
         }
 
-        if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
-            if (node.setProperty(command[command.length - 2], Region.Status.fromString(command[command.length - 1]))) {
-                MessageSystem.successMessage(player, "regionFlagSet");
-            }
-            else {
-                MessageSystem.failMessage(player, "invalidRegionFlagValue");
-            }
-        }
-        else {
-            MessageSystem.failMessage(player, "playerNotOwner");
-        }
     }
 }

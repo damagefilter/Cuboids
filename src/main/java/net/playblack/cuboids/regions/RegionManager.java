@@ -40,6 +40,14 @@ public class RegionManager {
         global = Config.get().getGlobalSettings();
     }
 
+    public boolean setGlobalProperty(String name, Region.Status status) {
+        return global.setProperty(name, status);
+    }
+    public boolean unsetGlobalProperty(String name) {
+        return global.removeProperty(name);
+    }
+
+
     /*
      * *********************************************************************************
      * LOAD / SAVE / RELOAD / STUFF
@@ -120,7 +128,7 @@ public class RegionManager {
      */
     public boolean addRegion(Region cube) {
         if (cuboidExists(cube.getName(), cube.getWorld(), cube.getDimension())) {
-            Debug.log("Region already exists! Not adding it");
+            Debug.log("Region already exists! Not adding " + cube.getName());
             return false;
         }
 
@@ -130,7 +138,6 @@ public class RegionManager {
         }
         else {
             addRoot(cube);
-//            reverseFindChildNodes(cube);
         }
         cube.hasChanged = true;
         saveSingle(cube);
@@ -387,7 +394,7 @@ public class RegionManager {
             if (tree.equalsWorld(cube)) {
                 if (cube.cuboidIsWithin(tree, true)) {
                     Region tmp = tree.queryChilds(cube);
-                    if (tmp != null) {
+                    if (tmp != null && tmp != cube) {
                         matches.add(tmp);
                     }
                 }

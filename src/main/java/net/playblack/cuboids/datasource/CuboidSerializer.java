@@ -10,6 +10,7 @@ import net.canarymod.api.world.blocks.Chest;
 import net.canarymod.api.world.blocks.Sign;
 import net.canarymod.api.world.blocks.TileEntity;
 import net.canarymod.database.DataAccess;
+import net.canarymod.database.Database;
 import net.canarymod.database.exceptions.DatabaseWriteException;
 import net.playblack.cuboids.datasource.da.RegionDataAccess;
 import net.playblack.cuboids.datasource.da.RegionExtraDataAccess;
@@ -17,7 +18,9 @@ import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class takes care of serializing a CuboidSelection to something storable
@@ -138,9 +141,17 @@ public class CuboidSerializer {
      * Save the loaded and serialized CuboidSelection to the selected Backend
      */
     public void save() {
+        HashMap<DataAccess, Map<String, Object>> insertsExtras = new HashMap<DataAccess, Map<String, Object>>();
+        for (DataAccess d : contents) {
+            RegionExtraDataAccess da = (RegionExtraDataAccess)d;
+            HashMap<String, Object> filter = new HashMap<String, Object>();
+            filter.put("index", da.index);
+            filter.put("region", da.region);
+            insertsExtras.put(da, filter);
+        }
         try {
-            Canary.db().insert(baseData);
-            Canary.db().insertAll(contents);
+            Database.get().update(baseData, new HashMap<String, Object>());
+            Database.get().updateAll(new RegionExtraDataAccess(), insertsExtras);
         }
         catch (DatabaseWriteException e) {
             e.printStackTrace();

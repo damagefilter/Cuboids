@@ -48,21 +48,19 @@ public class Bootstrapper {
         // ------------------------------------------------------
         Config.setConfig(new Config(plugin));
         CServer.setServer(server);
-        Config.get().setImplementation(impl); // init this thing for a first time
+        Config.get().setImplementation(impl);
         // ------------------------------------------------------
         boolean hasConverted = false;
         if (loaders != null) {
             Converter c = new Converter();
             for (Loader loader : loaders) {
                 if (c.convertFiles(loader)) {
-                    if (!hasConverted) {
-                        hasConverted = true;
-                    }
+                    hasConverted |= true;
                 }
             }
         }
         if (hasConverted) {
-            Debug.cacheMessage("Loaded Cuboids files", false);
+            Debug.cacheMessage("Detected and loaded legacy region files.", true);
         }
         // ------------------------------------------------------
         int loaded = RegionManager.get().load();

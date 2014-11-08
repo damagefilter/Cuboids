@@ -61,7 +61,7 @@ public class CuboidGenerator extends BaseGen {
 
         if (replace) {
             for (Vector position : selection.getBlockList().keySet()) {
-                if (selection.getBlock(position) == toReplace) {
+                if (selection.getBlock(position).getMachineName().equals(toReplace.getMachineName())) {
                     selection.setBlock(position, block);
                 }
             }

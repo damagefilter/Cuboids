@@ -11,6 +11,7 @@ import net.playblack.cuboids.impl.canarymod.commands.CmodCommands;
 import net.playblack.cuboids.impl.canarymod.commands.MiscCommands;
 import net.playblack.cuboids.impl.canarymod.commands.SelectionEditingCommands;
 import net.playblack.cuboids.impl.canarymod.commands.WorldEditingCommands;
+import net.playblack.cuboids.loaders.legacyregion.XmlRegionLegacyLoader;
 import net.playblack.mcutils.Debug;
 
 public class Cuboids extends Plugin {
@@ -18,7 +19,7 @@ public class Cuboids extends Plugin {
     @Override
     public boolean enable() {
         Debug.overrideLogger(getLogman());
-        new Bootstrapper(new CanaryServer(), new Loader[]{new CuboidFLoader()}, Implementation.CANARY).bootstrap(this);
+        new Bootstrapper(new CanaryServer(), new Loader[]{new CuboidFLoader(), new XmlRegionLegacyLoader()}, Implementation.CANARY).bootstrap(this);
         try {
             Canary.commands().registerCommands(new CmodCommands(), this, false);
             Canary.commands().registerCommands(new MiscCommands(), this, false);

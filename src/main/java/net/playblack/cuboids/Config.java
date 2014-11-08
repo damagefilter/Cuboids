@@ -184,10 +184,7 @@ public class Config {
         String[] itemsList = cuboidSetting.getString("restricted-items", "").split(",");
         restrictedItems = new ArrayList<Integer>(itemsList.length);
         for (String i : itemsList) {
-            int a = CServer.getServer().getItemId(i);
-            if (a >= 0) {
-                global.addRestrictedItem(a);
-            }
+            global.addRestrictedItem(i);
         }
 
         String dataSource = dsSetting.getString("data-source", "xml");
@@ -369,18 +366,22 @@ public class Config {
     }
 
     public boolean setGlobalProperty(String name, Region.Status value) {
-        boolean result = global.setProperty(name, value);
+        boolean result = RegionManager.get().setGlobalProperty(name, value);
         if (result) {
-            RegionManager.get().updateGlobalSettings();
+            this.global.setProperty(name, value);
+            this.cuboidSetting.setString("global-" + name, value.toString());
+            this.cuboidSetting.save();
             return true;
         }
         return false;
     }
 
     public boolean removeGlobalProperty(String name) {
-        boolean result = global.removeProperty(name);
+        boolean result = RegionManager.get().unsetGlobalProperty(name);
         if (result) {
-            RegionManager.get().updateGlobalSettings();
+            this.global.removeProperty(name);
+            this.cuboidSetting.removeKey("global-" + name);
+            this.cuboidSetting.save();
             return true;
         }
         return false;

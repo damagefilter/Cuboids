@@ -1,6 +1,6 @@
 package net.playblack.cuboids.history;
 
-import net.playblack.cuboids.blocks.CBlock;
+import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.Vector;
 
@@ -15,19 +15,19 @@ public class HistoryObject {
     /**
      * Blocks before this modification has been made
      */
-    private LinkedHashMap<Vector, CBlock> blocksBefore;
+    private LinkedHashMap<Vector, BlockType> blocksBefore;
 
     /**
      * The modification itselt as block list
      */
-    private LinkedHashMap<Vector, CBlock> modifiedBlocks;
+    private LinkedHashMap<Vector, BlockType> modifiedBlocks;
 
     /**
      * Create a defaulr history object
      */
     public HistoryObject() {
-        blocksBefore = new LinkedHashMap<Vector, CBlock>(30);
-        modifiedBlocks = new LinkedHashMap<Vector, CBlock>(30);
+        blocksBefore = new LinkedHashMap<Vector, BlockType>(30);
+        modifiedBlocks = new LinkedHashMap<Vector, BlockType>(30);
 
     }
 
@@ -37,8 +37,8 @@ public class HistoryObject {
      * @param listSize
      */
     public HistoryObject(int listSize) {
-        blocksBefore = new LinkedHashMap<Vector, CBlock>(listSize);
-        modifiedBlocks = new LinkedHashMap<Vector, CBlock>(listSize);
+        blocksBefore = new LinkedHashMap<Vector, BlockType>(listSize);
+        modifiedBlocks = new LinkedHashMap<Vector, BlockType>(listSize);
 
     }
 
@@ -48,7 +48,7 @@ public class HistoryObject {
      * @param original
      * @param modified
      */
-    public HistoryObject(LinkedHashMap<Vector, CBlock> original, LinkedHashMap<Vector, CBlock> modified) {
+    public HistoryObject(LinkedHashMap<Vector, BlockType> original, LinkedHashMap<Vector, BlockType> modified) {
         blocksBefore = original;
         modifiedBlocks = modified;
     }
@@ -70,7 +70,7 @@ public class HistoryObject {
      *
      * @return
      */
-    public LinkedHashMap<Vector, CBlock> getBlocksBefore() {
+    public LinkedHashMap<Vector, BlockType> getBlocksBefore() {
         return blocksBefore;
     }
 
@@ -79,7 +79,7 @@ public class HistoryObject {
      *
      * @param b
      */
-    public void setBlocksBefore(LinkedHashMap<Vector, CBlock> b) {
+    public void setBlocksBefore(LinkedHashMap<Vector, BlockType> b) {
         blocksBefore = b;
     }
 
@@ -88,7 +88,7 @@ public class HistoryObject {
      *
      * @return
      */
-    public LinkedHashMap<Vector, CBlock> getModifiedBlocks() {
+    public LinkedHashMap<Vector, BlockType> getModifiedBlocks() {
         return modifiedBlocks;
     }
 
@@ -97,7 +97,7 @@ public class HistoryObject {
      *
      * @param b
      */
-    public void setModifiedBlocks(LinkedHashMap<Vector, CBlock> b) {
+    public void setModifiedBlocks(LinkedHashMap<Vector, BlockType> b) {
         modifiedBlocks = b;
     }
 
@@ -107,7 +107,7 @@ public class HistoryObject {
      * @param v
      * @param block
      */
-    public void setBlock(Vector v, CBlock block) {
+    public void setBlock(Vector v, BlockType block) {
         modifiedBlocks.put(v, block);
     }
 
@@ -117,7 +117,7 @@ public class HistoryObject {
      * @param v
      * @return
      */
-    public CBlock getBlock(Vector v) {
+    public BlockType getBlock(Vector v) {
         return modifiedBlocks.get(v);
     }
 
@@ -127,7 +127,7 @@ public class HistoryObject {
      * @param v
      * @param block
      */
-    public void setBlockBefore(Vector v, CBlock block) {
+    public void setBlockBefore(Vector v, BlockType block) {
         blocksBefore.put(v, block);
     }
 
@@ -137,7 +137,7 @@ public class HistoryObject {
      * @param v
      * @return
      */
-    public CBlock getOriginalBlock(Vector v) {
+    public BlockType getOriginalBlock(Vector v) {
         return blocksBefore.get(v);
     }
 }

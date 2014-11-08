@@ -425,6 +425,18 @@ public class Region {
      */
     public List<Region> getChildsDeep(List<Region> collection) {
         for (Region r : childs) {
+            collection.add(r);
+            collection = r.getChildsDeep(collection);
+        }
+        if (!collection.contains(this)) {
+            collection.add(this);
+        }
+        return collection;
+    }
+
+    public List<Region> getChildsDeep() {
+        ArrayList<Region> collection = new ArrayList<Region>();
+        for (Region r : childs) {
             collection.addAll(r.getChildsDeep(collection));
         }
         if (!collection.contains(this)) {

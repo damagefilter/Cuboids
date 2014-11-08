@@ -5,6 +5,7 @@ import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.database.DataAccess;
+import net.canarymod.database.Database;
 import net.canarymod.database.exceptions.DatabaseReadException;
 import net.playblack.cuboids.datasource.da.RegionDataAccess;
 import net.playblack.cuboids.datasource.da.RegionExtraDataAccess;
@@ -50,11 +51,11 @@ public class CuboidDeserializer {
 
         try {
             // Load data from database
-            Canary.db().load(this.blocks, new HashMap<String, Object>());
+            Database.get().load(this.blocks, new HashMap<String, Object>());
             extraData = new ArrayList<DataAccess>();
             HashMap<String, Object> filter = new HashMap<String, Object>();
             filter.put("region", name);
-            Canary.db().loadAll(new RegionExtraDataAccess(), extraData, filter);
+            Database.get().loadAll(new RegionExtraDataAccess(), extraData, filter);
 
             // Apply
             for (int i = 0; i < blocks.blockData.size(); ++i) {

@@ -3,6 +3,7 @@ package net.playblack.cuboids.loaders;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
+import net.playblack.mcutils.Debug;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,7 @@ public class Converter {
         }
         shells = loader.load();
         if (shells.size() > 0) {
+            Debug.cacheMessage("Legacy loader " + loader.getImplementationVersion() + " loaded " + shells.size() + " regions. Adding to tree ...", true);
             convert();
             return true;
         }

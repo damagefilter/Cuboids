@@ -1,8 +1,8 @@
 package net.playblack.cuboids.datasource;
 
-import net.canarymod.Canary;
 import net.canarymod.ToolBox;
 import net.canarymod.database.DataAccess;
+import net.canarymod.database.Database;
 import net.canarymod.database.exceptions.DatabaseReadException;
 import net.canarymod.database.exceptions.DatabaseWriteException;
 import net.playblack.cuboids.datasource.da.RegionInformationDataAccess;
@@ -13,6 +13,7 @@ import net.playblack.mcutils.Debug;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Uses the CanaryMod database to load and save region files
@@ -25,7 +26,11 @@ public class CanaryDbData implements BaseData {
     public void saveRegion(Region node) {
         DataAccess da = RegionInformationDataAccess.toDataAccess(node);
         try {
-            Canary.db().insert(da);
+            HashMap<String, Object> filter = new HashMap<String, Object>();
+            filter.put("region_name", node.getName());
+            filter.put("world_name", node.getWorld());
+            filter.put("world_dimension", node.getDimension());
+            Database.get().update(da, filter);
         }
         catch (DatabaseWriteException e) {
             Debug.logStack("Could not save region.", e);
@@ -34,15 +39,19 @@ public class CanaryDbData implements BaseData {
 
     @Override
     public void saveAll(ArrayList<Region> treeList, boolean silent, boolean force) {
-        ArrayList<DataAccess> toInsert = new ArrayList<DataAccess>();
+        Map<DataAccess, Map<String, Object>> toInsert = new HashMap<DataAccess, Map<String, Object>>();
         for (Region r : treeList) {
-            toInsert.add(RegionInformationDataAccess.toDataAccess(r));
-            for (Region reg : r.getChildsDeep(new ArrayList<Region>())) {
-                toInsert.add(RegionInformationDataAccess.toDataAccess(reg));
+            List<Region> all = r.getChildsDeep(new ArrayList<Region>());
+            for (Region reg : all) {
+                HashMap<String, Object> filter = new HashMap<String, Object>();
+                filter.put("region_name", reg.getName());
+                filter.put("world_name", reg.getWorld());
+                filter.put("world_dimension", reg.getDimension());
+                toInsert.put(RegionInformationDataAccess.toDataAccess(reg), filter);
             }
         }
         try {
-            Canary.db().insertAll(toInsert);
+            Database.get().updateAll(new RegionInformationDataAccess(), toInsert);
         }
         catch (DatabaseWriteException e) {
             Debug.logStack("Could not save region tree.", e);
@@ -55,7 +64,7 @@ public class CanaryDbData implements BaseData {
         this.loadedRegions.put("root", new ArrayList<Region>());
         int loaded = 0;
         try {
-            Canary.db().loadAll(new RegionInformationDataAccess(), loadedDas, new HashMap<String, Object>());
+            Database.get().loadAll(new RegionInformationDataAccess(), loadedDas, new HashMap<String, Object>());
             for (DataAccess d : loadedDas) {
                 RegionInformationDataAccess da = (RegionInformationDataAccess)d;
                 if (ToolBox.stringToNull(da.parent) == null) {
@@ -101,12 +110,12 @@ public class CanaryDbData implements BaseData {
     @Override
     public void loadRegion(String name, String world, int dimension) {
         HashMap<String, Object> filter = new HashMap<String, Object>();
-        filter.put("name", name);
-        filter.put("world", world);
-        filter.put("dimension", dimension);
+        filter.put("region_name", name);
+        filter.put("world_name", world);
+        filter.put("world_dimension", dimension);
         RegionInformationDataAccess da = new RegionInformationDataAccess();
         try {
-            Canary.db().load(da, filter);
+            Database.get().load(da, filter);
             if (da.hasData()) {
                 Region old = RegionManager.get().getRegionByName(name, world, dimension);
                 if (old != null) {
@@ -126,10 +135,10 @@ public class CanaryDbData implements BaseData {
         try {
             RegionInformationDataAccess da = RegionInformationDataAccess.toDataAccess(node);
             HashMap<String, Object> filter = new HashMap<String, Object>();
-            filter.put("name", node.getName());
-            filter.put("world", node.getWorld());
-            filter.put("dimension", node.getDimension());
-            Canary.db().remove(da, filter);
+            filter.put("region_name", node.getName());
+            filter.put("world_name", node.getWorld());
+            filter.put("world_dimension", node.getDimension());
+            Database.get().remove(da, filter);
         }
         catch (DatabaseWriteException e) {
             e.printStackTrace();

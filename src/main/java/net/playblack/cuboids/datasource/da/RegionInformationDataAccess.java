@@ -1,5 +1,6 @@
 package net.playblack.cuboids.datasource.da;
 
+import net.canarymod.database.Column;
 import net.canarymod.database.DataAccess;
 import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.cuboids.exceptions.SerializerException;
@@ -22,23 +23,35 @@ public class RegionInformationDataAccess extends DataAccess {
     private Region generatedRegion;
 
     // Basics
+    @Column(columnName = "region_name", dataType = Column.DataType.STRING)
     public String name;
+    @Column(columnName = "parent_region", dataType = Column.DataType.STRING)
     public String parent;
+    @Column(columnName = "world_name", dataType = Column.DataType.STRING)
     public String world;
+    @Column(columnName = "world_dimension", dataType = Column.DataType.INTEGER)
     public int dimension;
+    @Column(columnName = "region_priority", dataType = Column.DataType.INTEGER)
     public int priority;
 
     // Location
+    @Column(columnName = "region_origin", dataType = Column.DataType.STRING)
     public String origin; // Vector
+    @Column(columnName = "region_offset", dataType = Column.DataType.STRING)
     public String offset; // Vector
 
+    @Column(columnName = "allowed_players", dataType = Column.DataType.STRING, isList = true)
     public List<String> players;
+    @Column(columnName = "allowed_groups", dataType = Column.DataType.STRING, isList = true)
     public List<String> groups;
 
+    @Column(columnName = "restricted_commands", dataType = Column.DataType.STRING, isList = true)
     public List<String> commands;
+    @Column(columnName = "restricted_items", dataType = Column.DataType.STRING, isList = true)
     public List<String> items;
 
     // Formatted in name:value
+    @Column(columnName = "region_flags", dataType = Column.DataType.STRING, isList = true)
     public List<String> flags; // I'm so sorry but I think there is no other way around it.
 
     /**
