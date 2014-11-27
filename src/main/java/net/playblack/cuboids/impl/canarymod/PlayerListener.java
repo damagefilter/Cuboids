@@ -64,16 +64,17 @@ public class PlayerListener implements PluginListener {
         if (!player.getWorld().isChunkLoaded((int) to.getX(), (int) to.getZ())) {
             player.getWorld().loadChunk((int) to.getX(), (int) to.getZ());
         }
+        /*
         CLocation vTo = new CLocation(to.getX(), to.getY(), to.getZ(), to.getType().getId(), to.getWorldName());
         ToolBox.adjustWorldPosition(vTo);
         CLocation vFrom = new CLocation(from.getX(), from.getY(), from.getZ(), from.getType().getId(), from.getWorldName());
         ToolBox.adjustWorldPosition(vFrom);
 
-        PlayerWalkEvent event = new PlayerWalkEvent(player, vFrom, vTo);
+         PlayerWalkEvent event = new PlayerWalkEvent(player, vFrom, vTo);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();
-        }
+        } */
     }
 
     @HookHandler
