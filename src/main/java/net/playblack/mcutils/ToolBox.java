@@ -1,6 +1,8 @@
 package net.playblack.mcutils;
 
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Location;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.exceptions.InvalidInputException;
 import net.playblack.cuboids.gameinterface.CServer;
 
@@ -25,7 +27,7 @@ public class ToolBox {
      * @param pos
      * @return
      */
-    public static void adjustWorldPosition(Vector pos) {
+    public static void adjustWorldPosition(Vector3D pos) {
         if (pos.getBlockX() < 0) {
             pos.setX(pos.getBlockX() - 1);
         }
@@ -42,7 +44,7 @@ public class ToolBox {
         // EDIT 2013: It came back again, lol
     }
 
-    public static void adjustWorldPosition(CLocation loc) {
+    public static void adjustWorldPosition(Location loc) {
 //        Canary.log.info("Adjusting block: " + loc.toString());
         if (loc.getBlockX() < 0) {
             loc.setX(loc.getBlockX() - 1);
@@ -60,8 +62,8 @@ public class ToolBox {
      * @param p
      * @return
      */
-    public static Vector adjustToCanaryPosition(Vector p) {
-        Vector loc = new Vector(p);
+    public static Vector3D adjustToCanaryPosition(Vector3D p) {
+        Vector3D loc = new Vector3D(p);
         if (loc.getX() < -0.6D) {
             loc.setX(loc.getBlockX() - 1);
         }

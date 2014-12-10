@@ -1,5 +1,6 @@
 package net.playblack.cuboids.actions.operators;
 
+import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
@@ -14,11 +15,13 @@ public class PlayerMovementOperator implements ActionListener {
     public void onPlayerMove(PlayerWalkEvent event) {
 
         CPlayer p = CServer.getServer().getPlayer(event.getPlayer().getName());
-        if (!p.canMoveTo(event.getTo())) {
+        Location from = new Location(event.getPlayer().getWorld(), event.getFrom());
+        Location to = new Location(event.getPlayer().getWorld(), event.getTo());
+        if (!p.canMoveTo(to)) {
             p.teleportTo(event.getFrom());
         }
 
-        CuboidInterface.get().handleRegionsForPlayer(event.getPlayer(), event.getFrom(), event.getTo());
+        CuboidInterface.get().handleRegionsForPlayer(event.getPlayer(), from, to);
     }
 
     static {

@@ -24,7 +24,7 @@ public class CmodLoadPoints extends CBaseCommand {
         if (parseCommand(player, command)) {
             return;
         }
-        Region cube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
+        Region cube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
         if (!player.hasPermission("cselect")) {
             MessageSystem.failMessage(player, "permissionDenied");
             return;

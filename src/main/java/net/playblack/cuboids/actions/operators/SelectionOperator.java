@@ -4,6 +4,7 @@ import net.canarymod.LineTracer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.blocks.Block;
+import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.actions.ActionHandler;
@@ -15,7 +16,6 @@ import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
-import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.ColorManager;
 
 /**
@@ -32,7 +32,7 @@ public class SelectionOperator implements ActionListener {
      * @param p
      * @return
      */
-    private boolean explainRegion(Player player, CLocation p) {
+    private boolean explainRegion(Player player, Location p) {
         Item item = player.getItemHeld();
         if (item == null) {
             return false;
@@ -49,10 +49,10 @@ public class SelectionOperator implements ActionListener {
      * Handle the selection of points of a selection.
      *
      * @param player
-     * @param CLocation
+     * @param location
      * @param rightclick this must be set=true on rightclick events for doubleAction mode.
      */
-    private boolean setSelectionPoint(Player player, CLocation CLocation, boolean rightclick, boolean remote) {
+    private boolean setSelectionPoint(Player player, Location location, boolean rightclick, boolean remote) {
         Item item = player.getItemHeld();
         if (item == null) {
             return false;
@@ -77,16 +77,16 @@ public class SelectionOperator implements ActionListener {
         }
         if (Config.get().isUseDoubleAction()) {
 //            System.out.println("selection in normal mode");
-            setPointNormalStyle(player, CLocation, rightclick);
+            setPointNormalStyle(player, location, rightclick);
         }
         else {
             System.out.println("selection in classic mode");
-            setPointClassicStyle(player, CLocation);
+            setPointClassicStyle(player, location);
         }
         return true;
     }
 
-    private void setPointClassicStyle(Player player, CLocation point) {
+    private void setPointClassicStyle(Player player, Location point) {
         CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
         if (selection.isComplete()) {
             selection.reset();
@@ -94,40 +94,40 @@ public class SelectionOperator implements ActionListener {
         if (!selection.hasOrigin() && !selection.hasOffset()) {
             selection.setOrigin(point);
             MessageSystem.successMessage(player, "originSet");
-            MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
+            MessageSystem.customMessage(player, ColorManager.Gray, point.toString());
         }
         else if (selection.hasOrigin() && !selection.hasOffset()) {
             selection.setOffset(point);
             MessageSystem.successMessage(player, "offsetSet");
-            MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
+            MessageSystem.customMessage(player, ColorManager.Gray, point.toString());
         }
         else if (!selection.hasOrigin() && selection.hasOffset()) {
             selection.reset();
             selection.setOrigin(point);
             MessageSystem.successMessage(player, "originSet");
-            MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
+            MessageSystem.customMessage(player, ColorManager.Gray, point.toString());
         }
         else {
             //and this is so unlikely to happen - but just in case some derp manages it
             selection.reset();
             selection.setOrigin(point);
             MessageSystem.successMessage(player, "originSet");
-            MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
+            MessageSystem.customMessage(player, ColorManager.Gray, point.toString());
         }
 
     }
 
-    private void setPointNormalStyle(Player player, CLocation point, boolean rightClick) {
+    private void setPointNormalStyle(Player player, Location point, boolean rightClick) {
         CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
         if (rightClick) {
             selection.setOffset(point);
             MessageSystem.successMessage(player, "offsetSet");
-            MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
+            MessageSystem.customMessage(player, ColorManager.Gray, point.toString());
         }
         else {
             selection.setOrigin(point);
             MessageSystem.successMessage(player, "originSet");
-            MessageSystem.customMessage(player, ColorManager.Gray, point.explain());
+            MessageSystem.customMessage(player, ColorManager.Gray, point.toString());
         }
     }
 
@@ -155,8 +155,7 @@ public class SelectionOperator implements ActionListener {
         if (v == null) {
             return;
         }
-        CLocation loc = new CLocation(v.getLocation());
-        setSelectionPoint(event.getPlayer(), loc, false, true);
+        setSelectionPoint(event.getPlayer(), v.getLocation(), false, true);
     }
 
     @ActionHandler

@@ -23,7 +23,7 @@ public class CmodRename extends CBaseCommand {
             return;
         }
 
-        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
+        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
 
         if (!player.hasPermission("cuboids.super.admin")) {
             if (!(node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod"))) {

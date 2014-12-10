@@ -1,20 +1,20 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.mcutils.CLocation;
 
 public class LiquidFlowEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled;
     private BlockType sourceBlock;
     private BlockType targetBlock;
-    private CLocation CLocation;
+    private Location location;
 
-    public LiquidFlowEvent(BlockType sourceBlock, BlockType targetBlock, CLocation CLocation) {
+    public LiquidFlowEvent(BlockType sourceBlock, BlockType targetBlock, Location location) {
         this.sourceBlock = sourceBlock;
         this.targetBlock = targetBlock;
-        this.CLocation = CLocation;
+        this.location = location;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class LiquidFlowEvent extends CuboidEvent implements Cancellable {
         return targetBlock;
     }
 
-    public CLocation getLocation() {
-        return CLocation;
+    public Location getLocation() {
+        return location;
     }
 }

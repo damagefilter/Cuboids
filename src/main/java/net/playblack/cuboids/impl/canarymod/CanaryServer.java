@@ -27,19 +27,14 @@ public class CanaryServer extends CServer {
     }
 
     @Override
-    public World getWorld(String name, int dimension) {
-        DimensionType dim = DimensionType.fromId(dimension);
-        return Canary.getServer().getWorldManager().getWorld(name, dim, false);
+    public World getWorld(String name) {
+        return Canary.getServer().getWorldManager().getWorld(name, false);
     }
 
-    @Override
-    public World getWorld(int id) {
-        return getWorld(getDefaultWorld().getName(), id);
-    }
 
     @Override
     public World getDefaultWorld() {
-        return getWorld(Canary.getServer().getDefaultWorldName(), 0);
+        return getWorld(Canary.getServer().getDefaultWorld().getFqName());
     }
 
     @Override

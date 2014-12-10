@@ -1,8 +1,9 @@
-package net.playblack.cuboids.blockoperators;
+package net.playblack.cuboids.generators;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
@@ -15,7 +16,7 @@ import net.playblack.mcutils.Vector;
  *
  * @author Chris
  */
-public class PyramidGenerator extends BaseGen {
+public class SphereGenerator extends BaseGen {
 
     private boolean fill;
     private int radius;
@@ -27,7 +28,7 @@ public class PyramidGenerator extends BaseGen {
      * @param selection
      * @param world
      */
-    public PyramidGenerator(CuboidSelection selection, World world) {
+    public SphereGenerator(CuboidSelection selection, World world) {
         super(selection, world);
     }
 
@@ -51,15 +52,14 @@ public class PyramidGenerator extends BaseGen {
         fill = sleepy;
     }
 
-    private void createPyramid() {
-        Vector center = selection.getOrigin();
+    private void createSphere() {
+        Vector3D center = selection.getOrigin();
         if (selection.getOffset() == null) {
             // A little work around to evaluate true
             // when modifyWorld is issued as it needs the selection to be
             // complete
             selection.setOffset(center);
         }
-
         int Xmin = center.getBlockX() - radius;
         int Xmax = center.getBlockX() + radius;
         int Ymin = center.getBlockY() - radius;
@@ -68,36 +68,15 @@ public class PyramidGenerator extends BaseGen {
         int Zmax = center.getBlockZ() + radius;
 
         synchronized (lock) {
-            for (int y = Ymin; y <= Ymax; y++) {
-                for (int x = Xmin; x <= Xmax; x++) {
-                    for (int z = Zmin; z <= Zmax; z++) {
-                        selection.setBlock(new Vector(x, y, z), material);
-                    }
-                }
-                Xmin += 1;
-                Xmax -= 1;
-                Zmin += 1;
-                Zmax -= 1;
-            }
-            // This'll hollow out the pyramid.
-            if (!fill && radius > 2) { // easy, but destructive way
-                Xmin = center.getBlockX() - radius + 2;
-                Xmax = center.getBlockX() + radius - 2;
-                Zmin = center.getBlockZ() - radius + 2;
-                Zmax = center.getBlockZ() + radius - 2;
-                Ymin = center.getBlockY() + 1;
-                Ymax = center.getBlockY() + radius - 1;
-                BlockType air = BlockType.Air;
+            for (int x = Xmin; x <= Xmax; x++) {
                 for (int y = Ymin; y <= Ymax; y++) {
-                    for (int x = Xmin; x <= Xmax; x++) {
-                        for (int z = Zmin; z <= Zmax; z++) {
-                            selection.setBlock(new Vector(x, y, z), air);
+                    for (int z = Zmin; z <= Zmax; z++) {
+
+                        double diff = Math.sqrt(Math.pow(x - center.getX(), 2.0D) + Math.pow(y - center.getY(), 2.0D) + Math.pow(z - center.getZ(), 2.0D));
+                        if (diff < radius + 0.5 && (fill || (!fill && diff > radius - 0.5))) {
+                            selection.setBlock(new Vector3D(x, y, z), material);
                         }
                     }
-                    Xmin += 1;
-                    Xmax -= 1;
-                    Zmin += 1;
-                    Zmax -= 1;
                 }
             }
         }
@@ -106,7 +85,7 @@ public class PyramidGenerator extends BaseGen {
     @Override
     public boolean execute(Player player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
         selection.clearBlocks();
-        createPyramid();
+        createSphere();
         CuboidSelection world = scanWorld(true, false);
 
         if (newHistory) {

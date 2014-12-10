@@ -1,14 +1,14 @@
-package net.playblack.cuboids.blockoperators;
+package net.playblack.cuboids.generators;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
-import net.playblack.mcutils.Vector;
 
 import java.util.LinkedHashMap;
 
@@ -19,8 +19,8 @@ import java.util.LinkedHashMap;
  */
 public class VectorOffsetGenerator extends BaseGen {
 
-    private Vector position;
-    private LinkedHashMap<Vector, BlockType> originalPositions;
+    private Vector3D position;
+    private LinkedHashMap<Vector3D, BlockType> originalPositions;
 
     /**
      * The selection you pass along here will be written into the world!
@@ -38,7 +38,7 @@ public class VectorOffsetGenerator extends BaseGen {
      *
      * @param offset
      */
-    public void setOffsetVector(Vector offset) {
+    public void setOffsetVector(Vector3D offset) {
         this.position = offset;
     }
 
@@ -57,9 +57,9 @@ public class VectorOffsetGenerator extends BaseGen {
         double z_distance = position.getZ() - selection.getOrigin().getZ();
         CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset());
         synchronized (lock) {
-            for (Vector key : selection.getBlockList().keySet()) {
+            for (Vector3D key : selection.getBlockList().keySet()) {
                 BlockType b = selection.getBlockList().get(key);
-                tmp.setBlock(new Vector(key.getX() + x_distance, key.getY() + y_distance, key.getZ() + z_distance), b);
+                tmp.setBlock(new Vector3D(key.getX() + x_distance, key.getY() + y_distance, key.getZ() + z_distance), b);
             }
             originalPositions = selection.getBlockList();
             selection.setBlockList(tmp.getBlockList());

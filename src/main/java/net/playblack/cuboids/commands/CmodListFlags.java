@@ -45,7 +45,7 @@ public class CmodListFlags extends CBaseCommand {
             }
         }
         else {
-            Region r = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
+            Region r = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
             if (r == null) {
                 r = Config.get().getGlobalSettings();
             }

@@ -1,9 +1,10 @@
 package net.playblack.cuboids.commands;
 
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.SessionManager;
-import net.playblack.cuboids.blockoperators.VectorOffsetGenerator;
+import net.playblack.cuboids.generators.VectorOffsetGenerator;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.selections.CuboidSelection;
@@ -40,7 +41,7 @@ public class Cpaste extends CBaseCommand {
             return;
         }
         VectorOffsetGenerator gen = new VectorOffsetGenerator(sel, player.getWorld());
-        gen.setOffsetVector(new Vector(player.getPosition()));
+        gen.setOffsetVector(new Vector3D(player.getPosition()));
         try {
             try {
                 if (gen.execute(player, true)) {

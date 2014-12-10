@@ -40,7 +40,6 @@ public class Highprotect extends CBaseCommand {
         selection.expandVert();
         selection.setWorld(player.getWorld().getName());
         Region cube = selection.toRegion(player, Arrays.copyOfRange(command, 1, command.length));
-        cube.setDimension(player.getWorld().getType().getId());
         cube.setProperty("protection", Status.ALLOW);
         if (CuboidInterface.get().addCuboid(cube)) {
             MessageSystem.successMessage(player, "cuboidCreated");

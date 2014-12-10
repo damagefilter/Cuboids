@@ -2,9 +2,9 @@ package net.playblack.cuboids.actions.events.forwardings;
 
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.mcutils.CLocation;
 
 import java.util.List;
 import java.util.Map;
@@ -14,14 +14,14 @@ public class ExplosionEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled = false;
     private ExplosionType explosionType;
     private Entity entity;
-    private CLocation CLocation;
-    private Map<CLocation, BlockType> affectedBlocks;
-    private List<CLocation> protectedBlocks = null;
+    private Location location;
+    private Map<Location, BlockType> affectedBlocks;
+    private List<Location> protectedBlocks = null;
 
-    public ExplosionEvent(Entity entity, CLocation CLocation, ExplosionType explosiontype, Map<CLocation, BlockType> affectedBlocks) {
+    public ExplosionEvent(Entity entity, Location location, ExplosionType explosiontype, Map<Location, BlockType> affectedBlocks) {
         this.explosionType = explosiontype;
         this.entity = entity;
-        this.CLocation = CLocation;
+        this.location = location;
         this.affectedBlocks = affectedBlocks;
     }
 
@@ -43,19 +43,19 @@ public class ExplosionEvent extends CuboidEvent implements Cancellable {
         return entity;
     }
 
-    public CLocation getLocation() {
-        return CLocation;
+    public Location getLocation() {
+        return location;
     }
 
-    public Map<CLocation, BlockType> getAffectedBlocks() {
+    public Map<Location, BlockType> getAffectedBlocks() {
         return affectedBlocks;
     }
 
-    public List<CLocation> getProtectedBlocks() {
+    public List<Location> getProtectedBlocks() {
         return protectedBlocks;
     }
 
-    public void setProtectedBlocks(List<CLocation> list) {
+    public void setProtectedBlocks(List<Location> list) {
         this.protectedBlocks = list;
     }
 

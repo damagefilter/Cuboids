@@ -1,6 +1,7 @@
 package net.playblack.cuboids.selections;
 
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.mcutils.Vector;
 
 import java.util.LinkedHashMap;
@@ -37,7 +38,7 @@ public interface ISelection {
      * @param v
      * @param b
      */
-    public void setBlock(Vector v, BlockType b);
+    public void setBlock(Vector3D v, BlockType b);
 
     /**
      * Get a block from the specified coordinate storage in this selection. May
@@ -46,21 +47,21 @@ public interface ISelection {
      * @param v
      * @return
      */
-    public BlockType getBlock(Vector v);
+    public BlockType getBlock(Vector3D v);
 
     /**
      * Get the whole block list from this selection
      *
      * @return
      */
-    public LinkedHashMap<Vector, BlockType> getBlockList();
+    public LinkedHashMap<Vector3D, BlockType> getBlockList();
 
     /**
      * Override the whole block list from this selection
      *
      * @param newList
      */
-    public void setBlockList(LinkedHashMap<Vector, BlockType> newList);
+    public void setBlockList(LinkedHashMap<Vector3D, BlockType> newList);
 
     /**
      * Get the size of this selection, that is: number of stored blocks

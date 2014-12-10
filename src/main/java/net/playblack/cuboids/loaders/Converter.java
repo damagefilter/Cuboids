@@ -22,7 +22,6 @@ public class Converter {
         cube.setName(shell.getName());
         cube.setOrigin(shell.getOrigin());
         cube.setOffset(shell.getOffset());
-        cube.setDimension(shell.getDimension());
         cube.setWorld(shell.getWorld());
         cube.setFarewell(shell.getFarewell());
         cube.setWelcome(shell.getWelcome());

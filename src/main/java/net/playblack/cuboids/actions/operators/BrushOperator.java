@@ -4,19 +4,19 @@ import net.canarymod.LineTracer;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.blocks.Block;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
-import net.playblack.cuboids.blockoperators.SphereGenerator;
+import net.playblack.cuboids.generators.SphereGenerator;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.selections.PlayerSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.Debug;
-import net.playblack.mcutils.Vector;
 
 public class BrushOperator implements ActionListener {
     /**
@@ -25,7 +25,7 @@ public class BrushOperator implements ActionListener {
      * @param player
      * @param point
      */
-    public void handleBrush(Player player, Vector point) {
+    public void handleBrush(Player player, Vector3D point) {
         Item i = player.getItemHeld();
         if (i == null) {
             return;
@@ -58,7 +58,7 @@ public class BrushOperator implements ActionListener {
     public void onArmSwing(ArmSwingEvent event) {
         Block target = new LineTracer(event.getPlayer()).getTargetBlock();
         if (target != null) {
-            Vector v = new Vector(target.getPosition());
+            Vector3D v = new Vector3D(target.getPosition());
             handleBrush(event.getPlayer(), v);
         }
     }

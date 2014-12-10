@@ -1,5 +1,6 @@
 package net.playblack.cuboids.actions.operators;
 
+import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
@@ -7,16 +8,15 @@ import net.playblack.cuboids.actions.events.forwardings.EntityDamageEvent;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.CLocation;
 
 public class DamageOperator implements ActionListener {
 
-    public boolean mobCanDoDamage(CLocation l) {
+    public boolean mobCanDoDamage(Location l) {
         Region r = RegionManager.get().getActiveRegion(l, false);
         return r.getProperty("mob-damage") != Status.DENY;
     }
 
-    public boolean playerCanDoDamage(CLocation l) {
+    public boolean playerCanDoDamage(Location l) {
         Region r = RegionManager.get().getActiveRegion(l, false);
         if (r.getProperty("pvp-damage") == Status.DENY) {
             return false;
@@ -30,12 +30,12 @@ public class DamageOperator implements ActionListener {
     @ActionHandler
     public void onDamage(EntityDamageEvent event) {
         if (event.getAttacker().isMob() || event.getAttacker().isAnimal()) {
-            if (!mobCanDoDamage(new CLocation(event.getDefender().getLocation()))) {
+            if (!mobCanDoDamage(event.getDefender().getLocation())) {
                 event.cancel();
             }
         }
         if (event.getAttacker().isPlayer()) {
-            if (!playerCanDoDamage(new CLocation(event.getDefender().getLocation()))) {
+            if (!playerCanDoDamage(event.getDefender().getLocation())) {
                 event.cancel();
             }
         }

@@ -1,8 +1,9 @@
-package net.playblack.cuboids.blockoperators;
+package net.playblack.cuboids.generators;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
@@ -15,10 +16,11 @@ import net.playblack.mcutils.Vector;
  *
  * @author Chris
  */
-public class SphereGenerator extends BaseGen {
+public class DiscGenerator extends BaseGen {
 
     private boolean fill;
     private int radius;
+    private int height;
     private BlockType material;
 
     /**
@@ -27,7 +29,7 @@ public class SphereGenerator extends BaseGen {
      * @param selection
      * @param world
      */
-    public SphereGenerator(CuboidSelection selection, World world) {
+    public DiscGenerator(CuboidSelection selection, World world) {
         super(selection, world);
     }
 
@@ -40,8 +42,22 @@ public class SphereGenerator extends BaseGen {
         this.material = block;
     }
 
+    /**
+     * Set disc/circle radius
+     *
+     * @param radius
+     */
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    /**
+     * Set disc/circle height
+     *
+     * @param height
+     */
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     /**
@@ -51,18 +67,13 @@ public class SphereGenerator extends BaseGen {
         fill = sleepy;
     }
 
-    private void createSphere() {
-        Vector center = selection.getOrigin();
-        if (selection.getOffset() == null) {
-            // A little work around to evaluate true
-            // when modifyWorld is issued as it needs the selection to be
-            // complete
-            selection.setOffset(center);
-        }
+    private void createDisc() {
+        Vector3D center = selection.getOrigin();
+        selection.clearBlocks();
         int Xmin = center.getBlockX() - radius;
         int Xmax = center.getBlockX() + radius;
-        int Ymin = center.getBlockY() - radius;
-        int Ymax = center.getBlockY() + radius;
+        int Ymin = (height + center.getBlockY() >= center.getBlockY()) ? center.getBlockY() : height + center.getBlockY();
+        int Ymax = (height + center.getBlockY() <= center.getBlockY()) ? center.getBlockY() : height + center.getBlockY();
         int Zmin = center.getBlockZ() - radius;
         int Zmax = center.getBlockZ() + radius;
 
@@ -70,10 +81,10 @@ public class SphereGenerator extends BaseGen {
             for (int x = Xmin; x <= Xmax; x++) {
                 for (int y = Ymin; y <= Ymax; y++) {
                     for (int z = Zmin; z <= Zmax; z++) {
-
-                        double diff = Math.sqrt(Math.pow(x - center.getX(), 2.0D) + Math.pow(y - center.getY(), 2.0D) + Math.pow(z - center.getZ(), 2.0D));
+                        double diff = Math.sqrt(Math.pow(x - center.getBlockX(), 2.0D) + Math.pow(z - center.getBlockZ(), 2.0D));
                         if (diff < radius + 0.5 && (fill || (!fill && diff > radius - 0.5))) {
-                            selection.setBlock(new Vector(x, y, z), material);
+                            selection.setBlock(new Vector3D(x, y, z), material);
+
                         }
                     }
                 }
@@ -83,13 +94,13 @@ public class SphereGenerator extends BaseGen {
 
     @Override
     public boolean execute(Player player, boolean newHistory) throws BlockEditLimitExceededException, SelectionIncompleteException {
-        selection.clearBlocks();
-        createSphere();
+        createDisc();
         CuboidSelection world = scanWorld(true, false);
 
         if (newHistory) {
             SessionManager.get().getPlayerHistory(player.getName()).remember(new HistoryObject(world, selection));
         }
-        return modifyWorld(false);
+        boolean result = modifyWorld(false);
+        return result;
     }
 }

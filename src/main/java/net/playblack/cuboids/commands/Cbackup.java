@@ -2,7 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.blockoperators.GenericGenerator;
+import net.playblack.cuboids.generators.GenericGenerator;
 import net.playblack.cuboids.datasource.CuboidSerializer;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
@@ -34,7 +34,7 @@ public class Cbackup extends CBaseCommand {
                 return;
             }
         }
-        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
+        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
         if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod")) {
             GenericGenerator gen = new GenericGenerator(new CuboidSelection(node.getOrigin(), node.getOffset()), player.getWorld());
 

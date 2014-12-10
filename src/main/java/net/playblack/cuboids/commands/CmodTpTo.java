@@ -1,6 +1,7 @@
 package net.playblack.cuboids.commands;
 
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
@@ -25,12 +26,12 @@ public class CmodTpTo extends CBaseCommand {
         if (parseCommand(player, command)) {
             return;
         }
-        Region targetCube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
+        Region targetCube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
         if (targetCube == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
-        Vector target = Vector.getCenterPoint(targetCube.getOrigin(), targetCube.getOffset());
+        Vector3D target = Vector.getCenterPoint(targetCube.getOrigin(), targetCube.getOffset());
 
         CPlayer p = CServer.getServer().getPlayer(player.getName());
         if (player.hasPermission("cuboids.super.admin") || (player.hasPermission("cteleport") && targetCube.playerIsAllowed(player.getName(), p.getGroups()))) {
@@ -39,7 +40,7 @@ public class CmodTpTo extends CBaseCommand {
             }
             int y = player.getWorld().getHighestBlockAt(target.getBlockX(), target.getBlockZ());
             target.setY(y);
-            player.teleportTo(target.toNative());
+            player.teleportTo(target);
             MessageSystem.successMessage(player, "playerTeleported");
         }
         else {

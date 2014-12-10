@@ -30,7 +30,7 @@ public class CmodRemoveFlag extends CBaseCommand {
             return;
         }
 
-        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName(), player.getWorld().getType().getId());
+        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
         if (node == null) {
             MessageSystem.failMessage(player, "noCuboidFound");
             return;

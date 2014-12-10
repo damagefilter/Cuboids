@@ -2,20 +2,20 @@ package net.playblack.cuboids.actions.events.forwardings;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.mcutils.CLocation;
 
 public class BlockLeftClickEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled = false;
     private Player player;
     private BlockType block;
-    private CLocation CLocation;
+    private Location location;
 
-    public BlockLeftClickEvent(Player player, BlockType block, CLocation CLocation) {
+    public BlockLeftClickEvent(Player player, BlockType block, Location location) {
         this.player = player;
         this.block = block;
-        this.CLocation = CLocation;
+        this.location = location;
 
     }
 
@@ -37,7 +37,7 @@ public class BlockLeftClickEvent extends CuboidEvent implements Cancellable {
         return block;
     }
 
-    public CLocation getLocation() {
-        return CLocation;
+    public Location getLocation() {
+        return location;
     }
 }

@@ -4,7 +4,7 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.SessionManager;
-import net.playblack.cuboids.blockoperators.GenericGenerator;
+import net.playblack.cuboids.generators.GenericGenerator;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.selections.CuboidSelection;

@@ -3,14 +3,14 @@ package net.playblack.cuboids.gameinterface;
 import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.World;
+import net.canarymod.api.world.position.Location;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.HealThread;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.CLocation;
-import net.playblack.mcutils.Vector;
 
 import java.util.concurrent.TimeUnit;
 
@@ -107,7 +107,7 @@ public abstract class CPlayer {
      *
      * @param v
      */
-    public abstract void teleportTo(Vector v);
+    public abstract void teleportTo(Vector3D v);
 
     /**
      * Check if this player is an admin
@@ -125,11 +125,11 @@ public abstract class CPlayer {
 
     public abstract World getWorld();
 
-    public abstract Vector getPosition();
+    public abstract Vector3D getPosition();
 
-    public abstract void setPosition(Vector v);
+    public abstract void setPosition(Vector3D v);
 
-    public abstract CLocation getLocation();
+    public abstract Location getLocation();
 
     public abstract double getX();
 
@@ -148,11 +148,11 @@ public abstract class CPlayer {
     /**
      * Check if this player is allowed to modify a block at a given location
      *
-     * @param CLocation
+     * @param location
      * @return
      */
-    public boolean canModifyBlock(CLocation CLocation) {
-        Region cube = RegionManager.get().getActiveRegion(CLocation, false);
+    public boolean canModifyBlock(Location location) {
+        Region cube = RegionManager.get().getActiveRegion(location, false);
         if (hasPermission("cuboids.super.admin") || cube.playerIsAllowed(getName(), getGroups())) {
             return true;
         }
@@ -172,7 +172,7 @@ public abstract class CPlayer {
         }
 
         if (currentRegion.getProperty("restrict-items") == Status.ALLOW) {
-            return currentRegion.isItemRestricted(item.getId());
+            return currentRegion.isItemRestricted(item.getType().getMachineName());
         }
         return true;
     }
@@ -180,11 +180,11 @@ public abstract class CPlayer {
     /**
      * Check if this player can go wherever it's about to go
      *
-     * @param CLocation
+     * @param location
      * @return
      */
-    public boolean canMoveTo(CLocation CLocation) {
-        Region cube = RegionManager.get().getActiveRegion(CLocation, false);
+    public boolean canMoveTo(Location location) {
+        Region cube = RegionManager.get().getActiveRegion(location, false);
         if (hasPermission("cuboids.super.admin") || cube.playerIsAllowed(getName(), getGroups())) {
             return true;
         }

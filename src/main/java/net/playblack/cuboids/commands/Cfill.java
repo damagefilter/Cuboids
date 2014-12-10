@@ -3,7 +3,7 @@ package net.playblack.cuboids.commands;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.blockoperators.CuboidGenerator;
+import net.playblack.cuboids.generators.CuboidGenerator;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.selections.CuboidSelection;

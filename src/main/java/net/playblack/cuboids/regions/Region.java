@@ -2,15 +2,14 @@ package net.playblack.cuboids.regions;
 
 import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.world.World;
+import net.canarymod.api.world.position.Location;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.RegionFlagRegister;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.ColorManager;
-import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,33 +17,26 @@ import java.util.Map;
 public class Region {
 
     /**
-     * Flag as changed to make it available for the saving thread
-     */
-    public boolean hasChanged = false;
-    /**
      * List of all child nodes
      */
-    protected ArrayList<Region> childs = new ArrayList<Region>(5);
+    private ArrayList<Region> childs = new ArrayList<Region>(5);
     /**
      * Reference to this Cuboids parent
-     */ //This'll get ugly when reading from datasource
-    protected Region parent;
+     */
+    private Region parent;
     /**
      * The name of this cuboid
      */
-    protected String name;
+    private String name;
     /**
      * The name of the world this cuboid sits in
      */
-    protected String world;
-    /**
-     * The ID of the dimension for this cuboid. This may always be 0 in some implementations
-     */
-    protected int dimension;
+    private String world;
+
     /**
      * Cuboids priority. Cuboids with higher priority will be considered when areas clash
      */
-    protected int priority;
+    private int priority;
     /**
      * Map of all currently existing property
      */
@@ -57,8 +49,8 @@ public class Region {
      * List of allowed groups
      */
     private ArrayList<String> groups;
-    private Vector origin;
-    private Vector offset;
+    private Vector3D origin;
+    private Vector3D offset;
     /**
      * Welcome / Farewell messages to display
      */
@@ -85,51 +77,6 @@ public class Region {
         this.parent = parent;
         if (parent != null) {
             parent.childs.add(this);
-        }
-    }
-
-    /**
-     * Recursively add player to this Region and its childs.
-     * This will set the currentRegion in the player
-     * Recursively goes down
-     *
-     * @param player
-     * @param loc
-     */
-    public void addPlayerWithin(CPlayer player, CLocation loc) {
-        if (!player.getName().equalsIgnoreCase("no_players")) {
-            //Add into this cuboid
-            if (!player.getName().substring(2).isEmpty()) {
-                if (isWithin(loc)) {
-                    player.setRegion(this);
-                }
-            }
-            for (Region child : childs) {
-                if (child.isWithin(loc)) {
-                    child.addPlayerWithin(player, loc);
-                }
-            }
-        }
-    }
-
-    /**
-     * Recursively remove player from this Region and its childs
-     *
-     * @param player
-     * @param toCheck
-     */
-    public void removePlayerWithin(CPlayer player, CLocation toCheck) {
-        if (!isWithin(toCheck)) {
-            if (parent != null && parent.isWithin(toCheck)) {
-                player.setRegion(parent);
-            }
-            //Assume we're not in any region anymore.
-            //If we are we
-            player.setRegion(null);
-            for (Region child : childs) {
-                child.removePlayerWithin(player, toCheck);
-
-            }
         }
     }
 
@@ -192,20 +139,6 @@ public class Region {
     }
 
     /**
-     * @return the dimension
-     */
-    public int getDimension() {
-        return dimension;
-    }
-
-    /**
-     * @param dimension the dimension to set
-     */
-    public void setDimension(int dimension) {
-        this.dimension = dimension;
-    }
-
-    /**
      * get this regiosn priority
      *
      * @return
@@ -224,21 +157,21 @@ public class Region {
         this.priority = prio;
         for (Region child : childs) {
             child.setPriority(child.getPriority() + difference);
-            child.hasChanged = true;
         }
 
     }
 
-    public boolean equalsWorld(World world) {
-        return (world.getType().getId() == dimension) && (this.world.equals(world.getName()));
-    }
 
     public boolean equalsWorld(Region other) {
-        return (other.dimension == dimension) && (world.equals(other.world));
+        return (world.equals(other.world));
     }
 
-    public boolean equalsWorld(String name, int dim) {
-        return (dim == dimension) && (world.equals(name));
+    public boolean equalsWorld(World world) {
+        return (world.getFqName().equals(this.world));
+    }
+
+    public boolean equalsWorld(String world) {
+        return world != null && (world.equals(this.world));
     }
 
     /**
@@ -252,21 +185,11 @@ public class Region {
     }
 
     /**
-     * Add a region to the list of childs of tis cuboid
-     *
-     * @param c
-     */
-    public void attachRegion(Region c) {
-        c.setParent(this);
-        childs.add(c);
-    }
-
-    /**
      * Remove a child from this regions child list
      *
      * @param c
      */
-    public void detachChild(Region c) {
+    void detachChild(Region c) {
         childs.remove(c);
     }
 
@@ -283,9 +206,6 @@ public class Region {
         return childs;
     }
 
-    public void clearChilds() {
-        childs.clear();
-    }
 
     /**
      * Try finding a cuboid with the given name within the childs.
@@ -323,7 +243,7 @@ public class Region {
      * @param priority You should set this to 0 it's for internal stuffs
      * @return
      */
-    public Region queryChilds(CLocation loc, int priority) {
+    public Region queryChilds(Location loc, int priority) {
         if (!isWithin(loc)) {
             return null;
         }
@@ -400,15 +320,6 @@ public class Region {
     }
 
     /**
-     * Check if this is the global settings Cuboid
-     *
-     * @return
-     */
-    public boolean isGlobal() {
-        return name.equals("__WORLD__");
-    }
-
-    /**
      * Check if this is a root cuboid, that means it has no parent
      *
      * @return
@@ -427,17 +338,6 @@ public class Region {
         for (Region r : childs) {
             collection.add(r);
             collection = r.getChildsDeep(collection);
-        }
-        if (!collection.contains(this)) {
-            collection.add(this);
-        }
-        return collection;
-    }
-
-    public List<Region> getChildsDeep() {
-        ArrayList<Region> collection = new ArrayList<Region>();
-        for (Region r : childs) {
-            collection.addAll(r.getChildsDeep(collection));
         }
         if (!collection.contains(this)) {
             collection.add(this);
@@ -481,16 +381,6 @@ public class Region {
             return properties.get(name);
         }
         return Status.DEFAULT;
-    }
-
-    /**
-     * Check if this cuboid has a given property.
-     *
-     * @param name
-     * @return
-     */
-    public boolean propertyExists(String name) {
-        return properties.containsKey(name);
     }
 
     /**
@@ -552,12 +442,12 @@ public class Region {
             return false;
         }
         // group = group.substring(2);
-        if (group.indexOf(",") >= 0) {
+        if (group.contains(",")) {
             addGroup(group.split(","));
             return true;
         }
         else {
-            if (group.indexOf("g:") >= 0) {
+            if (group.contains("g:")) {
                 if (!group.equalsIgnoreCase("no_groups")) {
                     if (!group.equalsIgnoreCase("g:")) {
                         groups.add(group.substring(2).replace(" ", "").toLowerCase());
@@ -585,8 +475,8 @@ public class Region {
      * @param groups Array
      */
     public void addGroup(String[] groups) {
-        for (int i = 0; i < groups.length; i++) {
-            addGroup(groups[i]);
+        for (String group : groups) {
+            addGroup(group);
         }
 
     }
@@ -620,8 +510,8 @@ public class Region {
      * @param groupNames Array
      */
     public void removeGroup(String[] groupNames) {
-        for (int i = 0; i < groupNames.length; i++) {
-            removeGroup(groupNames[i]);
+        for (String groupName : groupNames) {
+            removeGroup(groupName);
         }
     }
 
@@ -637,7 +527,7 @@ public class Region {
         if (players.contains(playerName)) {
             return false;
         }
-        if (playerName.indexOf(",") >= 0) {
+        if (playerName.contains(",")) {
             addPlayer(playerName.split(","));
             return true;
         }
@@ -659,8 +549,8 @@ public class Region {
      * @param playerNames Array
      */
     public void addPlayer(String[] playerNames) {
-        for (int i = 0; i < playerNames.length; i++) {
-            addPlayer(playerNames[i]);
+        for (String playerName : playerNames) {
+            addPlayer(playerName);
         }
 
     }
@@ -692,28 +582,8 @@ public class Region {
      * @param playerNames Array
      */
     public void removePlayer(String[] playerNames) {
-        for (int i = 0; i < playerNames.length; i++) {
-            removePlayer(playerNames[i]);
-        }
-    }
-
-    /**
-     * Check if this cuboid is inside another
-     *
-     * @param v1       Other Cuboid Point 1
-     * @param v2       Other Cuboid Point 2
-     * @param complete true: Cuboid must be completely inside, false: Cuboid can be
-     *                 inside only partially
-     * @return true if cuboid is inside another, false otherwise
-     */
-    public boolean cuboidIsWithin(Vector v1, Vector v2, boolean complete) {
-        Vector min = Vector.getMinor(v1, v2);
-        Vector max = Vector.getMajor(v1, v2);
-        if (complete) {
-            return origin.isWithin(min, max) && offset.isWithin(min, max);
-        }
-        else {
-            return origin.isWithin(min, max) || offset.isWithin(min, max);
+        for (String playerName : playerNames) {
+            removePlayer(playerName);
         }
     }
 
@@ -726,8 +596,8 @@ public class Region {
      */
     public boolean cuboidIsWithin(Region cube, boolean complete) {
         if (this.equalsWorld(cube)) {
-            Vector min = Vector.getMinimum(cube.getOrigin(), cube.getOffset());
-            Vector max = Vector.getMaximum(cube.getOrigin(), cube.getOffset());
+            Vector3D min = Vector3D.getMinimum(cube.getOrigin(), cube.getOffset());
+            Vector3D max = Vector3D.getMaximum(cube.getOrigin(), cube.getOffset());
 
             if (complete) {
                 return origin.isWithin(min, max) && offset.isWithin(min, max);
@@ -747,12 +617,12 @@ public class Region {
      * @param v
      * @return
      */
-    public boolean isWithin(CLocation v) {
-        if (!equalsWorld(v.getWorld(), v.getDimension())) {
+    public boolean isWithin(Location v) {
+        if (!equalsWorld(v.getWorld())) {
             return false;
         }
-        Vector min = Vector.getMinimum(origin, offset);
-        Vector max = Vector.getMaximum(origin, offset);
+        Vector3D min = Vector3D.getMinimum(origin, offset);
+        Vector3D max = Vector3D.getMaximum(origin, offset);
         return v.isWithin(min, max);
     }
 
@@ -761,7 +631,7 @@ public class Region {
      *
      * @return
      */
-    public int getSize() {
+    int getSize() {
         return (int) Vector.getDistance(origin.getBlockX(), offset.getBlockX()) * (int) Vector.getDistance(origin.getBlockY(), offset.getBlockY()) * (int) Vector.getDistance(origin.getBlockZ(), offset.getBlockZ());
     }
 
@@ -788,7 +658,7 @@ public class Region {
      */
     public void addRestrictedCommand(String command) {
         if (!command.equalsIgnoreCase("no_commands")) {
-            if (command.indexOf(",") >= 0) {
+            if (command.contains(",")) {
                 addRestrictedCommand(command.split(","));
             }
             else {
@@ -803,9 +673,9 @@ public class Region {
      * @param commands Array
      */
     public void addRestrictedCommand(String[] commands) {
-        for (int i = 0; i < commands.length; i++) {
-            if (!commands[i].equalsIgnoreCase("no_commands")) {
-                restrictedCommands.add(commands[i]);
+        for (String command : commands) {
+            if (!command.equalsIgnoreCase("no_commands")) {
+                restrictedCommands.add(command);
             }
         }
 
@@ -834,18 +704,7 @@ public class Region {
     public boolean commandIsRestricted(String command) {
         return restrictedCommands.contains(command) || restrictedCommands.contains(command.substring(1));
     }
-
-    /**
-     * Add items to regions restricted items list
-     *
-     * @param id
-     * @deprecated Use addRestrictedItem with string argument(s) instead.
-     */
-    @Deprecated
-    public void addRestrictedItem(int id) {
-        throw new UnsupportedOperationException("Deprecated. Use strings instead of ints!");
-    }
-
+    
     /**
      * Add one or more comma seperated items from string to the restricted items
      * list
@@ -858,9 +717,7 @@ public class Region {
         }
         if (items.contains(",")) {
             String[] itemList = items.split(",");
-            for (String item : itemList) {
-                restrictedItems.add(item);
-            }
+            Collections.addAll(restrictedItems, itemList);
         }
         restrictedItems.add(items);
     }
@@ -869,30 +726,14 @@ public class Region {
         if (items == null) {
             return;
         }
-        for (String item : items) {
-            restrictedItems.add(item);
-        }
+        Collections.addAll(restrictedItems, items);
     }
 
-    /**
-     * Remove items to regions restricted items list
-     *
-     * @param id
-     */
-    public void removeRestrictedItem(int id) {
-        restrictedItems.remove(Integer.valueOf(id));
+
+    public void removeRestrictedItem(String name) {
+        restrictedItems.remove(name);
     }
 
-    /**
-     * Check if item is restricted
-     *
-     * @param id
-     * @return true if item is restricted, false otherwise
-     */
-    @Deprecated
-    public boolean isItemRestricted(int id) {
-        throw new UnsupportedOperationException("Deprecated. Use strings instead of ints!");
-    }
 
     public boolean isItemRestricted(String id) {
         return restrictedItems.contains(id);
@@ -919,11 +760,11 @@ public class Region {
                 return true;
             }
         }
-        for (int i = 0; i < group.length; i++) {
-            if (groups.contains(group[i].toLowerCase())) {
+        for (String aGroup : group) {
+            if (groups.contains(aGroup.toLowerCase())) {
                 return true;
             }
-            else if (groups.contains("g:" + group[i].toLowerCase())) {
+            else if (groups.contains("g:" + aGroup.toLowerCase())) {
                 return true;
             }
         }
@@ -992,7 +833,7 @@ public class Region {
     /**
      * @return the origin
      */
-    public Vector getOrigin() {
+    public Vector3D getOrigin() {
         return origin;
     }
 
@@ -1006,7 +847,7 @@ public class Region {
     /**
      * @param origin the origin to set
      */
-    public void setOrigin(Vector origin) {
+    public void setOrigin(Vector3D origin) {
         this.origin = origin;
 //        ToolBox.adjustWorldPosition(origin);
     }
@@ -1014,14 +855,14 @@ public class Region {
     /**
      * @return the offset
      */
-    public Vector getOffset() {
+    public Vector3D getOffset() {
         return offset;
     }
 
     /**
      * @param offset the offset to set
      */
-    public void setOffset(Vector offset) {
+    public void setOffset(Vector3D offset) {
         this.offset = offset;
 //        ToolBox.adjustWorldPosition(offset);
     }
@@ -1031,8 +872,8 @@ public class Region {
      *
      * @return the center point
      */
-    public Vector getRegionCenter() {
-        return Vector.getCenterPoint(getOrigin(), getOffset());
+    public Vector3D getRegionCenter() {
+        return Vector3D.getCenterPoint(getOrigin(), getOffset());
     }
 
     /**
@@ -1042,7 +883,7 @@ public class Region {
      * @param origin the new origin
      * @param offset the new offset
      */
-    public void setBoundingBox(Vector origin, Vector offset) {
+    public void setBoundingBox(Vector3D origin, Vector3D offset) {
         this.origin = origin;
         this.offset = offset;
         if (hasParent() && !cuboidIsWithin(this.parent, true)) {
@@ -1105,19 +946,12 @@ public class Region {
         StringBuilder builder = new StringBuilder();
         int count = 0;
         for (String key : properties.keySet()) {
-            if (count <= 3) {
-                builder.append(ColorManager.Rose).append(key).append(": ").append(ColorManager.LightGreen).append(properties.get(key).name()).append(", ");
-            }
-            else {
-                count = 0;
-                builder.append(";");
-
-            }
+            builder.append(ColorManager.Rose).append(key).append(": ").append(ColorManager.LightGreen).append(properties.get(key).name()).append(", ");
         }
         return builder.toString();
     }
 
-    public ArrayList<Region> parentsToList(Region r, ArrayList<Region> parents) {
+    ArrayList<Region> parentsToList(Region r, ArrayList<Region> parents) {
         if (r.parent == null) {
             return parents;
         }
@@ -1134,14 +968,14 @@ public class Region {
         }
         if (other instanceof Region) {
             Region c = (Region) other;
-            return (c.name.equals(name)) && (c.getSize() == getSize()) && (c.world.equals(world)) && (c.dimension == dimension);
+            return (c.name.equals(name)) && (c.getSize() == getSize()) && (c.world.equals(world));
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return getSize() + priority + dimension;
+        return getSize() + priority + world.hashCode();
     }
 
     public enum Status {

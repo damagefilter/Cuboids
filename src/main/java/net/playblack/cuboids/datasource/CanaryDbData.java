@@ -29,7 +29,6 @@ public class CanaryDbData implements BaseData {
             HashMap<String, Object> filter = new HashMap<String, Object>();
             filter.put("region_name", node.getName());
             filter.put("world_name", node.getWorld());
-            filter.put("world_dimension", node.getDimension());
             Database.get().update(da, filter);
         }
         catch (DatabaseWriteException e) {
@@ -46,7 +45,6 @@ public class CanaryDbData implements BaseData {
                 HashMap<String, Object> filter = new HashMap<String, Object>();
                 filter.put("region_name", reg.getName());
                 filter.put("world_name", reg.getWorld());
-                filter.put("world_dimension", reg.getDimension());
                 toInsert.put(RegionInformationDataAccess.toDataAccess(reg), filter);
             }
         }
@@ -117,7 +115,7 @@ public class CanaryDbData implements BaseData {
         try {
             Database.get().load(da, filter);
             if (da.hasData()) {
-                Region old = RegionManager.get().getRegionByName(name, world, dimension);
+                Region old = RegionManager.get().getRegionByName(name, world);
                 if (old != null) {
                     RegionManager.get().removeRegion(old);
                 }
@@ -137,7 +135,6 @@ public class CanaryDbData implements BaseData {
             HashMap<String, Object> filter = new HashMap<String, Object>();
             filter.put("region_name", node.getName());
             filter.put("world_name", node.getWorld());
-            filter.put("world_dimension", node.getDimension());
             Database.get().remove(da, filter);
         }
         catch (DatabaseWriteException e) {

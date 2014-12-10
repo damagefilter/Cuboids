@@ -1,13 +1,12 @@
 package net.playblack.cuboids.selections;
 
 import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.mcutils.Vector;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
@@ -17,12 +16,12 @@ import java.util.LinkedHashMap;
  */
 public class CuboidSelection implements ISelection {
 
-    protected LinkedHashMap<Vector, BlockType> blockList;
+    protected LinkedHashMap<Vector3D, BlockType> blockList;
 
     protected String world = "__NOWORLD__";
 
-    protected Vector origin;
-    protected Vector offset;
+    protected Vector3D origin;
+    protected Vector3D offset;
 
     /**
      * Empty CTOR
@@ -30,7 +29,7 @@ public class CuboidSelection implements ISelection {
     public CuboidSelection() {
         origin = null;
         offset = null;
-        blockList = new LinkedHashMap<Vector, BlockType>();
+        blockList = new LinkedHashMap<Vector3D, BlockType>();
     }
 
     /**
@@ -39,10 +38,10 @@ public class CuboidSelection implements ISelection {
      * @param v1
      * @param v2
      */
-    public CuboidSelection(Vector v1, Vector v2) {
-        origin = new Vector(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
-        offset = new Vector(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
-        blockList = new LinkedHashMap<Vector, BlockType>((int) Vector.getAreaVolume(origin, offset));
+    public CuboidSelection(Vector3D v1, Vector3D v2) {
+        origin = new Vector3D(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
+        offset = new Vector3D(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
+        blockList = new LinkedHashMap<Vector3D, BlockType>();
     }
 
     /**
@@ -52,13 +51,13 @@ public class CuboidSelection implements ISelection {
      * @param v2
      * @param blocks
      */
-    public CuboidSelection(Vector v1, Vector v2, LinkedHashMap<Vector, BlockType> blocks) {
-        origin = new Vector(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
-        offset = new Vector(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
+    public CuboidSelection(Vector3D v1, Vector3D v2, LinkedHashMap<Vector3D, BlockType> blocks) {
+        origin = new Vector3D(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
+        offset = new Vector3D(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
         blockList = blocks;
     }
 
-    public CuboidSelection(LinkedHashMap<Vector, BlockType> blocks) {
+    public CuboidSelection(LinkedHashMap<Vector3D, BlockType> blocks) {
         blockList = blocks;
     }
 
@@ -68,10 +67,10 @@ public class CuboidSelection implements ISelection {
         this.blockList = sel.getBlockList();
     }
 
-    public CuboidSelection(Vector v1, Vector v2, int size) {
-        origin = new Vector(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
-        offset = new Vector(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
-        blockList = new LinkedHashMap<Vector, BlockType>(size);
+    public CuboidSelection(Vector3D v1, Vector3D v2, int size) {
+        origin = new Vector3D(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
+        offset = new Vector3D(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
+        blockList = new LinkedHashMap<Vector3D, BlockType>(size);
     }
 
     /**
@@ -79,7 +78,7 @@ public class CuboidSelection implements ISelection {
      *
      * @return
      */
-    public Vector getOrigin() {
+    public Vector3D getOrigin() {
         return origin;
     }
 
@@ -88,8 +87,8 @@ public class CuboidSelection implements ISelection {
      *
      * @param o
      */
-    public void setOrigin(Vector o) {
-        this.origin = new Vector(o.getBlockX(), o.getBlockY(), o.getBlockZ());
+    public void setOrigin(Vector3D o) {
+        this.origin = new Vector3D(o.getBlockX(), o.getBlockY(), o.getBlockZ());
     }
 
     /**
@@ -97,7 +96,7 @@ public class CuboidSelection implements ISelection {
      *
      * @return
      */
-    public Vector getOffset() {
+    public Vector3D getOffset() {
         return offset;
     }
 
@@ -106,27 +105,27 @@ public class CuboidSelection implements ISelection {
      *
      * @param o
      */
-    public void setOffset(Vector o) {
-        this.offset = new Vector(o.getBlockX(), o.getBlockY(), o.getBlockZ());
+    public void setOffset(Vector3D o) {
+        this.offset = new Vector3D(o.getBlockX(), o.getBlockY(), o.getBlockZ());
     }
 
     @Override
-    public void setBlock(Vector v, BlockType b) {
+    public void setBlock(Vector3D v, BlockType b) {
         blockList.put(v, b);
     }
 
     @Override
-    public BlockType getBlock(Vector v) {
+    public BlockType getBlock(Vector3D v) {
         return blockList.get(v);
     }
 
     @Override
-    public LinkedHashMap<Vector, BlockType> getBlockList() {
+    public LinkedHashMap<Vector3D, BlockType> getBlockList() {
         return blockList;
     }
 
     @Override
-    public void setBlockList(LinkedHashMap<Vector, BlockType> newList) {
+    public void setBlockList(LinkedHashMap<Vector3D, BlockType> newList) {
         this.blockList = newList;
 
     }
@@ -138,7 +137,7 @@ public class CuboidSelection implements ISelection {
 
     @Override
     public long getBoundarySize() {
-        return (long) Vector.getAreaVolume(origin, offset);
+        return this.getSize();
     }
 
     @Override
@@ -163,8 +162,8 @@ public class CuboidSelection implements ISelection {
             sortEdgesOffsetFirst();
         }
         else {
-            Vector or_temp = Vector.getMaximum(origin, offset);
-            Vector off_temp = Vector.getMinimum(origin, offset);
+            Vector3D or_temp = Vector3D.getMaximum(origin, offset);
+            Vector3D off_temp = Vector3D.getMinimum(origin, offset);
             origin = or_temp;
             offset = off_temp;
         }
@@ -175,8 +174,8 @@ public class CuboidSelection implements ISelection {
      * smaller
      */
     private void sortEdgesOffsetFirst() {
-        Vector or_temp = Vector.getMaximum(origin, offset);
-        origin = Vector.getMinimum(origin, offset);
+        Vector3D or_temp = Vector3D.getMaximum(origin, offset);
+        origin = Vector3D.getMinimum(origin, offset);
         offset = or_temp;
     }
 

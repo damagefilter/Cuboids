@@ -1,20 +1,20 @@
 package net.playblack.cuboids.actions.events.forwardings;
 
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.mcutils.CLocation;
 
 public class BlockUpdateEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled;
     private BlockType block;
     private BlockType targetBlock;
-    private CLocation CLocation;
+    private Location location;
 
-    public BlockUpdateEvent(BlockType block, BlockType targetBlock, CLocation CLocation) {
+    public BlockUpdateEvent(BlockType block, BlockType targetBlock, Location location) {
         this.block = block;
         this.targetBlock = targetBlock;
-        this.CLocation = CLocation;
+        this.location = location;
     }
 
     @Override
@@ -36,8 +36,8 @@ public class BlockUpdateEvent extends CuboidEvent implements Cancellable {
         return block;
     }
 
-    public CLocation getLocation() {
-        return CLocation;
+    public Location getLocation() {
+        return location;
     }
 
     /**

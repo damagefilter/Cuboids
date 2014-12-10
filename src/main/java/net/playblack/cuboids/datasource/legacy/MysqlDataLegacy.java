@@ -1,5 +1,6 @@
 package net.playblack.cuboids.datasource.legacy;
 
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
@@ -70,10 +71,9 @@ public class MysqlDataLegacy implements BaseData {
      * @throws SQLException
      */
     public boolean mysqlCheckRegion(Region node) throws SQLException {
-        PreparedStatement ps = getConnection().prepareStatement("SELECT id FROM nodes" + " WHERE name=? AND world=? AND dimension=?");
+        PreparedStatement ps = getConnection().prepareStatement("SELECT id FROM nodes" + " WHERE name=? AND world=?");
         ps.setString(1, node.getName());
         ps.setString(2, node.getWorld());
-        ps.setInt(3, node.getDimension());
         ResultSet rs = ps.executeQuery();
         return rs.next();
     }
@@ -136,25 +136,7 @@ public class MysqlDataLegacy implements BaseData {
 
             // ---------------------- LEGACY LOADING ------------------------
             String world = rs.getString("world");
-            if (world.equalsIgnoreCase("NORMAL")) {
-                cube.setDimension(0);
-                cube.setWorld(CServer.getServer().getDefaultWorld().getName());
-                cube.hasChanged = true;
-            }
-            else if (world.equalsIgnoreCase("NETHER")) {
-                cube.setDimension(-1);
-                cube.setWorld(CServer.getServer().getDefaultWorld().getName());
-                cube.hasChanged = true;
-            }
-            else if (world.equalsIgnoreCase("END")) {
-                cube.setDimension(1);
-                cube.setWorld(CServer.getServer().getDefaultWorld().getName());
-                cube.hasChanged = true;
-            }
-            else {
-                cube.setDimension(rs.getInt("dimension"));
-                cube.setWorld(world);
-            }
+            cube.setWorld(world);
             // ---------------------- LEGACY LOADING END --------------------
             cube.setProperty("more-mobs", Status.softFromBoolean(ToolBox.stringToBoolean(rs.getString("hmob"))));
 //            cube.sethMob(ToolBox.stringToBoolean(rs.getString("hmob")));
@@ -166,8 +148,8 @@ public class MysqlDataLegacy implements BaseData {
             try {
                 String[] point1 = rs.getString("point1").trim().split(",");
                 String[] point2 = rs.getString("point2").trim().split(",");
-                Vector p1 = new Vector(Double.parseDouble(point1[0]), Double.parseDouble(point1[1]), Double.parseDouble(point1[2]));
-                Vector p2 = new Vector(Double.parseDouble(point2[0]), Double.parseDouble(point2[1]), Double.parseDouble(point2[2]));
+                Vector3D p1 = new Vector3D(Double.parseDouble(point1[0]), Double.parseDouble(point1[1]), Double.parseDouble(point1[2]));
+                Vector3D p2 = new Vector3D(Double.parseDouble(point2[0]), Double.parseDouble(point2[1]), Double.parseDouble(point2[2]));
                 cube.setBoundingBox(p1, p2);
             }
             catch (NumberFormatException e) {

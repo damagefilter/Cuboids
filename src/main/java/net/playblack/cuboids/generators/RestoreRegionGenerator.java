@@ -1,13 +1,13 @@
-package net.playblack.cuboids.blockoperators;
+package net.playblack.cuboids.generators;
 
 import net.canarymod.Canary;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.World;
-import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.blocks.Chest;
 import net.canarymod.api.world.blocks.Sign;
 import net.canarymod.api.world.blocks.TileEntity;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
@@ -24,15 +24,15 @@ import java.util.Map;
  */
 public class RestoreRegionGenerator extends BaseGen {
 
-    private Map<Vector, String[]> signs;
-    private Map<Vector, Item[]> items;
+    private Map<Vector3D, String[]> signs;
+    private Map<Vector3D, Item[]> items;
     /**
      * The selection you pass along here will be written into the world!
      *
      * @param selection
      * @param world
      */
-    public RestoreRegionGenerator(CuboidSelection selection, Map<Vector, String[]> signs, Map<Vector, Item[]> items,  World world) {
+    public RestoreRegionGenerator(CuboidSelection selection, Map<Vector3D, String[]> signs, Map<Vector3D, Item[]> items,  World world) {
         super(selection, world);
         this.signs = signs;
         this.items = items;
@@ -57,7 +57,7 @@ public class RestoreRegionGenerator extends BaseGen {
         }
         // Process blocks, 1st run
         synchronized (lock) {
-            for (Vector v : selection.getBlockList().keySet()) {
+            for (Vector3D v : selection.getBlockList().keySet()) {
                 changeBlock(selection.getBlock(v), v, world, false);
                 if (signs.containsKey(v)) {
                     TileEntity te = world.getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ()).getTileEntity();
@@ -81,7 +81,7 @@ public class RestoreRegionGenerator extends BaseGen {
 
         // process queued blocks
         synchronized (lock) {
-            for (Vector v : placeLast.keySet()) {
+            for (Vector3D v : placeLast.keySet()) {
                 changeBlock(placeLast.get(v), v, world, true);
                 if (signs.containsKey(v)) {
                     TileEntity te = world.getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ()).getTileEntity();

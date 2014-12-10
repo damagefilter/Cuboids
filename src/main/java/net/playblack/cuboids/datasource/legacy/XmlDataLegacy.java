@@ -1,14 +1,14 @@
 package net.playblack.cuboids.datasource.legacy;
 
+import net.canarymod.CanaryDeserializeException;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.datasource.BaseData;
-import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
-import net.playblack.mcutils.Vector;
 import net.visualillusionsent.utils.SystemUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -217,7 +217,7 @@ public class XmlDataLegacy implements BaseData {
         try {
             Document rdoc = regionBuilder.build(f);
             Region r = domToRegion(rdoc, true);
-            Region old = RegionManager.get().getRegionByName(name, world, dimension);
+            Region old = RegionManager.get().getRegionByName(name, world);
             if (old != null) {
                 RegionManager.get().removeRegion(old);
             }
@@ -233,7 +233,7 @@ public class XmlDataLegacy implements BaseData {
 
     @Override
     public void deleteRegion(Region node) {
-        String path = Config.get().getBasePath() + "regions/" + node.getWorld() + "_" + node.getName() + "_" + node.getDimension() + ".xml";
+        String path = Config.get().getBasePath() + "regions/" + node.getWorld() + "_" + node.getName() + "_" + ".xml";
         File file = new File(path);
         file.delete();
     }
@@ -277,9 +277,8 @@ public class XmlDataLegacy implements BaseData {
 
         meta.addContent(new Element("priority").setText("" + r.getPriority()));
         meta.addContent(new Element("world").setText(r.getWorld()));
-        meta.addContent(new Element("dimension").setText("" + r.getDimension()));
-        meta.addContent(new Element("origin").setText(r.getOrigin().serialize().toString()));
-        meta.addContent(new Element("offset").setText(r.getOffset().serialize().toString()));
+        meta.addContent(new Element("origin").setText(r.getOrigin().toString()));
+        meta.addContent(new Element("offset").setText(r.getOffset().toString()));
         meta.addContent(new Element("players").setText(r.getPlayerList()));
         meta.addContent(new Element("groups").setText(r.getGroupList()));
         regionElement.addContent(meta);
@@ -300,17 +299,16 @@ public class XmlDataLegacy implements BaseData {
 
         newRegion.setName(meta.getChildText("name"));
         newRegion.setPriority(Integer.parseInt(meta.getChildText("priority")));
-        newRegion.setDimension(Integer.parseInt(meta.getChildText("dimension")));
         newRegion.setWorld(meta.getChildText("world"));
         newRegion.setWelcome(ToolBox.stringToNull(meta.getChildText("welcome")));
         newRegion.setFarewell(ToolBox.stringToNull(meta.getChildText("farewell")));
         newRegion.addPlayer(meta.getChildText("players"));
         newRegion.addGroup(meta.getChildText("groups"));
         try {
-            newRegion.setOrigin(Vector.deserialize(meta.getChildText("origin")));
-            newRegion.setOffset(Vector.deserialize(meta.getChildText("offset")));
+            newRegion.setOrigin(Vector3D.fromString(meta.getChildText("origin")));
+            newRegion.setOffset(Vector3D.fromString(meta.getChildText("offset")));
         }
-        catch (DeserializeException e) {
+        catch (CanaryDeserializeException e) {
             Debug.logWarning(e.getMessage() + " - dropping region!");
             return null;
         }

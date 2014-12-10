@@ -1,12 +1,12 @@
 package net.playblack.cuboids.commands;
 
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.ColorManager;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class Cdiag extends CBaseCommand {
             return;
         }
 
-        ArrayList<Region> nodes = RegionManager.get().getCuboidsContaining(new CLocation(player.getLocation()), player.getWorld().getName(), player.getWorld().getType().getId());
+        ArrayList<Region> nodes = RegionManager.get().getCuboidsContaining(player.getLocation());
 
         CPlayer p = CServer.getServer().getPlayer(player.getName());
         MessageSystem.translateMessage(player, ColorManager.LightGreen, "cuboidContainingYou");

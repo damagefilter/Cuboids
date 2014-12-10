@@ -1,6 +1,7 @@
 package net.playblack.cuboids.loaders.legacyregion;
 
 import net.canarymod.Canary;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.loaders.CuboidShell;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.mcutils.Vector;
@@ -126,13 +127,13 @@ public class RegionLegacyShell implements CuboidShell {
     }
 
     @Override
-    public Vector getOrigin() {
-        return new Vector();
+    public Vector3D getOrigin() {
+        return new Vector3D();
     }
 
     @Override
-    public Vector getOffset() {
-        return new Vector();
+    public Vector3D getOffset() {
+        return new Vector3D();
     }
 
     @Override

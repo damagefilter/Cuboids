@@ -2,9 +2,9 @@ package net.playblack.cuboids.actions.events.forwardings;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.actions.events.Cancellable;
 import net.playblack.cuboids.actions.events.CuboidEvent;
-import net.playblack.mcutils.CLocation;
 
 /**
  * Fired when Cuboids catched a rightclick-on-block event
@@ -15,7 +15,7 @@ public class BlockRightClickEvent extends CuboidEvent implements Cancellable {
     private boolean isCancelled = false;
     private Player player;
     private BlockType clickedBlock;
-    private CLocation clickedCLocation;
+    private Location clickedCLocation;
 
     /**
      * Constructs a new RightClickEvent. Pass null for arguments that don't apply in the given situation!
@@ -24,7 +24,7 @@ public class BlockRightClickEvent extends CuboidEvent implements Cancellable {
      * @param block
      * @param CLocation
      */
-    public BlockRightClickEvent(Player player, BlockType block, CLocation CLocation) {
+    public BlockRightClickEvent(Player player, BlockType block, Location CLocation) {
         this.player = player;
         this.clickedBlock = block;
         this.clickedCLocation = CLocation;
@@ -63,7 +63,7 @@ public class BlockRightClickEvent extends CuboidEvent implements Cancellable {
      *
      * @return
      */
-    public CLocation getLocation() {
+    public Location getLocation() {
         return clickedCLocation;
     }
 }

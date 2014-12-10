@@ -1,9 +1,11 @@
 package net.playblack.cuboids.datasource;
 
 import net.canarymod.Canary;
+import net.canarymod.CanaryDeserializeException;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.database.DataAccess;
 import net.canarymod.database.Database;
 import net.canarymod.database.exceptions.DatabaseReadException;
@@ -11,7 +13,6 @@ import net.playblack.cuboids.datasource.da.RegionDataAccess;
 import net.playblack.cuboids.datasource.da.RegionExtraDataAccess;
 import net.playblack.cuboids.exceptions.DeserializeException;
 import net.playblack.cuboids.selections.CuboidSelection;
-import net.playblack.mcutils.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,8 +32,8 @@ public class CuboidDeserializer {
     protected World world;
     protected String regionName;
 
-    private Map<Vector, Item[]> chestContents;
-    private Map<Vector, String[]> signContents;
+    private Map<Vector3D, Item[]> chestContents;
+    private Map<Vector3D, String[]> signContents;
 
     /**
      * Prepared stuff for deserializing. Please check for file_exists before
@@ -46,8 +47,8 @@ public class CuboidDeserializer {
         this.world = world;
         this.blocks = new RegionDataAccess(name);
         this.regionName = name;
-        chestContents = new HashMap<Vector, Item[]>();
-        signContents = new HashMap<Vector, String[]>();
+        chestContents = new HashMap<Vector3D, Item[]>();
+        signContents = new HashMap<Vector3D, String[]>();
 
         try {
             // Load data from database
@@ -77,12 +78,16 @@ public class CuboidDeserializer {
     private void generateFromLine(String line, int lineNumber) throws DeserializeException {
         String[] split = line.split("\\|"); // results in 0=block,1=vector
         BlockType block;
-        Vector key;
+        Vector3D key;
         try {
             block = BlockType.fromString(split[0]);
-            key = Vector.deserialize(split[1]);
+            key = Vector3D.fromString(split[1]);
         }
         catch (ArrayIndexOutOfBoundsException f) {
+            throw new DeserializeException("Bad line format for region " + regionName + "Line:\n", line);
+        }
+
+        catch (CanaryDeserializeException f) {
             throw new DeserializeException("Bad line format for region " + regionName + "Line:\n", line);
         }
 
@@ -101,14 +106,14 @@ public class CuboidDeserializer {
 
     }
 
-    private void generateSignData(int index, Vector key) {
+    private void generateSignData(int index, Vector3D key) {
         String signText = ((RegionExtraDataAccess)extraData.get(index)).data;
         if (signText != null) {
             signContents.put(key, signText.split("\\|"));
         }
     }
 
-    private void generateChestContents(int index, Vector key) throws DeserializeException {
+    private void generateChestContents(int index, Vector3D key) throws CanaryDeserializeException {
         String chestContents = ((RegionExtraDataAccess)extraData.get(index)).data;
         if (chestContents != null) {
             String[] itemSplit = chestContents.split("\\|");
@@ -124,11 +129,11 @@ public class CuboidDeserializer {
         return cuboid;
     }
 
-    public Map<Vector, String[]> getSignContents() {
+    public Map<Vector3D, String[]> getSignContents() {
         return this.signContents;
     }
 
-    public Map<Vector, Item[]> getChestContents() {
+    public Map<Vector3D, Item[]> getChestContents() {
         return this.chestContents;
     }
 

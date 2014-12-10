@@ -1,8 +1,9 @@
-package net.playblack.cuboids.blockoperators;
+package net.playblack.cuboids.generators;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
@@ -78,16 +79,16 @@ public class WallsGenerator extends BaseGen {
             for (int x = tmp.getOrigin().getBlockX(); x <= tmp.getOffset().getBlockX(); x++) {
                 for (int y = tmp.getOrigin().getBlockY(); y <= tmp.getOffset().getBlockY(); y++) {
 
-                    tmp.setBlock(new Vector(x, y, tmp.getOrigin().getBlockZ()), wallMaterial);
-                    tmp.setBlock(new Vector(x, y, tmp.getOffset().getBlockZ()), wallMaterial);
+                    tmp.setBlock(new Vector3D(x, y, tmp.getOrigin().getBlockZ()), wallMaterial);
+                    tmp.setBlock(new Vector3D(x, y, tmp.getOffset().getBlockZ()), wallMaterial);
                 }
             }
 
             for (int y = tmp.getOrigin().getBlockY(); y <= tmp.getOffset().getBlockY(); y++) {
                 for (int z = tmp.getOrigin().getBlockZ(); z <= tmp.getOffset().getBlockZ(); z++) {
 
-                    tmp.setBlock(new Vector(tmp.getOrigin().getBlockX(), y, z), wallMaterial);
-                    tmp.setBlock(new Vector(tmp.getOffset().getBlockX(), y, z), wallMaterial);
+                    tmp.setBlock(new Vector3D(tmp.getOrigin().getBlockX(), y, z), wallMaterial);
+                    tmp.setBlock(new Vector3D(tmp.getOffset().getBlockX(), y, z), wallMaterial);
                 }
             }
 
@@ -95,8 +96,8 @@ public class WallsGenerator extends BaseGen {
                 for (int x = tmp.getOrigin().getBlockX(); x <= tmp.getOffset().getBlockX(); x++) {
                     for (int z = tmp.getOrigin().getBlockZ(); z <= tmp.getOffset().getBlockZ(); z++) {
 
-                        tmp.setBlock(new Vector(x, tmp.getOrigin().getBlockY(), z), floorMaterial);
-                        tmp.setBlock(new Vector(x, tmp.getOffset().getBlockY(), z), ceilingMaterial);
+                        tmp.setBlock(new Vector3D(x, tmp.getOrigin().getBlockY(), z), floorMaterial);
+                        tmp.setBlock(new Vector3D(x, tmp.getOffset().getBlockY(), z), ceilingMaterial);
                     }
                 }
             }

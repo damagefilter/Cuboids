@@ -1,6 +1,7 @@
 package net.playblack.cuboids.commands;
 
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
@@ -31,7 +32,7 @@ public class Cceiling extends CBaseCommand {
         }
         CuboidSelection sel = SelectionManager.get().getPlayerSelection(player.getName());
         sel.sortEdges(false);
-        Vector origin = sel.getOrigin();
+        Vector3D origin = sel.getOrigin();
         if ((command.length == 3) && command[2].equalsIgnoreCase("-r")) {
             origin.setY(player.getY() + height);
         }

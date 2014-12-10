@@ -1,9 +1,8 @@
 package net.playblack.cuboids.regions;
 
+import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.datasource.BaseData;
-import net.playblack.cuboids.gameinterface.CPlayer;
-import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.Debug;
 
 import java.util.ArrayList;
@@ -90,7 +89,7 @@ public class RegionManager {
      * @return
      */
     public boolean saveSingle(String name, String world, int dimension) {
-        dataSource.saveRegion(getRegionByName(name, world, dimension));
+        dataSource.saveRegion(getRegionByName(name, world));
         return true;
     }
 
@@ -127,7 +126,7 @@ public class RegionManager {
      * @return
      */
     public boolean addRegion(Region cube) {
-        if (cuboidExists(cube.getName(), cube.getWorld(), cube.getDimension())) {
+        if (cuboidExists(cube.getName(), cube.getWorld())) {
             Debug.log("Region already exists! Not adding " + cube.getName());
             return false;
         }
@@ -139,7 +138,6 @@ public class RegionManager {
         else {
             addRoot(cube);
         }
-        cube.hasChanged = true;
         saveSingle(cube);
         return true;
     }
@@ -206,7 +204,6 @@ public class RegionManager {
                 if (tree.getPriority() <= parent.getPriority()) {
                     tree.setPriority(parent.getPriority() + 1);
                 }
-                tree.hasChanged = true;
             }
 
             if (parent == null) {
@@ -241,9 +238,9 @@ public class RegionManager {
      * @param world
      * @return
      */
-    public boolean cuboidExists(String cube, String world, int dimension) {
+    public boolean cuboidExists(String cube, String world) {
         for (Region tree : rootNodes) {
-            if (tree.equalsWorld(world, dimension)) {
+            if (tree.equalsWorld(world)) {
                 if (tree.queryChilds(cube) != null) {
                     return true;
                 }
@@ -266,12 +263,12 @@ public class RegionManager {
      * @param ignoreGlobal pass true to ignore the global settings
      * @return
      */
-    public Region getActiveRegion(CLocation v, boolean ignoreGlobal) {
+    public Region getActiveRegion(Location v, boolean ignoreGlobal) {
         if (v == null) {
             return !ignoreGlobal ? global : null;
         }
         for (Region tree : rootNodes) {
-            if (tree.equalsWorld(v.getWorld(), v.getDimension())) {
+            if (tree.equalsWorld(v.getWorld())) {
                 if (!tree.isWithin(v)) {
                     continue;
                 }
@@ -285,42 +282,19 @@ public class RegionManager {
     }
 
     /**
-     * Add a player to this region and all child regions it is within
-     *
-     * @param player
-     */
-    public void addPlayerToRegions(CPlayer player, CLocation loc) {
-        for (Region tree : rootNodes) {
-            if (tree.isWithin(loc)) {
-                tree.addPlayerWithin(player, loc);
-            }
-        }
-    }
-
-    public void removePlayerFromRegion(CPlayer player, CLocation loc) {
-        Region r = player.getCurrentRegion();
-        if (r != null) {
-            if (!r.isWithin(loc)) {
-                player.setRegion(null);
-            }
-        }
-    }
-
-    /**
      * Create a list of Regions that contain the given Vector in the given
      * world
      *
      * @param v
-     * @param world
      * @return
      */
-    public ArrayList<Region> getCuboidsContaining(CLocation v, String world, int dimension) {
+    public ArrayList<Region> getCuboidsContaining(Location v) {
         ArrayList<Region> list = new ArrayList<Region>();
         if (v == null) {
             return list;
         }
         for (Region tree : rootNodes) {
-            if (tree.equalsWorld(world, dimension)) {
+            if (tree.equalsWorld(v.getWorld())) {
                 if (tree.isWithin(v)) {
                     for (Region node : tree.getChildsDeep(new ArrayList<Region>())) {
                         if (node.isWithin(v) && !list.contains(node)) {
@@ -346,7 +320,7 @@ public class RegionManager {
     public ArrayList<Region> getAllInDimension(String world, int dimension) {
         ArrayList<Region> list = new ArrayList<Region>();
         for (Region tree : rootNodes) {
-            if (tree.equalsWorld(world, dimension)) {
+            if (tree.equalsWorld(world)) {
                 tree.getChildsDeep(list);
             }
         }
@@ -367,9 +341,9 @@ public class RegionManager {
      * @param world
      * @return Region or null
      */
-    public Region getRegionByName(String name, String world, int dimension) {
+    public Region getRegionByName(String name, String world) {
         for (Region tree : rootNodes) {
-            if (tree.equalsWorld(world, dimension)) {
+            if (tree.equalsWorld(world)) {
                 Region tmp = tree.queryChilds(name);
                 if (tmp != null) {
                     return tmp;

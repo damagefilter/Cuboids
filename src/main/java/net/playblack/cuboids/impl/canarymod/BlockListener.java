@@ -6,6 +6,8 @@ import net.canarymod.api.entity.living.monster.Creeper;
 import net.canarymod.api.entity.living.monster.Enderman;
 import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Location;
+import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.hook.HookHandler;
 import net.canarymod.hook.entity.EndermanPickupBlockHook;
 import net.canarymod.hook.entity.HangingEntityDestroyHook;
@@ -34,7 +36,6 @@ import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
 import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
-import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
@@ -48,7 +49,7 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void blockRightClick(BlockRightClickHook hook) {
         Block b = hook.getBlockClicked();
-        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), hook.getPlayer().getWorld().getType().getId(), hook.getPlayer().getWorld().getName());
+        Location p = b.getLocation();
 
         BlockRightClickEvent event = new BlockRightClickEvent(hook.getPlayer(), b.getType(), p);
         ActionManager.fireEvent(event);
@@ -77,7 +78,7 @@ public class BlockListener implements PluginListener {
         }
         Block b = hook.getBlock();
         Player player = hook.getPlayer();
-        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        Location p = b.getLocation();
 
         BlockLeftClickEvent event = new BlockLeftClickEvent(player, b.getType(), p);
         ActionManager.fireEvent(event);
@@ -90,7 +91,7 @@ public class BlockListener implements PluginListener {
     public void blockDestroy(BlockDestroyHook hook) {
         Block b = hook.getBlock();
         Player player = hook.getPlayer();
-        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        Location p = b.getLocation();
 //        ToolBox.adjustWorldPosition(p);
 
         BlockBreakEvent event = new BlockBreakEvent(player, b.getType(), p);
@@ -104,7 +105,7 @@ public class BlockListener implements PluginListener {
     public void blockPlace(BlockPlaceHook hook) {
         Block b = hook.getBlockPlaced();
         Player player = hook.getPlayer();
-        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+        Location p = b.getLocation();
 
         BlockPlaceEvent event = new BlockPlaceEvent(player, b.getType(), p);
         ActionManager.fireEvent(event);
@@ -117,10 +118,10 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void onExplosion(ExplosionHook hook) {
         //Assemble the list of blocks ...
-        HashMap<CLocation, BlockType> blocks = new HashMap<CLocation, BlockType>();
+        HashMap<Location, BlockType> blocks = new HashMap<Location, BlockType>();
 
         for (Block x : hook.getAffectedBlocks()) {
-            blocks.put(new CLocation(x.getLocation()), x.getType());
+            blocks.put(x.getLocation(), x.getType());
         }
 
         Block b = hook.getBlock();
@@ -134,7 +135,7 @@ public class BlockListener implements PluginListener {
             }
         }
 
-        CLocation l = new CLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        Location l = b.getLocation();
         ExplosionEvent event = new ExplosionEvent(hook.getEntity(), l, type, blocks);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
@@ -142,15 +143,15 @@ public class BlockListener implements PluginListener {
             return;
         }
         //Not cancelled, process the list of blocks and remove those that should stay
-        List<CLocation> protectedBlocks = event.getProtectedBlocks();
+        List<Location> protectedBlocks = event.getProtectedBlocks();
         List<Block> blocksaffected = hook.getAffectedBlocks();
         if (protectedBlocks != null) {
-            for (CLocation m : protectedBlocks) {
+            for (Location m : protectedBlocks) {
                 for (int i = 0; i < blocksaffected.size(); ) {
                     Block x = blocksaffected.get(i);
-                    Vector tmp = new Vector(x.getX(), x.getY(), x.getZ());
+                    Vector3D tmp = new Vector3D(x.getX(), x.getY(), x.getZ());
 //                    ToolBox.adjustWorldPosition(tmp);
-                    if (m.samePosition2D(tmp)) {
+                    if (Vector.samePosition2D(m, tmp)) {
                         blocksaffected.remove(i);
                     }
                     else {
@@ -165,7 +166,7 @@ public class BlockListener implements PluginListener {
     public void onIgnite(IgnitionHook hook) {
         Block b = hook.getBlock();
         Player player = hook.getPlayer();
-        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        Location p = b.getLocation();
         ToolBox.adjustWorldPosition(p);
 
         IgniteEvent event = new IgniteEvent(hook.getCause(), p, b.getType(), player);
@@ -179,7 +180,8 @@ public class BlockListener implements PluginListener {
     public void onFlow(FlowHook hook) {
         Block b = hook.getBlockFrom();
         Block to = hook.getBlockTo();
-        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        Location p = b.getLocation();
+
         ToolBox.adjustWorldPosition(p);
         LiquidFlowEvent event = new LiquidFlowEvent(b.getType(), to.getType(), p);
         ActionManager.fireEvent(event);
@@ -191,7 +193,8 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void onBlockPhysics(BlockPhysicsHook hook) {
         Block b = hook.getBlock();
-        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        Location p = b.getLocation();
+
         ToolBox.adjustWorldPosition(p);
         BlockPhysicsEvent event = new BlockPhysicsEvent(b.getType(), p);
         ActionManager.fireEvent(event);
@@ -203,7 +206,7 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void onBlockUpdate(BlockUpdateHook hook) {
         Block b = hook.getBlock();
-        CLocation p = new CLocation(b.getX(), b.getY(), b.getZ(), b.getWorld().getType().getId(), b.getWorld().getName());
+        Location p = b.getLocation();
         ToolBox.adjustWorldPosition(p);
         BlockUpdateEvent event = new BlockUpdateEvent(b.getType(), hook.getNewBlockType(), p);
         ActionManager.fireEvent(event);
@@ -216,7 +219,7 @@ public class BlockListener implements PluginListener {
     public void onEndermanPickup(EndermanPickupBlockHook hook) {
         Block b = hook.getBlock();
         Enderman entity = hook.getEnderman();
-        CLocation l = new CLocation(b.getX(), b.getY(), b.getZ(), entity.getWorld().getType().getId(), entity.getWorld().getName());
+        Location l = b.getLocation();
         ToolBox.adjustWorldPosition(l);
         EndermanPickupEvent event = new EndermanPickupEvent(l, b.getType(), hook.getEnderman());
         ActionManager.fireEvent(event);
@@ -227,7 +230,7 @@ public class BlockListener implements PluginListener {
 
     @HookHandler
     public void onHangingEntityDestroy(HangingEntityDestroyHook hook) {
-        CLocation loc = new CLocation(hook.getPainting().getX(), hook.getPainting().getY(), hook.getPainting().getZ(), hook.getPainting().getWorld().getType().getId(), hook.getPainting().getWorld().getName());
+        Location loc = hook.getPainting().getLocation();
 
         EntityHangingDestroyEvent event = new EntityHangingDestroyEvent(hook.getPlayer(), loc);
         ActionManager.fireEvent(event);

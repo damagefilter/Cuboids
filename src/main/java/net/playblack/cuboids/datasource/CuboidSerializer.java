@@ -9,6 +9,7 @@ import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.blocks.Chest;
 import net.canarymod.api.world.blocks.Sign;
 import net.canarymod.api.world.blocks.TileEntity;
+import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.database.DataAccess;
 import net.canarymod.database.Database;
 import net.canarymod.database.exceptions.DatabaseWriteException;
@@ -100,10 +101,10 @@ public class CuboidSerializer {
     private void serializeBlockList(CuboidSelection cuboid) {
         // LinkedHashMap<Vector,BaseBlock> toSerialize = cuboid.getBlockList();
         int i = 0;
-        for (Vector key : cuboid.getBlockList().keySet()) {
+        for (Vector3D key : cuboid.getBlockList().keySet()) {
             BlockType b = cuboid.getBlock(key);
             // System.out.println(b.toString());
-            baseData.blockData.add(b.getMachineName().concat("|").concat(key.serialize().toString()));
+            baseData.blockData.add(b.getMachineName().concat("|").concat(key.toString()));
 
             // Do chest block serializing
             if (b.getMachineName().equals("minecraft:chest")) {

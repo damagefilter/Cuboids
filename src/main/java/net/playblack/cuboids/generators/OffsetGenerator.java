@@ -1,14 +1,14 @@
-package net.playblack.cuboids.blockoperators;
+package net.playblack.cuboids.generators;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
-import net.playblack.mcutils.Vector;
 
 /**
  * Offset blocks in a direction by a distance
@@ -71,27 +71,27 @@ public class OffsetGenerator extends BaseGen {
     private CuboidSelection recalculateBoundingRectangle(CuboidSelection tmp) {
         switch (direction) {
             case 0:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin().getY(), tmp.getOrigin().getZ() - distance));
-                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset().getY(), tmp.getOffset().getZ() - distance));
+                tmp.setOrigin(new Vector3D(tmp.getOrigin().getX(), tmp.getOrigin().getY(), tmp.getOrigin().getZ() - distance));
+                tmp.setOffset(new Vector3D(tmp.getOffset().getX(), tmp.getOffset().getY(), tmp.getOffset().getZ() - distance));
                 break;
             case 1:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX() - distance, tmp.getOrigin().getY(), tmp.getOrigin().getZ()));
-                tmp.setOffset(new Vector(tmp.getOffset().getX() - distance, tmp.getOffset().getY(), tmp.getOffset().getZ()));
+                tmp.setOrigin(new Vector3D(tmp.getOrigin().getX() - distance, tmp.getOrigin().getY(), tmp.getOrigin().getZ()));
+                tmp.setOffset(new Vector3D(tmp.getOffset().getX() - distance, tmp.getOffset().getY(), tmp.getOffset().getZ()));
             case 2:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin().getY(), tmp.getOrigin().getZ() + distance));
-                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset().getY(), tmp.getOffset().getZ() + distance));
+                tmp.setOrigin(new Vector3D(tmp.getOrigin().getX(), tmp.getOrigin().getY(), tmp.getOrigin().getZ() + distance));
+                tmp.setOffset(new Vector3D(tmp.getOffset().getX(), tmp.getOffset().getY(), tmp.getOffset().getZ() + distance));
                 break;
             case 3:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX() + distance, tmp.getOrigin().getY(), tmp.getOrigin().getZ()));
-                tmp.setOffset(new Vector(tmp.getOffset().getX() + distance, tmp.getOffset().getY(), tmp.getOffset().getZ()));
+                tmp.setOrigin(new Vector3D(tmp.getOrigin().getX() + distance, tmp.getOrigin().getY(), tmp.getOrigin().getZ()));
+                tmp.setOffset(new Vector3D(tmp.getOffset().getX() + distance, tmp.getOffset().getY(), tmp.getOffset().getZ()));
                 break;
             case 4:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin().getY() + distance, tmp.getOrigin().getZ()));
-                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset().getY() + distance, tmp.getOffset().getZ()));
+                tmp.setOrigin(new Vector3D(tmp.getOrigin().getX(), tmp.getOrigin().getY() + distance, tmp.getOrigin().getZ()));
+                tmp.setOffset(new Vector3D(tmp.getOffset().getX(), tmp.getOffset().getY() + distance, tmp.getOffset().getZ()));
                 break;
             case 5:
-                tmp.setOrigin(new Vector(tmp.getOrigin().getX(), tmp.getOrigin().getY() - distance, tmp.getOrigin().getZ()));
-                tmp.setOffset(new Vector(tmp.getOffset().getX(), tmp.getOffset().getY() - distance, tmp.getOffset().getZ()));
+                tmp.setOrigin(new Vector3D(tmp.getOrigin().getX(), tmp.getOrigin().getY() - distance, tmp.getOrigin().getZ()));
+                tmp.setOffset(new Vector3D(tmp.getOffset().getX(), tmp.getOffset().getY() - distance, tmp.getOffset().getZ()));
                 break;
         }
         return tmp;
@@ -107,27 +107,27 @@ public class OffsetGenerator extends BaseGen {
         // CuboidSelection tmp = new CuboidSelection(selection);
         BlockType air = BlockType.Air;
         CuboidSelection tmp = new CuboidSelection(selection.getOrigin(), selection.getOffset());
-        for (Vector key : selection.getBlockList().keySet()) {
+        for (Vector3D key : selection.getBlockList().keySet()) {
             BlockType original = selection.getBlock(key);
-            Vector newPos = new Vector(0, 0, 0);
+            Vector3D newPos = new Vector3D(0, 0, 0);
             switch (direction) {
                 case 0:
-                    newPos = new Vector(key.getX(), key.getY(), key.getZ() - distance);
+                    newPos = new Vector3D(key.getX(), key.getY(), key.getZ() - distance);
                     break;
                 case 1:
-                    newPos = new Vector(key.getX() - distance, key.getY(), key.getZ());
+                    newPos = new Vector3D(key.getX() - distance, key.getY(), key.getZ());
                     break;
                 case 2:
-                    newPos = new Vector(key.getX(), key.getY(), key.getZ() + distance);
+                    newPos = new Vector3D(key.getX(), key.getY(), key.getZ() + distance);
                     break;
                 case 3:
-                    newPos = new Vector(key.getX() + distance, key.getY(), key.getZ());
+                    newPos = new Vector3D(key.getX() + distance, key.getY(), key.getZ());
                     break;
                 case 4:
-                    newPos = new Vector(key.getX(), key.getY() + distance, key.getZ());
+                    newPos = new Vector3D(key.getX(), key.getY() + distance, key.getZ());
                     break;
                 case 5:
-                    newPos = new Vector(key.getX(), key.getY() - distance, key.getZ());
+                    newPos = new Vector3D(key.getX(), key.getY() - distance, key.getZ());
                     break;
             }
             tmp.setBlock(newPos, original);

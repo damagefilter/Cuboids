@@ -1,14 +1,14 @@
-package net.playblack.cuboids.blockoperators;
+package net.playblack.cuboids.generators;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
-import net.playblack.mcutils.Vector;
 
 /**
  * Generate Cuboids, fill selections, replace blocks inside selections
@@ -60,14 +60,14 @@ public class CuboidGenerator extends BaseGen {
         scanWorld(false, true);
 
         if (replace) {
-            for (Vector position : selection.getBlockList().keySet()) {
+            for (Vector3D position : selection.getBlockList().keySet()) {
                 if (selection.getBlock(position).getMachineName().equals(toReplace.getMachineName())) {
                     selection.setBlock(position, block);
                 }
             }
         }
         else {
-            for (Vector position : selection.getBlockList().keySet()) {
+            for (Vector3D position : selection.getBlockList().keySet()) {
                 selection.setBlock(position, block);
             }
         }

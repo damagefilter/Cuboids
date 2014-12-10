@@ -1,7 +1,8 @@
-package net.playblack.cuboids.blockoperators;
+package net.playblack.cuboids.generators;
 
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.selections.CuboidSelection;
@@ -16,7 +17,7 @@ public abstract class BaseGen implements IShapeGen {
     protected CuboidSelection selection;
     protected World world;
     // List of said blocks
-    HashMap<Vector, BlockType> placeLast = new HashMap<Vector, BlockType>();
+    HashMap<Vector3D, BlockType> placeLast = new HashMap<Vector3D, BlockType>();
     /**
      * List of block id's that need to be put last into the world
      */
@@ -58,14 +59,14 @@ public abstract class BaseGen implements IShapeGen {
 
         // Process blocks, 1st run
         synchronized (lock) {
-            for (Vector v : selection.getBlockList().keySet()) {
+            for (Vector3D v : selection.getBlockList().keySet()) {
                 changeBlock(selection.getBlock(v), v, world, false);
             }
         }
 
         // process queued blocks
         synchronized (lock) {
-            for (Vector v : placeLast.keySet()) {
+            for (Vector3D v : placeLast.keySet()) {
                 changeBlock(placeLast.get(v), v, world, true);
             }
             placeLast.clear();
@@ -79,7 +80,7 @@ public abstract class BaseGen implements IShapeGen {
      * @param v
      * @param world
      */
-    protected void preloadChunk(Vector v, World world) {
+    protected void preloadChunk(Vector3D v, World world) {
         if (!world.isChunkLoaded(v.getBlockX(), v.getBlockY(), v.getBlockZ())) {
             world.loadChunk(v.getBlockX(), v.getBlockZ());
         }
@@ -94,9 +95,9 @@ public abstract class BaseGen implements IShapeGen {
      * @param coords
      * @param world
      */
-    protected void changeBlock(BlockType block, Vector coords, World world, boolean queuedRun) {
+    protected void changeBlock(BlockType block, Vector3D coords, World world, boolean queuedRun) {
         preloadChunk(coords, world);
-        BlockType testBlock = world.getBlockAt(coords.toNative()).getType();
+        BlockType testBlock = world.getBlockAt(coords).getType();
 
         // If the block in the world is the same as the one we want to set, we
         // don't need to set - return
@@ -108,7 +109,7 @@ public abstract class BaseGen implements IShapeGen {
             placeLast.put(coords, block);
             return;
         }
-        world.setBlockAt(coords.toNative(), block);
+        world.setBlockAt(coords, block);
     }
 
     /**
@@ -143,18 +144,13 @@ public abstract class BaseGen implements IShapeGen {
             int length_y = (int) Vector.getDistance(selection.getOrigin().getY(), selection.getOffset().getY()) + 1;
             int length_z = (int) Vector.getDistance(selection.getOrigin().getZ(), selection.getOffset().getZ()) + 1;
             // We use that to calculate the blocks we want to put
-            Vector min = Vector.getMinimum(tmp.getOrigin(), tmp.getOffset());
+            Vector3D min = Vector3D.getMinimum(tmp.getOrigin(), tmp.getOffset());
 
-            Vector size = new Vector();
-
-            size.setX(length_x);
-            size.setY(length_y);
-            size.setZ(length_z);
             synchronized (lock) {
                 for (int x = 0; x < length_x; ++x) {
                     for (int y = 0; y < length_y; ++y) {
                         for (int z = 0; z < length_z; ++z) {
-                            Vector current = new Vector(min.getX() + x, min.getY() + y, min.getZ() + z);
+                            Vector3D current = new Vector3D(min.getX() + x, min.getY() + y, min.getZ() + z);
                             tmp.setBlock(current, world.getBlockAt(min.getBlockX() + x, min.getBlockY() + y, min.getBlockZ() + z).getType());
                         }
                     }
@@ -164,7 +160,7 @@ public abstract class BaseGen implements IShapeGen {
 
         else {
             synchronized (lock) {
-                for (Vector key : selection.getBlockList().keySet()) {
+                for (Vector3D key : selection.getBlockList().keySet()) {
                     tmp.setBlock(key, world.getBlockAt(key.getBlockX(), key.getBlockY(), key.getBlockZ()).getType());
                 }
             }

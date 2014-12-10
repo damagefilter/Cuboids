@@ -1,7 +1,7 @@
 package net.playblack.cuboids.selections;
 
 import net.canarymod.api.world.blocks.BlockType;
-import net.playblack.mcutils.Vector;
+import net.canarymod.api.world.position.Vector3D;
 
 import java.util.LinkedHashMap;
 
@@ -30,7 +30,7 @@ public class PlayerSelection extends CuboidSelection {
      * @param v1
      * @param v2
      */
-    public PlayerSelection(Vector v1, Vector v2) {
+    public PlayerSelection(Vector3D v1, Vector3D v2) {
         super(v1, v2);
     }
 
@@ -41,7 +41,7 @@ public class PlayerSelection extends CuboidSelection {
      * @param v2
      * @param blocks
      */
-    public PlayerSelection(Vector v1, Vector v2, LinkedHashMap<Vector, BlockType> blocks) {
+    public PlayerSelection(Vector3D v1, Vector3D v2, LinkedHashMap<Vector3D, BlockType> blocks) {
         super(v1, v2, blocks);
     }
 

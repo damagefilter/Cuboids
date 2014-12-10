@@ -5,12 +5,12 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.Inventory;
 import net.canarymod.api.inventory.Item;
 import net.canarymod.api.world.World;
+import net.canarymod.api.world.position.Location;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.regions.Region.Status;
-import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.Debug;
-import net.playblack.mcutils.Vector;
 
 public class CanaryPlayer extends CPlayer {
 
@@ -43,20 +43,20 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public Vector getPosition() {
-        return new Vector(player.getX(), player.getY(), player.getZ());
+    public Vector3D getPosition() {
+        return new Vector3D(player.getX(), player.getY(), player.getZ());
     }
 
     @Override
-    public void setPosition(Vector v) {
+    public void setPosition(Vector3D v) {
         player.setX(v.getX());
         player.setY(v.getY());
         player.setZ(v.getZ());
     }
 
     @Override
-    public CLocation getLocation() {
-        return new CLocation(player.getX(), player.getY(), player.getZ(), player.getWorld().getType().getId(), player.getWorld().getName());
+    public Location getLocation() {
+        return player.getLocation();
     }
 
     @Override
@@ -158,7 +158,7 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public void teleportTo(Vector v) {
+    public void teleportTo(Vector3D v) {
         player.teleportTo(v.getX(), v.getY(), v.getZ());
     }
 

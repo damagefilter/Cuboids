@@ -2,7 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.blockoperators.OffsetGenerator;
+import net.playblack.cuboids.generators.OffsetGenerator;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.selections.CuboidSelection;

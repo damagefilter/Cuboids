@@ -1,9 +1,9 @@
 package net.playblack.cuboids.loaders.cuboidf;
 
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.loaders.CuboidShell;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.mcutils.Vector;
 import net.visualillusionsent.utils.PropertiesFile;
 
 import java.util.ArrayList;
@@ -150,13 +150,13 @@ public class CuboidFShell implements CuboidShell {
     }
 
     @Override
-    public Vector getOrigin() {
-        return new Vector(file.getInt("X1", 0), file.getInt("Y1", 0), file.getInt("Z1", 0));
+    public Vector3D getOrigin() {
+        return new Vector3D(file.getInt("X1", 0), file.getInt("Y1", 0), file.getInt("Z1", 0));
     }
 
     @Override
-    public Vector getOffset() {
-        return new Vector(file.getInt("X2", 0), file.getInt("Y2", 0), file.getInt("Z2", 0));
+    public Vector3D getOffset() {
+        return new Vector3D(file.getInt("X2", 0), file.getInt("Y2", 0), file.getInt("Z2", 0));
     }
 
     @Override

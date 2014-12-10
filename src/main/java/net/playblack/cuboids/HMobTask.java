@@ -2,6 +2,7 @@ package net.playblack.cuboids;
 
 import net.canarymod.api.entity.living.monster.EntityMob;
 import net.canarymod.api.world.World;
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -54,7 +55,7 @@ public class HMobTask implements Runnable {
                     continue;
                 }
                 if ((node.getProperty("more-mobs") == Status.ALLOW) && (CServer.getServer().isPlayerInRegion(node))) {
-                    World w = CServer.getServer().getWorld(node.getWorld(), node.getDimension());
+                    World w = CServer.getServer().getWorld(node.getWorld());
                     if (w.getRawTime() < 13000) {
                         // It's not night, don't bother spawning things
                         continue;
@@ -62,7 +63,7 @@ public class HMobTask implements Runnable {
 
                     int maxMobs = rnd.nextInt(10);
                     int mobIndex = rnd.nextInt(6);
-                    Vector random = Vector.randomVector(node.getOrigin(), node.getOffset());
+                    Vector3D random = Vector.randomVector(node.getOrigin(), node.getOffset());
                     for (int i = 0; i < maxMobs; i++) {
                         EntityMob mob = getRandomhMob(w, mobIndex);
                         mob.setX(random.getX());

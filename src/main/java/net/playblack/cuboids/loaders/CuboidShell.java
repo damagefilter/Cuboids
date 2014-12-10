@@ -1,9 +1,7 @@
 package net.playblack.cuboids.loaders;
 
+import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.mcutils.Vector;
-
-import java.util.ArrayList;
 
 /**
  * This is a wrapper for foreign cuboid formats (D and F for example).
@@ -54,9 +52,9 @@ public interface CuboidShell {
 
     public java.util.List<String> getGrouplist();
 
-    public Vector getOrigin();
+    public Vector3D getOrigin();
 
-    public Vector getOffset();
+    public Vector3D getOffset();
 
     public boolean getFarmland();
 
