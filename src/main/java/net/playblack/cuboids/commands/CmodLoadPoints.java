@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.cuboids.selections.CuboidSelection;
@@ -25,10 +26,13 @@ public class CmodLoadPoints extends CBaseCommand {
             return;
         }
         Region cube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
-        if (!player.hasPermission("cselect")) {
-            MessageSystem.failMessage(player, "permissionDenied");
-            return;
+        if (!player.hasPermission(Permissions.ADMIN)) {
+            if (!player.hasPermission(Permissions.REGION$META)) {
+                MessageSystem.failMessage(player, "permissionDenied");
+                return;
+            }
         }
+
         CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
         selection.setOrigin(cube.getOrigin());
         selection.setOffset(cube.getOffset());

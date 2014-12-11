@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.ColorManager;
@@ -24,9 +25,8 @@ public class CmodRename extends CBaseCommand {
         }
 
         Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
-
-        if (!player.hasPermission("cuboids.super.admin")) {
-            if (!(node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod"))) {
+        if (!player.hasPermission(Permissions.ADMIN)) {
+            if (!(node.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY))) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }

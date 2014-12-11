@@ -3,6 +3,7 @@ package net.playblack.cuboids.commands;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.selections.PlayerSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
@@ -24,8 +25,8 @@ public class Cbrush extends CBaseCommand {
         if (parseCommand(player, command)) {
             return;
         }
-        if (!player.hasPermission("cuboids.super.admin")) {
-            if (!(player.hasPermission("WorldMod") && player.hasPermission("cbrush"))) {
+        if (!player.hasPermission(Permissions.ADMIN)) {
+            if (!(player.hasPermission(Permissions.EDIT$WORLD) && player.hasPermission(Permissions.BRUSH$EDIT))) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }

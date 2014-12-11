@@ -7,6 +7,7 @@ import net.playblack.cuboids.Config;
 import net.playblack.cuboids.CuboidSaveTask;
 import net.playblack.cuboids.HMobTask;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.selections.CuboidSelection;
@@ -75,7 +76,7 @@ public class CuboidInterface {
     public boolean canModifyBlock(Player p, Location location) {
         Region cube = RegionManager.get().getActiveRegion(location, false);
         CPlayer player = CServer.getServer().getPlayer(p.getName());
-        return p.hasPermission("cuboids.super.admin") || cube.playerIsAllowed(p.getName(), player.getGroups()) || cube.getProperty("protection") != Region.Status.DENY;
+        return p.hasPermission(Permissions.ADMIN) || cube.playerIsAllowed(p.getName(), player.getGroups()) || cube.getProperty("protection") != Region.Status.DENY;
 
     }
     /**
@@ -104,7 +105,7 @@ public class CuboidInterface {
      * @param cube
      */
     public void loadCuboid(Player player, String cube) {
-        if ((player.hasPermission("cuboids.super.admin")) || (player.hasPermission("cuboids.super.areamod"))) {
+        if ((player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN))) {
             if (!RegionManager.get().cuboidExists(cube, player.getWorld().getName())) {
                 MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
                 return;
@@ -131,7 +132,7 @@ public class CuboidInterface {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
-        if ((cubeNode.playerIsOwner(player.getName())) || ((player.hasPermission("cuboids.super.admin")) || (player.hasPermission("cuboids.super.areamod")))) {
+        if ((cubeNode.playerIsOwner(player.getName())) || (player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN))) {
             if (RegionManager.get().saveSingle(cube, player.getWorld().getName(), player.getWorld().getType().getId())) {
                 MessageSystem.successMessage(player, "cuboidSaved");
             }
@@ -224,7 +225,7 @@ public class CuboidInterface {
             return false;
         }
 
-        if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+        if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
             RegionManager.get().removeRegion(cube);
             MessageSystem.successMessage(player, "cuboidRemoved");
             return true;
@@ -249,7 +250,7 @@ public class CuboidInterface {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
-        if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+        if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
             for (int i = 2; i < command.length; i++) {
                 if (command[i].startsWith("g:")) {
                     cube.removeGroup(command[i]);
@@ -280,7 +281,7 @@ public class CuboidInterface {
     public boolean allowEntity(Player player, String[] command) {
         Region cube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
         if (cube != null) {
-            if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+            if (cube.playerIsOwner(player.getName()) ||player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
 
                 for (int i = 3; i < command.length; i++) {
                     if (command[i].startsWith("g:")) {
@@ -315,7 +316,7 @@ public class CuboidInterface {
     public boolean allowItem(Player player, String[] command) {
         Region cube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
         if (cube != null) {
-            if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+            if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
 
                 for (int i = 3; i < command.length; i++) {
                     cube.removeRestrictedItem(command[i]);
@@ -338,7 +339,7 @@ public class CuboidInterface {
     public boolean disallowItem(Player player, String[] command) {
         Region cube = RegionManager.get().getRegionByName(command[0], player.getWorld().getName());
         if (cube != null) {
-            if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+            if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
 
                 for (int i = 1; i < command.length; i++) {
                     cube.addRestrictedItem(command[i]);
@@ -369,7 +370,7 @@ public class CuboidInterface {
     public boolean restrictCommand(Player player, String[] command, String cubeName) {
         Region cube = RegionManager.get().getRegionByName(cubeName, player.getWorld().getName());
         if (cube != null) {
-            if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+            if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
                 for (int i = 3; i < command.length; i++) {
                     cube.addRestrictedCommand(command[i]);
                 }
@@ -392,7 +393,7 @@ public class CuboidInterface {
     public boolean allowCommand(Player player, String[] command, String cubeName) {
         Region cube = RegionManager.get().getRegionByName(cubeName, player.getWorld().getName());
         if (cube != null) {
-            if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+            if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
                 for (int i = 3; i < command.length; i++) {
                     cube.removeRestrictedCommand(command[i]);
                 }
@@ -414,7 +415,7 @@ public class CuboidInterface {
     public boolean resize(Player player, String cuboidName) {
         Region cube = RegionManager.get().getRegionByName(cuboidName, player.getWorld().getName());
         if (cube != null) {
-            if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+            if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
                 CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
                 if (!selection.isComplete()) {
                     MessageSystem.failMessage(player, "selectionIncomplete");
@@ -449,7 +450,7 @@ public class CuboidInterface {
     public void setPriority(Player player, String cubeName, int prio) {
         Region cube = RegionManager.get().getRegionByName(cubeName, player.getWorld().getName());
         if (cube != null) {
-            if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+            if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
                 cube.setPriority(prio);
                 RegionManager.get().updateRegion(cube);
                 MessageSystem.successMessage(player, "prioritySet");
@@ -467,7 +468,7 @@ public class CuboidInterface {
     public void setParent(Player player, String subject, String parent) {
         Region cube = RegionManager.get().getRegionByName(subject, player.getWorld().getName());
         if (cube != null) {
-            if (cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+            if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
                 Region parentCube = RegionManager.get().getRegionByName(parent, player.getWorld().getName());
                 if (parentCube == null) {
                     MessageSystem.failMessage(player, "parentNotSet");
@@ -527,7 +528,7 @@ public class CuboidInterface {
                     MessageSystem.translateMessage(player, ColorManager.LightGray, "youCanBuildHere");
                 }
             }
-            else if (player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+            else if (player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
                 MessageSystem.translateMessage(player, ColorManager.LightGreen, "youCanBuildHere");
             }
             else {
@@ -582,7 +583,7 @@ public class CuboidInterface {
                     MessageSystem.translateMessage(player, ColorManager.LightGray, "youCanBuildHere");
                 }
             }
-            else if (player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+            else if (player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
                 MessageSystem.translateMessage(player, ColorManager.LightGreen, "youCanBuildHere");
             }
             else {
@@ -665,8 +666,8 @@ public class CuboidInterface {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return;
         }
-        if (!player.hasPermission("cuboids.super.admin")) {
-            if (!(cube.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod"))) {
+        if (!player.hasPermission(Permissions.ADMIN)) {
+            if (!(cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY))) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }

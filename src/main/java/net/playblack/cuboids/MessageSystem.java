@@ -71,6 +71,6 @@ public class MessageSystem extends LocaleHelper {
     }
 
     public static void translateMessage(Player player, String color, String message, String... args) {
-        player.message(color.concat(ms.localeTranslate(message, locale, args)));
+        player.message(color.concat(ms.localeTranslate(message, locale, (Object[])args)));
     }
 }

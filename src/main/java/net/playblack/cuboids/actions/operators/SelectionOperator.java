@@ -7,6 +7,7 @@ import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
@@ -70,8 +71,8 @@ public class SelectionOperator implements ActionListener {
             }
         }
 
-        if (!player.hasPermission("cuboids.super.admin")) {
-            if (!player.hasPermission("cselect")) {
+        if (!player.hasPermission(Permissions.ADMIN)) {
+            if (!player.hasPermission(Permissions.SELECTION$CREATE)) {
                 return false;
             }
         }

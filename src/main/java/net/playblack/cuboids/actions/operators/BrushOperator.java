@@ -7,6 +7,7 @@ import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
@@ -32,7 +33,7 @@ public class BrushOperator implements ActionListener {
         }
 
         if (Config.get().getSculptItem().equals(i.getType().getMachineName())) {
-            if ((player.hasPermission("cuboids.worldmod") && player.hasPermission("cuboids.cbrush")) || player.hasPermission("cuboids.super.admin")) {
+            if ((player.hasPermission(Permissions.EDIT$WORLD) && player.hasPermission(Permissions.BRUSH$USE)) || player.hasPermission(Permissions.ADMIN)) {
                 PlayerSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
                 selection.setOrigin(point);
                 SphereGenerator gen = new SphereGenerator(selection, player.getWorld());

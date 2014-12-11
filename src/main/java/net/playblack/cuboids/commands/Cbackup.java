@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.generators.GenericGenerator;
 import net.playblack.cuboids.datasource.CuboidSerializer;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
@@ -28,14 +29,14 @@ public class Cbackup extends CBaseCommand {
         if (parseCommand(player, command)) {
             return;
         }
-        if (!player.hasPermission("cuboids.super.admin")) {
-            if (!player.hasPermission("cbackup")) {
+        if (!player.hasPermission(Permissions.ADMIN)) {
+            if (!player.hasPermission(Permissions.BACKUPAREA)) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
         }
         Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
-        if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod")) {
+        if (node.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY)) {
             GenericGenerator gen = new GenericGenerator(new CuboidSelection(node.getOrigin(), node.getOffset()), player.getWorld());
 
             CuboidSelection tmp = new CuboidSelection(node.getOrigin(), node.getOffset());

@@ -325,7 +325,7 @@ public class Config {
 
         while (it.hasNext()) {
             String key = it.next();
-            if (!player.hasPermission(key)) {
+            if (!player.hasPermission(Permissions.REGION$FLAGS + "." + key)) {
                 it.remove();
             }
         }

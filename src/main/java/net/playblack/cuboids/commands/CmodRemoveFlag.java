@@ -3,6 +3,7 @@ package net.playblack.cuboids.commands;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.ColorManager;
@@ -36,7 +37,7 @@ public class CmodRemoveFlag extends CBaseCommand {
             return;
         }
 
-        if (node.playerIsOwner(player.getName()) || player.hasPermission("cuboids.super.areamod") || player.hasPermission("cuboids.super.admin")) {
+        if (node.playerIsOwner(player.getName()) || player.hasPermission(Permissions.ADMIN) || player.hasPermission(Permissions.REGION$EDIT$ANY)) {
             if (node.removeProperty(command[2])) {
                 MessageSystem.successMessage(player, "regionFlagRemoved");
             }

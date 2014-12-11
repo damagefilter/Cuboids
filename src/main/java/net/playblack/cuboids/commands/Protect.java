@@ -2,6 +2,7 @@ package net.playblack.cuboids.commands;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -26,9 +27,11 @@ public class Protect extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        if (!(player.hasPermission("ccreate"))) {
-            MessageSystem.failMessage(player, "permissionDenied");
-            return;
+        if (!player.hasPermission(Permissions.ADMIN)) {
+            if (!player.hasPermission(Permissions.REGION$CREATE)) {
+                MessageSystem.failMessage(player, "permissionDenied");
+                return;
+            }
         }
         CuboidSelection selection = SelectionManager.get().getPlayerSelection(player.getName());
         if (!selection.isComplete()) {

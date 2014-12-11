@@ -2,7 +2,9 @@ package net.playblack.cuboids.actions.operators;
 
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.BlockType;
+import net.canarymod.api.world.position.Location;
 import net.canarymod.hook.world.IgnitionHook;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
@@ -22,7 +24,6 @@ import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
-import net.playblack.mcutils.CLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +38,9 @@ public class BlockModificationsOperator implements ActionListener {
      * @param positions
      * @return
      */
-    public List<CLocation> checkExplosionBlocks(Set<CLocation> positions, ExplosionType t) {
-        ArrayList<CLocation> toRemove = new ArrayList<CLocation>();
-        for (CLocation l : positions) {
+    public List<Location> checkExplosionBlocks(Set<Location> positions, ExplosionType t) {
+        ArrayList<Location> toRemove = new ArrayList<Location>();
+        for (Location l : positions) {
             if (shouldCancelExplosion(l, t)) {
                 toRemove.add(l);
             }
@@ -47,7 +48,7 @@ public class BlockModificationsOperator implements ActionListener {
         return toRemove;
     }
 
-    public boolean shouldCancelExplosion(CLocation loc, ExplosionType type) {
+    public boolean shouldCancelExplosion(Location loc, ExplosionType type) {
         boolean creeperSecure = RegionManager.get().getActiveRegion(loc, false).getProperty("creeper-explosion") == Status.DENY && type == ExplosionType.CREEPER;
         boolean tntSecure = RegionManager.get().getActiveRegion(loc, false).getProperty("tnt-explosion") == Status.DENY && type == ExplosionType.TNT;
         return creeperSecure || tntSecure;
@@ -60,8 +61,8 @@ public class BlockModificationsOperator implements ActionListener {
      * @param point
      * @return
      */
-    public boolean canUseLighter(Player player, CLocation point) {
-        if (player.hasPermission("cuboids.super.admin")) {
+    public boolean canUseLighter(Player player, Location point) {
+        if (player.hasPermission(Permissions.ADMIN)) {
             return true;
         }
         CPlayer p = CServer.getServer().getPlayer(player.getName());
@@ -69,8 +70,8 @@ public class BlockModificationsOperator implements ActionListener {
         return r.playerIsAllowed(player.getName(), p.getGroups()) || r.getProperty("firespread") != Status.DENY;
     }
 
-    public boolean canDestroyPaintings(Player player, CLocation point) {
-        if (player.hasPermission("cuboids.super.admin")) {
+    public boolean canDestroyPaintings(Player player, Location point) {
+        if (player.hasPermission(Permissions.ADMIN)) {
             return true;
         }
         CPlayer p = CServer.getServer().getPlayer(player.getName());
@@ -78,8 +79,8 @@ public class BlockModificationsOperator implements ActionListener {
         return r.playerIsAllowed(player.getName(), p.getGroups()) || r.getProperty("protection") != Status.DENY;
     }
 
-    public boolean canEndermanUseBlock(CLocation CLocation) {
-        Region r = RegionManager.get().getActiveRegion(CLocation, false);
+    public boolean canEndermanUseBlock(Location location) {
+        Region r = RegionManager.get().getActiveRegion(location, false);
         return r.getProperty("enderman-pickup") != Status.DENY;
     }
 
@@ -107,7 +108,7 @@ public class BlockModificationsOperator implements ActionListener {
             return;
         }
         //Remove blocks from protected regions but do the rest of the explosion
-        Map<CLocation, BlockType> markedBlocks = event.getAffectedBlocks();
+        Map<Location, BlockType> markedBlocks = event.getAffectedBlocks();
         //List of blocks that need to be removed
         event.setProtectedBlocks(checkExplosionBlocks(markedBlocks.keySet(), event.getExplosionType()));
     }

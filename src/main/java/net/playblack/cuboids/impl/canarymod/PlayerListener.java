@@ -19,7 +19,6 @@ import net.playblack.cuboids.actions.events.forwardings.EntityDamageEvent.Damage
 import net.playblack.cuboids.actions.events.forwardings.ItemDropEvent;
 import net.playblack.cuboids.actions.events.forwardings.PlayerWalkEvent;
 import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.mcutils.CLocation;
 import net.playblack.mcutils.ToolBox;
 
 public class PlayerListener implements PluginListener {
@@ -48,12 +47,9 @@ public class PlayerListener implements PluginListener {
         Location to = hook.getTo();
         Location from = hook.getFrom();
         Player player = hook.getPlayer();
-        CLocation vTo = new CLocation(to.getX(), to.getY(), to.getZ(), to.getType().getId(), to.getWorldName());
-        CLocation vFrom = new CLocation(from.getX(), from.getY(), from.getZ(), from.getType().getId(), from.getWorldName());
 
-        PlayerWalkEvent event = new PlayerWalkEvent(player, vFrom, vTo);
+        PlayerWalkEvent event = new PlayerWalkEvent(player, from, to);
         ActionManager.fireEvent(event);
-        //event.isCancelled() has no effect here
     }
 
     @HookHandler
@@ -64,12 +60,8 @@ public class PlayerListener implements PluginListener {
         if (!player.getWorld().isChunkLoaded((int) to.getX(), (int) to.getZ())) {
             player.getWorld().loadChunk((int) to.getX(), (int) to.getZ());
         }
-        CLocation vTo = new CLocation(to.getX(), to.getY(), to.getZ(), to.getType().getId(), to.getWorldName());
-        ToolBox.adjustWorldPosition(vTo);
-        CLocation vFrom = new CLocation(from.getX(), from.getY(), from.getZ(), from.getType().getId(), from.getWorldName());
-        ToolBox.adjustWorldPosition(vFrom);
-
-        PlayerWalkEvent event = new PlayerWalkEvent(player, vFrom, vTo);
+        // TODO: Might need position adjustments
+        PlayerWalkEvent event = new PlayerWalkEvent(player, from, to);
         ActionManager.fireEvent(event);
         if (event.isCancelled()) {
             hook.setCanceled();

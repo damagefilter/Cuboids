@@ -3,6 +3,7 @@ package net.playblack.cuboids.commands;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.BlockType;
 import net.playblack.cuboids.MessageSystem;
+import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.generators.DiscGenerator;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
@@ -32,8 +33,8 @@ public class Cdisc extends CBaseCommand {
             return;
         }
         // Check for the proper permissions
-        if (!player.hasPermission("cuboids.super.admin")) {
-            if (!player.hasPermission("WorldMod")) {
+        if (!player.hasPermission(Permissions.ADMIN)) {
+            if (!player.hasPermission(Permissions.EDIT$WORLD)) {
                 MessageSystem.failMessage(player, "permissionDenied");
                 return;
             }
