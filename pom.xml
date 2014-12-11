@@ -3,13 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.playblack</groupId>
     <artifactId>cuboids</artifactId>
-    <version>3.6-SNAPSHOT</version>
+    <version>4.0-SNAPSHOT</version>
     <name>Cuboids</name>
     <description>Cuboid-based area protection and world editing</description>
     <url>http://playblack.net</url>
     <inceptionYear>2012</inceptionYear>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <canary.main.class>net.playblack.cuboids.impl.canarymod.Cuboids</canary.main.class>
+        <license>BSD 3-Clause License</license>
+        <plugin.version>${project.version}</plugin.version>
     </properties>
     <organization>
         <name>PlayBlack</name>
@@ -49,7 +52,18 @@
     </dependencies>
     <build>
         <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
-        <finalName>Cuboids</finalName>
+        <finalName>Cuboids-${project.version}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.inf</include>
+                    <include>META-INF/**</include>
+                    <include>resources/**</include>
+                </includes>
+            </resource>
+        </resources>
 
         <!-- Plugins -->
         <plugins>

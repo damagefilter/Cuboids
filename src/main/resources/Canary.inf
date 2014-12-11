@@ -1,4 +1,8 @@
-main-class=net.playblack.cuboids.impl.canarymod.Cuboids
+;# ${name} - Canary Plugin Configuration File
+;# Copyright © ${project.inceptionYear}-${current.year} PlayBlack
+;# Licensed under the  BSD 3-Clause License
+
+name=${name}
+main-class=${canary.main.class}
 author=damagefilter
-version=3.5-SNAPSHOT
-name=Cuboids
+version=${plugin.version}
