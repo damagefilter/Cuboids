@@ -38,7 +38,7 @@ public class Protect extends CBaseCommand {
             MessageSystem.failMessage(player, "selectionIncomplete");
             return;
         }
-        selection.setWorld(player.getWorld().getName());
+        selection.setWorld(player.getWorld().getFqName());
         Region cube = selection.toRegion(player, command);
         cube.setProperty("protection", Status.ALLOW); // force protection if is allowed
         if (CuboidInterface.get().addCuboid(cube)) {

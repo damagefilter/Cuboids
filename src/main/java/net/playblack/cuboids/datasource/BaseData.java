@@ -38,11 +38,10 @@ public interface BaseData {
     /**
      * Load a single region from datasource and put into the RegionManager,
      * removing the old reference, if there was any
-     *
-     * @param name
+     *  @param name
      * @param world
      */
-    public void loadRegion(String name, String world, int dimension);
+    public void loadRegion(String name, String world);
 
     /**
      * Deletes a region from the datasource

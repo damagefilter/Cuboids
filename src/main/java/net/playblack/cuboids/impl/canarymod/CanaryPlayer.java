@@ -43,11 +43,6 @@ public class CanaryPlayer extends CPlayer {
     }
 
     @Override
-    public Vector3D getPosition() {
-        return new Vector3D(player.getX(), player.getY(), player.getZ());
-    }
-
-    @Override
     public void setPosition(Vector3D v) {
         player.setX(v.getX());
         player.setY(v.getY());

@@ -125,8 +125,6 @@ public abstract class CPlayer {
 
     public abstract World getWorld();
 
-    public abstract Vector3D getPosition();
-
     public abstract void setPosition(Vector3D v);
 
     public abstract Location getLocation();

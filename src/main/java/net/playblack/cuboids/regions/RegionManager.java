@@ -63,12 +63,11 @@ public class RegionManager {
 
     /**
      * Load a single cuboid from file
-     *
-     * @param name
+     *  @param name
      * @param world
      */
-    public void loadSingle(String name, String world, int dimension) {
-        dataSource.loadRegion(name, world, dimension);
+    public void loadSingle(String name, String world) {
+        dataSource.loadRegion(name, world);
     }
 
     /**
@@ -88,7 +87,7 @@ public class RegionManager {
      * @param world
      * @return
      */
-    public boolean saveSingle(String name, String world, int dimension) {
+    public boolean saveSingle(String name, String world) {
         dataSource.saveRegion(getRegionByName(name, world));
         return true;
     }
@@ -272,7 +271,7 @@ public class RegionManager {
                 if (!tree.isWithin(v)) {
                     continue;
                 }
-                Region r = tree.queryChilds(v, 0);
+                Region r = tree.queryChilds(v);
                 if (r != null) {
                     return r;
                 }
@@ -294,12 +293,10 @@ public class RegionManager {
             return list;
         }
         for (Region tree : rootNodes) {
-            if (tree.equalsWorld(v.getWorld())) {
-                if (tree.isWithin(v)) {
-                    for (Region node : tree.getChildsDeep(new ArrayList<Region>())) {
-                        if (node.isWithin(v) && !list.contains(node)) {
-                            list.add(node);
-                        }
+            if (tree.isWithin(v)) {
+                for (Region node : tree.getChildsDeep(new ArrayList<Region>())) {
+                    if (node.isWithin(v) && !list.contains(node)) {
+                        list.add(node);
                     }
                 }
             }
@@ -314,10 +311,9 @@ public class RegionManager {
      * Get a list of all cuboids in the given world
      *
      * @param world
-     * @param dimension
      * @return Region List or null if there were no cuboids
      */
-    public ArrayList<Region> getAllInDimension(String world, int dimension) {
+    public ArrayList<Region> getAllInDimension(String world) {
         ArrayList<Region> list = new ArrayList<Region>();
         for (Region tree : rootNodes) {
             if (tree.equalsWorld(world)) {

@@ -32,7 +32,7 @@ public class CmodSetFlag extends CBaseCommand {
             }
         }
 
-        Region node = RegionManager.get().getRegionByName(command[command.length - 3], player.getWorld().getName());
+        Region node = RegionManager.get().getRegionByName(command[command.length - 3], player.getWorld().getFqName());
         String flagName = command[command.length - 2];
         Region.Status status = Region.Status.fromString(command[command.length - 1]);
 

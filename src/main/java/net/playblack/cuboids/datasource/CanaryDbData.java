@@ -106,11 +106,10 @@ public class CanaryDbData implements BaseData {
     }
 
     @Override
-    public void loadRegion(String name, String world, int dimension) {
+    public void loadRegion(String name, String world) {
         HashMap<String, Object> filter = new HashMap<String, Object>();
         filter.put("region_name", name);
         filter.put("world_name", world);
-        filter.put("world_dimension", dimension);
         RegionInformationDataAccess da = new RegionInformationDataAccess();
         try {
             Database.get().load(da, filter);

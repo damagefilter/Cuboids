@@ -68,8 +68,8 @@ public class CuboidSelection implements ISelection {
     }
 
     public CuboidSelection(Vector3D v1, Vector3D v2, int size) {
-        origin = new Vector3D(v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
-        offset = new Vector3D(v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
+        origin = Vector3D.getMinimum(v1, v2);
+        offset = Vector3D.getMaximum(v1, v2);
         blockList = new LinkedHashMap<Vector3D, BlockType>(size);
     }
 
@@ -88,7 +88,7 @@ public class CuboidSelection implements ISelection {
      * @param o
      */
     public void setOrigin(Vector3D o) {
-        this.origin = new Vector3D(o.getBlockX(), o.getBlockY(), o.getBlockZ());
+        this.origin = o;
     }
 
     /**
@@ -106,7 +106,7 @@ public class CuboidSelection implements ISelection {
      * @param o
      */
     public void setOffset(Vector3D o) {
-        this.offset = new Vector3D(o.getBlockX(), o.getBlockY(), o.getBlockZ());
+        this.offset = o;
     }
 
     @Override
@@ -138,11 +138,6 @@ public class CuboidSelection implements ISelection {
     @Override
     public long getBoundarySize() {
         return this.getSize();
-    }
-
-    @Override
-    public String getWorld() {
-        return null;
     }
 
     @Override

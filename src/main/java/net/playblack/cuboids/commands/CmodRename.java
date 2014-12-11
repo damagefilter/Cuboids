@@ -24,7 +24,7 @@ public class CmodRename extends CBaseCommand {
             return;
         }
 
-        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
+        Region node = RegionManager.get().getRegionByName(command[1], player.getWorld().getFqName());
         if (!player.hasPermission(Permissions.ADMIN)) {
             if (!(node.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY))) {
                 MessageSystem.failMessage(player, "permissionDenied");

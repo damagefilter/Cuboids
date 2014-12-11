@@ -1,5 +1,6 @@
 package net.playblack.cuboids.gameinterface;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.living.monster.EntityMob;
 import net.canarymod.api.world.World;
 import net.playblack.cuboids.exceptions.InvalidPlayerException;
@@ -53,7 +54,7 @@ public abstract class CServer {
      *
      * @return
      */
-    public abstract ArrayList<CPlayer> getPlayers();
+    public abstract ArrayList<Player> getPlayers();
 
     /**
      * Get a player by name
@@ -62,7 +63,7 @@ public abstract class CServer {
      * @return
      * @throws InvalidPlayerException when given player does not exist (is not online)
      */
-    public abstract CPlayer getPlayer(String name) throws InvalidPlayerException;
+    public abstract Player getPlayer(String name) throws InvalidPlayerException;
 
     /**
      * Force to update the player reference in the player cache and return the
@@ -143,7 +144,7 @@ public abstract class CServer {
      * @return true if r contains any players, false otherwise
      */
     public boolean isPlayerInRegion(Region r) {
-        for (CPlayer p : getPlayers()) {
+        for (Player p : getPlayers()) {
             if (p.isInRegion(r)) {
                 return true;
             }

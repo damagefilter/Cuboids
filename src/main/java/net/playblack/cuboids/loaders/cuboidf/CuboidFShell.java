@@ -89,7 +89,7 @@ public class CuboidFShell implements CuboidShell {
 
     @Override
     public String getWorld() {
-        return CServer.getServer().getDefaultWorld().getName();
+        return CServer.getServer().getDefaultWorld().getFqName();
     }
 
     @Override

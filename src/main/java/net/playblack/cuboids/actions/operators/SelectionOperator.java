@@ -13,7 +13,6 @@ import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
@@ -136,27 +135,37 @@ public class SelectionOperator implements ActionListener {
     // Listener creation stuff
     // *******************************
 
-    @ActionHandler
-    public void onBlockRightClick(BlockRightClickEvent event) {
+    /**
+     * Returns true if the event should be canceled.
+     * Does some things depending on item in hand
+     *
+     * @param player
+     * @param location
+     * @return
+     */
+    public boolean onBlockRightClick(Player player, Location location) {
 //        System.out.println("Rightclick selection");
-        Item i = event.getPlayer().getItemHeld();
+        Item i = player.getItemHeld();
         if (i != null) {
             if (Config.get().getRegionItem().equals(i.getType().getMachineName())) {
-                if (setSelectionPoint(event.getPlayer(), event.getLocation(), true, false)) {
-                    event.cancel();
+                if (setSelectionPoint(player, location, true, false)) {
+                    return true;
                 }
             }
+            if (Config.get().getInspectorItem().equals(i.getType().getMachineName())) {
+                explainRegion(player, location);
+                return true;
+            }
         }
-        explainRegion(event.getPlayer(), event.getLocation());
+        return false;
     }
 
-    @ActionHandler
-    public void onArmSwing(ArmSwingEvent event) {
-        Block v = new LineTracer(event.getPlayer()).getTargetBlock();
+    public void onArmSwing(Player player) {
+        Block v = new LineTracer(player).getTargetBlock();
         if (v == null) {
             return;
         }
-        setSelectionPoint(event.getPlayer(), v.getLocation(), false, true);
+        setSelectionPoint(player, v.getLocation(), false, true);
     }
 
     @ActionHandler
@@ -164,6 +173,13 @@ public class SelectionOperator implements ActionListener {
         if (setSelectionPoint(event.getPlayer(), event.getLocation(), false, false)) {
             event.cancel();
         }
+    }
+
+    public boolean onBlockLeftClick(Player player, Location location) {
+        if (setSelectionPoint(player, location, false, false)) {
+            return true;
+        }
+        return false;
     }
 
     //Register that thing

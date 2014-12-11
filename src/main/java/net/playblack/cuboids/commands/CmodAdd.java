@@ -38,7 +38,7 @@ public class CmodAdd extends CBaseCommand {
         }
         defaultC.setBoundingBox(selection.getOrigin(), selection.getOffset());
         defaultC.setName(command[1]);
-        defaultC.setWorld(player.getWorld().getName());
+        defaultC.setWorld(player.getWorld().getFqName());
         defaultC.addPlayer("o:" + player.getName());
         if (CuboidInterface.get().addCuboid(defaultC)) {
             MessageSystem.successMessage(player, "cuboidCreated");

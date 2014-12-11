@@ -20,8 +20,7 @@ public class Converter {
         Region cube = new Region();
 
         cube.setName(shell.getName());
-        cube.setOrigin(shell.getOrigin());
-        cube.setOffset(shell.getOffset());
+        cube.setBoundingBox(shell.getOrigin(), shell.getOffset());
         cube.setWorld(shell.getWorld());
         cube.setFarewell(shell.getFarewell());
         cube.setWelcome(shell.getWelcome());

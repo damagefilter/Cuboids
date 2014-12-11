@@ -4,14 +4,10 @@ import net.canarymod.CanaryDeserializeException;
 import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.database.Column;
 import net.canarymod.database.DataAccess;
-import net.playblack.cuboids.exceptions.DeserializeException;
-import net.playblack.cuboids.exceptions.SerializerException;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.mcutils.Debug;
-import net.playblack.mcutils.Vector;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +27,6 @@ public class RegionInformationDataAccess extends DataAccess {
     public String parent;
     @Column(columnName = "world_name", dataType = Column.DataType.STRING)
     public String world;
-    @Column(columnName = "world_dimension", dataType = Column.DataType.INTEGER)
-    public int dimension;
     @Column(columnName = "region_priority", dataType = Column.DataType.INTEGER)
     public int priority;
 
@@ -70,8 +64,7 @@ public class RegionInformationDataAccess extends DataAccess {
         r.setWorld(this.world);
         r.setPriority(this.priority);
         try {
-            r.setOrigin(Vector3D.fromString(this.origin));
-            r.setOffset(Vector3D.fromString(this.offset));
+            r.setBoundingBox(Vector3D.fromString(this.origin), Vector3D.fromString(this.offset));
         }
         catch (CanaryDeserializeException e) {
             Debug.logError("Failed to deserialize a region from database. Dropping it: " + name);

@@ -1,5 +1,6 @@
 package net.playblack.cuboids.actions.operators;
 
+import net.canarymod.api.DamageType;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.Location;
@@ -8,17 +9,13 @@ import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.events.forwardings.BlockBreakEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
 import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
 import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
-import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
 import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
@@ -65,18 +62,18 @@ public class BlockModificationsOperator implements ActionListener {
         if (player.hasPermission(Permissions.ADMIN)) {
             return true;
         }
-        CPlayer p = CServer.getServer().getPlayer(player.getName());
+        Player p = CServer.getServer().getPlayer(player.getName());
         Region r = RegionManager.get().getActiveRegion(point, false);
-        return r.playerIsAllowed(player.getName(), p.getGroups()) || r.getProperty("firespread") != Status.DENY;
+        return r.playerIsAllowed(player, p.getPlayerGroups()) || r.getProperty("firespread") != Status.DENY;
     }
 
     public boolean canDestroyPaintings(Player player, Location point) {
         if (player.hasPermission(Permissions.ADMIN)) {
             return true;
         }
-        CPlayer p = CServer.getServer().getPlayer(player.getName());
+        Player p = CServer.getServer().getPlayer(player.getName());
         Region r = RegionManager.get().getActiveRegion(point, false);
-        return r.playerIsAllowed(player.getName(), p.getGroups()) || r.getProperty("protection") != Status.DENY;
+        return r.playerIsAllowed(player, p.getPlayerGroups()) || r.getProperty("protection") != Status.DENY;
     }
 
     public boolean canEndermanUseBlock(Location location) {
@@ -87,18 +84,23 @@ public class BlockModificationsOperator implements ActionListener {
     // *******************************
     // Listener creation stuff
     // *******************************
-    @ActionHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (!CuboidInterface.get().canModifyBlock(event.getPlayer(), event.getLocation())) {
-            event.cancel();
-        }
+
+    private boolean canModifyBlock(Player player, Location location) {
+        return CuboidInterface.get().canModifyBlock(player, location);
     }
 
-    @ActionHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
-        if (!CuboidInterface.get().canModifyBlock(event.getPlayer(), event.getLocation())) {
-            event.cancel();
-        }
+    /**
+     * Returns true if the event should be canceled
+     * @param player
+     * @param location
+     * @return
+     */
+    public boolean onBlockBreak(Player player, Location location) {
+        return !canModifyBlock(player, location);
+    }
+
+    public boolean onBlockPlace(Player player, Location location) {
+        return !canModifyBlock(player, location);
     }
 
     @ActionHandler
@@ -112,6 +114,18 @@ public class BlockModificationsOperator implements ActionListener {
         //List of blocks that need to be removed
         event.setProtectedBlocks(checkExplosionBlocks(markedBlocks.keySet(), event.getExplosionType()));
     }
+
+//    public boolean onEntityExplode(Location location) {
+//        if (shouldCancelExplosion(event.getLocation(), event.getExplosionType())) {
+//            event.cancel();
+//            return true;
+//        }
+//        //Remove blocks from protected regions but do the rest of the explosion
+//        Map<Location, BlockType> markedBlocks = event.getAffectedBlocks();
+//        //List of blocks that need to be removed
+//        event.setProtectedBlocks(checkExplosionBlocks(markedBlocks.keySet(), event.getExplosionType()));
+//        return false;
+//    }
 
     @ActionHandler
     public void onIgnite(IgniteEvent event) {

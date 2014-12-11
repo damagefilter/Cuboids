@@ -23,19 +23,21 @@ import net.canarymod.hook.world.FlowHook;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.plugin.PluginListener;
 import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.events.forwardings.ArmSwingEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockBreakEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockPlaceEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
 import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
 import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEvent;
 import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
-import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent.ExplosionType;
+import net.playblack.cuboids.actions.operators.ExplosionType;
 import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
 import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
+import net.playblack.cuboids.actions.operators.BlockModificationsOperator;
+import net.playblack.cuboids.actions.operators.BrushOperator;
+import net.playblack.cuboids.actions.operators.DamageOperator;
+import net.playblack.cuboids.actions.operators.MiscOperator;
+import net.playblack.cuboids.actions.operators.OperableItemsOperator;
+import net.playblack.cuboids.actions.operators.PlayerMovementOperator;
+import net.playblack.cuboids.actions.operators.SelectionOperator;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
@@ -46,20 +48,29 @@ public class BlockListener implements PluginListener {
 
     private HashMap<String, Long> armSwingTimings = new HashMap<String, Long>();
 
-    @HookHandler
-    public void blockRightClick(BlockRightClickHook hook) {
-        Block b = hook.getBlockClicked();
-        Location p = b.getLocation();
+    // Following is a list of operators
+    // They are used to delegate callbacks to logical chunks of code
+    BlockModificationsOperator blockModificationsOperator = new BlockModificationsOperator();
+    BrushOperator brushOperator = new BrushOperator();
+    DamageOperator damageOperator = new DamageOperator();
+    MiscOperator miscOperator = new MiscOperator();
+    OperableItemsOperator operableItemsOperator = new OperableItemsOperator();
+    PlayerMovementOperator playerMovementOperator = new PlayerMovementOperator();
+    SelectionOperator selectionOperator = new SelectionOperator();
 
-        BlockRightClickEvent event = new BlockRightClickEvent(hook.getPlayer(), b.getType(), p);
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
+    @HookHandler
+    public void onBlockRightClick(BlockRightClickHook hook) {
+        Block b = hook.getBlockClicked();
+        if (operableItemsOperator.onBlockClick(hook.getPlayer(), b.getType(), b.getLocation())) {
+            hook.setCanceled();
+        }
+        if (selectionOperator.onBlockRightClick(hook.getPlayer(), b.getLocation())) {
             hook.setCanceled();
         }
     }
 
     @HookHandler
-    public void leftClick(PlayerArmSwingHook hook) {
+    public void onArmSwing(PlayerArmSwingHook hook) {
         if (!armSwingTimings.containsKey(hook.getPlayer().getName())) {
             armSwingTimings.put(hook.getPlayer().getName(), 0L);
         }
@@ -68,11 +79,12 @@ public class BlockListener implements PluginListener {
             return;
         }
 
-        ActionManager.fireEvent(new ArmSwingEvent(hook.getPlayer()));
+        brushOperator.onArmSwing(hook.getPlayer());
+        selectionOperator.onArmSwing(hook.getPlayer());
     }
 
     @HookHandler
-    public void blockLeftClick(BlockLeftClickHook hook) {
+    public void onBlockLeftClick(BlockLeftClickHook hook) {
         if (hook.getBlock() == null) {
             return;
         }
@@ -80,37 +92,30 @@ public class BlockListener implements PluginListener {
         Player player = hook.getPlayer();
         Location p = b.getLocation();
 
-        BlockLeftClickEvent event = new BlockLeftClickEvent(player, b.getType(), p);
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
+        if (operableItemsOperator.onBlockClick(player, b.getType(), p)) {
+            hook.setCanceled();
+        }
+        if (selectionOperator.onBlockLeftClick(player, p)) {
             hook.setCanceled();
         }
     }
 
     @HookHandler
-    public void blockDestroy(BlockDestroyHook hook) {
+    public void onBlockDestroy(BlockDestroyHook hook) {
         Block b = hook.getBlock();
         Player player = hook.getPlayer();
         Location p = b.getLocation();
-//        ToolBox.adjustWorldPosition(p);
-
-        BlockBreakEvent event = new BlockBreakEvent(player, b.getType(), p);
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
+        if (blockModificationsOperator.onBlockBreak(player, p)) {
             hook.setCanceled();
         }
     }
 
     @HookHandler
-    public void blockPlace(BlockPlaceHook hook) {
+    public void onBlockPlace(BlockPlaceHook hook) {
         Block b = hook.getBlockPlaced();
         Player player = hook.getPlayer();
         Location p = b.getLocation();
-
-        BlockPlaceEvent event = new BlockPlaceEvent(player, b.getType(), p);
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
-//            Logman.println("place was canceled");
+        if (blockModificationsOperator.onBlockPlace(player, p)) {
             hook.setCanceled();
         }
     }

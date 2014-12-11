@@ -43,8 +43,8 @@ public class CanaryServer extends CServer {
     }
 
     @Override
-    public ArrayList<CPlayer> getPlayers() {
-        ArrayList<CPlayer> players = new ArrayList<CPlayer>(Canary.getServer().getPlayerList().size());
+    public ArrayList<Player> getPlayers() {
+        ArrayList<Player> players = new ArrayList<Player>(Canary.getServer().getPlayerList().size());
         for (Player p : Canary.getServer().getPlayerList()) {
             //That is to make use of the player instance cache
             try {
@@ -58,7 +58,7 @@ public class CanaryServer extends CServer {
     }
 
     @Override
-    public CPlayer getPlayer(String name) throws InvalidPlayerException {
+    public Player getPlayer(String name) throws InvalidPlayerException {
         if (!playerList.containsKey(name)) {
             Player p = Canary.getServer().matchPlayer(name);
             if (p == null) {

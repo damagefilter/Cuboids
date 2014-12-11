@@ -211,8 +211,8 @@ public class XmlDataLegacy implements BaseData {
     }
 
     @Override
-    public void loadRegion(String name, String world, int dimension) {
-        String path = Config.get().getBasePath() + "regions/" + world + "_" + name + "_" + dimension + ".xml";
+    public void loadRegion(String name, String world) {
+        String path = Config.get().getBasePath() + "regions/" + world + "_" + name + ".xml";
         File f = new File(path);
         try {
             Document rdoc = regionBuilder.build(f);
@@ -305,8 +305,7 @@ public class XmlDataLegacy implements BaseData {
         newRegion.addPlayer(meta.getChildText("players"));
         newRegion.addGroup(meta.getChildText("groups"));
         try {
-            newRegion.setOrigin(Vector3D.fromString(meta.getChildText("origin")));
-            newRegion.setOffset(Vector3D.fromString(meta.getChildText("offset")));
+            newRegion.setBoundingBox(Vector3D.fromString(meta.getChildText("origin")), Vector3D.fromString(meta.getChildText("offset")));
         }
         catch (CanaryDeserializeException e) {
             Debug.logWarning(e.getMessage() + " - dropping region!");

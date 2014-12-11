@@ -55,12 +55,10 @@ public class BrushOperator implements ActionListener {
         }
     }
 
-    @ActionHandler
-    public void onArmSwing(ArmSwingEvent event) {
-        Block target = new LineTracer(event.getPlayer()).getTargetBlock();
+    public void onArmSwing(Player player) {
+        Block target = new LineTracer(player).getTargetBlock();
         if (target != null) {
-            Vector3D v = new Vector3D(target.getPosition());
-            handleBrush(event.getPlayer(), v);
+            handleBrush(player, target.getLocation());
         }
     }
 

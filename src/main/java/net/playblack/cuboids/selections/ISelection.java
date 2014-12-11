@@ -14,13 +14,6 @@ import java.util.LinkedHashMap;
 public interface ISelection {
 
     /**
-     * Get the world for this selection
-     *
-     * @return
-     */
-    public String getWorld();
-
-    /**
      * Set the world for this selection
      *
      * @param world

@@ -25,7 +25,7 @@ public class CmodLoadPoints extends CBaseCommand {
         if (parseCommand(player, command)) {
             return;
         }
-        Region cube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
+        Region cube = RegionManager.get().getRegionByName(command[1], player.getWorld().getFqName());
         if (!player.hasPermission(Permissions.ADMIN)) {
             if (!player.hasPermission(Permissions.REGION$META)) {
                 MessageSystem.failMessage(player, "permissionDenied");

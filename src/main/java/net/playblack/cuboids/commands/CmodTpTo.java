@@ -4,7 +4,6 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.Permissions;
-import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
@@ -27,14 +26,15 @@ public class CmodTpTo extends CBaseCommand {
         if (parseCommand(player, command)) {
             return;
         }
-        Region targetCube = RegionManager.get().getRegionByName(command[1], player.getWorld().getName());
+        Region targetCube = RegionManager.get().getRegionByName(command[1], player.getWorld().getFqName());
         if (targetCube == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
+            MessageSystem.customFailMessage(player, "Region name: " + command[1]);
             return;
         }
         Vector3D target = Vector.getCenterPoint(targetCube.getOrigin(), targetCube.getOffset());
 
-        CPlayer p = CServer.getServer().getPlayer(player.getName());
+        Player p = CServer.getServer().getPlayer(player.getName());
         if (player.hasPermission(Permissions.ADMIN) || (player.hasPermission(Permissions.REGION$TELEPORT) && targetCube.playerIsAllowed(player.getName(), p.getGroups()))) {
             if (!player.getWorld().isChunkLoaded(target.getBlockX(), target.getBlockZ())) {
                 player.getWorld().loadChunk(target.getBlockX(), target.getBlockZ());

@@ -2,13 +2,11 @@ package net.playblack.cuboids.datasource.legacy;
 
 import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.datasource.BaseData;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
-import net.playblack.mcutils.Vector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -301,7 +299,7 @@ public class MysqlDataLegacy implements BaseData {
     }
 
     @Override
-    public void loadRegion(String name, String world, int dimension) {
+    public void loadRegion(String name, String world) {
         throw new UnsupportedOperationException("Loading single Regions in legacy mode is not supported!");
     }
 

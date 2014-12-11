@@ -1,12 +1,11 @@
 package net.playblack.cuboids.actions.operators;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
-import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockRightClickEvent;
 import net.playblack.cuboids.gameinterface.CPlayer;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
@@ -33,12 +32,12 @@ public class OperableItemsOperator implements ActionListener {
      * @param block
      * @return
      */
-    public boolean canUseBlock(CPlayer player, BlockType block, Location point) {
+    public boolean canUseBlock(Player player, BlockType block, Location point) {
         if (player.hasPermission("cuboids.super.admin")) {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);
-        return r.playerIsAllowed(player.getName(), player.getGroups()) || !r.isItemRestricted(block.getMachineName());
+        return r.playerIsAllowed(player, player.getPlayerGroups()) || !r.isItemRestricted(block.getMachineName());
     }
 
     public boolean canUseBucket(CPlayer player, Location point, boolean lavaBucket) {
@@ -59,11 +58,16 @@ public class OperableItemsOperator implements ActionListener {
     // *******************************
     // Listener creation stuff
     // *******************************
-    @ActionHandler
-    public void onBlockRightClick(BlockRightClickEvent event) {
-        if (!canUseBlock(CServer.getServer().getPlayer(event.getPlayer().getName()), event.getBlock(), event.getLocation())) {
-            event.cancel();
-        }
+
+    /**
+     * Returns true if the right clicking should be canceled
+     * @param player
+     * @param type
+     * @param location
+     * @return
+     */
+    public boolean onBlockClick(Player player, BlockType type, Location location) {
+        return !canUseBlock(player, type, location);
     }
 
     @ActionHandler
@@ -71,9 +75,5 @@ public class OperableItemsOperator implements ActionListener {
         if (!canUseBlock(CServer.getServer().getPlayer(event.getPlayer().getName()), event.getBlock(), event.getLocation())) {
             event.cancel();
         }
-    }
-
-    static {
-        ActionManager.registerActionListener("Cuboids", new OperableItemsOperator());
     }
 }

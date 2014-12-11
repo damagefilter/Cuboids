@@ -6,6 +6,7 @@ import net.canarymod.api.world.position.Vector3D;
 import java.util.Random;
 
 public class Vector {
+
     /**
      * Retrieve the distance between 2 given doubles<br>
      *

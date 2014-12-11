@@ -1,9 +1,11 @@
 package net.playblack.cuboids.regions;
 
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Vector3D;
+import net.canarymod.user.Group;
 import net.playblack.cuboids.RegionFlagRegister;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Vector;
@@ -240,10 +242,9 @@ public class Region {
      * That is: the one with the max priority or if prio clashes, then the smaller one
      *
      * @param loc
-     * @param priority You should set this to 0 it's for internal stuffs
      * @return
      */
-    public Region queryChilds(Location loc, int priority) {
+    public Region queryChilds(Location loc) {
         if (!isWithin(loc)) {
             return null;
         }
@@ -257,7 +258,7 @@ public class Region {
                     current = current.getSize() > c.getSize() ? c : current;
                 }
 
-                Region check = c.queryChilds(loc, current.getPriority());
+                Region check = c.queryChilds(loc);
                 if (check.getPriority() > current.getPriority()) {
                     current = check;
                 }
@@ -596,14 +597,11 @@ public class Region {
      */
     public boolean cuboidIsWithin(Region cube, boolean complete) {
         if (this.equalsWorld(cube)) {
-            Vector3D min = Vector3D.getMinimum(cube.getOrigin(), cube.getOffset());
-            Vector3D max = Vector3D.getMaximum(cube.getOrigin(), cube.getOffset());
-
             if (complete) {
-                return origin.isWithin(min, max) && offset.isWithin(min, max);
+                return origin.isWithin(cube.getOrigin(), cube.getOffset()) && offset.isWithin(cube.getOrigin(), cube.getOffset());
             }
             else {
-                return origin.isWithin(min, max) || offset.isWithin(min, max);
+                return origin.isWithin(cube.getOrigin(), cube.getOffset()) || offset.isWithin(cube.getOrigin(), cube.getOffset());
             }
         }
         else {
@@ -621,9 +619,7 @@ public class Region {
         if (!equalsWorld(v.getWorld())) {
             return false;
         }
-        Vector3D min = Vector3D.getMinimum(origin, offset);
-        Vector3D max = Vector3D.getMaximum(origin, offset);
-        return v.isWithin(min, max);
+        return v.isWithin(origin, offset);
     }
 
     /**
@@ -649,6 +645,10 @@ public class Region {
             }
         }
         return false;
+    }
+
+    public boolean playerIsOwner(Player player) {
+        return playerIsOwner(player.getName());
     }
 
     /**
@@ -750,6 +750,7 @@ public class Region {
      * @param player
      * @return True if player is allowed, false otherwise
      */
+    @Deprecated
     public boolean playerIsAllowed(String player, String[] group) {
         if (playerIsOwner(player)) {
             return true;
@@ -770,6 +771,25 @@ public class Region {
         }
         for (String listPlayer : players) {
             if (listPlayer.equalsIgnoreCase(player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean playerIsAllowed(Player player, Group[] groups) {
+        if (playerIsOwner(player)) {
+            return true;
+        }
+
+        for (Group group : groups) {
+            if (this.groups.contains(group.getName()) || this.groups.contains("g:" + group.getName())) {
+                return true;
+            }
+        }
+
+        for (String listPlayer : players) {
+            if (listPlayer.equalsIgnoreCase(player.getName())) {
                 return true;
             }
         }
@@ -845,26 +865,10 @@ public class Region {
      * ************************************************/
 
     /**
-     * @param origin the origin to set
-     */
-    public void setOrigin(Vector3D origin) {
-        this.origin = origin;
-//        ToolBox.adjustWorldPosition(origin);
-    }
-
-    /**
      * @return the offset
      */
     public Vector3D getOffset() {
         return offset;
-    }
-
-    /**
-     * @param offset the offset to set
-     */
-    public void setOffset(Vector3D offset) {
-        this.offset = offset;
-//        ToolBox.adjustWorldPosition(offset);
     }
 
     /**
@@ -884,8 +888,8 @@ public class Region {
      * @param offset the new offset
      */
     public void setBoundingBox(Vector3D origin, Vector3D offset) {
-        this.origin = origin;
-        this.offset = offset;
+        this.origin = Vector3D.getMinimum(origin, offset);
+        this.offset = Vector3D.getMaximum(origin, offset);
         if (hasParent() && !cuboidIsWithin(this.parent, true)) {
             this.detach();
         }
