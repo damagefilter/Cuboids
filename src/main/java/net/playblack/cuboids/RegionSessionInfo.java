@@ -33,7 +33,7 @@ public class RegionSessionInfo {
     public void setRegion(Region r) {
         if (r == null) {
             sendFarewell();
-            setGameMode(GameMode.SURVIVAL);
+            setGameMode(player.getWorld().getGameMode());
             currentRegion = null;
             return;
         }
