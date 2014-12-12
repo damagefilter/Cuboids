@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * Represents a per-player region info.
  * Contains player and current region and if player was creative and inventory stuff etc etc
- *
  */
 public class RegionSessionInfo {
     /**
@@ -33,7 +32,12 @@ public class RegionSessionInfo {
     public void setRegion(Region r) {
         if (r == null) {
             sendFarewell();
-            setGameMode(player.getWorld().getGameMode());
+
+            // Change gamemode when entering / leaving a region when not having bypass permission
+            if (!player.hasPermission(Permissions.BYPASS$GAMEMODE)) {
+                setGameMode(player.getWorld().getGameMode());
+            }
+
             currentRegion = null;
             return;
         }
@@ -44,8 +48,7 @@ public class RegionSessionInfo {
             }
             if (r.getProperty("creative") != Region.Status.ALLOW) {
                 setGameMode(GameMode.SURVIVAL);
-            }
-            else if (r.getProperty("creative") == Region.Status.ALLOW) {
+            } else if (r.getProperty("creative") == Region.Status.ALLOW) {
                 forcedMode = false; // TODO: This may have no effect, remove it?
                 setGameMode(GameMode.CREATIVE);
             }
@@ -55,12 +58,10 @@ public class RegionSessionInfo {
             if (currentRegion != null && !currentRegion.isChildOf(r)) {
                 currentRegion = r;
                 sendWelcome();
-            }
-            else if (currentRegion == null) {
+            } else if (currentRegion == null) {
                 currentRegion = r;
                 sendWelcome();
-            }
-            else {
+            } else {
                 currentRegion = r;
             }
         }
@@ -74,13 +75,11 @@ public class RegionSessionInfo {
         try {
             if (items.getContents().length > 0) {
                 player.getInventory().setContents(items.getContents());
-            }
-            else {
+            } else {
                 player.getInventory().clearContents();
             }
 
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             Debug.logStack(e);
         }
     }

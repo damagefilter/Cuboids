@@ -6,6 +6,7 @@ package net.playblack.cuboids;
 public class Permissions {
     public static final String ADMIN = "cuboids.super.admin";
     public static final String EDIT$WORLD = "cuboids.super.edit.world"; // worldmod
+    public static final String BYPASS$GAMEMODE = "cuboids.super.bypass.gamemode"; // bypassing change of gamemode when entering / leaving a region
 
 
     public static final String BRUSH$USE = "cuboids.brush.use"; // cbrush
