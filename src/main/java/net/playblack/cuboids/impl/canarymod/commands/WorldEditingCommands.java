@@ -4,7 +4,6 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.chat.MessageReceiver;
 import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandListener;
-import net.playblack.cuboids.exceptions.InvalidPlayerException;
 import net.playblack.cuboids.commands.Cbackup;
 import net.playblack.cuboids.commands.Cbrush;
 import net.playblack.cuboids.commands.Ccopy;
@@ -20,6 +19,7 @@ import net.playblack.cuboids.commands.Crestore;
 import net.playblack.cuboids.commands.Csphere;
 import net.playblack.cuboids.commands.Cundo;
 import net.playblack.cuboids.commands.Cwalls;
+import net.playblack.cuboids.exceptions.InvalidPlayerException;
 import net.playblack.mcutils.Debug;
 
 public class WorldEditingCommands implements CommandListener {

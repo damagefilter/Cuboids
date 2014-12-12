@@ -5,12 +5,12 @@ import net.canarymod.commandsys.CommandDependencyException;
 import net.canarymod.plugin.Plugin;
 import net.playblack.cuboids.Bootstrapper;
 import net.playblack.cuboids.Config.Implementation;
-import net.playblack.cuboids.loaders.cuboidf.CuboidFLoader;
-import net.playblack.cuboids.loaders.Loader;
 import net.playblack.cuboids.impl.canarymod.commands.CmodCommands;
 import net.playblack.cuboids.impl.canarymod.commands.MiscCommands;
 import net.playblack.cuboids.impl.canarymod.commands.SelectionEditingCommands;
 import net.playblack.cuboids.impl.canarymod.commands.WorldEditingCommands;
+import net.playblack.cuboids.loaders.Loader;
+import net.playblack.cuboids.loaders.cuboidf.CuboidFLoader;
 import net.playblack.cuboids.loaders.legacyregion.XmlRegionLegacyLoader;
 import net.playblack.mcutils.Debug;
 

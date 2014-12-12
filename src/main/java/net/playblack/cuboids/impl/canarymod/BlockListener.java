@@ -5,7 +5,6 @@ import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.living.monster.Creeper;
 import net.canarymod.api.entity.living.monster.Enderman;
 import net.canarymod.api.world.blocks.Block;
-import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.hook.HookHandler;
@@ -23,24 +22,16 @@ import net.canarymod.hook.world.FlowHook;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.plugin.PluginListener;
 import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
 import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
-import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEvent;
-import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
-import net.playblack.cuboids.actions.operators.ExplosionType;
-import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
-import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
 import net.playblack.cuboids.actions.operators.BlockModificationsOperator;
 import net.playblack.cuboids.actions.operators.BrushOperator;
-import net.playblack.cuboids.actions.operators.DamageOperator;
-import net.playblack.cuboids.actions.operators.MiscOperator;
+import net.playblack.cuboids.actions.operators.ExplosionType;
 import net.playblack.cuboids.actions.operators.OperableItemsOperator;
-import net.playblack.cuboids.actions.operators.PlayerMovementOperator;
 import net.playblack.cuboids.actions.operators.SelectionOperator;
 import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,10 +43,7 @@ public class BlockListener implements PluginListener {
     // They are used to delegate callbacks to logical chunks of code
     BlockModificationsOperator blockModificationsOperator = new BlockModificationsOperator();
     BrushOperator brushOperator = new BrushOperator();
-    DamageOperator damageOperator = new DamageOperator();
-    MiscOperator miscOperator = new MiscOperator();
     OperableItemsOperator operableItemsOperator = new OperableItemsOperator();
-    PlayerMovementOperator playerMovementOperator = new PlayerMovementOperator();
     SelectionOperator selectionOperator = new SelectionOperator();
 
     @HookHandler
@@ -123,10 +111,10 @@ public class BlockListener implements PluginListener {
     @HookHandler
     public void onExplosion(ExplosionHook hook) {
         //Assemble the list of blocks ...
-        HashMap<Location, BlockType> blocks = new HashMap<Location, BlockType>();
+        ArrayList<Location> blocks = new ArrayList<Location>();
 
         for (Block x : hook.getAffectedBlocks()) {
-            blocks.put(x.getLocation(), x.getType());
+            blocks.add(x.getLocation());
         }
 
         Block b = hook.getBlock();
@@ -141,27 +129,22 @@ public class BlockListener implements PluginListener {
         }
 
         Location l = b.getLocation();
-        ExplosionEvent event = new ExplosionEvent(hook.getEntity(), l, type, blocks);
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
+        if(blockModificationsOperator.onExplode(l, type, blocks)) {
             hook.setCanceled();
             return;
         }
+
         //Not cancelled, process the list of blocks and remove those that should stay
-        List<Location> protectedBlocks = event.getProtectedBlocks();
         List<Block> blocksaffected = hook.getAffectedBlocks();
-        if (protectedBlocks != null) {
-            for (Location m : protectedBlocks) {
-                for (int i = 0; i < blocksaffected.size(); ) {
-                    Block x = blocksaffected.get(i);
-                    Vector3D tmp = new Vector3D(x.getX(), x.getY(), x.getZ());
-//                    ToolBox.adjustWorldPosition(tmp);
-                    if (Vector.samePosition2D(m, tmp)) {
-                        blocksaffected.remove(i);
-                    }
-                    else {
-                        i++;
-                    }
+        for (Location m : blocks) {
+            for (int i = 0; i < blocksaffected.size(); ) {
+                Block x = blocksaffected.get(i);
+                Vector3D tmp = x.getLocation();
+                if (Vector.samePosition2D(m, tmp)) {
+                    blocksaffected.remove(i);
+                }
+                else {
+                    i++;
                 }
             }
         }
@@ -169,53 +152,28 @@ public class BlockListener implements PluginListener {
 
     @HookHandler
     public void onIgnite(IgnitionHook hook) {
-        Block b = hook.getBlock();
-        Player player = hook.getPlayer();
-        Location p = b.getLocation();
-        ToolBox.adjustWorldPosition(p);
-
-        IgniteEvent event = new IgniteEvent(hook.getCause(), p, b.getType(), player);
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
+        if (blockModificationsOperator.onIgnite(hook.getCause(), hook.getPlayer(), hook.getBlock().getLocation())) {
             hook.setCanceled();
         }
     }
 
     @HookHandler
     public void onFlow(FlowHook hook) {
-        Block b = hook.getBlockFrom();
-        Block to = hook.getBlockTo();
-        Location p = b.getLocation();
-
-        ToolBox.adjustWorldPosition(p);
-        LiquidFlowEvent event = new LiquidFlowEvent(b.getType(), to.getType(), p);
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
+        if (blockModificationsOperator.onLiquidFlow(hook.getBlockTo().getLocation(), hook.getBlockFrom().getType().getMachineName().endsWith("lava"))) {
             hook.setCanceled();
         }
     }
 
     @HookHandler
     public void onBlockPhysics(BlockPhysicsHook hook) {
-        Block b = hook.getBlock();
-        Location p = b.getLocation();
-
-        ToolBox.adjustWorldPosition(p);
-        BlockPhysicsEvent event = new BlockPhysicsEvent(b.getType(), p);
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
+        if (blockModificationsOperator.onBlockPhysics(hook.getBlock().getLocation())) {
             hook.setCanceled();
         }
     }
 
     @HookHandler
     public void onBlockUpdate(BlockUpdateHook hook) {
-        Block b = hook.getBlock();
-        Location p = b.getLocation();
-        ToolBox.adjustWorldPosition(p);
-        BlockUpdateEvent event = new BlockUpdateEvent(b.getType(), hook.getNewBlockType(), p);
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
+        if (blockModificationsOperator.onBlockUpdate(hook.getBlock().getType(), hook.getNewBlockType(), hook.getBlock().getLocation())) {
             hook.setCanceled();
         }
     }
@@ -235,13 +193,8 @@ public class BlockListener implements PluginListener {
 
     @HookHandler
     public void onHangingEntityDestroy(HangingEntityDestroyHook hook) {
-        Location loc = hook.getPainting().getLocation();
-
-        EntityHangingDestroyEvent event = new EntityHangingDestroyEvent(hook.getPlayer(), loc);
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
+        if (blockModificationsOperator.onEntityHangingDestroy(hook.getPlayer(), hook.getPainting().getLocation())) {
             hook.setCanceled();
         }
-
     }
 }

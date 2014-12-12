@@ -1,48 +1,36 @@
 package net.playblack.cuboids.actions.operators;
 
-import net.canarymod.api.DamageType;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.hook.world.IgnitionHook;
 import net.playblack.cuboids.Permissions;
-import net.playblack.cuboids.actions.ActionHandler;
 import net.playblack.cuboids.actions.ActionListener;
-import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.events.forwardings.BlockPhysicsEvent;
-import net.playblack.cuboids.actions.events.forwardings.BlockUpdateEvent;
-import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
-import net.playblack.cuboids.actions.events.forwardings.EntityHangingDestroyEvent;
-import net.playblack.cuboids.actions.events.forwardings.ExplosionEvent;
-import net.playblack.cuboids.actions.events.forwardings.IgniteEvent;
-import net.playblack.cuboids.actions.events.forwardings.LiquidFlowEvent;
 import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class BlockModificationsOperator implements ActionListener {
 
     /**
      * Create a list of blocks that should not be affected by the explosion
-     *
      * @param positions
-     * @return
+     * @param t
      */
-    public List<Location> checkExplosionBlocks(Set<Location> positions, ExplosionType t) {
-        ArrayList<Location> toRemove = new ArrayList<Location>();
-        for (Location l : positions) {
+    public void checkExplosionBlocks(List<Location> positions, ExplosionType t) {
+        Iterator<Location> it = positions.iterator();
+
+        while (it.hasNext()) {
+            Location l = it.next();
             if (shouldCancelExplosion(l, t)) {
-                toRemove.add(l);
+                it.remove();
             }
         }
-        return toRemove;
     }
 
     public boolean shouldCancelExplosion(Location loc, ExplosionType type) {
@@ -103,100 +91,102 @@ public class BlockModificationsOperator implements ActionListener {
         return !canModifyBlock(player, location);
     }
 
-    @ActionHandler
-    public void onEntityExplode(ExplosionEvent event) {
-        if (shouldCancelExplosion(event.getLocation(), event.getExplosionType())) {
-            event.cancel();
-            return;
+    public boolean onExplode(Location location, ExplosionType explosionType, List<Location> affectedBlocks) {
+        if (shouldCancelExplosion(location, explosionType)) {
+            return true;
         }
-        //Remove blocks from protected regions but do the rest of the explosion
-        Map<Location, BlockType> markedBlocks = event.getAffectedBlocks();
-        //List of blocks that need to be removed
-        event.setProtectedBlocks(checkExplosionBlocks(markedBlocks.keySet(), event.getExplosionType()));
+
+        // Iterates over the given list and removes blocks that should not be destroyed
+        checkExplosionBlocks(affectedBlocks, explosionType);
+        return false;
     }
 
-//    public boolean onEntityExplode(Location location) {
-//        if (shouldCancelExplosion(event.getLocation(), event.getExplosionType())) {
-//            event.cancel();
-//            return true;
-//        }
-//        //Remove blocks from protected regions but do the rest of the explosion
-//        Map<Location, BlockType> markedBlocks = event.getAffectedBlocks();
-//        //List of blocks that need to be removed
-//        event.setProtectedBlocks(checkExplosionBlocks(markedBlocks.keySet(), event.getExplosionType()));
-//        return false;
-//    }
+    public boolean onIgnite(IgnitionHook.IgnitionCause source, Player player, Location location) {
 
-    @ActionHandler
-    public void onIgnite(IgniteEvent event) {
-
-//        Debug.log(event.getLocation().toString());
-        if (event.getSource() == IgnitionHook.IgnitionCause.FLINT_AND_STEEL) {
-            if (!canUseLighter(event.getPlayer(), event.getLocation())) {
-                event.cancel();
+        if (source == IgnitionHook.IgnitionCause.FLINT_AND_STEEL) {
+            if (!canUseLighter(player, location)) {
+                return true;
             }
         }
         else {
-            Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
+            Region r = RegionManager.get().getActiveRegion(location, false);
             if (r.getProperty("firespread") == Status.DENY) {
-                event.cancel();
+                return true;
             }
         }
+        return false;
     }
 
-    @ActionHandler
-    public void onLiquidFlow(LiquidFlowEvent event) {
-        Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
-        if (event.isWaterFlow() && r.getProperty("water-flow") == Status.DENY) {
-            event.cancel();
-        }
-        if (event.isLavaFlow() && r.getProperty("lava-flow") == Status.DENY) {
-            event.cancel();
-        }
+    /**
+     * Returns true if the hook should be canceled (flow should not happen)
+     *
+     * @param flowTo
+     * @param isLavaFlow
+     * @return
+     */
+    public boolean onLiquidFlow(Location flowTo, boolean isLavaFlow) {
+        Region r = RegionManager.get().getActiveRegion(flowTo, false);
+        return isLavaFlow && r.getProperty("lava-flow") == Status.DENY || r.getProperty("water-flow") == Status.DENY;
+
     }
 
-    @ActionHandler
-    public void onBlockPhysics(BlockPhysicsEvent event) {
-        Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
-        if (r.getProperty("physics") == Status.DENY) {
-            event.cancel();
-        }
+    /**
+     * Returns true if physics should not happen
+     *
+     * @param location
+     * @return
+     */
+    public boolean onBlockPhysics(Location location) {
+        Region r = RegionManager.get().getActiveRegion(location, false);
+        return r.getProperty("physics") == Status.DENY;
     }
 
-    @ActionHandler
-    public void onBlockUpdate(BlockUpdateEvent event) {
-        boolean updatesFarmland = event.getBlock().getMachineName().equals("minecraft:farmland") && !event.getTargetBlock().getMachineName().equals("minecraft:farmland");
-        boolean updatesCrop = event.getBlock().getMachineName().equals("minecraft:wheat") && !event.getTargetBlock().getMachineName().equals("minecraft:wheat");
+    /**
+     * Returns true if the block update should not happen
+     *
+     * @param original
+     * @param targetBlock
+     * @param location
+     * @return
+     */
+    public boolean onBlockUpdate(BlockType original, BlockType targetBlock, Location location) {
+        boolean updatesFarmland = original.getMachineName().endsWith("farmland") && !targetBlock.getMachineName().endsWith("farmland");
+        boolean updatesCrop = original.getMachineName().endsWith("wheat") && !targetBlock.getMachineName().endsWith("wheat");
+
         // TODO: Checking against wheat might prevent people from harvesting
         if (updatesCrop || updatesFarmland) {
-            Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
+            Region r = RegionManager.get().getActiveRegion(location, false);
             if (r.getProperty("crops-trampling") == Status.DENY) {
-                event.cancel();
+                return true;
             }
         }
-        if (event.getTargetBlock().getMachineName().equals("minecraft:fire")) { // new block is fire
-            Region r = RegionManager.get().getActiveRegion(event.getLocation(), false);
+        if (targetBlock.getMachineName().endsWith("fire")) { // new block is fire
+            Region r = RegionManager.get().getActiveRegion(location, false);
             if (r.getProperty("firespread") == Status.DENY) {
-                event.cancel();
+                return true;
             }
         }
+        return false;
     }
 
-    @ActionHandler
-    public void onEndermanPickup(EndermanPickupEvent event) {
-        if (!canEndermanUseBlock(event.getLocation())) {
-            event.cancel();
-        }
+
+    /**
+     * Returns true if the enderman at this location should not pick up the block
+     *
+     * @param location
+     * @return
+     */
+    public boolean onEndermanPickup(Location location) {
+        return !canEndermanUseBlock(location);
     }
 
-    @ActionHandler
-    public void onEntityHangingDestroy(EntityHangingDestroyEvent event) {
-        if (!canDestroyPaintings(event.getPlayer(), event.getLocation())) {
-            event.cancel();
-        }
-    }
-
-    static {
-        ActionManager.registerActionListener("Cuboids", new BlockModificationsOperator());
+    /**
+     * Retrurns true if the hanging entity should not be destroyed
+     * @param player
+     * @param location
+     * @return
+     */
+    public boolean onEntityHangingDestroy(Player player, Location location) {
+        return !canDestroyPaintings(player, location);
     }
 }
