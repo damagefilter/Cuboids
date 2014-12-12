@@ -1,8 +1,10 @@
 package net.playblack.cuboids;
 
+import net.canarymod.Canary;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.Inventory;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.history.HistoryTimeline;
+import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.selections.CuboidSelection;
 
 import java.util.HashMap;
@@ -15,8 +17,9 @@ import java.util.HashMap;
  */
 public class SessionManager {
     private static SessionManager instance = null;
-    private HashMap<String, HistoryTimeline> playerHistories = new HashMap<String, HistoryTimeline>(CServer.getServer().getMaxPlayers());
-    private HashMap<String, CuboidSelection> playerClipboard = new HashMap<String, CuboidSelection>(CServer.getServer().getMaxPlayers());
+    private HashMap<String, HistoryTimeline> playerHistories = new HashMap<String, HistoryTimeline>(Canary.getServer().getMaxPlayers());
+    private HashMap<String, CuboidSelection> playerClipboard = new HashMap<String, CuboidSelection>(Canary.getServer().getMaxPlayers());
+    private HashMap<String, RegionSessionInfo> playerRegions = new HashMap<String, RegionSessionInfo>(Canary.getServer().getMaxPlayers());
     private HashMap<String, HashMap<Integer, Inventory>> inventories = new HashMap<String, HashMap<Integer, Inventory>>();
 
     private SessionManager() {
@@ -28,6 +31,56 @@ public class SessionManager {
             instance = new SessionManager();
         }
         return instance;
+    }
+
+    /**
+     * Get the region the given player (name) is currently in.
+     * This may be null if the player is in no particular region (or is in global)
+     * @param player
+     * @return
+     */
+    public Region getRegionForPlayer(String player) {
+        if (playerRegions.containsKey(player)) {
+            return playerRegions.get(player).getCurrentRegion();
+        }
+        return null;
+    }
+
+
+
+    /**
+     * Set the region for the given player (name).
+     * This can be null to signify that the player is in no particular region.
+     *
+     * @param player
+     * @param r
+     */
+    public void setRegionForPlayer(Player player, Region r) {
+        if (!playerRegions.containsKey(player.getName())) {
+            playerRegions.put(player.getName(), new RegionSessionInfo(player));
+        }
+        playerRegions.get(player.getName()).setRegion(r);
+    }
+
+    /**
+     * Check if there is anyone in the given region.
+     * (A player, that is)
+     *
+     * @param r
+     * @return
+     */
+    public boolean isRegionPopulated(Region r) {
+        for (Player p : Canary.getServer().getPlayerList()) {
+            if (playerIsInRegion(p.getName(), r)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean playerIsInRegion(String player, Region region) {
+        Region r = playerRegions.get(player).getCurrentRegion();
+        return region == null && r == null || r.equals(region);
     }
 
     public Inventory getPlayerInventory(String player, int mode) {

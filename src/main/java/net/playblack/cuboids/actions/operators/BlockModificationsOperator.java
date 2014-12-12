@@ -6,7 +6,6 @@ import net.canarymod.api.world.position.Location;
 import net.canarymod.hook.world.IgnitionHook;
 import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.actions.ActionListener;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -50,18 +49,16 @@ public class BlockModificationsOperator implements ActionListener {
         if (player.hasPermission(Permissions.ADMIN)) {
             return true;
         }
-        Player p = CServer.getServer().getPlayer(player.getName());
         Region r = RegionManager.get().getActiveRegion(point, false);
-        return r.playerIsAllowed(player, p.getPlayerGroups()) || r.getProperty("firespread") != Status.DENY;
+        return r.playerIsAllowed(player, player.getPlayerGroups()) || r.getProperty("firespread") != Status.DENY;
     }
 
     public boolean canDestroyPaintings(Player player, Location point) {
         if (player.hasPermission(Permissions.ADMIN)) {
             return true;
         }
-        Player p = CServer.getServer().getPlayer(player.getName());
         Region r = RegionManager.get().getActiveRegion(point, false);
-        return r.playerIsAllowed(player, p.getPlayerGroups()) || r.getProperty("protection") != Status.DENY;
+        return r.playerIsAllowed(player, player.getPlayerGroups()) || r.getProperty("protection") != Status.DENY;
     }
 
     public boolean canEndermanUseBlock(Location location) {

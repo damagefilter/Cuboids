@@ -2,7 +2,6 @@ package net.playblack.cuboids.selections;
 
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.Vector3D;
-import net.playblack.mcutils.Vector;
 
 import java.util.LinkedHashMap;
 

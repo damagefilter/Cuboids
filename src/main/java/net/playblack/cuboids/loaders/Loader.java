@@ -1,7 +1,5 @@
 package net.playblack.cuboids.loaders;
 
-import java.util.ArrayList;
-
 /**
  * Interface for loading foreign Cuboid file formats.
  *

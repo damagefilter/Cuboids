@@ -9,7 +9,6 @@ import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
-import net.playblack.mcutils.Vector;
 
 /**
  * Generate walls along the line of a cuboid selection

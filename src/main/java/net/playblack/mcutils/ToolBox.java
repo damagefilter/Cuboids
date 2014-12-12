@@ -4,7 +4,6 @@ import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.exceptions.InvalidInputException;
-import net.playblack.cuboids.gameinterface.CServer;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -125,42 +124,6 @@ public class ToolBox {
 
     public static boolean isNumeric(String str) {
         return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
-    }
-
-    public static short convertType(String data) {
-        short i;
-        try {
-            // if that fails it must be a name
-            i = (short) Integer.parseInt(data);
-        }
-        catch (NumberFormatException e) {
-            short x = (short) CServer.getServer().getItemId(data);
-            if (x == 0 && data.equalsIgnoreCase("air")) {
-                return x;
-            }
-            else if (x > 0) {
-                return x;
-            }
-            else {
-                return -1;
-            }
-        }
-        if (String.valueOf(i).equalsIgnoreCase(CServer.getServer().getItemName(i))) {
-            return -1;
-        }
-        return i;
-    }
-
-    public static byte convertData(String data) {
-        byte i;
-        try {
-            // if that fails it must be a name
-            i = (byte) Integer.parseInt(data);
-        }
-        catch (NumberFormatException e) {
-            i = -1;
-        }
-        return i;
     }
 
     public static int parseInt(String num) {

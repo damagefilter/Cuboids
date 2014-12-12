@@ -5,13 +5,12 @@ import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.Permissions;
 import net.playblack.cuboids.SessionManager;
-import net.playblack.cuboids.generators.VectorOffsetGenerator;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
+import net.playblack.cuboids.generators.VectorOffsetGenerator;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.Debug;
-import net.playblack.mcutils.Vector;
 
 /**
  * Paste a selection from clipboard into the world

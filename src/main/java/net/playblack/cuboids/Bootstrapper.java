@@ -2,17 +2,15 @@ package net.playblack.cuboids;
 
 //import java.util.concurrent.TimeUnit;
 
-import net.playblack.cuboids.Config.Implementation;
 import net.playblack.cuboids.actions.operators.BlockModificationsOperator;
 import net.playblack.cuboids.actions.operators.DamageOperator;
 import net.playblack.cuboids.actions.operators.MiscOperator;
 import net.playblack.cuboids.actions.operators.OperableItemsOperator;
 import net.playblack.cuboids.actions.operators.PlayerMovementOperator;
 import net.playblack.cuboids.actions.operators.SelectionOperator;
+import net.playblack.cuboids.impl.canarymod.Cuboids;
 import net.playblack.cuboids.loaders.Converter;
 import net.playblack.cuboids.loaders.Loader;
-import net.playblack.cuboids.gameinterface.CServer;
-import net.playblack.cuboids.impl.canarymod.Cuboids;
 import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Debug;
 //import net.playblack.cuboids.regions.CuboidInterface;
@@ -25,30 +23,23 @@ import net.playblack.mcutils.Debug;
  */
 public class Bootstrapper {
 
-    private CServer server;
     private Loader[] loaders;
-    private Implementation impl;
 
     /**
      * Expects the server implementation and a list of loaders for foreign
      * cuboids. Leave the list null if nothing should be loaded from foreign
      * sources
      *
-     * @param server
      * @param loaders
      */
-    public Bootstrapper(CServer server, Loader[] loaders, Implementation impl) {
-        this.server = server;
+    public Bootstrapper(Loader[] loaders) {
         this.loaders = loaders;
-        this.impl = impl;
 
     }
 
     public void bootstrap(Cuboids plugin) {
         // ------------------------------------------------------
         Config.setConfig(new Config(plugin));
-        CServer.setServer(server);
-        Config.get().setImplementation(impl);
         // ------------------------------------------------------
         boolean hasConverted = false;
         if (loaders != null) {

@@ -7,7 +7,6 @@ import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
 import net.playblack.mcutils.ToolBox;
-import net.playblack.mcutils.Vector;
 
 /**
  * Set ceiling level of current selection

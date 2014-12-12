@@ -13,7 +13,6 @@ import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.history.HistoryObject;
 import net.playblack.cuboids.selections.CuboidSelection;
-import net.playblack.mcutils.Vector;
 
 import java.util.Map;
 

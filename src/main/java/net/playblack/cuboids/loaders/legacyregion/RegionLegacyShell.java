@@ -4,7 +4,6 @@ import net.canarymod.Canary;
 import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.loaders.CuboidShell;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.mcutils.Vector;
 
 import java.util.ArrayList;
 

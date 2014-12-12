@@ -3,8 +3,6 @@ package net.playblack.cuboids.datasource.da;
 import net.canarymod.database.Column;
 import net.canarymod.database.DataAccess;
 
-import java.util.ArrayList;
-
 /**
  * Represents the contents of a region (that's chest contents etc)
  */

@@ -9,7 +9,7 @@ import net.playblack.cuboids.CuboidSaveTask;
 import net.playblack.cuboids.HMobTask;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.Permissions;
-import net.playblack.cuboids.gameinterface.CServer;
+import net.playblack.cuboids.SessionManager;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
@@ -75,8 +75,7 @@ public class CuboidInterface {
 
     public boolean canModifyBlock(Player p, Location location) {
         Region cube = RegionManager.get().getActiveRegion(location, false);
-        Player player = CServer.getServer().getPlayer(p.getName());
-        return p.hasPermission(Permissions.ADMIN) || cube.playerIsAllowed(p.getName(), player.getGroups()) || cube.getProperty("protection") != Region.Status.DENY;
+        return p.hasPermission(Permissions.ADMIN) || cube.playerIsAllowed(p, p.getPlayerGroups()) || cube.getProperty("protection") != Region.Status.DENY;
 
     }
     /**
@@ -166,14 +165,14 @@ public class CuboidInterface {
      * @param to
      */
     public void handleRegionsForPlayer(Player player, Location from, Location to) {
-        Player p = CServer.getServer().getPlayer(player.getName());
-        if (p.getCurrentRegion() != null) {
-            if (!p.getCurrentRegion().isWithin(p.getLocation()) && !p.getCurrentRegion().isWithin(from)) {
-                p.setRegion(null);
+        Region r = SessionManager.get().getRegionForPlayer(player.getName());
+        if (r != null) {
+            if (!r.isWithin(player.getLocation()) && !r.isWithin(from)) {
+                SessionManager.get().setRegionForPlayer(player, null);
             }
         }
         if (to != null) {
-            p.setRegion(RegionManager.get().getActiveRegion(to, true));
+            SessionManager.get().setRegionForPlayer(player, RegionManager.get().getActiveRegion(to, true));
         }
     }
 
@@ -192,12 +191,8 @@ public class CuboidInterface {
         // if(player.hasPermission("cuboids.super.admin")) {
         // return false;
         // }
-        Player p = CServer.getServer().getPlayer(player.getName());
-        Region cube = RegionManager.get().getActiveRegion(p.getLocation(), true);
-        if (cube == null) {
-            return false;
-        }
-        return cube.commandIsRestricted(command);
+        Region cube = RegionManager.get().getActiveRegion(player.getLocation(), true);
+        return cube != null && cube.commandIsRestricted(command);
     }
 
     /**
@@ -519,8 +514,7 @@ public class CuboidInterface {
 
         if (node != null) {
             player.message(ColorManager.LightGray + "---- " + node.getName() + " ----");
-            Player ref = CServer.getServer().getPlayer(player.getName());
-            if (node.playerIsAllowed(player.getName(), ref.getGroups())) {
+            if (node.playerIsAllowed(player, player.getPlayerGroups())) {
                 if (node.playerIsOwner(player.getName())) {
                     MessageSystem.translateMessage(player, ColorManager.LightGreen, "youOwnThisArea");
                 }
@@ -573,9 +567,8 @@ public class CuboidInterface {
         Region node = RegionManager.get().getRegionByName(name, player.getWorld().getFqName());
 
         if (node != null) {
-            Player ref = CServer.getServer().getPlayer(player.getName());
             player.message(ColorManager.LightGray + "---- " + node.getName() + " ----");
-            if (node.playerIsAllowed(player.getName(), ref.getGroups())) {
+            if (node.playerIsAllowed(player, player.getPlayerGroups())) {
                 if (node.playerIsOwner(player.getName())) {
                     MessageSystem.translateMessage(player, ColorManager.LightGreen, "youOwnThisArea");
                 }

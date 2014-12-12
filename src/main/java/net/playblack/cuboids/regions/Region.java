@@ -752,6 +752,7 @@ public class Region {
      */
     @Deprecated
     public boolean playerIsAllowed(String player, String[] group) {
+
         if (playerIsOwner(player)) {
             return true;
         }

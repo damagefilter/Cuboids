@@ -1,8 +1,8 @@
 package net.playblack.cuboids.loaders.cuboidf;
 
+import net.canarymod.Canary;
 import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.loaders.CuboidShell;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.visualillusionsent.utils.PropertiesFile;
 
@@ -89,7 +89,7 @@ public class CuboidFShell implements CuboidShell {
 
     @Override
     public String getWorld() {
-        return CServer.getServer().getDefaultWorld().getFqName();
+        return Canary.getServer().getDefaultWorld().getFqName();
     }
 
     @Override

@@ -1,26 +1,21 @@
 package net.playblack.cuboids.impl.canarymod;
 
 
-import net.canarymod.api.entity.living.monster.EntityMob;
 import net.canarymod.hook.HookHandler;
 import net.canarymod.hook.command.PlayerCommandHook;
 import net.canarymod.hook.entity.EntitySpawnHook;
 import net.canarymod.plugin.PluginListener;
-import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.events.forwardings.EntitySpawnEvent;
+import net.playblack.cuboids.actions.operators.MiscOperator;
 import net.playblack.cuboids.regions.CuboidInterface;
 
 public class MiscListener implements PluginListener {
 
+    public MiscOperator miscOperator = new MiscOperator();
+
     @HookHandler
     public void onMobSpawn(EntitySpawnHook hook) {
-        EntitySpawnEvent event;
-        if (hook.getEntity() instanceof EntityMob) {
-            event = new EntitySpawnEvent((EntityMob) hook.getEntity());
-            ActionManager.fireEvent(event);
-            if (event.isCancelled()) {
-                hook.setCanceled();
-            }
+        if (miscOperator.onMobSpawn(hook.getEntity())) {
+            hook.setCanceled();
         }
     }
 

@@ -1,9 +1,10 @@
 package net.playblack.cuboids;
 
+import net.canarymod.Canary;
 import net.canarymod.api.entity.living.monster.EntityMob;
+import net.canarymod.api.factory.EntityFactory;
 import net.canarymod.api.world.World;
 import net.canarymod.api.world.position.Vector3D;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
@@ -28,22 +29,23 @@ public class HMobTask implements Runnable {
     }
 
     private EntityMob getRandomhMob(World world, int index) {
+        EntityFactory factory = Canary.factory().getEntityFactory();
+
         switch (index) {
             case 0:
-
-                return CServer.getServer().getMob("CaveSpider", world);
+                return factory.newEntityMob("CaveSpider", world);
             case 1:
-                return CServer.getServer().getMob("Creeper", world);
+                return factory.newEntityMob("Creeper", world);
             case 2:
-                return CServer.getServer().getMob("Enderman", world);
+                return factory.newEntityMob("Enderman", world);
             case 3:
-                return CServer.getServer().getMob("Skeleton", world);
+                return factory.newEntityMob("Skeleton", world);
             case 4:
-                return CServer.getServer().getMob("Spider", world);
+                return factory.newEntityMob("Spider", world);
             case 5:
-                return CServer.getServer().getMob("Zombie", world);
+                return factory.newEntityMob("Zombie", world);
             default:
-                return CServer.getServer().getMob("Zombie", world);
+                return factory.newEntityMob("Zombie", world);
         }
     }
 
@@ -54,8 +56,8 @@ public class HMobTask implements Runnable {
                     // if mobs are not allowed to spawn, more-mobs flag is ignored
                     continue;
                 }
-                if ((node.getProperty("more-mobs") == Status.ALLOW) && (CServer.getServer().isPlayerInRegion(node))) {
-                    World w = CServer.getServer().getWorld(node.getWorld());
+                if ((node.getProperty("more-mobs") == Status.ALLOW) && (SessionManager.get().isRegionPopulated(node))) {
+                    World w = Canary.getServer().getWorld(node.getWorld());
                     if (w.getRawTime() < 13000) {
                         // It's not night, don't bother spawning things
                         continue;

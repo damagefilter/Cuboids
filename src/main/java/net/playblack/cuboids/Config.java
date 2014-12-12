@@ -5,8 +5,6 @@ import net.canarymod.config.Configuration;
 import net.canarymod.plugin.PluginException;
 import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.cuboids.datasource.CanaryDbData;
-import net.playblack.cuboids.datasource.legacy.XmlDataLegacy;
-import net.playblack.cuboids.gameinterface.CServer;
 import net.playblack.cuboids.impl.canarymod.Cuboids;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -32,8 +30,6 @@ public class Config {
     PropertiesFile pluginSetting;
     PropertiesFile cuboidSetting;
     PropertiesFile dsSetting;
-    private Implementation impl = Implementation.NOT_SET;
-    private String basePath = "plugins/cuboids/";
     // global settings go into this
     private Region global = new Region();
     private HashMap<String, String> sqlConfig = null;
@@ -222,6 +218,7 @@ public class Config {
      * @return
      */
     public String getBasePath() {
+        String basePath = "plugins/cuboids/";
         return basePath;
     }
 
@@ -385,26 +382,5 @@ public class Config {
             return true;
         }
         return false;
-    }
-
-    public Implementation getImplementation() {
-        return impl;
-    }
-
-    public void setImplementation(Implementation impl) {
-        //Only allow setting the implementation once!
-        if (impl == Implementation.NOT_SET) {
-            return;
-        }
-
-        if (this.impl == Implementation.NOT_SET) {
-            this.impl = impl;
-        }
-    }
-
-    public enum Implementation {
-        CANARY,
-        CANARY_NEW,
-        NOT_SET
     }
 }

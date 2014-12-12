@@ -5,7 +5,6 @@ import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.regions.Region;
-import net.playblack.mcutils.Vector;
 
 import java.util.LinkedHashMap;
 

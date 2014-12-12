@@ -1,6 +1,6 @@
 package net.playblack.cuboids;
 
-import net.playblack.cuboids.gameinterface.CPlayer;
+import net.canarymod.api.entity.living.humanoid.Player;
 import net.playblack.cuboids.regions.Region;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,13 +14,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class HealThread implements Runnable {
 
-    CPlayer player;
+    Player player;
     ScheduledExecutorService threadManager;
     Region cube;
     int healPower;
     long healDelay;
 
-    public HealThread(CPlayer player, Region cube, ScheduledExecutorService threadManager, int healPower, long healDelay) {
+    public HealThread(Player player, Region cube, ScheduledExecutorService threadManager, int healPower, long healDelay) {
         this.player = player;
         this.healPower = healPower;
         this.healDelay = healDelay;
@@ -30,7 +30,8 @@ public class HealThread implements Runnable {
 
     @Override
     public void run() {
-        if (player.isInRegion(cube)) {
+
+        if (SessionManager.get().playerIsInRegion(player.getName(), cube)) {
 
             if (player.getHealth() > 0) {
                 player.setHealth(player.getHealth() + this.healPower);
