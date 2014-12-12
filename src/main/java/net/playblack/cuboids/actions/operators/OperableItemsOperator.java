@@ -3,11 +3,10 @@ package net.playblack.cuboids.actions.operators;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.Location;
-import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.RegionManager;
 
-public class OperableItemsOperator implements ActionListener {
+public class OperableItemsOperator {
 
 //    /**
 //     * Checks if the player can use the item in his hand (right-mouse-use)

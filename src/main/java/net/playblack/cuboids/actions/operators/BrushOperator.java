@@ -8,8 +8,6 @@ import net.canarymod.api.world.position.Vector3D;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.Permissions;
-import net.playblack.cuboids.actions.ActionListener;
-import net.playblack.cuboids.actions.ActionManager;
 import net.playblack.cuboids.exceptions.BlockEditLimitExceededException;
 import net.playblack.cuboids.exceptions.SelectionIncompleteException;
 import net.playblack.cuboids.generators.SphereGenerator;
@@ -17,7 +15,7 @@ import net.playblack.cuboids.selections.PlayerSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.Debug;
 
-public class BrushOperator implements ActionListener {
+public class BrushOperator {
     /**
      * Handle brush action, make undo etc and execute in world
      *
@@ -58,9 +56,5 @@ public class BrushOperator implements ActionListener {
         if (target != null) {
             handleBrush(player, target.getLocation());
         }
-    }
-
-    static {
-        ActionManager.registerActionListener("Cuboids", new BrushOperator());
     }
 }

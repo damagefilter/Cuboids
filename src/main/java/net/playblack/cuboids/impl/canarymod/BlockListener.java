@@ -3,7 +3,6 @@ package net.playblack.cuboids.impl.canarymod;
 import net.canarymod.api.entity.Fireball;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.entity.living.monster.Creeper;
-import net.canarymod.api.entity.living.monster.Enderman;
 import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Vector3D;
@@ -21,14 +20,11 @@ import net.canarymod.hook.world.ExplosionHook;
 import net.canarymod.hook.world.FlowHook;
 import net.canarymod.hook.world.IgnitionHook;
 import net.canarymod.plugin.PluginListener;
-import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.events.forwardings.EndermanPickupEvent;
 import net.playblack.cuboids.actions.operators.BlockModificationsOperator;
 import net.playblack.cuboids.actions.operators.BrushOperator;
 import net.playblack.cuboids.actions.operators.ExplosionType;
 import net.playblack.cuboids.actions.operators.OperableItemsOperator;
 import net.playblack.cuboids.actions.operators.SelectionOperator;
-import net.playblack.mcutils.ToolBox;
 import net.playblack.mcutils.Vector;
 
 import java.util.ArrayList;
@@ -180,13 +176,7 @@ public class BlockListener implements PluginListener {
 
     @HookHandler
     public void onEndermanPickup(EndermanPickupBlockHook hook) {
-        Block b = hook.getBlock();
-        Enderman entity = hook.getEnderman();
-        Location l = b.getLocation();
-        ToolBox.adjustWorldPosition(l);
-        EndermanPickupEvent event = new EndermanPickupEvent(l, b.getType(), hook.getEnderman());
-        ActionManager.fireEvent(event);
-        if (event.isCancelled()) {
+        if (blockModificationsOperator.onEndermanPickup(hook.getBlock().getLocation())) {
             hook.setCanceled();
         }
     }

@@ -5,7 +5,6 @@ import net.canarymod.api.world.blocks.BlockType;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.hook.world.IgnitionHook;
 import net.playblack.cuboids.Permissions;
-import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
@@ -14,7 +13,7 @@ import net.playblack.cuboids.regions.RegionManager;
 import java.util.Iterator;
 import java.util.List;
 
-public class BlockModificationsOperator implements ActionListener {
+public class BlockModificationsOperator {
 
     /**
      * Create a list of blocks that should not be affected by the explosion

@@ -8,10 +8,6 @@ import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.MessageSystem;
 import net.playblack.cuboids.Permissions;
-import net.playblack.cuboids.actions.ActionHandler;
-import net.playblack.cuboids.actions.ActionListener;
-import net.playblack.cuboids.actions.ActionManager;
-import net.playblack.cuboids.actions.events.forwardings.BlockLeftClickEvent;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
@@ -22,7 +18,7 @@ import net.playblack.mcutils.ColorManager;
  *
  * @author chris
  */
-public class SelectionOperator implements ActionListener {
+public class SelectionOperator {
 
     /**
      * Explain the current region
@@ -167,22 +163,10 @@ public class SelectionOperator implements ActionListener {
         setSelectionPoint(player, v.getLocation(), false, true);
     }
 
-    @ActionHandler
-    public void onBlockLeftClick(BlockLeftClickEvent event) {
-        if (setSelectionPoint(event.getPlayer(), event.getLocation(), false, false)) {
-            event.cancel();
-        }
-    }
-
     public boolean onBlockLeftClick(Player player, Location location) {
         if (setSelectionPoint(player, location, false, false)) {
             return true;
         }
         return false;
-    }
-
-    //Register that thing
-    static {
-        ActionManager.registerActionListener("Cuboids", new SelectionOperator());
     }
 }

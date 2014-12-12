@@ -2,12 +2,11 @@ package net.playblack.cuboids.actions.operators;
 
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.world.position.Location;
-import net.playblack.cuboids.actions.ActionListener;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 
-public class MiscOperator implements ActionListener {
+public class MiscOperator {
 
     /**
      * Returns true if the item dropping needs to be canceled

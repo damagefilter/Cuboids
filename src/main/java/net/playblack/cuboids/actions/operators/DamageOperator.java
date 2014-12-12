@@ -2,14 +2,11 @@ package net.playblack.cuboids.actions.operators;
 
 import net.canarymod.api.entity.Entity;
 import net.canarymod.api.world.position.Location;
-import net.playblack.cuboids.actions.ActionHandler;
-import net.playblack.cuboids.actions.ActionListener;
-import net.playblack.cuboids.actions.events.forwardings.EntityDamageEvent;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 
-public class DamageOperator implements ActionListener {
+public class DamageOperator {
 
     public boolean mobCanDoDamage(Location l) {
         Region r = RegionManager.get().getActiveRegion(l, false);
@@ -25,20 +22,6 @@ public class DamageOperator implements ActionListener {
             return false;
         }
         return true;
-    }
-
-    @ActionHandler
-    public void onDamage(EntityDamageEvent event) {
-        if (event.getAttacker().isMob() || event.getAttacker().isAnimal()) {
-            if (!mobCanDoDamage(event.getDefender().getLocation())) {
-                event.cancel();
-            }
-        }
-        if (event.getAttacker().isPlayer()) {
-            if (!playerCanDoDamage(event.getDefender().getLocation())) {
-                event.cancel();
-            }
-        }
     }
 
     /**
