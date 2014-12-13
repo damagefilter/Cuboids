@@ -28,6 +28,10 @@ public class RegionSessionInfo {
     }
 
     public void setRegion(Region r) {
+        if (r == null && currentRegion == null) { // In case he moves from global region to global region, do nothing
+            return;
+        }
+
         if (r == null) {
             sendFarewell();
             setGameMode(player.getWorld().getGameMode());
