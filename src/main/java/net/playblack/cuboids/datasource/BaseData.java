@@ -2,7 +2,8 @@ package net.playblack.cuboids.datasource;
 
 import net.playblack.cuboids.regions.Region;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * This is an abstract data layer which can be extended so we can have multiple
@@ -22,11 +23,9 @@ public interface BaseData {
 
     /**
      * Save the whole treelist to datasource
-     *
-     * @param treeList list of CuboidTrees
-     * @param silent
-     */
-    public void saveAll(ArrayList<Region> treeList, boolean silent, boolean force);
+     *  @param treeList list of CuboidTrees
+     * */
+    public void saveAll(HashMap<String, List<Region>> treeList);
 
     /**
      * Load all regions from datasource into memory.

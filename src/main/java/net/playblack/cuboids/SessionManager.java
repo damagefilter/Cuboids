@@ -1,8 +1,10 @@
 package net.playblack.cuboids;
 
 import net.canarymod.Canary;
+import net.canarymod.api.GameMode;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.Inventory;
+import net.canarymod.api.inventory.Item;
 import net.playblack.cuboids.history.HistoryTimeline;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.cuboids.selections.CuboidSelection;
@@ -20,7 +22,7 @@ public class SessionManager {
     private HashMap<String, HistoryTimeline> playerHistories = new HashMap<String, HistoryTimeline>(Canary.getServer().getMaxPlayers());
     private HashMap<String, CuboidSelection> playerClipboard = new HashMap<String, CuboidSelection>(Canary.getServer().getMaxPlayers());
     private HashMap<String, RegionSessionInfo> playerRegions = new HashMap<String, RegionSessionInfo>(Canary.getServer().getMaxPlayers());
-    private HashMap<String, HashMap<Integer, Inventory>> inventories = new HashMap<String, HashMap<Integer, Inventory>>();
+    private HashMap<String, HashMap<GameMode, Item[]>> inventories = new HashMap<String, HashMap<GameMode, Item[]>>();
 
     private SessionManager() {
 
@@ -83,24 +85,19 @@ public class SessionManager {
         return region == null && r == null || r.equals(region);
     }
 
-    public Inventory getPlayerInventory(String player, int mode) {
-        HashMap<Integer, Inventory> inv = inventories.get(player);
+    public Item[] getPlayerInventory(String player, GameMode mode) {
+        HashMap<GameMode, Item[]> inv = inventories.get(player);
         if (inv != null) {
-            return inv.get(Integer.valueOf(mode));
+            return inv.get(mode);
         }
         return null;
     }
 
-    public void setPlayerInventory(String player, int mode, Inventory inventory) {
+    public void setPlayerInventory(String player, GameMode mode, Inventory inventory) {
         if (!inventories.containsKey(player)) {
-            inventories.put(player, new HashMap<Integer, Inventory>());
+            inventories.put(player, new HashMap<GameMode, Item[]>());
         }
-        inventories.get(player).put(mode, inventory);
-    }
-
-    public boolean inventoryExists(String player, int mode) {
-        HashMap<Integer, Inventory> inv = inventories.get(player);
-        return inv != null && inv.containsKey(mode);
+        inventories.get(player).put(mode, inventory.getContents());
     }
 
     /**

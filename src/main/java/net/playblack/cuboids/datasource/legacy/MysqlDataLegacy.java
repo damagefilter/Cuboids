@@ -8,6 +8,7 @@ import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -189,7 +190,7 @@ public class MysqlDataLegacy implements BaseData {
     }
 
     @Override
-    public void saveAll(ArrayList<Region> treeList, boolean silent, boolean force) {
+    public void saveAll(HashMap<String, List<Region>> treeList) {
         throw new UnsupportedOperationException("Cannot save files in legacy MySQL backend. Please use the new backend implementation.");
     }
 

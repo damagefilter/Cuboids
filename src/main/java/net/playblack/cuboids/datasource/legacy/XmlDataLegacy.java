@@ -55,21 +55,8 @@ public class XmlDataLegacy implements BaseData {
     }
 
     @Override
-    public void saveAll(ArrayList<Region> treeList, boolean silent, boolean force) {
-        synchronized (lock) {
-            try {
-                for (Region r : treeList) {
-                    writeFile(regionToDom(r));
-                    for (Region reg : r.getChildsDeep(new ArrayList<Region>())) {
-                        writeFile(regionToDom(reg));
-                    }
-                }
-            }
-            catch (IOException e) {
-                Debug.log(e.getMessage());
-            }
-
-        }
+    public void saveAll(HashMap<String, List<Region>> treeList) {
+        throw new UnsupportedOperationException("Cannot save files in legacy xml backend. Please use the new backend implementation.");
     }
 
     @Override

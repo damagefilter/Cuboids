@@ -150,7 +150,7 @@ public class CuboidInterface {
      * @param player
      */
     public void saveAll(Player player) {
-        RegionManager.get().save(false, true);
+        RegionManager.get().save();
         MessageSystem.successMessage(player, "cuboidSavedAll");
     }
 

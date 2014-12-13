@@ -37,23 +37,26 @@ public class CanaryDbData implements BaseData {
     }
 
     @Override
-    public void saveAll(ArrayList<Region> treeList, boolean silent, boolean force) {
+    public void saveAll(HashMap<String, List<Region>> treeList) {
         Map<DataAccess, Map<String, Object>> toInsert = new HashMap<DataAccess, Map<String, Object>>();
-        for (Region r : treeList) {
-            List<Region> all = r.getChildsDeep(new ArrayList<Region>());
-            for (Region reg : all) {
-                HashMap<String, Object> filter = new HashMap<String, Object>();
-                filter.put("region_name", reg.getName());
-                filter.put("world_name", reg.getWorld());
-                toInsert.put(RegionInformationDataAccess.toDataAccess(reg), filter);
+        for (List<Region> roots : treeList.values()) {
+            for (Region r : roots) {
+                List<Region> all = r.getChildsDeep(new ArrayList<Region>());
+                for (Region reg : all) {
+                    HashMap<String, Object> filter = new HashMap<String, Object>();
+                    filter.put("region_name", reg.getName());
+                    filter.put("world_name", reg.getWorld());
+                    toInsert.put(RegionInformationDataAccess.toDataAccess(reg), filter);
+                }
+            }
+            try {
+                Database.get().updateAll(new RegionInformationDataAccess(), toInsert);
+            }
+            catch (DatabaseWriteException e) {
+                Debug.logStack("Could not save region tree.", e);
             }
         }
-        try {
-            Database.get().updateAll(new RegionInformationDataAccess(), toInsert);
-        }
-        catch (DatabaseWriteException e) {
-            Debug.logStack("Could not save region tree.", e);
-        }
+
     }
 
     @Override

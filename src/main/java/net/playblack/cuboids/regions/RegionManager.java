@@ -6,6 +6,8 @@ import net.playblack.cuboids.datasource.BaseData;
 import net.playblack.mcutils.Debug;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * This manages Regions and takes care of lookups etc
@@ -14,7 +16,7 @@ import java.util.ArrayList;
  */
 public class RegionManager {
     private static RegionManager instance = null;
-    private ArrayList<Region> rootNodes = new ArrayList<Region>(15);
+    private HashMap<String, List<Region>> rootNodes = new HashMap<String, List<Region>>();
     private BaseData dataSource;
     private Region global;
 
@@ -73,11 +75,9 @@ public class RegionManager {
     /**
      * Save all cuboid files to backend
      *
-     * @param silent
-     * @param force
      */
-    public void save(boolean silent, boolean force) {
-        dataSource.saveAll(rootNodes, silent, force);
+    public void save() {
+        dataSource.saveAll(rootNodes);
     }
 
     /**
@@ -148,7 +148,10 @@ public class RegionManager {
      */
     public void addRoot(Region root) {
         if (root.isRoot()) {
-            rootNodes.add(root);
+            if (!rootNodes.containsKey(root.getWorld())) {
+                rootNodes.put(root.getWorld(), new ArrayList<Region>());
+            }
+            rootNodes.get(root.getWorld()).add(root);
         }
     }
 
@@ -161,8 +164,13 @@ public class RegionManager {
      */
     public void removeRegion(Region cube) {
 
-        if (rootNodes.contains(cube)) {
-            rootNodes.remove(cube);
+        List<Region> roots = rootNodes.get(cube.getWorld());
+        if (roots == null) {
+            Debug.logError(cube.getName() + " is within an unregistered world and therefore not tracked. Cannot remove!");
+            return;
+        }
+        if (roots.contains(cube)) {
+            roots.remove(cube);
         }
         //Detach the childs of the region and re-sort them in
         //If we don't do this, all childs will be thrown away
@@ -175,7 +183,7 @@ public class RegionManager {
                 addRoot(child);
             }
         }
-        //In this was not a root region, we need to detach it from its parent
+        //If this was not a root region, we need to detach it from its parent
         //so it will not be taken into consideration anymore
         cube.detach();
         removeNodeFile(cube);
@@ -185,10 +193,11 @@ public class RegionManager {
      * Take the root nodes, take them apart, re-sort them so it's all cool, put
      * them back together. Good as new!
      */
-    public void autoSortRegions() {
+    public void autoSortRegions(String world) {
         ArrayList<Region> workerList = new ArrayList<Region>();
         ArrayList<Region> rootList = new ArrayList<Region>();
-        for (Region tree : rootNodes) {
+        List<Region> roots = rootNodes.get(world);
+        for (Region tree : roots) {
             tree.getChildsDeep(workerList);
         }
         for (Region tree : workerList) {
@@ -210,24 +219,39 @@ public class RegionManager {
                 rootList.add(tree);
             }
         }
-        rootNodes = rootList;
+        roots = rootList;
+        rootNodes.get(world).clear();
+        rootNodes.get(world).addAll(roots);
+    }
+
+    public void autoSortRegions() {
+        for (String world : rootNodes.keySet()) {
+            autoSortRegions(world);
+        }
     }
 
     /**
      * Clear up parent parent relations. That means removing parent relations
-     * where childs are not 100% inside their parent. This is legacy support!
+     * where childs are not 100% inside their parent.
      */
-    public void cleanParentRelations() {
+    public void cleanParentRelations(String world) {
         ArrayList<Region> detachedRegions = new ArrayList<Region>();
-        for (Region tree : rootNodes) {
+        for (Region tree : rootNodes.get(world)) {
             detachedRegions.addAll(tree.fixChilds());
         }
+
         //Put all detached into root
         for (Region r : detachedRegions) {
             addRoot(r);
         }
         //Re-sort root nodes
         autoSortRegions();
+    }
+
+    public void cleanParentRelations() {
+        for (String world : rootNodes.keySet()) {
+            cleanParentRelations(world);
+        }
     }
 
     /**
@@ -238,7 +262,10 @@ public class RegionManager {
      * @return
      */
     public boolean cuboidExists(String cube, String world) {
-        for (Region tree : rootNodes) {
+        if (!rootNodes.containsKey(world)) {
+            return false;
+        }
+        for (Region tree : rootNodes.get(world)) {
             if (tree.equalsWorld(world)) {
                 if (tree.queryChilds(cube) != null) {
                     return true;
@@ -266,7 +293,11 @@ public class RegionManager {
         if (v == null) {
             return !ignoreGlobal ? global : null;
         }
-        for (Region tree : rootNodes) {
+        String world = v.getWorld().getFqName();
+        if (!rootNodes.containsKey(world)) {
+            return ignoreGlobal ? null : global;
+        }
+        for (Region tree : rootNodes.get(world)) {
             if (tree.equalsWorld(v.getWorld())) {
                 if (!tree.isWithin(v)) {
                     continue;
@@ -292,7 +323,12 @@ public class RegionManager {
         if (v == null) {
             return list;
         }
-        for (Region tree : rootNodes) {
+        String world = v.getWorld().getFqName();
+        if (!rootNodes.containsKey(world)) {
+            return list;
+        }
+
+        for (Region tree : rootNodes.get(world)) {
             if (tree.isWithin(v)) {
                 for (Region node : tree.getChildsDeep(new ArrayList<Region>())) {
                     if (node.isWithin(v) && !list.contains(node)) {
@@ -315,7 +351,11 @@ public class RegionManager {
      */
     public ArrayList<Region> getAllInDimension(String world) {
         ArrayList<Region> list = new ArrayList<Region>();
-        for (Region tree : rootNodes) {
+
+        if (!rootNodes.containsKey(world)) {
+            return list;
+        }
+        for (Region tree : rootNodes.get(world)) {
             if (tree.equalsWorld(world)) {
                 tree.getChildsDeep(list);
             }
@@ -338,7 +378,10 @@ public class RegionManager {
      * @return Region or null
      */
     public Region getRegionByName(String name, String world) {
-        for (Region tree : rootNodes) {
+        if (!rootNodes.containsKey(world)) {
+            return null;
+        }
+        for (Region tree : rootNodes.get(world)) {
             if (tree.equalsWorld(world)) {
                 Region tmp = tree.queryChilds(name);
                 if (tmp != null) {
@@ -357,10 +400,14 @@ public class RegionManager {
      * @return
      */
     public Region getPossibleParent(Region cube) {
-        // log.logMessage("Going to find a suitable parent for "+cube.getName(),
-        // "INFO");
+
+        if (!rootNodes.containsKey(cube.getWorld())) {
+            // This is either the first in the world or this happens during the load cycle of the plugin.
+            // In the latter case this is ultimately a root region anyway as the data source as already managed parenting.
+            return null;
+        }
         ArrayList<Region> matches = new ArrayList<Region>();
-        for (Region tree : rootNodes) {
+        for (Region tree : rootNodes.get(cube.getWorld())) {
             if (tree.equalsWorld(cube)) {
                 if (cube.cuboidIsWithin(tree, true)) {
                     Region tmp = tree.queryChilds(cube);
@@ -392,8 +439,17 @@ public class RegionManager {
      *
      * @return
      */
-    public ArrayList<Region> getRootNodeList() {
-        return rootNodes;
+    public ArrayList<Region> getRegionsWithProperty(String property) {
+        ArrayList<Region> regions = new ArrayList<Region>();
+
+        for (List<Region> roots : rootNodes.values()) {
+            for (Region r : roots) {
+                if (r.getProperty(property) == Region.Status.ALLOW) {
+                    regions.add(r);
+                }
+            }
+        }
+        return regions;
     }
 
     /**
@@ -404,15 +460,20 @@ public class RegionManager {
      * @param cube
      */
     public void updateRegion(Region cube) {
+        if (!rootNodes.containsKey(cube.getWorld())) {
+            rootNodes.put(cube.getWorld(), new ArrayList<Region>());
+        }
+        List<Region> roots = rootNodes.get(cube.getWorld());
+
         if (cube.getParent() == null) {
-            if (!rootNodes.contains(cube)) {
+            if (!roots.contains(cube)) {
                 addRoot(cube);
             }
         }
         else {
-            if (rootNodes.contains(cube)) {
-                //We have a prent but are filed unter rootNodes. must change ...
-                rootNodes.remove(cube);
+            if (roots.contains(cube)) {
+                //We have a parent but are filed under rootNodes. must change ...
+                roots.remove(cube);
                 //Parent is already set and updated, no need for more
             }
         }

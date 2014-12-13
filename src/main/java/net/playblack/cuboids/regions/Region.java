@@ -8,6 +8,7 @@ import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.user.Group;
 import net.playblack.cuboids.RegionFlagRegister;
 import net.playblack.mcutils.ColorManager;
+import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.Vector;
 
 import java.util.ArrayList;
@@ -98,6 +99,10 @@ public class Region {
      * @param cube
      */
     public void setParent(Region cube) {
+        if (!this.cuboidIsWithin(cube, true)) {
+            Debug.logError(cube.getName() + " cannot be made parent of " + this.getName() + ". The region is not inside the proposed parent.");
+            return;
+        }
         parent = cube;
 
         if (parent != null) {
@@ -255,15 +260,17 @@ public class Region {
                     current = c;
                 }
                 else if (current.getPriority() == c.getPriority()) {
-                    current = current.getSize() > c.getSize() ? c : current;
+                    current = current.getDiameter() > c.getDiameter() ? c : current;
                 }
 
                 Region check = c.queryChilds(loc);
-                if (check.getPriority() > current.getPriority()) {
-                    current = check;
-                }
-                else if (check.getPriority() == current.getPriority()) {
-                    current = current.getSize() > check.getSize() ? check : current;
+                if (check != null) {
+                    if (check.getPriority() > current.getPriority()) {
+                        current = check;
+                    }
+                    else if (check.getPriority() == current.getPriority()) {
+                        current = current.getDiameter() > check.getDiameter() ? check : current;
+                    }
                 }
             }
         }
@@ -285,7 +292,7 @@ public class Region {
                     current = c;
                 }
                 else if (c.getPriority() == current.getPriority()) {
-                    current = current.getSize() > c.getSize() ? c : current;
+                    current = current.getDiameter() > c.getDiameter() ? c : current;
                 }
 
                 Region check = c.queryChilds(cube);
@@ -293,7 +300,7 @@ public class Region {
                     current = check;
                 }
                 else if (check.getPriority() == current.getPriority()) {
-                    current = current.getSize() > check.getSize() ? check : current;
+                    current = current.getDiameter() > check.getDiameter() ? check : current;
                 }
             }
         }
@@ -616,9 +623,11 @@ public class Region {
      * @return
      */
     public boolean isWithin(Location v) {
-        if (!equalsWorld(v.getWorld())) {
-            return false;
-        }
+        // Note regions need to be checked for valid world upon creating.
+        // They are sorted by world in the root nodes afterwards.
+//        if (!equalsWorld(v.getWorld())) {
+//            return false;
+//        }
         return v.isWithin(origin, offset);
     }
 
@@ -627,8 +636,8 @@ public class Region {
      *
      * @return
      */
-    int getSize() {
-        return (int) Vector.getDistance(origin.getBlockX(), offset.getBlockX()) * (int) Vector.getDistance(origin.getBlockY(), offset.getBlockY()) * (int) Vector.getDistance(origin.getBlockZ(), offset.getBlockZ());
+    int getDiameter() {
+        return (int) origin.getSquareDistance(offset);
     }
 
     /**
@@ -973,14 +982,14 @@ public class Region {
         }
         if (other instanceof Region) {
             Region c = (Region) other;
-            return (c.name.equals(name)) && (c.getSize() == getSize()) && (c.world.equals(world));
+            return (c.name.equals(name)) && (c.getDiameter() == getDiameter()) && (c.world.equals(world));
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return getSize() + priority + world.hashCode();
+        return getDiameter() + priority + world.hashCode();
     }
 
     public enum Status {

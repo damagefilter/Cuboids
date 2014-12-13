@@ -3,6 +3,7 @@ package net.playblack.cuboids;
 import net.canarymod.api.GameMode;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.Inventory;
+import net.canarymod.api.inventory.Item;
 import net.playblack.cuboids.regions.CuboidInterface;
 import net.playblack.cuboids.regions.Region;
 import net.playblack.mcutils.Debug;
@@ -15,10 +16,6 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class RegionSessionInfo {
-    /**
-     * Was the game mode forced by something that was not cuboids area management?
-     */
-    private boolean forcedMode;
     private Player player;
     private Region currentRegion;
 
@@ -33,7 +30,7 @@ public class RegionSessionInfo {
     public void setRegion(Region r) {
         if (r == null) {
             sendFarewell();
-            setGameMode(GameMode.SURVIVAL);
+            setGameMode(player.getWorld().getGameMode());
             currentRegion = null;
             return;
         }
@@ -43,10 +40,9 @@ public class RegionSessionInfo {
                 sendFarewell();
             }
             if (r.getProperty("creative") != Region.Status.ALLOW) {
-                setGameMode(GameMode.SURVIVAL);
+                setGameMode(player.getWorld().getGameMode());
             }
             else if (r.getProperty("creative") == Region.Status.ALLOW) {
-                forcedMode = false; // TODO: This may have no effect, remove it?
                 setGameMode(GameMode.CREATIVE);
             }
             if (r.getProperty("healing") == Region.Status.ALLOW) {
@@ -66,14 +62,14 @@ public class RegionSessionInfo {
         }
     }
 
-    public void setInventory(Inventory items) {
+    public void setInventory(Item[] items) {
         if (items == null) {
             player.getInventory().clearContents();
             return;
         }
         try {
-            if (items.getContents().length > 0) {
-                player.getInventory().setContents(items.getContents());
+            if (items.length > 0) {
+                player.getInventory().setContents(items);
             }
             else {
                 player.getInventory().clearContents();
@@ -85,42 +81,29 @@ public class RegionSessionInfo {
         }
     }
 
-    public Inventory getInventory(GameMode mode) {
-        return SessionManager.get().getPlayerInventory(player.getName(), mode.getId());
+    public Item[] getInventory(GameMode mode) {
+        return SessionManager.get().getPlayerInventory(player.getName(), mode);
     }
 
-    public void setInventoryForMode(Inventory inv, GameMode mode) {
-        SessionManager.get().setPlayerInventory(player.getName(), mode.getId(), inv);
+    public void backupModeInventory(Inventory inv, GameMode mode) {
+        SessionManager.get().setPlayerInventory(player.getName(), mode, inv);
     }
 
+    /**
+     * Called before a new region is entered.
+     * So currentRegion is still the old region (possibly creative region) we're going to leave.
+     *
+     * @param newMode
+     */
     private void setGameMode(GameMode newMode) {
-        // Firstly assume we're not in forced mode
-        if (forcedMode && (player.getMode() != newMode)) {
-            forcedMode = false;
+        if (player.hasPermission(Permissions.BYPASS$GAMEMODE)) {
+            return;
         }
 
-        // This means we have been in this mode before
-        if (currentRegion == null && (player.getMode() == newMode)) {
-            forcedMode = true;
-        }
-
-        if (currentRegion != null) {
-            if (currentRegion.getProperty("creative") != Region.Status.ALLOW && (player.getMode() == newMode)) {
-                forcedMode = true;
-            }
-        }
-
-        if (!forcedMode) {
-            // Backup the inventory for later retrieval
-            setInventoryForMode(player.getInventory(), player.getMode());
-            player.setMode(newMode);
-            setInventory(getInventory(newMode));
-        }
-//        if (mode == 1 && !adminCreative) {
-//            setInventoryForMode(getCurrentInventory(), getGameMode());
-//            player.setMode(GameMode.fromId(mode));
-//            setInventory(getInventory(mode));
-//        }
+        // Backup the inventory for later retrieval
+        backupModeInventory(player.getInventory(), player.getMode());
+        player.setMode(newMode);
+        setInventory(getInventory(newMode));
     }
 
     private void sendFarewell() {
