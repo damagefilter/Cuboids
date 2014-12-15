@@ -1,15 +1,11 @@
 package net.playblack.cuboids.regions;
 
+import net.canarymod.Canary;
 import net.canarymod.Translator;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.position.Location;
-import net.playblack.cuboids.Config;
-import net.playblack.cuboids.CuboidSaveTask;
-import net.playblack.cuboids.HMobTask;
-import net.playblack.cuboids.MessageSystem;
-import net.playblack.cuboids.Permissions;
-import net.playblack.cuboids.SessionManager;
+import net.playblack.cuboids.*;
 import net.playblack.cuboids.selections.CuboidSelection;
 import net.playblack.cuboids.selections.SelectionManager;
 import net.playblack.mcutils.ColorManager;
@@ -666,6 +662,16 @@ public class CuboidInterface {
         }
         MessageSystem.translateMessage(player, ColorManager.LightGray, "restrictedCommandsForCuboid", cube.getName());
         player.message(ColorManager.Rose + cube.getRestrictedCommands().toString());
+    }
+
+    public void showCommand(Player player, String cubeName) {
+        Region cube = RegionManager.get().getRegionByName(cubeName, player.getWorld().getFqName());
+        if (cube == null) {
+            MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
+            return;
+        }
+
+        Canary.getServer().addSynchronousTask(new ShowTask(Config.getPlugin(), 10, player, cube.getOuterTopBlocks(cube), 10));
     }
 
     public void killTasks() {
