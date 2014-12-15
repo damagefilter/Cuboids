@@ -229,6 +229,25 @@ public class CmodCommands implements CommandListener {
         }
     }
 
+    @Command(aliases = {"show"},
+            parent = "cmod",
+            helpLookup = "cmod info",
+            description = "Shows your cuboid with some nice particles",
+            permissions = {"cuboids.cmod.show", "cuboids.misc.show", "cuboids.super.admin"},
+            toolTip = "/cmod show <area>",
+            min = 2)
+    public void cmodShow(MessageReceiver caller, String[] args) {
+        try {
+            new net.playblack.cuboids.commands.CmodShow().execute((Player) caller, args);
+        }
+        catch (InvalidPlayerException e) {
+            Debug.logError(e.getMessage());
+        }
+        catch (ClassCastException f) {
+            Debug.logError("This command works only on players!");
+        }
+    }
+
     @Command(aliases = {"loadpoints"},
             parent = "cmod",
             helpLookup = "cmod loadpoints",

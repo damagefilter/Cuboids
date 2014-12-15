@@ -1,8 +1,10 @@
 package net.playblack.cuboids.regions;
 
+import net.canarymod.Canary;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.api.inventory.ItemType;
 import net.canarymod.api.world.World;
+import net.canarymod.api.world.blocks.Block;
 import net.canarymod.api.world.position.Location;
 import net.canarymod.api.world.position.Vector3D;
 import net.canarymod.user.Group;
@@ -860,6 +862,13 @@ public class Region {
         return items.toString();
     }
 
+
+    /* ************************************************
+     *
+     * GETTER / SETTER STUFF
+     *
+     * ************************************************/
+
     /**
      * @return the origin
      */
@@ -867,12 +876,19 @@ public class Region {
         return origin;
     }
 
+    /**
+     * @return the origin location
+     */
+    public Location getOriginLocation() {
+        return new Location(Canary.getServer().getWorld(world), origin);
+    }
 
-    /* ************************************************
-     *
-     * GETTER / SETTER STUFF
-     *
-     * ************************************************/
+    /**
+     * @return the offset location
+     */
+    public Location getOffsetLocation() {
+        return new Location(Canary.getServer().getWorld(world), offset);
+    }
 
     /**
      * @return the offset
@@ -904,6 +920,31 @@ public class Region {
             this.detach();
         }
         RegionManager.get().cleanParentRelations();
+    }
+
+    public List<Block> getOuterTopBlocks(Region cube) {
+        Location origin = cube.getOriginLocation();
+        Location offset = cube.getOffsetLocation();
+        World world = origin.getWorld();
+
+        int startx = origin.getBlockX();
+        int startz = origin.getBlockZ();
+
+        int endx = offset.getBlockX();
+        int endz = offset.getBlockZ();
+
+        List<Block> blocks = new ArrayList<Block>();
+
+        for (int x = startx; x < endx; x++) {
+            for (int z = startz; z < endz; z++) {
+                if (x != startx && x != endx - 1 && z != startz && z != endz - 1)
+                    continue;
+
+                blocks.add(world.getBlockAt(x, world.getHighestBlockAt(x, z), z));
+            }
+        }
+
+        return blocks;
     }
 
     /**

@@ -23,6 +23,7 @@ import java.util.Iterator;
 public class Config {
 
     private static Config instance = null;
+    private static Cuboids cuboidsInstance = null;
     // Cuboids Default Settings
     HashMap<String, Region.Status> defaultSettings = new HashMap<String, Region.Status>();
     ArrayList<Integer> restrictedItems;
@@ -42,6 +43,7 @@ public class Config {
         return s;
     }
     public Config(Cuboids plugin) {
+        cuboidsInstance = plugin;
         pluginSetting = Configuration.getPluginConfig(plugin, "plugin-config");
 //        pluginSetting = new PropsFile(basePath + "settings.properties");
 //        cuboidSetting = new PropsFile(basePath + "cuboid.properties");
@@ -205,6 +207,10 @@ public class Config {
             return;
         }
         Config.instance = instance;
+    }
+
+    public static Cuboids getPlugin() {
+        return cuboidsInstance;
     }
 
     public void updateGlobalSettings(Region props) {
