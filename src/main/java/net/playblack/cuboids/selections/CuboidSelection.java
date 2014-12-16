@@ -206,7 +206,7 @@ public class CuboidSelection implements ISelection {
     public Region toRegion(Player player, String[] playerlist) {
         Region cube = new Region();
         String name = null;
-        cube.setBoundingBox(this.origin, this.offset);
+        cube.setBoundingBox(this.origin, this.offset, false);
         for (int i = 0; i < playerlist.length; i++) {
             if (i == (playerlist.length - 1)) { // last element is name!
                 name = playerlist[i];

@@ -8,7 +8,6 @@ import net.playblack.cuboids.regions.RegionManager;
 import net.playblack.mcutils.Debug;
 import net.playblack.mcutils.ToolBox;
 
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -149,7 +148,7 @@ public class MysqlDataLegacy implements BaseData {
                 String[] point2 = rs.getString("point2").trim().split(",");
                 Vector3D p1 = new Vector3D(Double.parseDouble(point1[0]), Double.parseDouble(point1[1]), Double.parseDouble(point1[2]));
                 Vector3D p2 = new Vector3D(Double.parseDouble(point2[0]), Double.parseDouble(point2[1]), Double.parseDouble(point2[2]));
-                cube.setBoundingBox(p1, p2);
+                cube.setBoundingBox(p1, p2, false);
             }
             catch (NumberFormatException e) {
                 Debug.logWarning("Failed to parse points for Region " + cube.getName() + ", stopping!");

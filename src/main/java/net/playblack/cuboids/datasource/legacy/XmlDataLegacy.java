@@ -292,7 +292,7 @@ public class XmlDataLegacy implements BaseData {
         newRegion.addPlayer(meta.getChildText("players"));
         newRegion.addGroup(meta.getChildText("groups"));
         try {
-            newRegion.setBoundingBox(Vector3D.fromString(meta.getChildText("origin")), Vector3D.fromString(meta.getChildText("offset")));
+            newRegion.setBoundingBox(Vector3D.fromString(meta.getChildText("origin")), Vector3D.fromString(meta.getChildText("offset")), false);
         }
         catch (CanaryDeserializeException e) {
             Debug.logWarning(e.getMessage() + " - dropping region!");

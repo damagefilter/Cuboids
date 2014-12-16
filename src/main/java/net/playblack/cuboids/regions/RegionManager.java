@@ -8,7 +8,9 @@ import net.playblack.mcutils.Debug;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This manages Regions and takes care of lookups etc
@@ -195,34 +197,34 @@ public class RegionManager {
      * them back together. Good as new!
      */
     public void autoSortRegions(String world) {
-        ArrayList<Region> workerList = new ArrayList<Region>();
         ArrayList<Region> rootList = new ArrayList<Region>();
         List<Region> roots = rootNodes.get(world);
-        for (Region tree : roots) {
-            tree.getChildsDeep(workerList);
+        List<Region> workList = new ArrayList<Region>();
+        // Create a flat list of all nodes in the world.
+        for (Region root : roots) {
+            root.getChildsDeep(workList);
         }
-        for (Region tree : workerList) {
-            Region parent = getPossibleParent(tree);
-            // Parent must not be null and also must not have the same name as
-            // cube (because then it would be cube)
-            if (parent != null && !(parent.getName().equals(tree.getName()))) {
-                tree.setParent(parent);
-                if (parent.getPriority() < 0) {
-                    parent.setPriority(0);
-                }
-                if (tree.getPriority() <= parent.getPriority()) {
-                    tree.setPriority(parent.getPriority() + 1);
-                }
+        for (Region region : workList) {
+            Region parent = getPossibleParentFromSet(region, workList);
+            if (region.isRoot() && parent == null) {
+                // Still root, don't change
+                rootList.add(region);
+                continue;
             }
-
+            if (region.hasParent() && region.cuboidIsWithin(region.getParent(), true)) {
+                // Still good, don't change
+                continue;
+            }
+            // Parent must not be null and also must not have the same name as cube
+            if (!region.equals(parent)) {
+                region.setParent(parent);
+            }
             if (parent == null) {
-                tree.setParent(null);
-                rootList.add(tree);
+                rootList.add(region);
             }
         }
-        roots = rootList;
         rootNodes.get(world).clear();
-        rootNodes.get(world).addAll(roots);
+        rootNodes.get(world).addAll(rootList);
     }
 
     public void autoSortRegions() {
@@ -407,12 +409,10 @@ public class RegionManager {
         }
         ArrayList<Region> matches = new ArrayList<Region>();
         for (Region tree : rootNodes.get(cube.getWorld())) {
-            if (tree.equalsWorld(cube)) {
-                if (cube.cuboidIsWithin(tree, true)) {
-                    Region tmp = tree.queryChilds(cube);
-                    if (tmp != null && tmp != cube) {
-                        matches.add(tmp);
-                    }
+            if (cube.cuboidIsWithin(tree, true)) {
+                Region tmp = tree.queryChilds(cube);
+                if (tmp != null && tmp != cube) {
+                    matches.add(tmp);
                 }
             }
         }
@@ -426,6 +426,40 @@ public class RegionManager {
                     if (!matche.getName().equals(cube.getName())) {
                         min = matche;
                     }
+                }
+            }
+            return min;
+        }
+        return null;
+    }
+
+    /**
+     * Get a possible parent from a flat set of regions.
+     * Childs will not be checked, provide all possible candidates in the set
+     *
+     * @param cube
+     * @param set
+     * @return
+     */
+    private Region getPossibleParentFromSet(Region cube, List<Region> set) {
+        Set<Region> matches = new HashSet<Region>();
+        for (Region tree : set) {
+            if (cube.cuboidIsWithin(tree, true)) {
+                matches.add(tree);
+            }
+        }
+        if (matches.size() > 0) {
+            Region min = null;
+            for (Region matche : matches) {
+                if (matche.equals(cube)) {
+                    continue;
+                }
+                if (min == null) {
+                    min = matche;
+                    continue;
+                }
+                if (min.getPriority() > matche.getPriority()) {
+                    min = matche;
                 }
             }
             return min;

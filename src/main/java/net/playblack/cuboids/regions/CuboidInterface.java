@@ -411,7 +411,7 @@ public class CuboidInterface {
                     MessageSystem.failMessage(player, "selectionIncomplete");
                     return false;
                 }
-                cube.setBoundingBox(selection.getOrigin(), selection.getOffset());
+                cube.setBoundingBox(selection.getOrigin(), selection.getOffset(), false);
                 RegionManager.get().updateRegion(cube);
                 RegionManager.get().autoSortRegions();
 

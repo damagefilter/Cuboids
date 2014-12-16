@@ -36,7 +36,7 @@ public class CmodAdd extends CBaseCommand {
             MessageSystem.failMessage(player, "selectionIncomplete");
             return;
         }
-        defaultC.setBoundingBox(selection.getOrigin(), selection.getOffset());
+        defaultC.setBoundingBox(selection.getOrigin(), selection.getOffset(), false);
         defaultC.setName(command[1]);
         defaultC.setWorld(player.getWorld().getFqName());
         defaultC.addPlayer("o:" + player.getName());

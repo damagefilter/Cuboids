@@ -64,7 +64,7 @@ public class RegionInformationDataAccess extends DataAccess {
         r.setWorld(this.world);
         r.setPriority(this.priority);
         try {
-            r.setBoundingBox(Vector3D.fromString(this.origin), Vector3D.fromString(this.offset));
+            r.setBoundingBox(Vector3D.fromString(this.origin), Vector3D.fromString(this.offset), false);
         }
         catch (CanaryDeserializeException e) {
             Debug.logError("Failed to deserialize a region from database. Dropping it: " + name);

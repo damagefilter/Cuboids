@@ -12,7 +12,7 @@ import net.playblack.mcutils.ColorManager;
 public class CmodMove extends CBaseCommand {
 
     public CmodMove() {
-        super("Move a Cuboid: " + ColorManager.Yellow + "/cmod <area> move/resize", 3);
+        super("Move a Cuboid: " + ColorManager.Yellow + "/cmod move <region>", 2);
     }
 
     @Override

@@ -295,16 +295,16 @@ public class Region {
      */
     public Region queryChilds(Region cube) {
         Region current = this;
-        for (Region c : childs) {
-            if (cube.cuboidIsWithin(c, true)) {
-                if (c.getPriority() > current.getPriority()) {
-                    current = c;
+        for (Region child : childs) {
+            if (cube.cuboidIsWithin(child, true)) {
+                if (child.getPriority() > current.getPriority()) {
+                    current = child;
                 }
-                else if (c.getPriority() == current.getPriority()) {
-                    current = current.getDiameter() > c.getDiameter() ? c : current;
+                else if (child.getPriority() == current.getPriority()) {
+                    current = current.getDiameter() > child.getDiameter() ? child : current;
                 }
 
-                Region check = c.queryChilds(cube);
+                Region check = child.queryChilds(cube);
                 if (check.getPriority() > current.getPriority()) {
                     current = check;
                 }
@@ -354,7 +354,7 @@ public class Region {
     public List<Region> getChildsDeep(List<Region> collection) {
         for (Region r : childs) {
             collection.add(r);
-            collection = r.getChildsDeep(collection);
+            r.getChildsDeep(collection);
         }
         if (!collection.contains(this)) {
             collection.add(this);
@@ -614,10 +614,14 @@ public class Region {
     public boolean cuboidIsWithin(Region cube, boolean complete) {
         if (this.equalsWorld(cube)) {
             if (complete) {
-                return origin.isWithin(cube.getOrigin(), cube.getOffset()) && offset.isWithin(cube.getOrigin(), cube.getOffset());
+                return cube.isWithin(origin) && cube.isWithin(offset);
+//                return isWithin(cube.getOrigin()) && isWithin(cube.getOffset());
+//                return origin.isWithin(cube.getOrigin(), cube.getOffset()) && offset.isWithin(cube.getOrigin(), cube.getOffset());
             }
             else {
-                return origin.isWithin(cube.getOrigin(), cube.getOffset()) || offset.isWithin(cube.getOrigin(), cube.getOffset());
+                return cube.isWithin(origin) || cube.isWithin(offset);
+//                return isWithin(cube.getOrigin()) || isWithin(cube.getOffset());
+//                return origin.isWithin(cube.getOrigin(), cube.getOffset()) || offset.isWithin(cube.getOrigin(), cube.getOffset());
             }
         }
         else {
@@ -922,17 +926,20 @@ public class Region {
     /**
      * Sets the bounding box of this region and manages re-sorting
      * if the new size causes any inconsistency with parent relations
-     *
      * @param origin the new origin
      * @param offset the new offset
+     * @param sort true if you wish to re-generate the tree after the resizing operation
      */
-    public void setBoundingBox(Vector3D origin, Vector3D offset) {
+    public void setBoundingBox(Vector3D origin, Vector3D offset, boolean sort) {
         this.origin = Vector3D.getMinimum(origin, offset);
         this.offset = Vector3D.getMaximum(origin, offset);
         if (hasParent() && !cuboidIsWithin(this.parent, true)) {
             this.detach();
         }
-        RegionManager.get().cleanParentRelations();
+        if (sort) {
+            RegionManager.get().autoSortRegions(this.world);
+        }
+
     }
 
     public List<Block> getOuterTopBlocks(Region cube) {
