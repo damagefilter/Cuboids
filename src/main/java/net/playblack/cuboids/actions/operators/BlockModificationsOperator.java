@@ -57,7 +57,7 @@ public class BlockModificationsOperator {
             return true;
         }
         Region r = RegionManager.get().getActiveRegion(point, false);
-        return r.playerIsAllowed(player, player.getPlayerGroups()) || r.getProperty("protection") != Status.DENY;
+        return r.playerIsAllowed(player, player.getPlayerGroups()) || r.getProperty("protection") != Status.ALLOW;
     }
 
     public boolean canEndermanUseBlock(Location location) {

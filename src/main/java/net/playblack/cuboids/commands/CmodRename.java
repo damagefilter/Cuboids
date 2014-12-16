@@ -31,10 +31,7 @@ public class CmodRename extends CBaseCommand {
                 return;
             }
         }
-
-        RegionManager.get().removeRegion(node);
         node.setName(command[3]);
-        RegionManager.get().addRegion(node);
         MessageSystem.successMessage(player, "cuboidRenamed");
     }
 }

@@ -1,5 +1,6 @@
 package net.playblack.cuboids.regions;
 
+import net.canarymod.Canary;
 import net.canarymod.api.world.position.Location;
 import net.playblack.cuboids.Config;
 import net.playblack.cuboids.datasource.BaseData;
@@ -298,14 +299,12 @@ public class RegionManager {
             return ignoreGlobal ? null : global;
         }
         for (Region tree : rootNodes.get(world)) {
-            if (tree.equalsWorld(v.getWorld())) {
-                if (!tree.isWithin(v)) {
-                    continue;
-                }
-                Region r = tree.queryChilds(v);
-                if (r != null) {
-                    return r;
-                }
+            if (!tree.isWithin(v)) {
+                continue;
+            }
+            Region r = tree.queryChilds(v);
+            if (r != null) {
+                return r;
             }
         }
         return ignoreGlobal ? null : global;

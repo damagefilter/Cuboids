@@ -71,7 +71,7 @@ public class CuboidInterface {
 
     public boolean canModifyBlock(Player p, Location location) {
         Region cube = RegionManager.get().getActiveRegion(location, false);
-        return p.hasPermission(Permissions.ADMIN) || cube.playerIsAllowed(p, p.getPlayerGroups()) || cube.getProperty("protection") != Region.Status.DENY;
+        return p.hasPermission(Permissions.ADMIN) || cube.playerIsAllowed(p, p.getPlayerGroups()) || cube.getProperty("protection") != Region.Status.ALLOW;
 
     }
     /**
@@ -198,7 +198,6 @@ public class CuboidInterface {
      * @return
      */
     public boolean addCuboid(Region cube) {
-        //No parent was found so ths needs to be added to a root node
         return RegionManager.get().addRegion(cube);
     }
 
