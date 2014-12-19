@@ -132,22 +132,18 @@ public class BlockListener implements PluginListener {
 
         //Not cancelled, process the list of blocks and remove those that should stay
         List<Block> blocksaffected = hook.getAffectedBlocks();
-        System.out.println("Affected blocks: " + blocksaffected.size());
-        int removedBlocks = 0;
         for (Location m : blocks) {
             for (int i = 0; i < blocksaffected.size(); ) {
                 Block x = blocksaffected.get(i);
                 Vector3D tmp = x.getLocation();
                 if (Vector.samePosition2D(m, tmp)) {
                     blocksaffected.remove(i);
-                    ++removedBlocks;
                 }
                 else {
                     i++;
                 }
             }
         }
-        System.out.println("Removed blocks: " + removedBlocks);
     }
 
     @HookHandler

@@ -617,14 +617,14 @@ public class CuboidInterface {
      */
     public void displayCuboidList(Player player, int page) {
         String world = player.getWorld().getFqName();
-        String dimName = player.getWorld().getType().getName();
+        String dimension = player.getWorld().getType().getName();
 
         int perPage = 10, maxPages, amount;
         ArrayList<Region> cuboids = RegionManager.get().getAllInDimension(world);
         // Following is all taken from CuboidPlugin
         // Because I suck at making paging
         if (cuboids == null || cuboids.isEmpty()) {
-            MessageSystem.translateMessage(player, ColorManager.LightGray, "noCuboidsInworldAndDimemsion", world, dimName);
+            MessageSystem.translateMessage(player, ColorManager.LightGray, "noCuboidsInworldAndDimemsion", player.getWorld().getName(), dimension);
             //(player, ColorManager.LightGray, "No cuboids for world " + world + " in Dimension " + dimName);
             return;
         }
@@ -637,13 +637,13 @@ public class CuboidInterface {
         }
         amount = (page - 1) * perPage;
 
-        MessageSystem.translateMessage(player, ColorManager.Yellow, "cuboidsInWorld", dimName, world, Integer.toString(page), Integer.toString(maxPages));
+        MessageSystem.translateMessage(player, ColorManager.Yellow, "cuboidsInWorld", dimension, player.getWorld().getName(), Integer.toString(page), Integer.toString(maxPages));
         for (int i = amount; i < (amount + perPage); i++) {
             if (cuboids.size() <= i) {
                 break;
             }
             Region cuboid = cuboids.get(i);
-            MessageSystem.customMessage(player, ColorManager.LightGray, cuboid.getName() + " at " + cuboid.getOrigin() + " / " + cuboid.getOffset());
+            MessageSystem.customMessage(player, ColorManager.Gold, cuboid.getName() + ColorManager.Gray + " at " + cuboid.getOrigin() + " / " + cuboid.getOffset());
         }
     }
 
