@@ -304,11 +304,12 @@ public class CuboidInterface {
      * @return
      */
     public boolean allowItem(Player player, String[] command) {
-        Region cube = RegionManager.get().getRegionByName(command[1], player.getWorld().getFqName());
+        Region cube = RegionManager.get().getRegionByName(command[0], player.getWorld().getFqName());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
 
-                for (int i = 3; i < command.length; i++) {
+                // First is region
+                for (int i = 1; i < command.length; i++) {
                     cube.removeRestrictedItem(command[i]);
                 }
                 RegionManager.get().updateRegion(cube);
@@ -361,7 +362,8 @@ public class CuboidInterface {
         Region cube = RegionManager.get().getRegionByName(cubeName, player.getWorld().getFqName());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
-                for (int i = 3; i < command.length; i++) {
+                // First is region
+                for (int i = 0; i < command.length; i++) {
                     cube.addRestrictedCommand(command[i]);
                 }
                 RegionManager.get().updateRegion(cube);
@@ -384,7 +386,7 @@ public class CuboidInterface {
         Region cube = RegionManager.get().getRegionByName(cubeName, player.getWorld().getFqName());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
-                for (int i = 3; i < command.length; i++) {
+                for (int i = 0; i < command.length; i++) {
                     cube.removeRestrictedCommand(command[i]);
                 }
                 RegionManager.get().updateRegion(cube);
