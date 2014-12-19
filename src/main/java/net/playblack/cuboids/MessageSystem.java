@@ -19,7 +19,7 @@ public class MessageSystem extends LocaleHelper {
     }
 
     private MessageSystem() {
-        super();
+        super(Config.get().getLang());
     }
 
     /**

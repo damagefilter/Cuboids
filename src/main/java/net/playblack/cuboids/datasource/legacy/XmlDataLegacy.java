@@ -126,7 +126,7 @@ public class XmlDataLegacy implements BaseData {
         loadedRegions.put("root", new ArrayList<Region>());
         File regionFolder = new File(Config.get().getBasePath() + "regions/");
         if (!regionFolder.exists()) {
-            regionFolder.mkdirs();
+            return rootRegions;
         }
         //Load all files sorted by parents.
         //Parentless regions get sorted into "root"
