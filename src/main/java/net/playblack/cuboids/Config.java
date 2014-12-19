@@ -11,7 +11,6 @@ import net.playblack.cuboids.regions.Region.Status;
 import net.playblack.cuboids.regions.RegionManager;
 import net.visualillusionsent.utils.PropertiesFile;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -26,7 +25,6 @@ public class Config {
     private static Cuboids cuboidsInstance = null;
     // Cuboids Default Settings
     HashMap<String, Region.Status> defaultSettings = new HashMap<String, Region.Status>();
-    ArrayList<Integer> restrictedItems;
     //The config files
     PropertiesFile pluginSetting;
     PropertiesFile cuboidSetting;
@@ -179,11 +177,7 @@ public class Config {
 
         global.setProperty("animal-damage", Status.fromString(cuboidSetting.getString("global-animal-damage", "DEFAULT")));
 
-        String[] itemsList = cuboidSetting.getString("restricted-items", "").split(",");
-        restrictedItems = new ArrayList<Integer>(itemsList.length);
-        for (String i : itemsList) {
-            global.addRestrictedItem(i);
-        }
+        global.addRestrictedItem(cuboidSetting.getString("global-restricted-items", ""));
 
         String dataSource = dsSetting.getString("data-source", "xml");
         if (dataSource.equalsIgnoreCase("mysql")) {
@@ -342,16 +336,6 @@ public class Config {
 
     public BaseData getDataSource() {
         return new CanaryDbData();
-    }
-
-    /**
-     * Check if the item is on the global restricted items list
-     *
-     * @param itemId
-     * @return
-     */
-    public boolean itemIsRestricted(int itemId) {
-        return restrictedItems.contains(Integer.valueOf(itemId));
     }
 
     public String getLang() {

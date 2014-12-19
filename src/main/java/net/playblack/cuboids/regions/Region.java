@@ -740,14 +740,16 @@ public class Region {
      * @param items
      */
     public void addRestrictedItem(String items) {
-        if (items == null) {
+        if (items == null || items.length() == 0) {
             return;
         }
         if (items.contains(",")) {
             String[] itemList = items.split(",");
             Collections.addAll(restrictedItems, itemList);
         }
-        restrictedItems.add(items);
+        else {
+            restrictedItems.add(items);
+        }
     }
 
     public void addRestrictedItem(String[] items) {
