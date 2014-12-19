@@ -1,7 +1,10 @@
 # This file NEEDS to be in UTF-8 format!
 # This file tells VIUtils which languages are supported
-de_DE=de_DE
+de_DE=en_EN
 en_EN=en_EN
+en_US=en_EN
+en_GB=en_EN
+
 ##################################################
 # Copyright 2012-2013 Visual Illusions Entertainment.
 #  
