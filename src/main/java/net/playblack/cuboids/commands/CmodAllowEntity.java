@@ -22,6 +22,6 @@ public class CmodAllowEntity extends CBaseCommand {
         if (parseCommand(player, command)) {
             return;
         }
-        CuboidInterface.get().allowEntity(player, Arrays.copyOfRange(command, 2, command.length));
+        CuboidInterface.get().allowEntity(player, Arrays.copyOfRange(command, 1, command.length));
     }
 }

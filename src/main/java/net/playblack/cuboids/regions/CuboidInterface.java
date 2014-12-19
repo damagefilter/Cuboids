@@ -235,13 +235,13 @@ public class CuboidInterface {
      * @return
      */
     public boolean disallowEntity(Player player, String[] command) {
-        Region cube = RegionManager.get().getRegionByName(command[1], player.getWorld().getFqName());
+        Region cube = RegionManager.get().getRegionByName(command[0], player.getWorld().getFqName());
         if (cube == null) {
             MessageSystem.failMessage(player, "cuboidNotFoundOnCommand");
             return false;
         }
         if (cube.playerIsOwner(player.getName()) || player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
-            for (int i = 2; i < command.length; i++) {
+            for (int i = 1; i < command.length; i++) {
                 if (command[i].startsWith("g:")) {
                     cube.removeGroup(command[i]);
                 }
@@ -269,11 +269,11 @@ public class CuboidInterface {
      * @return
      */
     public boolean allowEntity(Player player, String[] command) {
-        Region cube = RegionManager.get().getRegionByName(command[1], player.getWorld().getFqName());
+        Region cube = RegionManager.get().getRegionByName(command[0], player.getWorld().getFqName());
         if (cube != null) {
             if (cube.playerIsOwner(player.getName()) ||player.hasPermission(Permissions.REGION$EDIT$ANY) || player.hasPermission(Permissions.ADMIN)) {
-
-                for (int i = 3; i < command.length; i++) {
+                // First is region name
+                for (int i = 1; i < command.length; i++) {
                     if (command[i].startsWith("g:")) {
                         cube.addGroup(command[i]);
                     }
