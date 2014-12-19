@@ -25,7 +25,7 @@ public class BlockModificationsOperator {
 
         while (it.hasNext()) {
             Location l = it.next();
-            if (shouldCancelExplosion(l, t)) {
+            if (!shouldCancelExplosion(l, t)) {
                 it.remove();
             }
         }
@@ -92,7 +92,7 @@ public class BlockModificationsOperator {
             return true;
         }
 
-        // Iterates over the given list and removes blocks that should not be destroyed
+        // Iterates over the given list and removes blocks that are not protected so they can be removed from the affected blocks list
         checkExplosionBlocks(affectedBlocks, explosionType);
         return false;
     }

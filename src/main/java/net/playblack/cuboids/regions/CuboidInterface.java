@@ -643,7 +643,7 @@ public class CuboidInterface {
                 break;
             }
             Region cuboid = cuboids.get(i);
-            MessageSystem.customMessage(player, ColorManager.LightGray, cuboid.getName() + " : " + cuboid.getFlagList());
+            MessageSystem.customMessage(player, ColorManager.LightGray, cuboid.getName() + " at " + cuboid.getOrigin() + " / " + cuboid.getOffset());
         }
     }
 
